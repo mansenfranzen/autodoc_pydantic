@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "sphinx_autodoc_pydantic"
+version = "0.1.0"
+description = ""
+authors = ["mansenfranzen <franz.woellert@gmail.com>"]
+packages = [
+  { include = "sphinxcontrib" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+Sphinx = "^3.5.2"
+pydantic = "^1.8.1"
+sphinx-autoapi = "^1.7.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+sphinx-rtd-theme = "^0.5.1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
