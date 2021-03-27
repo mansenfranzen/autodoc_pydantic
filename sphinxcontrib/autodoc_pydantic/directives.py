@@ -4,14 +4,21 @@
 from typing import Tuple
 import importlib
 
-from docutils.nodes import literal, Element
-from sphinx.addnodes import desc_signature, pending_xref, desc_sig_element, \
-    desc_sig_punctuation, desc_annotation
+from docutils.nodes import Element, emphasis
+from sphinx.addnodes import (
+    desc_signature,
+    pending_xref,
+    desc_sig_element,
+    desc_sig_punctuation
+)
+
 from sphinx.domains.python import PyMethod, PyAttribute, PyClasslike
 from sphinx.environment import BuildEnvironment
 
-from sphinxcontrib.autodoc_pydantic.inspection import ModelWrapper, \
-    ValidatorFieldMapping, NamedReference
+from sphinxcontrib.autodoc_pydantic.inspection import (
+    ModelWrapper,
+    NamedReference
+)
 
 
 def create_href(text, target, env) -> pending_xref:
@@ -22,7 +29,7 @@ def create_href(text, target, env) -> pending_xref:
                'reftarget': target}
     refnode = pending_xref(text, **options)
     classes = ['xref', "py", '%s-%s' % ("py", "obj")]
-    refnode += literal(text, text, classes=classes)
+    refnode += emphasis(text, text, classes=classes)
     return refnode
 
 
@@ -33,18 +40,6 @@ def create_field_href(reference: NamedReference,
                        env=env)
 
 
-def remove_nodes_by_tagname(parent: Element, tagname: str):
-    """Removes all nodes with given `tagname` from `parent` node. Modifes parent
-    node in place.
-
-    """
-
-    nodes = [node for node in parent
-             if node.tagname == tagname]
-
-    for node in nodes:
-        parent.remove(node)
-
 class PydanticValidator(PyMethod):
     """Description of a method."""
 
@@ -54,7 +49,6 @@ class PydanticValidator(PyMethod):
         """
 
         # replace nodes
-        remove_nodes_by_tagname(signode, "desc_returns")
         signode += desc_sig_element("", " » ")
 
         # get imports, names and fields of validator
@@ -75,10 +69,7 @@ class PydanticValidator(PyMethod):
         str, str]:
         fullname, prefix = super().handle_signature(sig, signode)
 
-        if not self.env.config["autodoc_pydantic_validator_show_paramlist"]:
-            remove_nodes_by_tagname(signode, "desc_parameterlist")
-
-        if self.env.config["autodoc_pydantic_validator_replace_retann"]:
+        if self.env.config["autodoc_pydantic_validator_replace_signature"]:
             self.replace_return_node(signode)
 
         return fullname, prefix
@@ -119,22 +110,12 @@ class PydanticField(PyAttribute):
         return fullname, prefix
 
 
-
-
 class PydanticModel(PyClasslike):
     """Description of an attribute."""
 
-    def handle_signature(self, sig: str, signode: desc_signature) -> Tuple[
-        str, str]:
-        fullname, prefix = super().handle_signature(sig, signode)
-
-        if not self.env.config["autodoc_pydantic_model_show_paramlist"]:
-            remove_nodes_by_tagname(signode, "desc_parameterlist")
-
-        return fullname, prefix
-
     def get_signature_prefix(self, sig: str) -> str:
         return "pydantic model "
+
 
 class PydanticSettings(PydanticModel):
     """Description of an attribute."""

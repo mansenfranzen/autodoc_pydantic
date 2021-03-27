@@ -216,6 +216,12 @@ class PydanticModelDocumenter(ClassDocumenter):
         is_model = is_pydantic_model(member)
         return is_val and is_model
 
+    def format_signature(self, **kwargs) -> str:
+        if not self.env.config["autodoc_pydantic_model_show_paramlist"]:
+            return ""
+        else:
+            return super().format_signature(**kwargs)
+
     def add_content(self,
                     more_content: Optional[StringList],
                     no_docstring: bool = False
@@ -340,6 +346,11 @@ class PydanticValidatorDocumenter(MethodDocumenter):
         if self.env.config["autodoc_pydantic_show_validators"]:
             super().add_directive_header(sig)
 
+    def format_args(self, **kwargs: Any) -> str:
+
+        if self.env.config["autodoc_pydantic_validator_replace_signature"]:
+            return ''
+
     def add_content(self,
                     more_content: Optional[StringList],
                     no_docstring: bool = False
@@ -360,11 +371,17 @@ class PydanticValidatorDocumenter(MethodDocumenter):
 
         """
 
+        wrapper = ModelWrapper(self.parent)
+        fields = wrapper.get_fields_for_validator(self.object_name)
+
+        if not fields:
+            return
+
         source_name = self.get_sourcename()
         self.add_line(":Validates:", source_name)
 
-        wrapper = ModelWrapper(self.parent)
-        fields = wrapper.get_fields_for_validator(self.object_name)
         for field in fields:
             line = f"   - :py:obj:`{field.name} <{field.ref}>`"
             self.add_line(line, source_name)
+
+        self.add_line("", source_name)
