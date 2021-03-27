@@ -30,12 +30,11 @@ def setup(app: Sphinx) -> None:
     app.add_config_value(f'{stem}model_show_validators', True, True, bool)
     app.add_config_value(f'{stem}model_show_paramlist', False, True, bool)
 
-    app.add_config_value(f'{stem}validator_show_paramlist', False, True, bool)
-    app.add_config_value(f'{stem}validator_replace_retann', True, True, bool)
+    app.add_config_value(f'{stem}validator_replace_signature', True, True, bool)
     app.add_config_value(f'{stem}validator_list_fields', True, True, bool)
 
     app.add_config_value(f'{stem}field_list_validators', True, True, bool)
-    app.add_config_value(f'{stem}field_doc_policy', 'description', True, str)
+    app.add_config_value(f'{stem}field_doc_policy', 'both', True, str)
     app.add_config_value(f'{stem}field_show_constraints', True, True, bool)
     app.add_config_value(f'{stem}field_show_alias', True, True, bool)
 
