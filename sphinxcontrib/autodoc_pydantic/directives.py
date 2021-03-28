@@ -4,12 +4,11 @@
 from typing import Tuple
 import importlib
 
-from docutils.nodes import Element, emphasis
+from docutils.nodes import emphasis
 from sphinx.addnodes import (
     desc_signature,
     pending_xref,
-    desc_sig_element,
-    desc_sig_punctuation
+    desc_annotation
 )
 
 from sphinx.domains.python import PyMethod, PyAttribute, PyClasslike
@@ -49,7 +48,7 @@ class PydanticValidator(PyMethod):
         """
 
         # replace nodes
-        signode += desc_sig_element("", " » ")
+        signode += desc_annotation("", " » ")
 
         # get imports, names and fields of validator
         module = importlib.import_module(name=signode['module'])
@@ -62,7 +61,7 @@ class PydanticValidator(PyMethod):
         first_field = fields[0]
         signode += create_field_href(first_field, env=self.env)
         for field in fields[1:]:
-            signode += desc_sig_element("", ", ")
+            signode += desc_annotation("", ", ")
             signode += create_field_href(field, self.env)
 
     def handle_signature(self, sig: str, signode: desc_signature) -> Tuple[
@@ -98,7 +97,7 @@ class PydanticField(PyAttribute):
         alias = field.alias
 
         if alias != field_name:
-            signode += desc_sig_punctuation("", f" (alias '{alias}')")
+            signode += desc_annotation("", f" (alias '{alias}')")
 
     def handle_signature(self, sig: str, signode: desc_signature) -> Tuple[
         str, str]:
