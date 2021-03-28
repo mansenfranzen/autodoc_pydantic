@@ -6,10 +6,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [3.6, 3.7, 3.8, 3.9]
+        python-version: [3.6]
         os: [ubuntu-18.04]
         pydantic_version: [1.8, 1.7, 1.6, 1.5]
-        sphinx_version: [2.0, 3.0, 3.5]
+        sphinx_version: [2.1, 2.2, 2.3, 2.4]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
