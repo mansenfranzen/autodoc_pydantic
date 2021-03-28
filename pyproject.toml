@@ -9,7 +9,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = ">=3.6.1"
-Sphinx = ">=3.0"
+Sphinx = ">=2.0"
 pydantic = ">=1.6"
 
 [tool.poetry.dev-dependencies]
