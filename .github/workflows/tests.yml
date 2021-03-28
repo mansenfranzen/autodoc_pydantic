@@ -19,5 +19,7 @@ jobs:
       - uses: abatilo/actions-poetry@v2.0.0
       - name: Update required deps
         run: poetry add pydantic=~${{ matrix.pydantic_version }} sphinx=~${{ matrix.sphinx_version }}
+      - name: Install packages
+        run: poetry install
       - name: run pytest
         run: poetry run pytest
