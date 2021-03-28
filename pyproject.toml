@@ -8,10 +8,9 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.7"
-Sphinx = "^3.5.2"
-pydantic = "^1.8.1"
-sphinx-autoapi = "^1.7.0"
+python = ">=3.6.1"
+Sphinx = ">=3.0"
+pydantic = ">=1.6"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
