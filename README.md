@@ -1,6 +1,8 @@
 # autodoc_pydantic
 
-You love [pydantic](https://pydantic-docs.helpmanual.io/) and you want to document your models and configuration settings with [sphinx](https://www.sphinx-doc.org/en/master/)? Perfect, let's go. But wait, sphinx' [autodoc](https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html) does not integrate too well with pydantic models. Don't worry - just `pip install autodoc_pydantic`.
+You love [pydantic](https://pydantic-docs.helpmanual.io/) and you want to document your models and configuration settings with [sphinx](https://www.sphinx-doc.org/en/master/)? 
+
+Perfect, let's go. But wait, sphinx' [autodoc](https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html) does not integrate too well with pydantic models. Don't worry - just `pip install autodoc_pydantic`.
 
 ## Features
 
@@ -12,6 +14,7 @@ You love [pydantic](https://pydantic-docs.helpmanual.io/) and you want to docume
 - :clipboard: shows summary section for model configuration and validators
 - :eyes: hides overloaded and redundant model class signature
 - :books: sorts fields, validators and model config within models by type
+- 🍀 Supports `pydantic >= 1.0.0` and `sphinx >= 3.0.0`
 
 All of these addons are completely configurable.
 
