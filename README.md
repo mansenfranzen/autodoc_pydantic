@@ -1,8 +1,10 @@
 # autodoc_pydantic
 
-You love [pydantic](https://pydantic-docs.helpmanual.io/) and you want to document your models and configuration settings with [sphinx](https://www.sphinx-doc.org/en/master/)? 
+You love [pydantic](https://pydantic-docs.helpmanual.io/) :heart: and you want to document your models and configuration settings with [sphinx](https://www.sphinx-doc.org/en/master/)? 
 
-Perfect, let's go. But wait, sphinx' [autodoc](https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html) does not integrate too well with pydantic models. Don't worry - just `pip install autodoc_pydantic`.
+Perfect, let's go. But wait, sphinx' [autodoc](https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html) does not integrate too well with pydantic models :confused:. 
+
+Don't worry - just `pip install autodoc_pydantic` :relaxed:.
 
 ## Features
 
