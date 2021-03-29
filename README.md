@@ -1,18 +1,19 @@
 # autodoc_pydantic
 
-**Seamlessly integrate your pydantic models within your Sphinx documentation.** You love pydantic and you want to document your models and configuration settings with sphinx? Perfect, let's go. But wait, sphinx' autodoc does not integrate too well with pydantic models. Don't worry - just `pip install autodoc_pydantic`.
+You love [pydantic](https://pydantic-docs.helpmanual.io/) and you want to document your models and configuration settings with [sphinx](https://www.sphinx-doc.org/en/master/)? Perfect, let's go. But wait, sphinx' [autodoc](https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html) does not integrate too well with pydantic models. Don't worry - just `pip install autodoc_pydantic`.
 
 ## Features
 
-- provides default values, alias and constraints for model fields
-- adds references between validators and processed fields
-- includes collapsable model json schema
-- defines explicit pydantic prefixes for models, settings, fields, validators and model config
-- shows summary section for model configuration and validators
-- hides overloaded and redundant model class signature
-- sorts fields, validators and model config within models by type
+- :speech_balloon: provides default values, alias and constraints for model fields
+- :link: adds references between validators and corresponding fields
+- :page_with_curl: includes collapsable model json schema
+- :surfer: natively integrates with autodoc extension
+- :paperclip: defines explicit pydantic prefixes for models, settings, fields, validators and model config
+- :clipboard: shows summary section for model configuration and validators
+- :eyes: hides overloaded and redundant model class signature
+- :books: sorts fields, validators and model config within models by type
 
-All of these modifications and addons are completely configurable.
+All of these addons are completely configurable.
 
 ## Installation
 
@@ -29,6 +30,31 @@ All of these modifications and addons are completely configurable.
    autodoc_pydantic_field_show_constraints = True
    autodoc_pydantic_model_show_schema = True
    ```
+ 
+## Usage
+
+The standard `automodule` directive already understands pydantic models that it encounters by default. No more tweaks are required.
+
+```rest
+.. automodule:: package.module
+```
+
+Additionally, autodoc_pydantic provides specific directives for models, settings, fields, validators and class config:
+
+```rest
+.. autopydantic_model:: package.module.MyModel
+   :members:
+   
+.. autopydantic_settings:: package.module.MySettings
+   :members:
+   
+.. autopydantic_field:: package.module.MyModel.foobar
+
+.. autopydantic_validator:: package.module.MyModel.validator
+
+.. autopydantic_class_config:: package.module.MyModel.Config
+   :members:
+```
  
 ## Configuration
 
