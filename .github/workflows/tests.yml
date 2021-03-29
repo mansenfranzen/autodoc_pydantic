@@ -6,7 +6,7 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'ci skip')"
     environment: ci
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         python-version: [3.6]
         os: [ubuntu-18.04]
@@ -25,5 +25,8 @@ jobs:
         run: poetry install
       - name: run pytest
         run: poetry run pytest --cov-report term --cov-report xml:report.xml
-      - name: upload code coverage report
-        run: bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r report.xml
+      - name: Run codacy-coverage-reporter
+        uses: codacy/codacy-coverage-reporter-action@master
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: report.xml
