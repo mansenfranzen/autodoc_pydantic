@@ -42,6 +42,7 @@ The standard `automodule` directive already understands pydantic models that it 
 
 ```rest
 .. automodule:: package.module
+   :members:
 ```
 
 Additionally, autodoc_pydantic provides specific directives for models, settings, fields, validators and class config:
