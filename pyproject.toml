@@ -3,19 +3,21 @@ name = "sphinx_autodoc_pydantic"
 version = "0.1.0"
 description = ""
 authors = ["mansenfranzen <franz.woellert@gmail.com>"]
-packages = [
-  { include = "sphinxcontrib" }
-]
+packages = [{ include = "sphinxcontrib" }]
 
 [tool.poetry.dependencies]
 python = ">=3.6.1"
-Sphinx = ">=2.0"
-pydantic = ">=1.6"
+Sphinx = ">=3.0"
+pydantic = ">=1.0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
+pytest = "^6.0"
 pytest-cov = "^2.0"
 sphinx-rtd-theme = "^0.5.1"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "--cov-report term --cov-report xml:coverage.xml --cov=sphinxcontrib"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
