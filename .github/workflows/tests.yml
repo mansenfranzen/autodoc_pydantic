@@ -10,8 +10,8 @@ jobs:
       matrix:
         python-version: [3.6]
         os: [ubuntu-18.04]
-        pydantic_version: [1.8, 1.7, 1.6, 1.5, 1.0, 1.1, 1.2, 1.3, 1.4]
-        sphinx_version: [3.0]
+        pydantic_version: [=~1.8, =~1.7, =~1.6, =~1.5, =~1.0, @latest]
+        sphinx_version: [=~3.5, =~3.0, @latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -20,7 +20,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - uses: abatilo/actions-poetry@v2.0.0
       - name: Update required deps
-        run: poetry add pydantic=~${{ matrix.pydantic_version }} sphinx=~${{ matrix.sphinx_version }}
+        run: poetry add pydantic${{ matrix.pydantic_version }} sphinx${{ matrix.sphinx_version }}
       - name: Install packages
         run: poetry install
       - name: run pytest
@@ -29,4 +29,4 @@ jobs:
         uses: codacy/codacy-coverage-reporter-action@master
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: report.xml
+          coverage-reports: coverage.xml
