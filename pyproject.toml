@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "sphinx_autodoc_pydantic"
+name = "autodoc_pydantic"
 version = "0.1.0"
 description = ""
 authors = ["mansenfranzen <franz.woellert@gmail.com>"]
