@@ -11,7 +11,7 @@ jobs:
         python-version: [3.6]
         os: [ubuntu-18.04]
         pydantic_version: ["=~1.8", "=~1.7", "=~1.6", "=~1.5", "=~1.0", "@latest"]
-        sphinx_version: ["=~3.5", "=~3.4", "=~3.3", "=~3.2", "@latest"]
+        sphinx_version: ["=~3.5", "=~3.4", "@latest"]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -28,5 +28,5 @@ jobs:
       - name: Run codacy-coverage-reporter
         uses: codacy/codacy-coverage-reporter-action@master
         with:
-          project-token: ${{ secrets.CODACY_PROJECT_TOKENd }}
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
           coverage-reports: coverage.xml
