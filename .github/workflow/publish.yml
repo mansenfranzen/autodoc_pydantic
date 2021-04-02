@@ -1,0 +1,23 @@
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+    branches:
+      - main
+
+name: Publish
+
+jobs:
+  publish:
+    name: Upload to PyPI
+    environment: Publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - uses: abatilo/actions-poetry@v2.0.0
+      - name: build
+        run: poetry build
+      - name: publish
+        run: poetry publish --username __token__ --password ${{ secrets.PYPI_TOKEN }}
