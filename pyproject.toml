@@ -12,7 +12,7 @@ documentation = "https://github.com/mansenfranzen/autodoc_pydantic"
 keywords = ["sphinx", "pydantic", "autodoc", "documentation", "extension"]
 classifiers = [
     "Framework :: Sphinx :: Extension",
-    "Topic :: Documentation :: Sphinx"
+    "Topic :: Documentation :: Sphinx",
     "Topic :: Software Development :: Documentation"
 ]
 
