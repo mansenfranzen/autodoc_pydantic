@@ -62,7 +62,7 @@ def test_model_with_field(app):
                                 addnodes.index,
                                 [desc, ([desc_signature, ([desc_annotation, "field "],
                                                           [desc_name, "field"],
-                                                          [desc_annotation, ()],
+                                                          [desc_annotation, (": ", [pending_xref, "int"])],
                                                           [desc_annotation, " = 1"])],
                                         [desc_content, ([paragraph, "Doc field"])])
                                  ])
