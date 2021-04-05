@@ -116,7 +116,7 @@ class PydanticModel(PyClasslike):
         return "pydantic model "
 
 
-class PydanticSettings(PydanticModel):
+class PydanticSettings(PyClasslike):
     """Description of an attribute."""
 
     def get_signature_prefix(self, sig: str) -> str:
