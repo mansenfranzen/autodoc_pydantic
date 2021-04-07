@@ -28,7 +28,7 @@ sphinx-rtd-theme = "^0.5.1"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "--cov-report term --cov-report xml:coverage.xml --cov=sphinxcontrib"
+#addopts = "--cov-report term --cov-report xml:coverage.xml --cov=sphinxcontrib"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
