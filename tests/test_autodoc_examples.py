@@ -1,15 +1,14 @@
-import pytest
+"""This module contains end to end example tests.
 
+"""
 
-@pytest.mark.sphinx('html', testroot='ext-autodoc_pydantic')
-def test_model_plain(app, autodocument):
-    options_app = dict(autodoc_pydantic_model_show_schema=False)
-    actual = autodocument(app=app,
-                          documenter='pydantic_model',
+def test_model_plain(autodocument):
+    options_app = dict(autodoc_pydantic_model_show_json=False)
+    actual = autodocument(documenter='pydantic_model',
                           object_path='target.model.PlainModel',
                           options_app=options_app)
 
-    assert list(actual) == [
+    assert actual == [
         '',
         '.. py:pydantic_model:: PlainModel',
         '   :module: target.model',
@@ -18,17 +17,15 @@ def test_model_plain(app, autodocument):
         ''
     ]
 
-@pytest.mark.sphinx('html', testroot='ext-autodoc_pydantic')
-def test_model_with_field(app, autodocument):
-    options_app = dict(autodoc_pydantic_model_show_schema=False)
+def test_model_with_field(autodocument):
+    options_app = dict(autodoc_pydantic_model_show_json=False)
     options_doc = dict(members=None)
-    actual = autodocument(app=app,
-                          documenter='pydantic_model',
+    actual = autodocument(documenter='pydantic_model',
                           object_path='target.model.ModelWithField',
                           options_doc=options_doc,
                           options_app=options_app)
 
-    assert list(actual) == [
+    assert actual == [
         '',
         '.. py:pydantic_model:: ModelWithField',
         '   :module: target.model',
@@ -45,17 +42,16 @@ def test_model_with_field(app, autodocument):
         ''
     ]
 
-@pytest.mark.sphinx('html', testroot='ext-autodoc_pydantic')
-def test_model_with_field_validator(app, autodocument):
-    options_app = dict(autodoc_pydantic_model_show_schema=False)
+
+def test_model_with_field_validator(autodocument):
+    options_app = dict(autodoc_pydantic_model_show_json=False)
     options_doc = dict(members=None)
-    actual = autodocument(app=app,
-                          documenter='pydantic_model',
+    actual = autodocument(documenter='pydantic_model',
                           object_path='target.model.ModelWithFieldValidator',
                           options_doc=options_doc,
                           options_app=options_app)
 
-    assert list(actual) == [
+    assert actual == [
         '',
         '.. py:pydantic_model:: ModelWithFieldValidator',
         '   :module: target.model',
@@ -87,17 +83,15 @@ def test_model_with_field_validator(app, autodocument):
     ]
 
 
-@pytest.mark.sphinx('html', testroot='ext-autodoc_pydantic')
-def test_model_with_config(app, autodocument):
-    options_app = dict(autodoc_pydantic_model_show_schema=False)
+def test_model_with_config(autodocument):
+    options_app = dict(autodoc_pydantic_model_show_json=False)
     options_doc = dict(members=None)
-    actual = autodocument(app=app,
-                          documenter='pydantic_model',
+    actual = autodocument(documenter='pydantic_model',
                           object_path='target.model.ModelWithConfig',
                           options_doc=options_doc,
                           options_app=options_app)
 
-    assert list(actual) == [
+    assert actual == [
         '',
         '.. py:pydantic_model:: ModelWithConfig',
         '   :module: target.model',
@@ -107,7 +101,8 @@ def test_model_with_config(app, autodocument):
         '   :Config:',
         '      - **allow_mutation**: *bool = True*',
         '',
-        '   .. py:pydantic_config_class:: ModelWithConfig.Config()',
+        '',
+        '   .. py:pydantic_config:: ModelWithConfig.Config()',
         '      :module: target.model',
         '',
         '      With Doc String.',
@@ -121,13 +116,11 @@ def test_model_with_config(app, autodocument):
         '']
 
 
-@pytest.mark.sphinx('html', testroot='ext-autodoc_pydantic')
-def test_model_plain_show_json(app, autodocument):
-    actual = autodocument(app=app,
-                          documenter='pydantic_model',
+def test_model_plain_show_json(autodocument):
+    actual = autodocument(documenter='pydantic_model',
                           object_path='target.model.PlainModel')
 
-    assert list(actual) == [
+    assert actual == [
         '',
         '.. py:pydantic_model:: PlainModel',
         '   :module: target.model',
