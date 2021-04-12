@@ -17,7 +17,7 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = ">=3.6.1"
+python = "^3.6.1"
 Sphinx = ">=3.0"
 pydantic = ">=1.0"
 
@@ -25,6 +25,7 @@ pydantic = ">=1.0"
 pytest = "^6.0"
 pytest-cov = "^2.0"
 sphinx-rtd-theme = "^0.5.1"
+sphinx-tabs = "^2"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
