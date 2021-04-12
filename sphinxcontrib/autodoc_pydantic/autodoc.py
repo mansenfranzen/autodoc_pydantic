@@ -261,14 +261,14 @@ class PydanticFieldDocumenter(PydanticAutoDocMixin, AttributeDocumenter):
                 self.add_line(line, source_name)
 
 
-class PydanticConfigClassDocumenter(ClassDocumenter):
+class PydanticConfigClassDocumenter(PydanticAutoDocMixin, ClassDocumenter):
     """Represents specialized Documenter subclass for pydantic model
     configuration.
 
     """
 
-    objtype = 'pydantic_config_class'
-    directivetype = 'pydantic_config_class'
+    objtype = 'pydantic_config'
+    directivetype = 'pydantic_config'
     member_order = 100
     priority = 10 + ClassDocumenter.priority
 
