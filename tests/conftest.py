@@ -118,6 +118,17 @@ def autodocument(test_app):
     """Create callable which applies auto documenter to given object path.
     """
 
-@pytest.fixture(scope='session')
-def autodocument():
-    return do_autodoc
+    def _auto(documenter: str,
+              object_path: str,
+              options_doc: Optional[Dict] = None,
+              options_app: Optional[Dict] = None,
+              testroot: str = "ext-autodoc_pydantic",
+              deactivate_all: bool = False):
+        app = test_app(testroot, deactivate_all)
+        return do_autodoc(app=app,
+                          documenter=documenter,
+                          object_path=object_path,
+                          options_app=options_app,
+                          options_doc=options_doc)
+
+    return _auto
