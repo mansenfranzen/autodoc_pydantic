@@ -1,6 +1,7 @@
-"""Pytest configuration which is heavily borrowed from sphinx.
+"""Pytest configuration which is partially borrowed from sphinx conftest.py.
 
 """
+
 from typing import Optional, Dict, List
 from unittest.mock import Mock
 
@@ -13,6 +14,25 @@ from sphinx.testing.path import path
 from sphinx.util.docutils import LoggingReporter
 
 pytest_plugins = 'sphinx.testing.fixtures'
+
+CONF_DEACTIVATE = {
+    "autodoc_pydantic_config_show": False,
+
+    "autodoc_pydantic_model_show_json": False,
+    "autodoc_pydantic_model_show_config": False,
+    "autodoc_pydantic_model_show_validators": False,
+    "autodoc_pydantic_model_show_paramlist": False,
+    "autodoc_pydantic_model_undoc_members": False,
+    "autodoc_pydantic_model_members": False,
+
+    "autodoc_pydantic_validator_show": False,
+    "autodoc_pydantic_validator_replace_signature": False,
+    "autodoc_pydantic_validator_list_fields": False,
+
+    "autodoc_pydantic_field_list_validators": False,
+    "autodoc_pydantic_field_show_constraints": False,
+    "autodoc_pydantic_field_show_alias": False,
+}
 
 
 @pytest.fixture(scope='session')
