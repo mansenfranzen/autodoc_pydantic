@@ -1,4 +1,7 @@
-import pytest
+"""This module contains tests for pydantic specific directives.
+
+"""
+
 from docutils.nodes import (
     paragraph, 
     field_list, 
@@ -22,12 +25,10 @@ from sphinx.addnodes import (
     pending_xref, 
     index
 )
-from sphinx.testing.restructuredtext import parse
 from sphinx.testing.util import assert_node
 
 
-@pytest.mark.sphinx('html', testroot='ext-autodoc_pydantic')
-def test_example_model_with_field(app):
+def test_example_model_with_field(parse_rst):
     """Tests plain minimal pydantic model with doc string. Ensure that
     annotation is correct.
 
@@ -68,12 +69,11 @@ def test_example_model_with_field(app):
          ]
     )
 
-    doctree = parse(app, "\n".join(input_rst))
+    doctree = parse_rst(input_rst)
     assert_node(doctree, output_nodes)
 
 
-@pytest.mark.sphinx('html', testroot='ext-autodoc_pydantic')
-def test_example_model_with_field_and_validator(app):
+def test_example_model_with_field_and_validator(parse_rst):
     """Tests more complex pydantic model with validators and fields including
     corresponding referencing.
 
@@ -194,12 +194,11 @@ def test_example_model_with_field_and_validator(app):
          ]
     )
 
-    doctree = parse(app, "\n".join(input_rst))
+    doctree = parse_rst(input_rst)
     assert_node(doctree, output_nodes)
 
 
-@pytest.mark.sphinx('html', testroot='ext-autodoc_pydantic')
-def test_example_model_with_config(app):
+def test_example_model_with_config(parse_rst):
     """Tests plain pydantic model config class.
 
     """
@@ -214,7 +213,7 @@ def test_example_model_with_config(app):
         '   :Config:',
         '      - **allow_mutation**: *bool = True*',
         '',
-        '   .. py:pydantic_config_class:: ModelWithConfig.Config()',
+        '   .. py:pydantic_config:: ModelWithConfig.Config()',
         '      :module: target.model',
         '',
         '      With Doc String.',
@@ -270,12 +269,11 @@ def test_example_model_with_config(app):
          ]
     )
 
-    doctree = parse(app, "\n".join(input_rst))
+    doctree = parse_rst(input_rst)
     assert_node(doctree, output_nodes)
 
 
-@pytest.mark.sphinx('html', testroot='ext-autodoc_pydantic')
-def test_pydantic_model(app):
+def test_pydantic_model(parse_rst):
     """Tests pydantic_model directive.
 
     """
@@ -295,12 +293,11 @@ def test_pydantic_model(app):
          ]
     )
 
-    doctree = parse(app, "\n".join(input_rst))
+    doctree = parse_rst(input_rst)
     assert_node(doctree, output_nodes)
 
 
-@pytest.mark.sphinx('html', testroot='ext-autodoc_pydantic')
-def test_pydantic_settings(app):
+def test_pydantic_settings(parse_rst):
     """Tests pydantic_settings directive.
 
     """
@@ -320,17 +317,16 @@ def test_pydantic_settings(app):
          ]
     )
 
-    doctree = parse(app, "\n".join(input_rst))
+    doctree = parse_rst(input_rst)
     assert_node(doctree, output_nodes)
 
 
-@pytest.mark.sphinx('html', testroot='ext-autodoc_pydantic')
-def test_pydantic_config_class(app):
+def test_pydantic_config(parse_rst):
     """Tests pydantic_config_class directive.
 
     """
 
-    input_rst = ['.. py:pydantic_config_class:: Model.Config',
+    input_rst = ['.. py:pydantic_config:: Model.Config',
                  '   :module: target.model',
                  '',
                  '   Config Plain.',
@@ -345,12 +341,11 @@ def test_pydantic_config_class(app):
          ]
     )
 
-    doctree = parse(app, "\n".join(input_rst))
+    doctree = parse_rst(input_rst)
     assert_node(doctree, output_nodes)
 
 
-@pytest.mark.sphinx('html', testroot='ext-autodoc_pydantic')
-def test_pydantic_validator(app):
+def test_pydantic_validator(parse_rst):
     """Tests pydantic_validator directive.
 
     """
@@ -374,12 +369,12 @@ def test_pydantic_validator(app):
          ]
     )
 
-    doctree = parse(app, "\n".join(input_rst))
+    doctree = parse_rst(input_rst)
     assert_node(doctree, output_nodes)
 
 
-@pytest.mark.sphinx('html', testroot='ext-autodoc_pydantic')
-def test_pydantic_field(app):
+
+def test_pydantic_field(parse_rst):
     """Tests pydantic_field directive.
 
     """
@@ -406,5 +401,5 @@ def test_pydantic_field(app):
          ]
     )
 
-    doctree = parse(app, "\n".join(input_rst))
+    doctree = parse_rst(input_rst)
     assert_node(doctree, output_nodes)
