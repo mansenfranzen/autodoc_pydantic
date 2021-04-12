@@ -43,7 +43,7 @@ def rootdir():
 def do_autodoc(app: Sphinx,
                documenter: str,
                object_path: str,
-               options_doc: Optional[Dict]=None,
+               options_doc: Optional[Dict] = None,
                options_app: Optional[Dict] = None) -> List[str]:
     """Run auto `documenter` for given object referenced by `object_path` within
     provided sphinx `app`. Optionally override app and documenter settings.
@@ -54,10 +54,17 @@ def do_autodoc(app: Sphinx,
         Sphinx app in which documenter is run.
     documenter: str
         Name of documenter which is used to document `object_path`.
+    object_path: str
+        Full path to object to be documented.
     options_doc: dict
         Optional settings to be passed to documenter.
     options_app: dict
         Optional settings to be passed to app.
+
+    Returns
+    -------
+    result: list
+        List of strings containing lines of generated restructured text.
 
     """
 
@@ -81,7 +88,35 @@ def do_autodoc(app: Sphinx,
     documenter = doc_cls(bridge, object_path)
     documenter.generate()
 
-    return bridge.result
+    return list(bridge.result)
+
+
+@pytest.fixture(scope="function")
+def test_app(make_app, sphinx_test_tempdir, rootdir):
+    """Create callable returning a fresh test app.
+
+    """
+
+    def create(testroot: str, deactivate_all: bool = False):
+        srcdir = sphinx_test_tempdir / testroot
+
+        if rootdir and not srcdir.exists():
+            testroot_path = rootdir / ('test-' + testroot)
+            testroot_path.copytree(srcdir)
+
+        kwargs = dict(srcdir=srcdir)
+        if deactivate_all:
+            kwargs["confoverrides"] = CONF_DEACTIVATE
+
+        return make_app("html", **kwargs)
+
+    return create
+
+
+@pytest.fixture(scope='function')
+def autodocument(test_app):
+    """Create callable which applies auto documenter to given object path.
+    """
 
 @pytest.fixture(scope='session')
 def autodocument():
