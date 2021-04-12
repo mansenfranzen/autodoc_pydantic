@@ -320,6 +320,13 @@ class PydanticModelDocumenter(PydanticAutoDocMixin, ClassDocumenter):
     objtype = 'pydantic_model'
     directivetype = 'pydantic_model'
     priority = 10 + ClassDocumenter.priority
+    option_spec = ClassDocumenter.option_spec.copy()
+    option_spec.update({"model-show-json": option_default_true,
+                        "model-show-paramlist": option_default_true,
+                        "model-show-validators": option_default_true,
+                        "model-show-config": option_default_true,
+                        "undoc-members": option_default_true,
+                        "hide-members": option_default_true})
 
     def __init__(self, *args: Any) -> None:
         super().__init__(*args)
