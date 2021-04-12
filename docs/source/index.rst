@@ -27,7 +27,7 @@ Features
    :maxdepth: 2
    :caption: User guide:
 
-   user_guide
+   configuration
 
 .. toctree::
    :maxdepth: 2
