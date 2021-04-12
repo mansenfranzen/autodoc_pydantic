@@ -7,11 +7,13 @@ from unittest.mock import Mock
 
 import pytest
 from sphinx.application import Sphinx
-from sphinx.ext.autodoc.directive import process_documenter_options, \
-    DocumenterBridge
-
 from sphinx.testing.path import path
+from sphinx.testing.restructuredtext import parse
 from sphinx.util.docutils import LoggingReporter
+from sphinx.ext.autodoc.directive import (
+    process_documenter_options,
+    DocumenterBridge
+)
 
 pytest_plugins = 'sphinx.testing.fixtures'
 
@@ -115,7 +117,8 @@ def test_app(make_app, sphinx_test_tempdir, rootdir):
 
 @pytest.fixture(scope='function')
 def autodocument(test_app):
-    """Create callable which applies auto documenter to given object path.
+    """Create callable to apply auto documenter to given object path.
+
     """
 
     def _auto(documenter: str,
@@ -132,3 +135,21 @@ def autodocument(test_app):
                           options_doc=options_doc)
 
     return _auto
+
+
+@pytest.fixture(scope="function")
+def parse_rst(test_app):
+    """Create callable to parse restructured text and return doc tree.
+
+    """
+
+    def _parse(text: List[str],
+               testroot: str = "ext-autodoc_pydantic",
+               deactivate_all: bool = False):
+
+        text = "\n".join(text)
+        app = test_app(testroot, deactivate_all)
+
+        return parse(app=app, text=text)
+
+    return _parse
