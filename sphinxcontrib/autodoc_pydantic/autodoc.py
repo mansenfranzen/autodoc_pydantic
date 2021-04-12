@@ -357,8 +357,6 @@ class PydanticModelDocumenter(PydanticAutoDocMixin, ClassDocumenter):
             return super().format_signature(**kwargs)
         else:
             return ""
-        else:
-            return super().format_signature(**kwargs)
 
     def add_content(self,
                     more_content: Optional[StringList],
@@ -387,7 +385,6 @@ class PydanticModelDocumenter(PydanticAutoDocMixin, ClassDocumenter):
         for line in lines:
             self.add_line(line, source_name)
 
-
     def add_config(self):
         """Adds summary section describing the model configuration.
 
@@ -407,6 +404,7 @@ class PydanticModelDocumenter(PydanticAutoDocMixin, ClassDocumenter):
         for name, value in values.items():
             line = f"   - **{name}**: *{type(value).__name__} = {value}*"
             self.add_line(line, source_name)
+        self.add_line("", source_name)
 
     def add_validators(self):
         """Adds summary section describing all validators with corresponding
@@ -428,9 +426,10 @@ class PydanticModelDocumenter(PydanticAutoDocMixin, ClassDocumenter):
                             f":py:obj:`{field.name} <{field.ref}>`")
                     self.add_line(line, source_name)
 
+            self.add_line("", source_name)
+
 
 class PydanticSettingsDocumenter(PydanticModelDocumenter):
-
     objtype = 'pydantic_settings'
     directivetype = 'pydantic_settings'
     priority = 10 + PydanticModelDocumenter.priority
