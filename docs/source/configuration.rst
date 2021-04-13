@@ -40,14 +40,14 @@ Show JSON
 
    .. tab:: enabled
 
-      .. autopydantic_model:: package.cfg.ModelShowJson
+      .. autopydantic_model:: target.configuration.ModelShowJson
          :model-show-json: True
          :hide-members:
          :noindex:
 
    .. tab:: disabled
 
-      .. autopydantic_model:: package.cfg.ModelShowJson
+      .. autopydantic_model:: target.configuration.ModelShowJson
          :model-show-json: False
          :hide-members:
          :noindex:
@@ -65,7 +65,7 @@ Show JSON
 
       .. code-block::
 
-         .. autopydantic_model:: package.cfg.ModelShowJson
+         .. autopydantic_model:: target.configuration.ModelShowJson
             :model-show-json: True
 
    .. tab:: conf.py
@@ -90,7 +90,7 @@ Show Config
 
    .. tab:: enabled
 
-      .. autopydantic_model:: package.cfg.ModelShowConfig
+      .. autopydantic_model:: target.configuration.ModelShowConfig
          :model-show-config: True
          :model-show-json: False
          :hide-members:
@@ -98,7 +98,7 @@ Show Config
 
    .. tab:: disabled
 
-      .. autopydantic_model:: package.cfg.ModelShowConfig
+      .. autopydantic_model:: target.configuration.ModelShowConfig
          :model-show-config: False
          :model-show-json: False
          :hide-members:
@@ -119,7 +119,7 @@ Show Config
 
       .. code-block::
 
-         .. autopydantic_model:: package.cfg.ModelShowConfig
+         .. autopydantic_model:: target.configuration.ModelShowConfig
             :model-show-config: True
 
    .. tab:: conf.py
@@ -144,7 +144,7 @@ Show Validators
 
    .. tab:: enabled
 
-      .. autopydantic_model:: package.cfg.ModelShowValidators
+      .. autopydantic_model:: target.configuration.ModelShowValidators
          :model-show-config: False
          :model-show-json: False
          :model-show-validators: True
@@ -153,7 +153,7 @@ Show Validators
 
    .. tab:: disabled
 
-      .. autopydantic_model:: package.cfg.ModelShowValidators
+      .. autopydantic_model:: target.configuration.ModelShowValidators
          :model-show-config: False
          :model-show-json: False
          :model-show-validators: False
@@ -182,7 +182,7 @@ Show Validators
 
       .. code-block::
 
-         .. autopydantic_model:: package.cfg.ModelShowValidators
+         .. autopydantic_model:: target.configuration.ModelShowValidators
             :model-show-validators: True
 
    .. tab:: conf.py
@@ -207,7 +207,7 @@ Show ParamList
 
    .. tab:: enabled
 
-      .. autopydantic_model:: package.cfg.ModelShowParamList
+      .. autopydantic_model:: target.configuration.ModelShowParamList
          :model-show-config: True
          :model-show-json: False
          :model-show-paramlist: True
@@ -216,7 +216,7 @@ Show ParamList
 
    .. tab:: disabled
 
-      .. autopydantic_model:: package.cfg.ModelShowParamList
+      .. autopydantic_model:: target.configuration.ModelShowParamList
          :model-show-config: False
          :model-show-json: False
          :model-show-paramlist: False
@@ -237,7 +237,7 @@ Show ParamList
 
       .. code-block::
 
-         .. autopydantic_model:: package.cfg.ModelShowParamList
+         .. autopydantic_model:: target.configuration.ModelShowParamList
             :model-show-paramlist: True
 
    .. tab:: conf.py
@@ -262,14 +262,14 @@ Show Undoc Members
 
    .. tab:: enabled
 
-      .. autopydantic_model:: package.cfg.ModelUndocMembers
+      .. autopydantic_model:: target.configuration.ModelUndocMembers
          :model-show-json: False
          :undoc-members:
          :noindex:
 
    .. tab:: disabled
 
-      .. autopydantic_model:: package.cfg.ModelUndocMembers
+      .. autopydantic_model:: target.configuration.ModelUndocMembers
          :model-show-json: False
          :hide-members:
          :noindex:
@@ -288,7 +288,7 @@ Show Undoc Members
 
       .. code-block::
 
-         .. autopydantic_model:: package.cfg.ModelUndocMembers
+         .. autopydantic_model:: target.configuration.ModelUndocMembers
             :undoc-members:
 
    .. tab:: conf.py
@@ -318,13 +318,13 @@ Show Members
 
    .. tab:: enabled
 
-      .. autopydantic_model:: package.cfg.ModelMembers
+      .. autopydantic_model:: target.configuration.ModelMembers
          :model-show-json: False
          :noindex:
 
    .. tab:: disabled
 
-      .. autopydantic_model:: package.cfg.ModelMembers
+      .. autopydantic_model:: target.configuration.ModelMembers
          :model-show-json: False
          :hide-members:
          :noindex:
@@ -346,7 +346,7 @@ Show Members
 
       .. code-block::
 
-         .. autopydantic_model:: package.cfg.ModelMembers
+         .. autopydantic_model:: target.configuration.ModelMembers
             :members:
 
    .. tab:: conf.py

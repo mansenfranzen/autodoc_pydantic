@@ -14,11 +14,13 @@
 import sys
 from pathlib import Path
 
-path_parent = Path(__file__).parent
-path_examples = path_parent.joinpath("package")
-path_autodoc_pydantic = path_parent.parent.parent
+path = Path(__file__)
+path_autodoc_pydantic = path.parents[2]
+path_examples = path.parents[2].joinpath("tests",
+                                         "roots",
+                                         "test-ext-autodoc_pydantic")
 
-sys.path.insert(0, str(path_parent))
+sys.path.insert(0, str(path_examples))
 sys.path.insert(0, str(path_autodoc_pydantic))
 
 # -- Project information -----------------------------------------------------
