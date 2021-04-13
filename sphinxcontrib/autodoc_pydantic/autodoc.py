@@ -12,7 +12,7 @@ from sphinx.ext.autodoc import (
     MethodDocumenter,
     ClassDocumenter,
     AttributeDocumenter,
-    ALL)
+    ALL, Documenter)
 
 from sphinx.util.inspect import object_description
 
@@ -64,11 +64,17 @@ def option_default_true(arg: Any) -> bool:
                          f"Valid arguments are 'true' or 'false'.")
 
 
-class PydanticAutoDocMixin:
-    """Mixin class providing methods to handle getting and setting directive
+class PydanticAutoDoc:
+    """Composite class providing methods to handle getting and setting directive
     option values.
 
     """
+
+    def __init__(self, parent: Documenter):
+        self.parent = parent
+        self.options = parent.options
+        self.env = parent.env
+        self.objtype = parent.objtype
 
     def get_configuration_option_name(self, name: str) -> str:
         """Provide full app environment configuration name for given option
@@ -156,12 +162,16 @@ class PydanticAutoDocMixin:
                 self.options[name] = value_false
 
 
-class PydanticFieldDocumenter(PydanticAutoDocMixin, AttributeDocumenter):
+class PydanticFieldDocumenter(AttributeDocumenter):
     objtype = 'pydantic_field'
     directivetype = 'pydantic_field'
     priority = 10 + AttributeDocumenter.priority
     option_spec = dict(AttributeDocumenter.option_spec)
     member_order = 0
+
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.pyautodoc = PydanticAutoDoc(self)
 
     @classmethod
     def can_document_member(cls,
@@ -261,7 +271,7 @@ class PydanticFieldDocumenter(PydanticAutoDocMixin, AttributeDocumenter):
                 self.add_line(line, source_name)
 
 
-class PydanticConfigClassDocumenter(PydanticAutoDocMixin, ClassDocumenter):
+class PydanticConfigClassDocumenter(ClassDocumenter):
     """Represents specialized Documenter subclass for pydantic model
     configuration.
 
@@ -274,6 +284,7 @@ class PydanticConfigClassDocumenter(PydanticAutoDocMixin, ClassDocumenter):
 
     def __init__(self, *args: Any) -> None:
         super().__init__(*args)
+        self.pyautodoc = PydanticAutoDoc(self)
         self.options["undoc-members"] = True
 
     @classmethod
@@ -300,7 +311,7 @@ class PydanticConfigClassDocumenter(PydanticAutoDocMixin, ClassDocumenter):
 
         """
 
-        if self.get_option_value("show"):
+        if self.pyautodoc.get_option_value("show"):
             super().add_content(more_content, no_docstring)
 
     def add_directive_header(self, sig: str) -> None:
@@ -308,11 +319,11 @@ class PydanticConfigClassDocumenter(PydanticAutoDocMixin, ClassDocumenter):
 
         """
 
-        if self.get_option_value("show"):
+        if self.pyautodoc.get_option_value("show"):
             super().add_directive_header(sig)
 
 
-class PydanticModelDocumenter(PydanticAutoDocMixin, ClassDocumenter):
+class PydanticModelDocumenter(ClassDocumenter):
     """Represents specialized Documenter subclass for pydantic models.
 
     """
@@ -330,9 +341,10 @@ class PydanticModelDocumenter(PydanticAutoDocMixin, ClassDocumenter):
 
     def __init__(self, *args: Any) -> None:
         super().__init__(*args)
-        self.set_default_option("member-order")
-        self.set_default_option("undoc-members")
-        self.set_default_option_with_value("members", ALL)
+        self.pyautodoc = PydanticAutoDoc(self)
+        self.pyautodoc.set_default_option("member-order")
+        self.pyautodoc.set_default_option("undoc-members")
+        self.pyautodoc.set_default_option_with_value("members", ALL)
 
         no_members = self.options.get("hide-members")
         if no_members:
@@ -353,7 +365,7 @@ class PydanticModelDocumenter(PydanticAutoDocMixin, ClassDocumenter):
         return is_val and is_model
 
     def format_signature(self, **kwargs) -> str:
-        if self.get_option_value("model-show-paramlist"):
+        if self.pyautodoc.get_option_value("model-show-paramlist"):
             return super().format_signature(**kwargs)
         else:
             return ""
@@ -364,13 +376,13 @@ class PydanticModelDocumenter(PydanticAutoDocMixin, ClassDocumenter):
                     ) -> None:
         super().add_content(more_content, no_docstring)
 
-        if self.get_option_value("model-show-json"):
+        if self.pyautodoc.get_option_value("model-show-json"):
             self.add_collapsable_schema()
 
-        if self.get_option_value("model-show-config"):
+        if self.pyautodoc.get_option_value("model-show-config"):
             self.add_config()
 
-        if self.get_option_value("model-show-validators"):
+        if self.pyautodoc.get_option_value("model-show-validators"):
             self.add_validators()
 
     def add_collapsable_schema(self):
@@ -451,7 +463,7 @@ class PydanticSettingsDocumenter(PydanticModelDocumenter):
             return False
 
 
-class PydanticValidatorDocumenter(PydanticAutoDocMixin, MethodDocumenter):
+class PydanticValidatorDocumenter(MethodDocumenter):
     """Represents specialized Documenter subclass for pydantic validators.
 
     """
@@ -460,6 +472,10 @@ class PydanticValidatorDocumenter(PydanticAutoDocMixin, MethodDocumenter):
     directivetype = 'pydantic_validator'
     member_order = 50
     priority = 10 + MethodDocumenter.priority
+
+    def __init__(self, *args: Any) -> None:
+        super().__init__(*args)
+        self.pyautodoc = PydanticAutoDoc(self)
 
     @classmethod
     def can_document_member(cls,
@@ -480,7 +496,7 @@ class PydanticValidatorDocumenter(PydanticAutoDocMixin, MethodDocumenter):
 
         """
 
-        if self.get_option_value("show"):
+        if self.pyautodoc.get_option_value("show"):
             super().add_directive_header(sig)
 
     def format_args(self, **kwargs: Any) -> str:
@@ -496,7 +512,7 @@ class PydanticValidatorDocumenter(PydanticAutoDocMixin, MethodDocumenter):
 
         """
 
-        if self.get_option_value("show"):
+        if self.pyautodoc.get_option_value("show"):
             super().add_content(more_content, no_docstring)
 
             if self.env.config["autodoc_pydantic_validator_list_fields"]:
