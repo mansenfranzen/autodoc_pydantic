@@ -1,5 +1,6 @@
 from sphinx.application import Sphinx
 
+from sphinxcontrib.autodoc_pydantic.autocodeblock import AutoCodeBlock
 from sphinxcontrib.autodoc_pydantic.autodoc import (
     PydanticValidatorDocumenter,
     PydanticModelDocumenter,
@@ -46,9 +47,12 @@ def setup(app: Sphinx) -> None:
     app.add_directive_to_domain("py", "pydantic_config", PydanticConfigClass)
     app.add_directive_to_domain("py", "pydantic_validator", PydanticValidator)
 
+    app.add_directive("autocodeblock", AutoCodeBlock)
+
     app.setup_extension('sphinx.ext.autodoc')  # Require autodoc extension
     app.add_autodocumenter(PydanticFieldDocumenter)
     app.add_autodocumenter(PydanticModelDocumenter)
     app.add_autodocumenter(PydanticSettingsDocumenter)
     app.add_autodocumenter(PydanticValidatorDocumenter)
     app.add_autodocumenter(PydanticConfigClassDocumenter)
+
