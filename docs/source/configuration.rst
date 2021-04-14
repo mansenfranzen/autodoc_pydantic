@@ -20,7 +20,6 @@ how pydantic objects are displayed:
          :model-show-json: True
          :model-show-config: False
 
-
 -----
 Model
 -----
@@ -54,12 +53,7 @@ Show JSON
 
    .. tab:: example
 
-      .. code-block:: python
-
-         class ModelShowJson(BaseModel):
-             """Exmaple showing json representation."""
-
-             field: int = 5
+      .. autocodeblock:: target.configuration.ModelShowJson
 
    .. tab:: rst
 
@@ -106,14 +100,7 @@ Show Config
 
    .. tab:: example
 
-      .. code-block:: python
-
-         class ModelShowConfig(BaseModel):
-             """Example showing model configuration."""
-
-             class Config:
-                 title = "FooBar"
-                 allow_mutation = True
+      .. autocodeblock:: target.configuration.ModelShowConfig
 
    .. tab:: rst
 
@@ -162,21 +149,7 @@ Show Validators
 
    .. tab:: example
 
-      .. code-block:: python
-
-         class ModelShowValidators(BaseModel):
-             """Exmaple showing validators."""
-
-             field1: int = 5
-             field2: str = "FooBar"
-
-             @validator("field1")
-             def check1(cls, v):
-                 return v
-
-             @validator("field2")
-             def check2(cls, v):
-                 return v
+      .. autocodeblock:: target.configuration.ModelShowValidators
 
    .. tab:: rst
 
@@ -225,13 +198,7 @@ Show ParamList
 
    .. tab:: example
 
-      .. code-block:: python
-
-         class ModelShowParamList(BaseModel):
-             """Example showing param list."""
-
-             field1: int = 5
-             field2: str = "FooBar"
+      .. autocodeblock:: target.configuration.ModelShowParamList
 
    .. tab:: rst
 
@@ -276,13 +243,7 @@ Show Undoc Members
 
    .. tab:: example
 
-      .. code-block:: python
-
-         class ModelUndocMembers(BaseModel):
-             """Example showing undoc members."""
-
-             field1: int = 5
-             field2: str = "FooBar"
+      .. autocodeblock:: target.configuration.ModelUndocMembers
 
    .. tab:: rst
 
@@ -331,16 +292,7 @@ Show Members
 
    .. tab:: example
 
-      .. code-block:: python
-
-         class ModelMembers(BaseModel):
-             """Example showing members."""
-
-             field1: int = 5
-             """Doc field 1"""
-
-             field2: str = "FooBar"
-             """Doc field 2"""
+      .. autocodeblock:: target.configuration.ModelMembers
 
    .. tab:: rst
 
