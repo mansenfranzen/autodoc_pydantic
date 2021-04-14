@@ -236,74 +236,74 @@ def test_autodoc_pydantic_model_show_validators_false(autodocument):
     assert result == actual
 
 
-def test_autodoc_pydantic_model_show_paramlist_true(autodocument):
+def test_autodoc_pydantic_model_hide_paramlist_false(autodocument):
     result = [
         '',
-        ".. py:pydantic_model:: ModelShowParamList(*, field1: int = 5, field2: str = 'FooBar')",
+        ".. py:pydantic_model:: ModelHideParamList(*, field1: int = 5, field2: str = 'FooBar')",
         '   :module: target.configuration',
         '',
-        '   ModelShowParamList.',
+        '   ModelHideParamList.',
         ''
     ]
 
     # explict global
     actual = autodocument(
         documenter='pydantic_model',
-        object_path='target.configuration.ModelShowParamList',
-        options_app={"autodoc_pydantic_model_show_paramlist": True},
+        object_path='target.configuration.ModelHideParamList',
+        options_app={"autodoc_pydantic_model_hide_paramlist": True},
         deactivate_all=True)
     assert result == actual
 
     # explict local
     actual = autodocument(
         documenter='pydantic_model',
-        object_path='target.configuration.ModelShowParamList',
-        options_doc={"model-show-paramlist": True},
+        object_path='target.configuration.ModelHideParamList',
+        options_doc={"model-hide-paramlist": True},
         deactivate_all=True)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
         documenter='pydantic_model',
-        object_path='target.configuration.ModelShowParamList',
-        options_app={"autodoc_pydantic_model_show_paramlist": False},
-        options_doc={"model-show-paramlist": True},
+        object_path='target.configuration.ModelHideParamList',
+        options_app={"autodoc_pydantic_model_hide_paramlist": False},
+        options_doc={"model-hide-paramlist": True},
         deactivate_all=True)
     assert result == actual
 
 
-def test_autodoc_pydantic_model_show_paramlist_false(autodocument):
+def test_autodoc_pydantic_model_hide_paramlist_true(autodocument):
     result = [
         '',
-        '.. py:pydantic_model:: ModelShowParamList',
+        '.. py:pydantic_model:: ModelHideParamList',
         '   :module: target.configuration',
         '',
-        '   ModelShowParamList.',
+        '   ModelHideParamList.',
         ''
     ]
 
     # explict global
     actual = autodocument(
         documenter='pydantic_model',
-        object_path='target.configuration.ModelShowParamList',
-        options_app={"autodoc_pydantic_model_show_paramlist": False},
+        object_path='target.configuration.ModelHideParamList',
+        options_app={"autodoc_pydantic_model_hide_paramlist": False},
         deactivate_all=True)
     assert result == actual
 
     # explict local
     actual = autodocument(
         documenter='pydantic_model',
-        object_path='target.configuration.ModelShowParamList',
-        options_doc={"model-show-paramlist": False},
+        object_path='target.configuration.ModelHideParamList',
+        options_doc={"model-hide-paramlist": False},
         deactivate_all=True)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
         documenter='pydantic_model',
-        object_path='target.configuration.ModelShowParamList',
-        options_app={"autodoc_pydantic_model_show_paramlist": True},
-        options_doc={"model-show-paramlist": False},
+        object_path='target.configuration.ModelHideParamList',
+        options_app={"autodoc_pydantic_model_hide_paramlist": True},
+        options_doc={"model-hide-paramlist": False},
         deactivate_all=True)
     assert result == actual
 

@@ -23,8 +23,8 @@ class ModelShowValidators(BaseModel):
         return v
 
 
-class ModelShowParamList(BaseModel):
-    """ModelShowParamList."""
+class ModelHideParamList(BaseModel):
+    """ModelHideParamList."""
 
     field1: int = 5
     field2: str = "FooBar"

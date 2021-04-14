@@ -132,10 +132,8 @@ Show Validators
    .. tab:: enabled
 
       .. autopydantic_model:: target.configuration.ModelShowValidators
-         :model-show-config: False
-         :model-show-json: False
+         :__doc_disable_except__: model-show-validators
          :model-show-validators: True
-         :hide-members:
          :noindex:
 
    .. tab:: disabled
@@ -170,9 +168,9 @@ Show ParamList
 
 :Description: Show or hide parameter list of class signature. It usually becomes rather overloaded once a lot fields are present. Additionally, it is redundant since fields are documented anyway.
 
-:Config: `autodoc_pydantic_model_show_paramlist`
+:Config: `autodoc_pydantic_model_hide_paramlist`
 
-:Option: `:model-show-paramlist:`
+:Option: `:model-hide-paramlist:`
 
 :Default: False
 
@@ -180,38 +178,38 @@ Show ParamList
 
    .. tab:: enabled
 
-      .. autopydantic_model:: target.configuration.ModelShowParamList
+      .. autopydantic_model:: target.configuration.ModelHideParamList
          :model-show-config: True
          :model-show-json: False
-         :model-show-paramlist: True
+         :model-hide-paramlist: True
          :hide-members:
          :noindex:
 
    .. tab:: disabled
 
-      .. autopydantic_model:: target.configuration.ModelShowParamList
+      .. autopydantic_model:: target.configuration.ModelHideParamList
          :model-show-config: False
          :model-show-json: False
-         :model-show-paramlist: False
+         :model-hide-paramlist: False
          :hide-members:
          :noindex:
 
    .. tab:: example
 
-      .. autocodeblock:: target.configuration.ModelShowParamList
+      .. autocodeblock:: target.configuration.ModelHideParamList
 
    .. tab:: rst
 
       .. code-block::
 
-         .. autopydantic_model:: target.configuration.ModelShowParamList
-            :model-show-paramlist: True
+         .. autopydantic_model:: target.configuration.ModelHideParamList
+            :model-hide-paramlist: True
 
    .. tab:: conf.py
 
       .. code-block:: python
 
-         autodoc_pydantic_model_show_paramlist = False # True
+         autodoc_pydantic_model_hide_paramlist = False # True
 
 
 Show Undoc Members
