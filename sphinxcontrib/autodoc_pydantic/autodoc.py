@@ -2,7 +2,7 @@
 
 """
 import json
-from typing import Any, Optional
+from typing import Any, Optional, Set
 
 import pydantic
 from docutils.statemachine import StringList
@@ -64,6 +64,17 @@ def option_default_true(arg: Any) -> bool:
                          f"Valid arguments are 'true' or 'false'.")
 
 
+def option_list_like(arg: Any) -> Set[str]:
+    """Used to define a set of items.
+
+    """
+
+    if not arg:
+        return set()
+    else:
+        return {x.strip() for x in arg.split(",")}
+
+
 class PydanticAutoDoc:
     """Composite class providing methods to handle getting and setting directive
     option values.
@@ -99,6 +110,17 @@ class PydanticAutoDoc:
 
         return f"autodoc_pydantic_{sanitized}"
 
+    def is_available(self, name: str) -> bool:
+        """Check if option is usable.
+
+        """
+
+        available = self.options.get("__doc_disable_except__")
+        if available is None:
+            return True
+        else:
+            return name in available
+
     def get_option_value(self, name: str) -> Any:
         """Get option value for given `name`. First, looks for explicit
         directive option values (e.g. :member-order:) which have highest
@@ -114,7 +136,7 @@ class PydanticAutoDoc:
 
         if name in self.options:
             return self.options[name]
-        else:
+        elif self.is_available(name):
             config_name = self.get_configuration_option_name(name)
             return self.env.config[config_name]
 
@@ -129,7 +151,7 @@ class PydanticAutoDoc:
 
         """
 
-        if name not in self.options:
+        if (name not in self.options) and (self.is_available(name)):
             config_name = self.get_configuration_option_name(name)
             value = self.env.config[config_name]
             self.options[name] = value
@@ -154,7 +176,7 @@ class PydanticAutoDoc:
 
         value = self.options.get(name)
 
-        if not value:
+        if not value and self.is_available(name):
             config_name = self.get_configuration_option_name(name)
             if self.env.config[config_name]:
                 self.options[name] = value_true
@@ -333,11 +355,12 @@ class PydanticModelDocumenter(ClassDocumenter):
     priority = 10 + ClassDocumenter.priority
     option_spec = ClassDocumenter.option_spec.copy()
     option_spec.update({"model-show-json": option_default_true,
-                        "model-show-paramlist": option_default_true,
+                        "model-hide-paramlist": option_default_true,
                         "model-show-validators": option_default_true,
                         "model-show-config": option_default_true,
                         "undoc-members": option_default_true,
-                        "hide-members": option_default_true})
+                        "hide-members": option_default_true,
+                        "__doc_disable_except__": option_list_like})
 
     def __init__(self, *args: Any) -> None:
         super().__init__(*args)
@@ -345,7 +368,7 @@ class PydanticModelDocumenter(ClassDocumenter):
         self.pyautodoc.set_default_option("member-order")
         self.pyautodoc.set_default_option("undoc-members")
         self.pyautodoc.set_default_option_with_value("members", ALL)
-
+        print(self.options)
         no_members = self.options.get("hide-members")
         if no_members:
             self.options["members"] = []
@@ -365,10 +388,10 @@ class PydanticModelDocumenter(ClassDocumenter):
         return is_val and is_model
 
     def format_signature(self, **kwargs) -> str:
-        if self.pyautodoc.get_option_value("model-show-paramlist"):
-            return super().format_signature(**kwargs)
-        else:
+        if self.pyautodoc.get_option_value("model-hide-paramlist"):
             return ""
+        else:
+            return super().format_signature(**kwargs)
 
     def add_content(self,
                     more_content: Optional[StringList],
