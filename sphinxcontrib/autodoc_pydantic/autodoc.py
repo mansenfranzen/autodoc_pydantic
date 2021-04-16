@@ -218,6 +218,11 @@ class PydanticFieldDocumenter(AttributeDocumenter):
     directivetype = 'pydantic_field'
     priority = 10 + AttributeDocumenter.priority
     option_spec = dict(AttributeDocumenter.option_spec)
+    option_spec.update(
+        {"field-show-default": option_default_true,
+         "field_show_constraints": option_default_true,
+         "field_list_validators": option_default_true,
+         "field_doc_policy": option_one_of_factory({"both", "docstring", "description"})})
     member_order = 0
 
     def __init__(self, *args):
@@ -244,6 +249,14 @@ class PydanticFieldDocumenter(AttributeDocumenter):
         """
 
         super().add_directive_header(sig)
+        if self.pyautodoc.get_option_value("field-show-default"):
+            self.add_default_value()
+
+
+    def add_default_value(self):
+        """Adds default value.
+
+        """
 
         name = self.objpath[-1]
         wrapper = ModelWrapper(self.parent)
@@ -258,16 +271,16 @@ class PydanticFieldDocumenter(AttributeDocumenter):
                     no_docstring: bool = False
                     ) -> None:
 
-        cfg = self.env.config["autodoc_pydantic_field_doc_policy"]
-        if cfg in ("docstring", "both"):
+        doc_policy = self.pyautodoc.get_option_value("field_doc_policy")
+        if doc_policy in ("docstring", "both"):
             super().add_content(more_content, no_docstring)
-        if cfg in ("both", "description"):
+        if doc_policy in ("both", "description"):
             self.add_description()
 
-        if self.env.config["autodoc_pydantic_field_show_constraints"]:
+        if self.pyautodoc.get_option_value("field_show_constraints"):
             self.add_constraints()
 
-        if self.env.config["autodoc_pydantic_field_list_validators"]:
+        if self.pyautodoc.get_option_value("field_list_validators"):
             self.add_validators()
 
     def add_constraints(self):
