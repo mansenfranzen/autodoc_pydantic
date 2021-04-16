@@ -39,6 +39,7 @@ def setup(app: Sphinx) -> None:
     app.add_config_value(f'{stem}field_doc_policy', 'both', True, str)
     app.add_config_value(f'{stem}field_show_constraints', True, True, bool)
     app.add_config_value(f'{stem}field_show_alias', True, True, bool)
+    app.add_config_value(f'{stem}field_show_default', True, True, bool)
 
     app.add_directive_to_domain("py", "pydantic_field", PydanticField)
     app.add_directive_to_domain("py", "pydantic_model", PydanticModel)
