@@ -20,6 +20,7 @@ path_examples = path.parents[2].joinpath("tests",
                                          "roots",
                                          "test-ext-autodoc_pydantic")
 
+sys.path.insert(0, str(path.parent))
 sys.path.insert(0, str(path_examples))
 sys.path.insert(0, str(path_autodoc_pydantic))
 
@@ -43,7 +44,8 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinxcontrib.autodoc_pydantic",
     "sphinx_tabs.tabs",
-    "sphinx.ext.autosectionlabel"
+    "sphinx.ext.autosectionlabel",
+    "extensions"
 ]
 
 # Add any paths that contain templates here, relative to this directory.
