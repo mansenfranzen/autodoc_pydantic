@@ -250,7 +250,7 @@ def test_autodoc_pydantic_model_hide_paramlist_false(autodocument):
     actual = autodocument(
         documenter='pydantic_model',
         object_path='target.configuration.ModelHideParamList',
-        options_app={"autodoc_pydantic_model_hide_paramlist": True},
+        options_app={"autodoc_pydantic_model_hide_paramlist": False},
         deactivate_all=True)
     assert result == actual
 
@@ -258,7 +258,7 @@ def test_autodoc_pydantic_model_hide_paramlist_false(autodocument):
     actual = autodocument(
         documenter='pydantic_model',
         object_path='target.configuration.ModelHideParamList',
-        options_doc={"model-hide-paramlist": True},
+        options_doc={"model-hide-paramlist": False},
         deactivate_all=True)
     assert result == actual
 
@@ -266,8 +266,8 @@ def test_autodoc_pydantic_model_hide_paramlist_false(autodocument):
     actual = autodocument(
         documenter='pydantic_model',
         object_path='target.configuration.ModelHideParamList',
-        options_app={"autodoc_pydantic_model_hide_paramlist": False},
-        options_doc={"model-hide-paramlist": True},
+        options_app={"autodoc_pydantic_model_hide_paramlist": True},
+        options_doc={"model-hide-paramlist": False},
         deactivate_all=True)
     assert result == actual
 
@@ -286,7 +286,7 @@ def test_autodoc_pydantic_model_hide_paramlist_true(autodocument):
     actual = autodocument(
         documenter='pydantic_model',
         object_path='target.configuration.ModelHideParamList',
-        options_app={"autodoc_pydantic_model_hide_paramlist": False},
+        options_app={"autodoc_pydantic_model_hide_paramlist": True},
         deactivate_all=True)
     assert result == actual
 
@@ -294,7 +294,7 @@ def test_autodoc_pydantic_model_hide_paramlist_true(autodocument):
     actual = autodocument(
         documenter='pydantic_model',
         object_path='target.configuration.ModelHideParamList',
-        options_doc={"model-hide-paramlist": False},
+        options_doc={"model-hide-paramlist": True},
         deactivate_all=True)
     assert result == actual
 
@@ -302,8 +302,8 @@ def test_autodoc_pydantic_model_hide_paramlist_true(autodocument):
     actual = autodocument(
         documenter='pydantic_model',
         object_path='target.configuration.ModelHideParamList',
-        options_app={"autodoc_pydantic_model_hide_paramlist": True},
-        options_doc={"model-hide-paramlist": False},
+        options_app={"autodoc_pydantic_model_hide_paramlist": False},
+        options_doc={"model-hide-paramlist": True},
         deactivate_all=True)
     assert result == actual
 
@@ -453,7 +453,7 @@ def test_autodoc_pydantic_model_members_false(autodocument):
     actual = autodocument(
         documenter='pydantic_model',
         object_path='target.configuration.ModelMembers',
-        options_doc={"hide-members": True},
+        options_doc={"members": "False"},
         deactivate_all=True)
     assert result == actual
 
@@ -462,6 +462,6 @@ def test_autodoc_pydantic_model_members_false(autodocument):
         documenter='pydantic_model',
         object_path='target.configuration.ModelMembers',
         options_app={"autodoc_pydantic_model_members": True},
-        options_doc={"hide-members": True},
+        options_doc={"members": "False"},
         deactivate_all=True)
     assert result == actual
