@@ -19,7 +19,7 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "^3.6.1"
 Sphinx = ">=3.0"
-pydantic = ">=1.0"
+pydantic = ">=1.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.0"
