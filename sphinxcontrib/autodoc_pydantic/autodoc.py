@@ -2,7 +2,7 @@
 
 """
 import json
-from typing import Any, Optional, Set
+from typing import Any, Optional, Set, Union, List
 
 import pydantic
 from docutils.statemachine import StringList
@@ -39,6 +39,22 @@ tpl_collapse = """
    </details></p>
    
 """
+
+def members_option(arg: Any) -> Union[object, List[str]]:
+    """Used to convert the :members: option to auto directives."""
+    if isinstance(arg, str):
+        sanitized = arg.lower()
+        if sanitized == "true":
+            return ALL
+        elif sanitized == "false":
+            return None
+
+    if arg in (None, True):
+        return ALL
+    elif arg is False:
+        return None
+    else:
+        return [x.strip() for x in arg.split(',') if x.strip()]
 
 
 def option_default_true(arg: Any) -> bool:
@@ -176,7 +192,7 @@ class PydanticAutoDoc:
 
         value = self.options.get(name)
 
-        if not value and self.is_available(name):
+        if value is not None and self.is_available(name):
             config_name = self.get_configuration_option_name(name)
             if self.env.config[config_name]:
                 self.options[name] = value_true
@@ -359,7 +375,7 @@ class PydanticModelDocumenter(ClassDocumenter):
                         "model-show-validators": option_default_true,
                         "model-show-config": option_default_true,
                         "undoc-members": option_default_true,
-                        "hide-members": option_default_true,
+                        "members": members_option,
                         "__doc_disable_except__": option_list_like})
 
     def __init__(self, *args: Any) -> None:
@@ -368,10 +384,8 @@ class PydanticModelDocumenter(ClassDocumenter):
         self.pyautodoc.set_default_option("member-order")
         self.pyautodoc.set_default_option("undoc-members")
         self.pyautodoc.set_default_option_with_value("members", ALL)
-        print(self.options)
-        no_members = self.options.get("hide-members")
-        if no_members:
-            self.options["members"] = []
+        if self.options.get("undoc-members") is False:
+            self.options.pop("undoc-members")
 
     @classmethod
     def can_document_member(cls,
