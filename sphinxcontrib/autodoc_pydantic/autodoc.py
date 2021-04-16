@@ -2,7 +2,7 @@
 
 """
 import json
-from typing import Any, Optional, Set, Union, List
+from typing import Any, Optional, Set, Union, List, Callable
 
 import pydantic
 from docutils.statemachine import StringList
@@ -56,6 +56,19 @@ def members_option(arg: Any) -> Union[object, List[str]]:
     else:
         return [x.strip() for x in arg.split(',') if x.strip()]
 
+
+def option_one_of_factory(choices: Set[Any]) -> Callable:
+    """Create a option validation function which allows only one value
+    of given set of provided `choices`.
+
+    """
+
+    def option_func(value: Any):
+        if value not in choices:
+            raise ValueError(f"Option value has to be on of {choices}")
+        return value
+
+    return option_func
 
 def option_default_true(arg: Any) -> bool:
     """Used to define boolean options with default to True if no argument
