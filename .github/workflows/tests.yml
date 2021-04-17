@@ -10,7 +10,7 @@ jobs:
       matrix:
         python-version: [3.6]
         os: [ubuntu-18.04]
-        pydantic_version: ["=~1.8", "=~1.7", "=~1.6", "=~1.5", "=~1.4", "@latest"]
+        pydantic_version: ["=~1.8", "=~1.7", "=~1.6", "=~1.5", "@latest"]
         sphinx_version: ["=~3.5", "=~3.4", "@latest"]
     runs-on: ${{ matrix.os }}
     steps:
