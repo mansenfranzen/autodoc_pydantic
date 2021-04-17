@@ -19,6 +19,8 @@ from sphinxcontrib.autodoc_pydantic.inspection import (
     ModelWrapper,
     NamedReference
 )
+from sphinxcontrib.autodoc_pydantic.util import PydanticAutoDoc, \
+    option_default_true
 
 
 def create_href(text, target, env) -> pending_xref:
@@ -42,6 +44,13 @@ def create_field_href(reference: NamedReference,
 
 class PydanticValidator(PyMethod):
     """Description of a method."""
+
+    option_spec =PyMethod.option_spec.copy()
+    option_spec.update({"validator_replace_signature": option_default_true})
+
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.pyautodoc = PydanticAutoDoc(self)
 
     def replace_return_node(self, signode: desc_signature):
         """Replaces the return node with references to validated fields.
@@ -67,13 +76,15 @@ class PydanticValidator(PyMethod):
         str, str]:
         fullname, prefix = super().handle_signature(sig, signode)
 
-        if self.env.config["autodoc_pydantic_validator_replace_signature"]:
+        if self.pyautodoc.get_option_value("validator-replace-signature"):
             self.replace_return_node(signode)
 
         return fullname, prefix
 
     def get_signature_prefix(self, sig: str) -> str:
-        return "validator "
+
+        value = self.pyautodoc.get_option_value("validator-signature-prefix")
+        return value or super().get_signature_prefix(sig)
 
 
 class PydanticField(PyAttribute):
