@@ -465,3 +465,204 @@ def test_autodoc_pydantic_model_members_false(autodocument):
         options_doc={"members": "False"},
         deactivate_all=True)
     assert result == actual
+
+
+def test_autodoc_pydantic_model_member_order_groupwise(autodocument):
+    result = [
+        '',
+        ".. py:pydantic_model:: ModelMemberOrder",
+        '   :module: target.configuration',
+        '',
+        '   ModelMemberOrder.',
+        '',
+        '',
+        '   .. py:pydantic_field:: ModelMemberOrder.field',
+        '      :module: target.configuration',
+        '      :type: int',
+        '      :value: 1',
+        '',
+        '      Field.',
+        '',
+        '',
+        '   .. py:pydantic_validator:: ModelMemberOrder.dummy',
+        '      :module: target.configuration',
+        '      :classmethod:',
+        '',
+        '      Check.',
+        '',
+        '',
+        '   .. py:pydantic_config:: ModelMemberOrder.Config()',
+        '      :module: target.configuration',
+        '',
+        '      Config.',
+        ''
+    ]
+
+    # explict global
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelMemberOrder',
+        options_app={"autodoc_pydantic_model_members": True,
+                     "autodoc_pydantic_validator_show": True,
+                     "autodoc_pydantic_config_show": True,
+                     "autodoc_pydantic_model_member_order": "groupwise"},
+        deactivate_all=True)
+    assert result == actual
+
+
+    # explict local
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelMemberOrder',
+        options_app={"autodoc_pydantic_model_members": True,
+                     "autodoc_pydantic_validator_show": True,
+                     "autodoc_pydantic_config_show": True},
+        options_doc={"member-order": "groupwise"},
+        deactivate_all=True)
+    assert result == actual
+
+    # explicit local overwrite global
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelMemberOrder',
+        options_app={"autodoc_pydantic_model_members": True,
+                     "autodoc_pydantic_validator_show": True,
+                     "autodoc_pydantic_config_show": True,
+                     "autodoc_pydantic_model_member_order": "bysource"},
+        options_doc={"member-order": "groupwise"},
+        deactivate_all=True)
+    assert result == actual
+    
+
+def test_autodoc_pydantic_model_member_order_bysource(autodocument):
+    result = [
+        '',
+        ".. py:pydantic_model:: ModelMemberOrder",
+        '   :module: target.configuration',
+        '',
+        '   ModelMemberOrder.',
+        '',
+        '',
+        '   .. py:pydantic_validator:: ModelMemberOrder.dummy',
+        '      :module: target.configuration',
+        '      :classmethod:',
+        '',
+        '      Check.',
+        '',
+        '',
+        '   .. py:pydantic_config:: ModelMemberOrder.Config()',
+        '      :module: target.configuration',
+        '',
+        '      Config.',
+        '',
+        '',
+        '   .. py:pydantic_field:: ModelMemberOrder.field',
+        '      :module: target.configuration',
+        '      :type: int',
+        '      :value: 1',
+        '',
+        '      Field.',
+        ''
+    ]
+
+    # explict global
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelMemberOrder',
+        options_app={"autodoc_pydantic_model_members": True,
+                     "autodoc_pydantic_validator_show": True,
+                     "autodoc_pydantic_config_show": True,
+                     "autodoc_pydantic_model_member_order": "bysource"},
+        deactivate_all=True)
+    assert result == actual
+
+
+    # explict local
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelMemberOrder',
+        options_app={"autodoc_pydantic_model_members": True,
+                     "autodoc_pydantic_validator_show": True,
+                     "autodoc_pydantic_config_show": True},
+        options_doc={"member-order": "bysource"},
+        deactivate_all=True)
+    assert result == actual
+
+    # explicit local overwrite global
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelMemberOrder',
+        options_app={"autodoc_pydantic_model_members": True,
+                     "autodoc_pydantic_validator_show": True,
+                     "autodoc_pydantic_config_show": True,
+                     "autodoc_pydantic_model_member_order": "groupwise"},
+        options_doc={"member-order": "bysource"},
+        deactivate_all=True)
+    assert result == actual
+    
+    
+def test_autodoc_pydantic_model_member_order_alphabetical(autodocument):
+    result = [
+        '',
+        ".. py:pydantic_model:: ModelMemberOrder",
+        '   :module: target.configuration',
+        '',
+        '   ModelMemberOrder.',
+        '',
+        '',
+        '   .. py:pydantic_config:: ModelMemberOrder.Config()',
+        '      :module: target.configuration',
+        '',
+        '      Config.',
+        '',
+        '',
+        '   .. py:pydantic_validator:: ModelMemberOrder.dummy',
+        '      :module: target.configuration',
+        '      :classmethod:',
+        '',
+        '      Check.',
+        '',
+        '',
+        '   .. py:pydantic_field:: ModelMemberOrder.field',
+        '      :module: target.configuration',
+        '      :type: int',
+        '      :value: 1',
+        '',
+        '      Field.',
+        ''
+    ]
+
+    # explict global
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelMemberOrder',
+        options_app={"autodoc_pydantic_model_members": True,
+                     "autodoc_pydantic_validator_show": True,
+                     "autodoc_pydantic_config_show": True,
+                     "autodoc_pydantic_model_member_order": "alphabetical"},
+        deactivate_all=True)
+    assert result == actual
+
+
+    # explict local
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelMemberOrder',
+        options_app={"autodoc_pydantic_model_members": True,
+                     "autodoc_pydantic_validator_show": True,
+                     "autodoc_pydantic_config_show": True},
+        options_doc={"member-order": "alphabetical"},
+        deactivate_all=True)
+    assert result == actual
+
+    # explicit local overwrite global
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelMemberOrder',
+        options_app={"autodoc_pydantic_model_members": True,
+                     "autodoc_pydantic_validator_show": True,
+                     "autodoc_pydantic_config_show": True,
+                     "autodoc_pydantic_model_member_order": "groupwise"},
+        options_doc={"member-order": "alphabetical"},
+        deactivate_all=True)
+    assert result == actual

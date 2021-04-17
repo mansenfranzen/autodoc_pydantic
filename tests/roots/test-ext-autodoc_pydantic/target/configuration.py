@@ -45,3 +45,19 @@ class ModelMembers(BaseModel):
 
     field2: str = "FooBar"
     """Doc field 2"""
+
+
+class ModelMemberOrder(BaseModel):
+    """ModelMemberOrder."""
+
+    @validator("field")
+    def dummy(cls, v) -> str:
+        """Check."""
+        return v
+
+    class Config:
+        """Config."""
+        allow_mutation = True
+
+    field: int = 1
+    """Field."""
