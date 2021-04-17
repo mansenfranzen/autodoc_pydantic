@@ -31,7 +31,7 @@ Model
    :path: target.configuration.ModelShowJson
    :config: autodoc_pydantic_model_show_json
    :option: model-show-json
-   :default: True
+   :values: True, False
 
    Show the json representation of a pydantic model within in the class doc string as a collapsable code block.
 
@@ -41,7 +41,7 @@ Model
    :path: target.configuration.ModelShowConfig
    :config: autodoc_pydantic_model_show_config
    :option: model-show-config
-   :default: True
+   :values: True, False
 
    Show model config summary within the class doc string.
 
@@ -51,7 +51,7 @@ Model
    :path: target.configuration.ModelShowValidators
    :config: autodoc_pydantic_model_show_validators
    :option: model-show-validators
-   :default: True
+   :values: True, False
 
    Show all validators along with corresponding fields within the class doc string. Hyperlinks are automatically created for validators and fields.
 
@@ -61,7 +61,7 @@ Model
    :path: target.configuration.ModelHideParamList
    :config: autodoc_pydantic_model_hide_paramlist
    :option: model-hide-paramlist
-   :default: True
+   :values: True, False
 
    Hide parameter list of class signature. It usually becomes rather overloaded once a lot fields are present. Additionally, it is redundant since fields are documented anyway.
 
@@ -72,7 +72,7 @@ Model
    :config: autodoc_pydantic_model_undoc_members
    :option: undoc-members
    :option_additional: members
-   :default: True
+   :values: True, False
 
    Show undocumented members. By default, undocumented members are hidden for standard :code:`auto` directives. For pydantic models, this is overwritten if enabled.
 
@@ -87,6 +87,16 @@ Model
    :path: target.configuration.ModelMembers
    :config: autodoc_pydantic_model_members
    :option: members
-   :default: True
+   :values: True, False
 
    Show members. By default, members are hidden for standard :code:`auto` directives. For pydantic models, this is overwritten if enabled.
+
+.. tabdocconfig:: autopydantic_model
+   :title: Member Order
+   :path: target.configuration.ModelMemberOrder
+   :config: autodoc_pydantic_model_member_order
+   :option: member-order
+   :option_additional: members, config-show, validator-show
+   :values: groupwise, bysource, alphabetical
+
+   Order members groupwise by default in the following order: fields, validators and config.

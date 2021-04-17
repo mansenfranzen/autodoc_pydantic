@@ -21,42 +21,32 @@ from sphinx.ext.autodoc.directive import DummyOptionSpec
 from sphinx.util import nested_parse_with_titles
 from sphinx.util.docutils import switch_source_input, SphinxDirective
 
+
+tab_sub_tpl = """
+   .. tab:: {value_label}
+
+      .. {directive}:: {path}
+         :__doc_disable_except__: {option}
+         :{option}: {value}{option_additional}
+         :noindex:
+"""
+
 tab_tpl = """
 {title}
 
 {description}
 
+:conf.py: *{config}*
+
+:option: *{option}*
+
+**Available values with rendered examples:**
 
 .. tabs::
 
-   .. tab:: enabled
-
-      .. {directive}:: {path}
-         :__doc_disable_except__: {option}
-         :{option}: {default}{option_additional}
-         :noindex:
-
-   .. tab:: disabled
-
-      .. {directive}:: {path}
-         :__doc_disable_except__: {option}
-         :{option}: {default_disabled}{option_additional}
-         :noindex:
-
-   .. tab:: conf.py
-
-      .. code-block:: python
-
-         {config} = {default} # {default_remaining}
-
-   .. tab:: option
-
-      .. code-block::
-
-         .. {directive}:: {path}
-            :{option}: {default}
-            
-   .. tab:: example
+{tabs}
+           
+   .. tab:: *example code*
 
       .. autocodeblock:: {path}
 
@@ -76,21 +66,29 @@ class TabDocDirective(SphinxDirective):
 
     def run(self) -> List[Node]:
 
-        defaults = self.options["default"].split(",")
-        if len(defaults) == 1:
-            default = "True"
-            default_disabled = default_remaining = "False"
-        else:
-            default = defaults[0]
-            default_disabled = defaults[1]
-            default_remaining = defaults[1:]
-
         option_addition = self.options.get("option_additional", "")
         if option_addition:
             add = option_addition.split(",")
-            lines = "\n".join([f"         :{option}:" for option in add])
+            lines = "\n".join([f"         :{option.strip()}:" for option in add])
             option_addition = "\n" + lines
 
+        defaults = self.options["values"].split(",")
+        defaults = [x.strip() for x in defaults]
+        defaults_remaining = ", ".join(defaults[1:])
+
+        tabs = []
+        for default in defaults:
+            value_label = default if len(tabs) else default + " (default)"
+            tab_rst = tab_sub_tpl.format(
+                value=default,
+                value_label=value_label,
+                path=self.options["path"],
+                config=self.options["config"],
+                option=self.options["option"],
+                option_additional=option_addition,
+                directive=self.arguments[0]
+            )
+            tabs.append(tab_rst)
 
         title = self.options["title"]
         title = title + "\n" + ("-" * len(title))
@@ -98,14 +96,14 @@ class TabDocDirective(SphinxDirective):
         content = tab_tpl.format(
             title=title,
             description=" ".join(self.content),
+            tabs="\n".join(tabs),
             directive=self.arguments[0],
             path=self.options["path"],
             config=self.options["config"],
             option=self.options["option"],
             option_additional=option_addition,
-            default=default,
-            default_disabled=default_disabled,
-            default_remaining=default_remaining
+            default=defaults[0],
+            default_remaining=defaults_remaining,
         )
 
         content = StringList(content.split("\n"))
