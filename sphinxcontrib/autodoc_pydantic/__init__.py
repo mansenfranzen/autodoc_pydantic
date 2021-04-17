@@ -32,6 +32,7 @@ def setup(app: Sphinx) -> None:
     app.add_config_value(f'{stem}model_member_order', 'groupwise', True, str)
 
     app.add_config_value(f'{stem}validator_show', True, True, bool)
+    app.add_config_value(f'{stem}validator_signature_prefix', "validator ", True, str)
     app.add_config_value(f'{stem}validator_replace_signature', True, True, bool)
     app.add_config_value(f'{stem}validator_list_fields', True, True, bool)
 
