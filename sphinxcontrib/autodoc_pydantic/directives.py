@@ -1,9 +1,7 @@
 """This module contains pydantic specific directives.
 
 """
-import pydoc
 from typing import Tuple
-import importlib
 
 from docutils.nodes import emphasis
 from sphinx.addnodes import (
@@ -43,9 +41,11 @@ def create_field_href(reference: NamedReference,
 
 
 class PydanticValidator(PyMethod):
-    """Description of a method."""
+    """Description of pydantic validator.
 
-    option_spec =PyMethod.option_spec.copy()
+    """
+
+    option_spec = PyMethod.option_spec.copy()
     option_spec.update({"validator_replace_signature": option_default_true})
 
     def __init__(self, *args):
@@ -82,16 +82,32 @@ class PydanticValidator(PyMethod):
         return fullname, prefix
 
     def get_signature_prefix(self, sig: str) -> str:
+        """Overwrite original signature prefix with custom pydantic ones.
 
+        """
         value = self.pyautodoc.get_option_value("validator-signature-prefix")
         return value or super().get_signature_prefix(sig)
 
 
 class PydanticField(PyAttribute):
-    """Description of an attribute."""
+    """Description of pydantic field.
+
+    """
+
+    option_spec = PyAttribute.option_spec.copy()
+    option_spec.update({"field-show-alias": option_default_true})
+
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.pyautodoc = PydanticAutoDoc(self)
 
     def get_signature_prefix(self, sig: str) -> str:
-        return "field "
+        """Overwrite original signature prefix with custom pydantic ones.
+
+        """
+
+        value = self.pyautodoc.get_option_value("field-signature-prefix")
+        return value or super().get_signature_prefix(sig)
 
     def add_alias(self, signode: desc_signature):
         """Replaces the return node with references to validated fields.
@@ -111,28 +127,59 @@ class PydanticField(PyAttribute):
         str, str]:
         fullname, prefix = super().handle_signature(sig, signode)
 
-        if self.env.config["autodoc_pydantic_field_show_alias"]:
+        if self.pyautodoc.get_option_value("field-show-alias"):
             self.add_alias(signode)
 
         return fullname, prefix
 
 
 class PydanticModel(PyClasslike):
-    """Description of an attribute."""
+    """Description of pydantic model.
+
+    """
+
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.pyautodoc = PydanticAutoDoc(self)
 
     def get_signature_prefix(self, sig: str) -> str:
-        return "pydantic model "
+        """Overwrite original signature prefix with custom pydantic ones.
+
+        """
+
+        value = self.pyautodoc.get_option_value("model-signature-prefix")
+        return value or super().get_signature_prefix(sig)
 
 
 class PydanticSettings(PyClasslike):
-    """Description of an attribute."""
+    """Description of pydantic settings.
+
+    """
+
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.pyautodoc = PydanticAutoDoc(self)
 
     def get_signature_prefix(self, sig: str) -> str:
-        return "pydantic settings "
+        """Overwrite original signature prefix with custom pydantic ones.
+
+        """
+
+        value = self.pyautodoc.get_option_value("settings-signature-prefix")
+        return value or super().get_signature_prefix(sig)
 
 
 class PydanticConfigClass(PyClasslike):
-    """Description of an attribute."""
+    """Description of pydantic model/settings config class."""
+
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.pyautodoc = PydanticAutoDoc(self)
 
     def get_signature_prefix(self, sig: str) -> str:
-        return "model "
+        """Overwrite original signature prefix with custom pydantic ones.
+
+        """
+
+        value = self.pyautodoc.get_option_value("config-signature-prefix")
+        return value or super().get_signature_prefix(sig)
