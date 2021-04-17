@@ -2,9 +2,10 @@
 
 """
 import json
-from typing import Any, Optional, Set, Union, List, Callable
+from typing import Any, Optional
 
 import pydantic
+from docutils.parsers.rst.directives import unchanged
 from docutils.statemachine import StringList
 from pydantic import BaseSettings
 from pydantic.schema import get_field_schema_validations
@@ -12,7 +13,7 @@ from sphinx.ext.autodoc import (
     MethodDocumenter,
     ClassDocumenter,
     AttributeDocumenter,
-    ALL, Documenter)
+    ALL)
 
 from sphinx.util.inspect import object_description
 
@@ -21,8 +22,13 @@ from sphinxcontrib.autodoc_pydantic.inspection import (
     is_validator_by_name,
     ModelWrapper
 )
-
-NONE = object()
+from sphinxcontrib.autodoc_pydantic.util import (
+    option_members,
+    option_one_of_factory,
+    option_default_true,
+    option_list_like,
+    PydanticAutoDoc
+)
 
 tpl_collapse = """
 .. raw:: html
@@ -39,178 +45,6 @@ tpl_collapse = """
    </details></p>
    
 """
-
-def members_option(arg: Any) -> Union[object, List[str]]:
-    """Used to convert the :members: option to auto directives."""
-    if isinstance(arg, str):
-        sanitized = arg.lower()
-        if sanitized == "true":
-            return ALL
-        elif sanitized == "false":
-            return None
-
-    if arg in (None, True):
-        return ALL
-    elif arg is False:
-        return None
-    else:
-        return [x.strip() for x in arg.split(',') if x.strip()]
-
-
-def option_one_of_factory(choices: Set[Any]) -> Callable:
-    """Create a option validation function which allows only one value
-    of given set of provided `choices`.
-
-    """
-
-    def option_func(value: Any):
-        if value not in choices:
-            raise ValueError(f"Option value has to be on of {choices}")
-        return value
-
-    return option_func
-
-def option_default_true(arg: Any) -> bool:
-    """Used to define boolean options with default to True if no argument
-    is passed.
-
-    """
-
-    if isinstance(arg, bool):
-        return arg
-
-    if arg is None:
-        return True
-
-    sanitized = arg.strip().lower()
-
-    if sanitized == "true":
-        return True
-    elif sanitized == "false":
-        return False
-    else:
-        raise ValueError(f"Directive option argument '{arg}' is not valid. "
-                         f"Valid arguments are 'true' or 'false'.")
-
-
-def option_list_like(arg: Any) -> Set[str]:
-    """Used to define a set of items.
-
-    """
-
-    if not arg:
-        return set()
-    else:
-        return {x.strip() for x in arg.split(",")}
-
-
-class PydanticAutoDoc:
-    """Composite class providing methods to handle getting and setting directive
-    option values.
-
-    """
-
-    def __init__(self, parent: Documenter):
-        self.parent = parent
-        self.options = parent.options
-        self.env = parent.env
-        self.objtype = parent.objtype
-
-    def get_configuration_option_name(self, name: str) -> str:
-        """Provide full app environment configuration name for given option
-        name.
-
-        Parameters
-        ----------
-        name: str
-            Name of the option.
-
-        Returns
-        -------
-        full_name: str
-            Full app environment configuration name.
-
-        """
-
-        sanitized = name.replace("-", "_")
-        prefix = self.objtype.split("_")[-1]
-        if prefix not in sanitized:
-            sanitized = f"{prefix}_{sanitized}"
-
-        return f"autodoc_pydantic_{sanitized}"
-
-    def is_available(self, name: str) -> bool:
-        """Check if option is usable.
-
-        """
-
-        available = self.options.get("__doc_disable_except__")
-        if available is None:
-            return True
-        else:
-            return name in available
-
-    def get_option_value(self, name: str) -> Any:
-        """Get option value for given `name`. First, looks for explicit
-        directive option values (e.g. :member-order:) which have highest
-        priority. Second, if no directive option is given, get the default
-        option value provided via the app environment configuration.
-
-        Parameters
-        ----------
-        name: str
-            Name of the option.
-
-        """
-
-        if name in self.options:
-            return self.options[name]
-        elif self.is_available(name):
-            config_name = self.get_configuration_option_name(name)
-            return self.env.config[config_name]
-
-    def set_default_option(self, name: str):
-        """Set default option value for given `name` from app environment
-        configuration if an explicit directive option was not provided.
-
-        Parameters
-        ----------
-        name: str
-            Name of the option.
-
-        """
-
-        if (name not in self.options) and (self.is_available(name)):
-            config_name = self.get_configuration_option_name(name)
-            value = self.env.config[config_name]
-            self.options[name] = value
-
-    def set_default_option_with_value(self, name: str,
-                                      value_true: Any,
-                                      value_false: Optional[Any] = NONE):
-        """Set option value for given `name`. Depending on app environment
-        configuration boolean value choose either `value_true` or `value_false`.
-        This is only relevant if option value has not been set, yet.
-
-        Parameters
-        ----------
-        name: str
-            Name of the option.
-        value_true:
-            Value to be set if True.
-        value_false:
-            Value to be set if False.
-
-        """
-
-        value = self.options.get(name)
-
-        if value is not None and self.is_available(name):
-            config_name = self.get_configuration_option_name(name)
-            if self.env.config[config_name]:
-                self.options[name] = value_true
-            elif value_false is not NONE:
-                self.options[name] = value_false
 
 
 class PydanticFieldDocumenter(AttributeDocumenter):
@@ -401,7 +235,7 @@ class PydanticModelDocumenter(ClassDocumenter):
                         "model-show-validators": option_default_true,
                         "model-show-config": option_default_true,
                         "undoc-members": option_default_true,
-                        "members": members_option,
+                        "members": option_members,
                         "__doc_disable_except__": option_list_like})
 
     def __init__(self, *args: Any) -> None:
@@ -535,10 +369,16 @@ class PydanticValidatorDocumenter(MethodDocumenter):
     directivetype = 'pydantic_validator'
     member_order = 50
     priority = 10 + MethodDocumenter.priority
+    option_spec = MethodDocumenter.option_spec.copy()
+    option_spec.update({"validator_replace_signature": option_default_true,
+                        "validator-list-fields": option_default_true,
+                        "validator-signature_prefix": unchanged})
 
     def __init__(self, *args: Any) -> None:
         super().__init__(*args)
         self.pyautodoc = PydanticAutoDoc(self)
+        self.pyautodoc.pass_option_to_directive("validator_replace_signature")
+        self.pyautodoc.pass_option_to_directive("validator-signature_prefix")
 
     @classmethod
     def can_document_member(cls,
@@ -564,7 +404,7 @@ class PydanticValidatorDocumenter(MethodDocumenter):
 
     def format_args(self, **kwargs: Any) -> str:
 
-        if self.env.config["autodoc_pydantic_validator_replace_signature"]:
+        if self.pyautodoc.get_option_value("validator-replace-signature"):
             return ''
 
     def add_content(self,
@@ -578,7 +418,7 @@ class PydanticValidatorDocumenter(MethodDocumenter):
         if self.pyautodoc.get_option_value("show"):
             super().add_content(more_content, no_docstring)
 
-            if self.env.config["autodoc_pydantic_validator_list_fields"]:
+            if self.pyautodoc.get_option_value("validator-list-fields"):
                 self.add_field_list()
 
     def add_field_list(self):
