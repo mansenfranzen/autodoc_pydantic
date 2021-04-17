@@ -2,7 +2,8 @@
 Configuration
 =============
 
-**autodoc_pydantic** is completely configurable. There are two ways to configure
+One major strength of **autodoc_pydantic** is that every feature is completely
+configurable to allow maximum customization. There are two ways to configure
 how pydantic objects are displayed:
 
 - **conf.py**: Globally define the default configuration via :code:`conf.py` which takes effect for all pydantic objects like:
