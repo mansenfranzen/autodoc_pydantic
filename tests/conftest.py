@@ -19,11 +19,13 @@ pytest_plugins = 'sphinx.testing.fixtures'
 
 CONF_DEACTIVATE = {
     "autodoc_pydantic_config_show": False,
+    "autodoc_pydantic_config_undoc_members": False,
+    "autodoc_pydantic_config_members": False,
 
     "autodoc_pydantic_model_show_json": False,
     "autodoc_pydantic_model_show_config": False,
     "autodoc_pydantic_model_show_validators": False,
-    "autodoc_pydantic_model_show_paramlist": False,
+    "autodoc_pydantic_model_hide_paramlist": True,
     "autodoc_pydantic_model_undoc_members": False,
     "autodoc_pydantic_model_members": False,
 
@@ -80,6 +82,7 @@ def do_autodoc(app: Sphinx,
     options_doc = options_doc or {}
     doc_cls = app.registry.documenters[documenter]
     doc_opts = process_documenter_options(doc_cls, app.config, options_doc)
+    print(doc_opts)
 
     # get documenter bridge which is going to contain the result
     state = Mock()
