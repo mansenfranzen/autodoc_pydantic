@@ -1,6 +1,7 @@
 """This module contains pydantic specific directives.
 
 """
+import pydoc
 from typing import Tuple
 import importlib
 
@@ -51,10 +52,8 @@ class PydanticValidator(PyMethod):
         signode += desc_annotation("", " » ")
 
         # get imports, names and fields of validator
-        module = importlib.import_module(name=signode['module'])
-        model_name, validator_name = signode["fullname"].split(".")
-        model = getattr(module, model_name)
-        wrapper = ModelWrapper.factory(model)
+        validator_name = signode["fullname"].split(".")[-1]
+        wrapper = ModelWrapper.from_signode(signode)
         fields = wrapper.get_fields_for_validator(validator_name)
 
         # add field reference nodes
@@ -89,10 +88,8 @@ class PydanticField(PyAttribute):
         """
 
         # get imports, names and fields of validator
-        module = importlib.import_module(name=signode['module'])
-        model_name, field_name = signode["fullname"].split(".")
-        model = getattr(module, model_name)
-        wrapper = ModelWrapper.factory(model)
+        field_name = signode["fullname"].split(".")[-1]
+        wrapper = ModelWrapper.from_signode(signode)
         field = wrapper.get_field_object_by_name(field_name)
         alias = field.alias
 
