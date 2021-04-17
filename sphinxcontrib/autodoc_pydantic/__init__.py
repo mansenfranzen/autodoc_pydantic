@@ -23,6 +23,8 @@ def setup(app: Sphinx) -> None:
 
     app.add_config_value(f'{stem}config_show', True, True, bool)
     app.add_config_value(f'{stem}config_signature_prefix', "model ", True, str)
+    app.add_config_value(f'{stem}config_undoc_members', True, True, bool)
+    app.add_config_value(f'{stem}config_members', True, True, bool)
 
     app.add_config_value(f'{stem}settings_signature_prefix', "pydantic settings ", True, str)
 
