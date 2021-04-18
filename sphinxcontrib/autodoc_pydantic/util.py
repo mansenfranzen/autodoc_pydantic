@@ -2,6 +2,7 @@
 and the PyAutoDoc composite class.
 
 """
+import pydoc
 from typing import Any, Union, List, Set, Callable, Optional
 
 from docutils.parsers.rst import Directive
@@ -83,6 +84,13 @@ class PydanticAutoDoc:
 
     def __init__(self, parent: Union[Documenter, Directive]):
         self.parent = parent
+
+    def get_pydantic_object_from_name(self) -> Any:
+        """Return the object referenced by name.
+
+        """
+
+        return pydoc.locate(self.parent.name)
 
     def get_configuration_option_name(self, name: str) -> str:
         """Provide full app environment configuration name for given option
