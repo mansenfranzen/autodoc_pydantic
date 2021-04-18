@@ -87,13 +87,13 @@ def test_autodoc_pydantic_model_show_json_false(autodocument):
     assert actual == result
 
 
-def test_autodoc_pydantic_model_show_config_true(autodocument):
+def test_autodoc_pydantic_model_show_config_summary_summary_true(autodocument):
     result = [
         '',
-        '.. py:pydantic_model:: ModelShowConfig',
+        '.. py:pydantic_model:: ModelShowConfigSummary',
         '   :module: target.configuration',
         '',
-        '   ModelShowConfig.',
+        '   ModelShowConfigSummary.',
         '',
         '   :Config:',
         '      - **allow_mutation**: *bool = True*',
@@ -103,135 +103,135 @@ def test_autodoc_pydantic_model_show_config_true(autodocument):
     # explict global
     actual = autodocument(
         documenter='pydantic_model',
-        object_path='target.configuration.ModelShowConfig',
-        options_app={"autodoc_pydantic_model_show_config": True},
+        object_path='target.configuration.ModelShowConfigSummary',
+        options_app={"autodoc_pydantic_model_show_config_summary": True},
         deactivate_all=True)
     assert actual == result
 
     # explict local
     actual = autodocument(documenter='pydantic_model',
-                          object_path='target.configuration.ModelShowConfig',
-                          options_doc={"model-show-config": True},
+                          object_path='target.configuration.ModelShowConfigSummary',
+                          options_doc={"model-show-config-summary": True},
                           deactivate_all=True)
     assert actual == result
 
     # explicit local overwrite global
     actual = autodocument(
         documenter='pydantic_model',
-        object_path='target.configuration.ModelShowConfig',
-        options_app={"autodoc_pydantic_model_show_config": False},
-        options_doc={"model-show-config": True},
+        object_path='target.configuration.ModelShowConfigSummary',
+        options_app={"autodoc_pydantic_model_show_config_summary": False},
+        options_doc={"model-show-config-summary": True},
         deactivate_all=True)
     assert actual == result
 
 
-def test_autodoc_pydantic_model_show_config_false(autodocument):
+def test_autodoc_pydantic_model_show_config_summary_false(autodocument):
     result = [
         '',
-        '.. py:pydantic_model:: ModelShowConfig',
+        '.. py:pydantic_model:: ModelShowConfigSummary',
         '   :module: target.configuration',
         '',
-        '   ModelShowConfig.',
+        '   ModelShowConfigSummary.',
         ''
     ]
 
     # explict global
     actual = autodocument(
         documenter='pydantic_model',
-        object_path='target.configuration.ModelShowConfig',
-        options_app={"autodoc_pydantic_model_show_config": False},
+        object_path='target.configuration.ModelShowConfigSummary',
+        options_app={"autodoc_pydantic_model_show_config_summary": False},
         deactivate_all=True)
     assert actual == result
 
     # explict local
     actual = autodocument(
         documenter='pydantic_model',
-        object_path='target.configuration.ModelShowConfig',
-        options_doc={"model-show-config": False},
+        object_path='target.configuration.ModelShowConfigSummary',
+        options_doc={"model-show-config-summary": False},
         deactivate_all=True)
     assert actual == result
 
     # explicit local overwrite global
     actual = autodocument(
         documenter='pydantic_model',
-        object_path='target.configuration.ModelShowConfig',
-        options_app={"autodoc_pydantic_model_show_config": True},
-        options_doc={"model-show-config": False},
+        object_path='target.configuration.ModelShowConfigSummary',
+        options_app={"autodoc_pydantic_model_show_config_summary": True},
+        options_doc={"model-show-config-summary": False},
         deactivate_all=True)
     assert actual == result
 
 
-def test_autodoc_pydantic_model_show_validators_true(autodocument):
+def test_autodoc_pydantic_model_show_validators_summary_true(autodocument):
     result = [
         '',
-        '.. py:pydantic_model:: ModelShowValidators',
+        '.. py:pydantic_model:: ModelShowValidatorsSummary',
         '   :module: target.configuration',
         '',
-        '   ModelShowValidators.',
+        '   ModelShowValidatorsSummary.',
         '',
         '   :Validators:',
-        '      - :py:obj:`check <target.configuration.ModelShowValidators.check>` » :py:obj:`field <target.configuration.ModelShowValidators.field>`',
+        '      - :py:obj:`check <target.configuration.ModelShowValidatorsSummary.check>` » :py:obj:`field <target.configuration.ModelShowValidatorsSummary.field>`',
         ''
     ]
 
     # explict global
     actual = autodocument(
         documenter='pydantic_model',
-        object_path='target.configuration.ModelShowValidators',
-        options_app={"autodoc_pydantic_model_show_validators": True},
+        object_path='target.configuration.ModelShowValidatorsSummary',
+        options_app={"autodoc_pydantic_model_show_validators_summary": True},
         deactivate_all=True)
     assert result == actual
 
     # explict local
     actual = autodocument(
         documenter='pydantic_model',
-        object_path='target.configuration.ModelShowValidators',
-        options_doc={"model-show-validators": True},
+        object_path='target.configuration.ModelShowValidatorsSummary',
+        options_doc={"model-show-validators-summary": True},
         deactivate_all=True)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
         documenter='pydantic_model',
-        object_path='target.configuration.ModelShowValidators',
-        options_app={"autodoc_pydantic_model_show_validators": False},
-        options_doc={"model-show-validators": True},
+        object_path='target.configuration.ModelShowValidatorsSummary',
+        options_app={"autodoc_pydantic_model_show_validators_summary": False},
+        options_doc={"model-show-validators-summary": True},
         deactivate_all=True)
     assert result == actual
 
 
-def test_autodoc_pydantic_model_show_validators_false(autodocument):
+def test_autodoc_pydantic_model_show_validators_summary_false(autodocument):
     result = [
         '',
-        '.. py:pydantic_model:: ModelShowValidators',
+        '.. py:pydantic_model:: ModelShowValidatorsSummary',
         '   :module: target.configuration',
         '',
-        '   ModelShowValidators.',
+        '   ModelShowValidatorsSummary.',
         ''
     ]
 
     # explict global
     actual = autodocument(
         documenter='pydantic_model',
-        object_path='target.configuration.ModelShowValidators',
-        options_app={"autodoc_pydantic_model_show_validators": False},
+        object_path='target.configuration.ModelShowValidatorsSummary',
+        options_app={"autodoc_pydantic_model_show_validators_summary": False},
         deactivate_all=True)
     assert result == actual
 
     # explict local
     actual = autodocument(
         documenter='pydantic_model',
-        object_path='target.configuration.ModelShowValidators',
-        options_doc={"model-show-validators": False},
+        object_path='target.configuration.ModelShowValidatorsSummary',
+        options_doc={"model-show-validators-summary": False},
         deactivate_all=True)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
         documenter='pydantic_model',
-        object_path='target.configuration.ModelShowValidators',
-        options_app={"autodoc_pydantic_model_show_validators": True},
-        options_doc={"model-show-validators": False},
+        object_path='target.configuration.ModelShowValidatorsSummary',
+        options_app={"autodoc_pydantic_model_show_validators_summary": True},
+        options_doc={"model-show-validators-summary": False},
         deactivate_all=True)
     assert result == actual
 

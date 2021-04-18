@@ -5,16 +5,16 @@ class ModelShowJson(BaseModel):
     """ModelShowJson."""
 
 
-class ModelShowConfig(BaseModel):
-    """ModelShowConfig."""
+class ModelShowConfigSummary(BaseModel):
+    """ModelShowConfigSummary."""
 
     class Config:
         title: str = "FooBar"
         allow_mutation: bool = True
 
 
-class ModelShowValidators(BaseModel):
-    """ModelShowValidators."""
+class ModelShowValidatorsSummary(BaseModel):
+    """ModelShowValidatorsSummary."""
 
     field: int = 1
 
