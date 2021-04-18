@@ -28,10 +28,10 @@ def setup(app: Sphinx) -> None:
     app.add_config_value(f'{stem}settings_signature_prefix', "pydantic settings ", True, str)
 
     app.add_config_value(f'{stem}model_show_json', True, True, bool)
-    app.add_config_value(f'{stem}model_show_config', True, True, bool)
+    app.add_config_value(f'{stem}model_show_config_member', True, True, bool)
     app.add_config_value(f'{stem}model_show_config_summary', True, True, bool)
-    app.add_config_value(f'{stem}model_show_validators', True, True, bool)
-    app.add_config_value(f'{stem}model_show_validators_summary', True, True, bool)
+    app.add_config_value(f'{stem}model_show_validator_members', True, True, bool)
+    app.add_config_value(f'{stem}model_show_validator_summary', True, True, bool)
     app.add_config_value(f'{stem}model_hide_paramlist', True, True, bool)
     app.add_config_value(f'{stem}model_undoc_members', True, True, bool)
     app.add_config_value(f'{stem}model_members', True, True, bool)

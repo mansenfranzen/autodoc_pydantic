@@ -22,10 +22,10 @@ CONF_DEACTIVATE = {
     "autodoc_pydantic_config_members": False,
 
     "autodoc_pydantic_model_show_json": False,
-    "autodoc_pydantic_model_show_config": False,
+    "autodoc_pydantic_model_show_config_member": False,
     "autodoc_pydantic_model_show_config_summary": False,
-    "autodoc_pydantic_model_show_validators": False,
-    "autodoc_pydantic_model_show_validators_summary": False,
+    "autodoc_pydantic_model_show_validator_members": False,
+    "autodoc_pydantic_model_show_validator_summary": False,
     "autodoc_pydantic_model_hide_paramlist": True,
     "autodoc_pydantic_model_undoc_members": False,
     "autodoc_pydantic_model_members": False,
