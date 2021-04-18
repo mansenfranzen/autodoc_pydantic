@@ -21,7 +21,6 @@ from sphinxcontrib.autodoc_pydantic.directives import (
 def setup(app: Sphinx) -> None:
     stem = "autodoc_pydantic_"
 
-    app.add_config_value(f'{stem}config_show', True, True, bool)
     app.add_config_value(f'{stem}config_signature_prefix', "model ", True, str)
     app.add_config_value(f'{stem}config_undoc_members', True, True, bool)
     app.add_config_value(f'{stem}config_members', True, True, bool)
@@ -30,14 +29,15 @@ def setup(app: Sphinx) -> None:
 
     app.add_config_value(f'{stem}model_show_json', True, True, bool)
     app.add_config_value(f'{stem}model_show_config', True, True, bool)
+    app.add_config_value(f'{stem}model_show_config_summary', True, True, bool)
     app.add_config_value(f'{stem}model_show_validators', True, True, bool)
+    app.add_config_value(f'{stem}model_show_validators_summary', True, True, bool)
     app.add_config_value(f'{stem}model_hide_paramlist', True, True, bool)
     app.add_config_value(f'{stem}model_undoc_members', True, True, bool)
     app.add_config_value(f'{stem}model_members', True, True, bool)
     app.add_config_value(f'{stem}model_member_order', 'groupwise', True, str)
     app.add_config_value(f'{stem}model_signature_prefix', "pydantic model ", True, str)
 
-    app.add_config_value(f'{stem}validator_show', True, True, bool)
     app.add_config_value(f'{stem}validator_signature_prefix', "validator ", True, str)
     app.add_config_value(f'{stem}validator_replace_signature', True, True, bool)
     app.add_config_value(f'{stem}validator_list_fields', True, True, bool)
