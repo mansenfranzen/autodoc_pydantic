@@ -40,7 +40,7 @@ Model
    :title: Show Config
    :path: target.configuration.ModelShowConfig
    :config: autodoc_pydantic_model_show_config
-   :option: model-show-config
+   :option: model-show-config-summary
    :values: True, False
 
    Show model config summary within the class doc string.
@@ -50,7 +50,7 @@ Model
    :title: Show Validators
    :path: target.configuration.ModelShowValidators
    :config: autodoc_pydantic_model_show_validators
-   :option: model-show-validators
+   :option: model-show-validator-summary
    :values: True, False
 
    Show all validators along with corresponding fields within the class doc string. Hyperlinks are automatically created for validators and fields.
@@ -96,7 +96,27 @@ Model
    :path: target.configuration.ModelMemberOrder
    :config: autodoc_pydantic_model_member_order
    :option: member-order
-   :option_additional: members, config-show, validator-show
+   :option_additional: members, model-show-config-member, model-show-validator-members
    :values: groupwise, bysource, alphabetical
 
    Order members groupwise by default in the following order: fields, validators and config.
+
+.. tabdocconfig:: autopydantic_model
+   :title: Show Config Member
+   :path: target.configuration.ModelShowConfigMember
+   :config: autodoc_pydantic_model_show_config_member
+   :option: model-show-config-member
+   :option_additional: members
+   :values: True, False
+
+   Show pydantic config class. It can be hidden if it is irrelevant.
+
+.. tabdocconfig:: autopydantic_model
+   :title: Show Validator Members
+   :path: target.configuration.ModelShowValidatorMembers
+   :config: autodoc_pydantic_model_show_validator_members
+   :option: model-show-validator-members
+   :option_additional: members
+   :values: True, False
+
+   Show pydantic validator methods. They can be hidden if they are irrelevant.
