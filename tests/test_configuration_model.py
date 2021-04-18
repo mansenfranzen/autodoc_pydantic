@@ -2,6 +2,11 @@
 
 """
 
+SETTING_MEMBER_ORDER = {
+    "autodoc_pydantic_model_members": True,
+    "autodoc_pydantic_model_show_validator_members": True,
+    "autodoc_pydantic_model_show_config_member": True}
+
 
 def test_autodoc_pydantic_model_show_json_true(autodocument):
     result = [
@@ -161,7 +166,7 @@ def test_autodoc_pydantic_model_show_config_summary_false(autodocument):
     assert actual == result
 
 
-def test_autodoc_pydantic_model_show_validators_summary_true(autodocument):
+def test_autodoc_pydantic_model_show_validator_summary_true(autodocument):
     result = [
         '',
         '.. py:pydantic_model:: ModelShowValidatorsSummary',
@@ -178,7 +183,7 @@ def test_autodoc_pydantic_model_show_validators_summary_true(autodocument):
     actual = autodocument(
         documenter='pydantic_model',
         object_path='target.configuration.ModelShowValidatorsSummary',
-        options_app={"autodoc_pydantic_model_show_validators_summary": True},
+        options_app={"autodoc_pydantic_model_show_validator_summary": True},
         deactivate_all=True)
     assert result == actual
 
@@ -186,7 +191,7 @@ def test_autodoc_pydantic_model_show_validators_summary_true(autodocument):
     actual = autodocument(
         documenter='pydantic_model',
         object_path='target.configuration.ModelShowValidatorsSummary',
-        options_doc={"model-show-validators-summary": True},
+        options_doc={"model-show-validator-summary": True},
         deactivate_all=True)
     assert result == actual
 
@@ -195,12 +200,12 @@ def test_autodoc_pydantic_model_show_validators_summary_true(autodocument):
         documenter='pydantic_model',
         object_path='target.configuration.ModelShowValidatorsSummary',
         options_app={"autodoc_pydantic_model_show_validators_summary": False},
-        options_doc={"model-show-validators-summary": True},
+        options_doc={"model-show-validator-summary": True},
         deactivate_all=True)
     assert result == actual
 
 
-def test_autodoc_pydantic_model_show_validators_summary_false(autodocument):
+def test_autodoc_pydantic_model_show_validator_summary_false(autodocument):
     result = [
         '',
         '.. py:pydantic_model:: ModelShowValidatorsSummary',
@@ -214,7 +219,7 @@ def test_autodoc_pydantic_model_show_validators_summary_false(autodocument):
     actual = autodocument(
         documenter='pydantic_model',
         object_path='target.configuration.ModelShowValidatorsSummary',
-        options_app={"autodoc_pydantic_model_show_validators_summary": False},
+        options_app={"autodoc_pydantic_model_show_validator_summary": False},
         deactivate_all=True)
     assert result == actual
 
@@ -222,7 +227,7 @@ def test_autodoc_pydantic_model_show_validators_summary_false(autodocument):
     actual = autodocument(
         documenter='pydantic_model',
         object_path='target.configuration.ModelShowValidatorsSummary',
-        options_doc={"model-show-validators-summary": False},
+        options_doc={"model-show-validator-summary": False},
         deactivate_all=True)
     assert result == actual
 
@@ -231,7 +236,7 @@ def test_autodoc_pydantic_model_show_validators_summary_false(autodocument):
         documenter='pydantic_model',
         object_path='target.configuration.ModelShowValidatorsSummary',
         options_app={"autodoc_pydantic_model_show_validators_summary": True},
-        options_doc={"model-show-validators-summary": False},
+        options_doc={"model-show-validator-summary": False},
         deactivate_all=True)
     assert result == actual
 
@@ -502,21 +507,16 @@ def test_autodoc_pydantic_model_member_order_groupwise(autodocument):
     actual = autodocument(
         documenter='pydantic_model',
         object_path='target.configuration.ModelMemberOrder',
-        options_app={"autodoc_pydantic_model_members": True,
-                     "autodoc_pydantic_validator_show": True,
-                     "autodoc_pydantic_config_show": True,
-                     "autodoc_pydantic_model_member_order": "groupwise"},
+        options_app={"autodoc_pydantic_model_member_order": "groupwise",
+                     **SETTING_MEMBER_ORDER},
         deactivate_all=True)
     assert result == actual
-
 
     # explict local
     actual = autodocument(
         documenter='pydantic_model',
         object_path='target.configuration.ModelMemberOrder',
-        options_app={"autodoc_pydantic_model_members": True,
-                     "autodoc_pydantic_validator_show": True,
-                     "autodoc_pydantic_config_show": True},
+        options_app=SETTING_MEMBER_ORDER,
         options_doc={"member-order": "groupwise"},
         deactivate_all=True)
     assert result == actual
@@ -525,14 +525,12 @@ def test_autodoc_pydantic_model_member_order_groupwise(autodocument):
     actual = autodocument(
         documenter='pydantic_model',
         object_path='target.configuration.ModelMemberOrder',
-        options_app={"autodoc_pydantic_model_members": True,
-                     "autodoc_pydantic_validator_show": True,
-                     "autodoc_pydantic_config_show": True,
-                     "autodoc_pydantic_model_member_order": "bysource"},
+        options_app={"autodoc_pydantic_model_member_order": "bysource",
+                     **SETTING_MEMBER_ORDER},
         options_doc={"member-order": "groupwise"},
         deactivate_all=True)
     assert result == actual
-    
+
 
 def test_autodoc_pydantic_model_member_order_bysource(autodocument):
     result = [
@@ -569,21 +567,16 @@ def test_autodoc_pydantic_model_member_order_bysource(autodocument):
     actual = autodocument(
         documenter='pydantic_model',
         object_path='target.configuration.ModelMemberOrder',
-        options_app={"autodoc_pydantic_model_members": True,
-                     "autodoc_pydantic_validator_show": True,
-                     "autodoc_pydantic_config_show": True,
-                     "autodoc_pydantic_model_member_order": "bysource"},
+        options_app={"autodoc_pydantic_model_member_order": "bysource",
+                     **SETTING_MEMBER_ORDER},
         deactivate_all=True)
     assert result == actual
-
 
     # explict local
     actual = autodocument(
         documenter='pydantic_model',
         object_path='target.configuration.ModelMemberOrder',
-        options_app={"autodoc_pydantic_model_members": True,
-                     "autodoc_pydantic_validator_show": True,
-                     "autodoc_pydantic_config_show": True},
+        options_app=SETTING_MEMBER_ORDER,
         options_doc={"member-order": "bysource"},
         deactivate_all=True)
     assert result == actual
@@ -592,15 +585,13 @@ def test_autodoc_pydantic_model_member_order_bysource(autodocument):
     actual = autodocument(
         documenter='pydantic_model',
         object_path='target.configuration.ModelMemberOrder',
-        options_app={"autodoc_pydantic_model_members": True,
-                     "autodoc_pydantic_validator_show": True,
-                     "autodoc_pydantic_config_show": True,
-                     "autodoc_pydantic_model_member_order": "groupwise"},
+        options_app={"autodoc_pydantic_model_member_order": "groupwise",
+                     **SETTING_MEMBER_ORDER},
         options_doc={"member-order": "bysource"},
         deactivate_all=True)
     assert result == actual
-    
-    
+
+
 def test_autodoc_pydantic_model_member_order_alphabetical(autodocument):
     result = [
         '',
@@ -636,21 +627,16 @@ def test_autodoc_pydantic_model_member_order_alphabetical(autodocument):
     actual = autodocument(
         documenter='pydantic_model',
         object_path='target.configuration.ModelMemberOrder',
-        options_app={"autodoc_pydantic_model_members": True,
-                     "autodoc_pydantic_validator_show": True,
-                     "autodoc_pydantic_config_show": True,
-                     "autodoc_pydantic_model_member_order": "alphabetical"},
+        options_app={"autodoc_pydantic_model_member_order": "alphabetical",
+                     **SETTING_MEMBER_ORDER},
         deactivate_all=True)
     assert result == actual
-
 
     # explict local
     actual = autodocument(
         documenter='pydantic_model',
         object_path='target.configuration.ModelMemberOrder',
-        options_app={"autodoc_pydantic_model_members": True,
-                     "autodoc_pydantic_validator_show": True,
-                     "autodoc_pydantic_config_show": True},
+        options_app=SETTING_MEMBER_ORDER,
         options_doc={"member-order": "alphabetical"},
         deactivate_all=True)
     assert result == actual
@@ -659,10 +645,209 @@ def test_autodoc_pydantic_model_member_order_alphabetical(autodocument):
     actual = autodocument(
         documenter='pydantic_model',
         object_path='target.configuration.ModelMemberOrder',
-        options_app={"autodoc_pydantic_model_members": True,
-                     "autodoc_pydantic_validator_show": True,
-                     "autodoc_pydantic_config_show": True,
-                     "autodoc_pydantic_model_member_order": "groupwise"},
+        options_app={"autodoc_pydantic_model_member_order": "groupwise",
+                     **SETTING_MEMBER_ORDER},
         options_doc={"member-order": "alphabetical"},
+        deactivate_all=True)
+    assert result == actual
+
+
+def test_autodoc_pydantic_model_show_validator_members_true(autodocument):
+    result = [
+        '',
+        ".. py:pydantic_model:: ModelShowValidatorMembers",
+        '   :module: target.configuration',
+        '',
+        '   ModelShowValidatorMembers.',
+        '',
+        '',
+        '   .. py:pydantic_field:: ModelShowValidatorMembers.field',
+        '      :module: target.configuration',
+        '      :type: int',
+        '      :value: 1',
+        '',
+        '      Field.',
+        '',
+        '',
+        '   .. py:pydantic_validator:: ModelShowValidatorMembers.dummy',
+        '      :module: target.configuration',
+        '      :classmethod:',
+        '',
+        '      Check.',
+        ''
+    ]
+
+    # explict global
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelShowValidatorMembers',
+        options_app={"autodoc_pydantic_model_members": True,
+                     "autodoc_pydantic_model_show_validator_members": True},
+        deactivate_all=True)
+    assert result == actual
+
+    # explict local
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelShowValidatorMembers',
+        options_app={"autodoc_pydantic_model_members": True},
+        options_doc={"model-show-validator-members": True},
+        deactivate_all=True)
+    assert result == actual
+
+    # explicit local overwrite global
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelShowValidatorMembers',
+        options_app={"autodoc_pydantic_model_members": True,
+                     "autodoc_pydantic_model_show_validator_members": False},
+        options_doc={"model-show-validator-members": True},
+        deactivate_all=True)
+    assert result == actual
+
+
+def test_autodoc_pydantic_model_show_validator_members_false(autodocument):
+    result = [
+        '',
+        ".. py:pydantic_model:: ModelShowValidatorMembers",
+        '   :module: target.configuration',
+        '',
+        '   ModelShowValidatorMembers.',
+        '',
+        '',
+        '   .. py:pydantic_field:: ModelShowValidatorMembers.field',
+        '      :module: target.configuration',
+        '      :type: int',
+        '      :value: 1',
+        '',
+        '      Field.',
+        ''
+    ]
+
+    # explict global
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelShowValidatorMembers',
+        options_app={"autodoc_pydantic_model_members": True,
+                     "autodoc_pydantic_model_show_validator_members": False},
+        deactivate_all=True)
+    assert result == actual
+
+    # explict local
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelShowValidatorMembers',
+        options_app={"autodoc_pydantic_model_members": True},
+        options_doc={"model-show-validator-members": False},
+        deactivate_all=True)
+    assert result == actual
+
+    # explicit local overwrite global
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelShowValidatorMembers',
+        options_app={"autodoc_pydantic_model_members": True,
+                     "autodoc_pydantic_model_show_validator_members": True},
+        options_doc={"model-show-validator-members": False},
+        deactivate_all=True)
+    assert result == actual
+
+
+def test_autodoc_pydantic_model_show_config_members_true(autodocument):
+    result = [
+        '',
+        ".. py:pydantic_model:: ModelShowConfigMember",
+        '   :module: target.configuration',
+        '',
+        '   ModelShowConfigMember.',
+        '',
+        '',
+        '   .. py:pydantic_field:: ModelShowConfigMember.field',
+        '      :module: target.configuration',
+        '      :type: int',
+        '      :value: 1',
+        '',
+        '      Field.',
+        '',
+        '',
+        '   .. py:pydantic_config:: ModelShowConfigMember.Config()',
+        '      :module: target.configuration',
+        '',
+        '      Config.',
+        ''
+    ]
+
+    # explict global
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelShowConfigMember',
+        options_app={"autodoc_pydantic_model_members": True,
+                     "autodoc_pydantic_model_show_config_member": True},
+        deactivate_all=True)
+    assert result == actual
+
+    # explict local
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelShowConfigMember',
+        options_app={"autodoc_pydantic_model_members": True},
+        options_doc={"model-show-config-member": True},
+        deactivate_all=True)
+    assert result == actual
+
+    # explicit local overwrite global
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelShowConfigMember',
+        options_app={"autodoc_pydantic_model_members": True,
+                     "autodoc_pydantic_model_show_config_member": False},
+        options_doc={"model-show-config-member": True},
+        deactivate_all=True)
+    assert result == actual
+
+
+def test_autodoc_pydantic_model_show_config_members_false(autodocument):
+    result = [
+        '',
+        ".. py:pydantic_model:: ModelShowConfigMember",
+        '   :module: target.configuration',
+        '',
+        '   ModelShowConfigMember.',
+        '',
+        '',
+        '   .. py:pydantic_field:: ModelShowConfigMember.field',
+        '      :module: target.configuration',
+        '      :type: int',
+        '      :value: 1',
+        '',
+        '      Field.',
+        '',
+    ]
+
+    # explict global
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelShowConfigMember',
+        options_app={"autodoc_pydantic_model_members": True,
+                     "autodoc_pydantic_model_show_config_member": False},
+        deactivate_all=True)
+    assert result == actual
+
+    # explict local
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelShowConfigMember',
+        options_app={"autodoc_pydantic_model_members": True},
+        options_doc={"model-show-config-member": False},
+        deactivate_all=True)
+    assert result == actual
+
+    # explicit local overwrite global
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelShowConfigMember',
+        options_app={"autodoc_pydantic_model_members": True,
+                     "autodoc_pydantic_model_show_config_member": True},
+        options_doc={"model-show-config-member": False},
         deactivate_all=True)
     assert result == actual
