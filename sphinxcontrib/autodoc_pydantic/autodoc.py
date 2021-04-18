@@ -209,24 +209,6 @@ class PydanticConfigClassDocumenter(ClassDocumenter):
         is_class = isinstance(member, type)
         return is_val and is_parent_model and is_config and is_class
 
-    def add_content(self,
-                    more_content: Optional[StringList],
-                    no_docstring: bool = False
-                    ) -> None:
-        """Optionally show model configuration or not.
-
-        """
-
-        if self.pyautodoc.get_option_value("show"):
-            super().add_content(more_content, no_docstring)
-
-    def add_directive_header(self, sig: str) -> None:
-        """Optionally show model configuration or not.
-
-        """
-
-        if self.pyautodoc.get_option_value("show"):
-            super().add_directive_header(sig)
 
 
 class PydanticModelDocumenter(ClassDocumenter):
@@ -240,12 +222,12 @@ class PydanticModelDocumenter(ClassDocumenter):
     option_spec = ClassDocumenter.option_spec.copy()
     option_spec.update({"model-show-json": option_default_true,
                         "model-hide-paramlist": option_default_true,
-                        "model-show-validators": option_default_true,
-                        "model-show-config": option_default_true,
+                        "model-show-validator-members": option_default_true,
+                        "model-show-validator-summary": option_default_true,
+                        "model-show-config-member": option_default_true,
+                        "model-show-config-summary": option_default_true,
                         "undoc-members": option_default_true,
                         "members": option_members,
-                        "config-show": option_default_true,
-                        "validator-show": option_default_true,
                         "__doc_disable_except__": option_list_like})
 
     def __init__(self, *args: Any) -> None:
@@ -256,6 +238,35 @@ class PydanticModelDocumenter(ClassDocumenter):
         self.pyautodoc.set_default_option_with_value("members", ALL)
         if self.options.get("undoc-members") is False:
             self.options.pop("undoc-members")
+
+        if not self.pyautodoc.get_option_value("model-show-config-member"):
+            self.hide_config_member()
+
+        if not self.pyautodoc.get_option_value("model-show-validator-members"):
+            self.hide_validator_members()
+
+    def hide_config_member(self):
+        """Add `Config` to `exclude_members` option.
+
+        """
+
+        if "exclude-members" not in self.options:
+            self.options["exclude-members"] = {"Config"}
+        else:
+            self.options["exclude-members"].add("Config")
+
+    def hide_validator_members(self):
+        """Add validator names to `exclude_members`.
+
+        """
+
+        obj = self.pyautodoc.get_pydantic_object_from_name()
+
+        validators = ModelWrapper(obj).get_validator_names()
+        if "exclude-members" not in self.options:
+            self.options["exclude-members"] = validators
+        else:
+            self.options["exclude-members"].update(validators)
 
     @classmethod
     def can_document_member(cls,
@@ -286,11 +297,11 @@ class PydanticModelDocumenter(ClassDocumenter):
         if self.pyautodoc.get_option_value("model-show-json"):
             self.add_collapsable_schema()
 
-        if self.pyautodoc.get_option_value("model-show-config"):
-            self.add_config()
+        if self.pyautodoc.get_option_value("model-show-config-summary"):
+            self.add_config_summary()
 
-        if self.pyautodoc.get_option_value("model-show-validators"):
-            self.add_validators()
+        if self.pyautodoc.get_option_value("model-show-validator-summary"):
+            self.add_validators_summary()
 
     def add_collapsable_schema(self):
 
@@ -304,7 +315,7 @@ class PydanticModelDocumenter(ClassDocumenter):
         for line in lines:
             self.add_line(line, source_name)
 
-    def add_config(self):
+    def add_config_summary(self):
         """Adds summary section describing the model configuration.
 
         """
@@ -325,7 +336,7 @@ class PydanticModelDocumenter(ClassDocumenter):
             self.add_line(line, source_name)
         self.add_line("", source_name)
 
-    def add_validators(self):
+    def add_validators_summary(self):
         """Adds summary section describing all validators with corresponding
         fields.
 
@@ -404,14 +415,6 @@ class PydanticValidatorDocumenter(MethodDocumenter):
         is_validator = is_validator_by_name(membername, parent.object)
         return is_val and is_validator
 
-    def add_directive_header(self, sig: str) -> None:
-        """Optionally show validator header.
-
-        """
-
-        if self.pyautodoc.get_option_value("show"):
-            super().add_directive_header(sig)
-
     def format_args(self, **kwargs: Any) -> str:
 
         if self.pyautodoc.get_option_value("validator-replace-signature"):
@@ -425,11 +428,10 @@ class PydanticValidatorDocumenter(MethodDocumenter):
 
         """
 
-        if self.pyautodoc.get_option_value("show"):
-            super().add_content(more_content, no_docstring)
+        super().add_content(more_content, no_docstring)
 
-            if self.pyautodoc.get_option_value("validator-list-fields"):
-                self.add_field_list()
+        if self.pyautodoc.get_option_value("validator-list-fields"):
+            self.add_field_list()
 
     def add_field_list(self):
         """Adds a field list with all fields that are validated by this
