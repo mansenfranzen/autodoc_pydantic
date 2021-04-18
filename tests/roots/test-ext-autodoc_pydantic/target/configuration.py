@@ -61,3 +61,26 @@ class ModelMemberOrder(BaseModel):
 
     field: int = 1
     """Field."""
+
+
+class ModelShowValidatorMembers(BaseModel):
+    """ModelShowValidatorMembers."""
+
+    field: int = 1
+    """Field."""
+
+    @validator("field")
+    def dummy(cls, v) -> str:
+        """Check."""
+        return v
+
+
+class ModelShowConfigMember(BaseModel):
+    """ModelShowConfigMember."""
+
+    field: int = 1
+    """Field."""
+
+    class Config:
+        """Config."""
+        allow_mutation = True
