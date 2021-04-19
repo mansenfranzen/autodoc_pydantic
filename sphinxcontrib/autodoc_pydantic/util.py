@@ -2,6 +2,7 @@
 and the PyAutoDoc composite class.
 
 """
+import functools
 import pydoc
 from typing import Any, Union, List, Set, Callable, Optional
 
@@ -84,6 +85,42 @@ class PydanticAutoDoc:
 
     def __init__(self, parent: Union[Documenter, Directive]):
         self.parent = parent
+
+        self.add_default_options()
+
+        if isinstance(self.parent, Documenter):
+            self.add_pass_through_to_directive()
+
+
+    def add_default_options(self):
+        """Adds all default options.
+
+        """
+
+        options = getattr(self.parent, "pyautodoc_set_default_option", [])
+        for option in options:
+            self.set_default_option(option)
+
+    def add_pass_through_to_directive(self):
+        """Intercepts documenters `add_directive_header` and adds pass through.
+
+        """
+
+        func = self.parent.add_directive_header
+
+        pass_through = ["__doc_disable_except__"]
+        specific = getattr(self.parent, "pyautodoc_pass_to_directive", [])
+        pass_through.extend(specific)
+
+        @functools.wraps(func)
+        def wrapped(*args, **kwargs):
+            result = func(*args, **kwargs)
+            for option in pass_through:
+                self.pass_option_to_directive(option)
+
+            return result
+
+        self.parent.add_directive_header = wrapped
 
     def get_pydantic_object_from_name(self) -> Any:
         """Return the object referenced by name.
@@ -178,7 +215,11 @@ class PydanticAutoDoc:
 
         if name in self.parent.options:
             source_name = self.parent.get_sourcename()
-            value = self.parent.options["name"]
+            value = self.parent.options[name]
+
+            if isinstance("value", set):
+                value = ", ".join(value)
+
             self.parent.add_line(f"   :{name}: {value}", source_name)
 
     def set_default_option_with_value(self, name: str,
