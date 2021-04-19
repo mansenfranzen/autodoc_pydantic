@@ -6,10 +6,34 @@ import functools
 import pydoc
 from typing import Any, Union, List, Set, Callable, Optional
 
+from docutils.nodes import emphasis
 from docutils.parsers.rst import Directive
+from sphinx.addnodes import pending_xref
+from sphinx.environment import BuildEnvironment
 from sphinx.ext.autodoc import ALL, Documenter
 
+from sphinxcontrib.autodoc_pydantic.inspection import NamedReference
+
 NONE = object()
+
+
+def create_href(text, target, env) -> pending_xref:
+    # create the reference node
+    options = {'refdoc': env.docname,
+               'refdomain': "py",
+               'reftype': "obj",
+               'reftarget': target}
+    refnode = pending_xref(text, **options)
+    classes = ['xref', "py", '%s-%s' % ("py", "obj")]
+    refnode += emphasis(text, text, classes=classes)
+    return refnode
+
+
+def create_field_href(reference: NamedReference,
+                      env: BuildEnvironment) -> pending_xref:
+    return create_href(text=reference.name,
+                       target=reference.ref,
+                       env=env)
 
 
 def option_members(arg: Any) -> Union[object, List[str]]:
@@ -77,20 +101,15 @@ def option_list_like(arg: Any) -> Set[str]:
         return {x.strip() for x in arg.split(",")}
 
 
-class PydanticAutoDoc:
-    """Composite class providing methods to handle getting and setting directive
-    option values.
+class PydanticAutoDirective:
+    """Composite class providing methods to handle getting and setting
+    directive option values.
 
     """
 
     def __init__(self, parent: Union[Documenter, Directive]):
         self.parent = parent
-
         self.add_default_options()
-
-        if isinstance(self.parent, Documenter):
-            self.add_pass_through_to_directive()
-
 
     def add_default_options(self):
         """Adds all default options.
@@ -101,40 +120,6 @@ class PydanticAutoDoc:
         for option in options:
             self.set_default_option(option)
 
-    def add_pass_through_to_directive(self):
-        """Intercepts documenters `add_directive_header` and adds pass through.
-
-        """
-
-        func = self.parent.add_directive_header
-
-        pass_through = ["__doc_disable_except__"]
-        specific = getattr(self.parent, "pyautodoc_pass_to_directive", [])
-        pass_through.extend(specific)
-
-        @functools.wraps(func)
-        def wrapped(*args, **kwargs):
-            result = func(*args, **kwargs)
-            for option in pass_through:
-                self.pass_option_to_directive(option)
-
-            return result
-
-        self.parent.add_directive_header = wrapped
-
-    def get_pydantic_object_from_name(self) -> Any:
-        """Return the object referenced by name.
-
-        """
-
-        obj = pydoc.locate(self.parent.name)
-
-        if obj is None:
-            raise ValueError(f"Could not locate object from path "
-                             f"`{self.parent.name}` for "
-                             f"`{self.parent.object}`.")
-        else:
-            return obj
 
     def get_configuration_option_name(self, name: str) -> str:
         """Provide full app environment configuration name for given option
@@ -153,12 +138,6 @@ class PydanticAutoDoc:
         """
 
         sanitized = name.replace("-", "_")
-
-        if isinstance(self.parent, Documenter):
-            prefix = self.parent.objtype.split("_")[-1]
-
-            if prefix not in sanitized:
-                sanitized = f"{prefix}_{sanitized}"
 
         return f"autodoc_pydantic_{sanitized}"
 
@@ -208,20 +187,6 @@ class PydanticAutoDoc:
             value = self.parent.env.config[config_name]
             self.parent.options[name] = value
 
-    def pass_option_to_directive(self, name: str):
-        """Pass an autodoc option through to the generated directive.
-
-        """
-
-        if name in self.parent.options:
-            source_name = self.parent.get_sourcename()
-            value = self.parent.options[name]
-
-            if isinstance("value", set):
-                value = ", ".join(value)
-
-            self.parent.add_line(f"   :{name}: {value}", source_name)
-
     def set_default_option_with_value(self, name: str,
                                       value_true: Any,
                                       value_false: Optional[Any] = NONE):
@@ -248,3 +213,88 @@ class PydanticAutoDoc:
                 self.parent.options[name] = value_true
             elif value_false is not NONE:
                 self.parent.options[name] = value_false
+
+
+class PydanticAutoDoc(PydanticAutoDirective):
+    """Composite class providing methods to handle getting and setting
+    autodoc directive option values.
+
+    """
+
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.add_pass_through_to_directive()
+
+    def get_configuration_option_name(self, name: str) -> str:
+        """Provide full app environment configuration name for given option
+        name.
+
+        Parameters
+        ----------
+        name: str
+            Name of the option.
+
+        Returns
+        -------
+        full_name: str
+            Full app environment configuration name.
+
+        """
+
+        sanitized = name.replace("-", "_")
+        prefix = self.parent.objtype.split("_")[-1]
+
+        if prefix not in sanitized:
+            sanitized = f"{prefix}_{sanitized}"
+
+        return f"autodoc_pydantic_{sanitized}"
+
+    def get_pydantic_object_from_name(self) -> Any:
+        """Return the object referenced by name.
+
+        """
+
+        obj = pydoc.locate(self.parent.name)
+
+        if obj is None:
+            raise ValueError(f"Could not locate object from path "
+                             f"`{self.parent.name}` for "
+                             f"`{self.parent.object}`.")
+        else:
+            return obj
+
+    def add_pass_through_to_directive(self):
+        """Intercepts documenters `add_directive_header` and adds pass through.
+
+        """
+
+        func = self.parent.add_directive_header
+
+        pass_through = ["__doc_disable_except__"]
+        specific = getattr(self.parent, "pyautodoc_pass_to_directive", [])
+        pass_through.extend(specific)
+
+        @functools.wraps(func)
+        def wrapped(*args, **kwargs):
+            result = func(*args, **kwargs)
+            for option in pass_through:
+                self.pass_option_to_directive(option)
+
+            return result
+
+        self.parent.add_directive_header = wrapped
+
+
+    def pass_option_to_directive(self, name: str):
+        """Pass an autodoc option through to the generated directive.
+
+        """
+
+        if name in self.parent.options:
+            source_name = self.parent.get_sourcename()
+            value = self.parent.options[name]
+
+            if isinstance("value", set):
+                value = ", ".join(value)
+
+            self.parent.add_line(f"   :{name}: {value}", source_name)

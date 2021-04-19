@@ -3,42 +3,19 @@
 """
 from typing import Tuple
 
-from docutils.nodes import emphasis
 from docutils.parsers.rst.directives import unchanged
 from sphinx.addnodes import (
     desc_signature,
-    pending_xref,
     desc_annotation
 )
-
 from sphinx.domains.python import PyMethod, PyAttribute, PyClasslike
-from sphinx.environment import BuildEnvironment
-
-from sphinxcontrib.autodoc_pydantic.inspection import (
-    ModelWrapper,
-    NamedReference
+from sphinxcontrib.autodoc_pydantic.inspection import ModelWrapper
+from sphinxcontrib.autodoc_pydantic.util import (
+    PydanticAutoDirective,
+    option_default_true,
+    option_list_like,
+    create_field_href
 )
-from sphinxcontrib.autodoc_pydantic.util import PydanticAutoDoc, \
-    option_default_true, option_list_like
-
-
-def create_href(text, target, env) -> pending_xref:
-    # create the reference node
-    options = {'refdoc': env.docname,
-               'refdomain': "py",
-               'reftype': "obj",
-               'reftarget': target}
-    refnode = pending_xref(text, **options)
-    classes = ['xref', "py", '%s-%s' % ("py", "obj")]
-    refnode += emphasis(text, text, classes=classes)
-    return refnode
-
-
-def create_field_href(reference: NamedReference,
-                      env: BuildEnvironment) -> pending_xref:
-    return create_href(text=reference.name,
-                       target=reference.ref,
-                       env=env)
 
 
 class PydanticValidator(PyMethod):
@@ -53,7 +30,7 @@ class PydanticValidator(PyMethod):
 
     def __init__(self, *args):
         super().__init__(*args)
-        self.pyautodoc = PydanticAutoDoc(self)
+        self.pyautodoc = PydanticAutoDirective(self)
 
     def replace_return_node(self, signode: desc_signature):
         """Replaces the return node with references to validated fields.
@@ -106,7 +83,7 @@ class PydanticField(PyAttribute):
 
     def __init__(self, *args):
         super().__init__(*args)
-        self.pyautodoc = PydanticAutoDoc(self)
+        self.pyautodoc = PydanticAutoDirective(self)
 
     def get_signature_prefix(self, sig: str) -> str:
         """Overwrite original signature prefix with custom pydantic ones.
@@ -152,7 +129,7 @@ class PydanticModel(PyClasslike):
 
     def __init__(self, *args):
         super().__init__(*args)
-        self.pyautodoc = PydanticAutoDoc(self)
+        self.pyautodoc = PydanticAutoDirective(self)
 
     def get_signature_prefix(self, sig: str) -> str:
         """Overwrite original signature prefix with custom pydantic ones.
@@ -175,7 +152,7 @@ class PydanticSettings(PyClasslike):
 
     def __init__(self, *args):
         super().__init__(*args)
-        self.pyautodoc = PydanticAutoDoc(self)
+        self.pyautodoc = PydanticAutoDirective(self)
 
     def get_signature_prefix(self, sig: str) -> str:
         """Overwrite original signature prefix with custom pydantic ones.
@@ -196,7 +173,7 @@ class PydanticConfigClass(PyClasslike):
 
     def __init__(self, *args):
         super().__init__(*args)
-        self.pyautodoc = PydanticAutoDoc(self)
+        self.pyautodoc = PydanticAutoDirective(self)
 
     def get_signature_prefix(self, sig: str) -> str:
         """Overwrite original signature prefix with custom pydantic ones.
