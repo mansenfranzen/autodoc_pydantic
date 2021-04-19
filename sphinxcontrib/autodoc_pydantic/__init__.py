@@ -21,11 +21,11 @@ from sphinxcontrib.autodoc_pydantic.directives import (
 def setup(app: Sphinx) -> None:
     stem = "autodoc_pydantic_"
 
-    app.add_config_value(f'{stem}config_signature_prefix', "model ", True, str)
+    app.add_config_value(f'{stem}config_signature_prefix', "model", True, str)
     app.add_config_value(f'{stem}config_undoc_members', True, True, bool)
     app.add_config_value(f'{stem}config_members', True, True, bool)
 
-    app.add_config_value(f'{stem}settings_signature_prefix', "pydantic settings ", True, str)
+    app.add_config_value(f'{stem}settings_signature_prefix', "pydantic settings", True, str)
 
     app.add_config_value(f'{stem}model_show_json', True, True, bool)
     app.add_config_value(f'{stem}model_show_config_member', True, True, bool)
@@ -36,9 +36,9 @@ def setup(app: Sphinx) -> None:
     app.add_config_value(f'{stem}model_undoc_members', True, True, bool)
     app.add_config_value(f'{stem}model_members', True, True, bool)
     app.add_config_value(f'{stem}model_member_order', 'groupwise', True, str)
-    app.add_config_value(f'{stem}model_signature_prefix', "pydantic model ", True, str)
+    app.add_config_value(f'{stem}model_signature_prefix', "pydantic model", True, str)
 
-    app.add_config_value(f'{stem}validator_signature_prefix', "validator ", True, str)
+    app.add_config_value(f'{stem}validator_signature_prefix', "validator", True, str)
     app.add_config_value(f'{stem}validator_replace_signature', True, True, bool)
     app.add_config_value(f'{stem}validator_list_fields', True, True, bool)
 
@@ -47,7 +47,7 @@ def setup(app: Sphinx) -> None:
     app.add_config_value(f'{stem}field_show_constraints', True, True, bool)
     app.add_config_value(f'{stem}field_show_alias', True, True, bool)
     app.add_config_value(f'{stem}field_show_default', True, True, bool)
-    app.add_config_value(f'{stem}field_signature_prefix', "field ", True, str)
+    app.add_config_value(f'{stem}field_signature_prefix', "field", True, str)
 
     app.add_directive_to_domain("py", "pydantic_field", PydanticField)
     app.add_directive_to_domain("py", "pydantic_model", PydanticModel)
