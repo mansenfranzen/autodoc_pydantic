@@ -142,3 +142,31 @@ Model / Settings
    :values: pydantic settings, class, foobar
 
    Define the signature prefix for pydantic settings.
+
+
+------------
+Config Class
+------------
+
+.. tabdocconfig:: autopydantic_config
+   :title: Show Members
+   :path: target.configuration.ConfigMembers.Config
+   :config: autodoc_pydantic_config_members
+   :option: members
+   :values: True, False
+
+   Show members. By default, members are hidden for standard :code:`auto` directives. For pydantic class config, this is overwritten if enabled.
+
+.. note::
+
+   By default, all undocumented members are shown for the `Config` class. The directive option :code:`:undoc-members:` is added automatically.
+
+
+.. tabdocconfig:: autopydantic_config
+   :title: Signature Prefix
+   :path: target.configuration.ConfigSignaturePrefix.Config
+   :config: autodoc_pydantic_config_signature_prefix
+   :option: config-signature-prefix
+   :values: model, class, foobar
+
+   Define the signature prefix for config class.

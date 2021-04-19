@@ -23,7 +23,7 @@ class ModelShowValidatorsSummary(BaseModel):
         return v
 
 
-class ModelHideParamList(BaseModel):
+class ModelHideParamList(BaseSettings):
     """ModelHideParamList."""
 
     field1: int = 5
@@ -92,3 +92,19 @@ class ModelSignaturePrefix(BaseModel):
 
 class SettingsSignaturePrefix(BaseSettings):
     """SettingsSignaturePrefix."""
+
+
+class ConfigMembers(BaseModel):
+    """ConfigUndocMembers."""
+
+    class Config:
+        allow_mutation = True
+        """Allow Mutation."""
+        title = "foobar"
+
+
+class ConfigSignaturePrefix(BaseModel):
+    """ConfigSignaturePrefix."""
+
+    class Config:
+        """Config."""
