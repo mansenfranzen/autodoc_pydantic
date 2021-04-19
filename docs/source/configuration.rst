@@ -22,9 +22,9 @@ how pydantic objects are displayed:
          :model-show-config: False
 
 
------
-Model
------
+----------------
+Model / Settings
+----------------
 
 .. tabdocconfig:: autopydantic_model
    :title: Show JSON
@@ -37,7 +37,7 @@ Model
 
 
 .. tabdocconfig:: autopydantic_model
-   :title: Show Config
+   :title: Show Config Summary
    :path: target.configuration.ModelShowConfigSummary
    :config: autodoc_pydantic_model_show_config_summary
    :option: model-show-config-summary
@@ -47,7 +47,18 @@ Model
 
 
 .. tabdocconfig:: autopydantic_model
-   :title: Show Validators
+   :title: Show Config Member
+   :path: target.configuration.ModelShowConfigMember
+   :config: autodoc_pydantic_model_show_config_member
+   :option: model-show-config-member
+   :option_additional: members
+   :values: True, False
+
+   Show pydantic config class. It can be hidden if it is irrelevant.
+
+
+.. tabdocconfig:: autopydantic_model
+   :title: Show Validator Summary
    :path: target.configuration.ModelShowValidatorsSummary
    :config: autodoc_pydantic_model_show_validator_summary
    :option: model-show-validator-summary
@@ -57,13 +68,14 @@ Model
 
 
 .. tabdocconfig:: autopydantic_model
-   :title: Hide ParamList
-   :path: target.configuration.ModelHideParamList
-   :config: autodoc_pydantic_model_hide_paramlist
-   :option: model-hide-paramlist
+   :title: Show Validator Members
+   :path: target.configuration.ModelShowValidatorMembers
+   :config: autodoc_pydantic_model_show_validator_members
+   :option: model-show-validator-members
+   :option_additional: members
    :values: True, False
 
-   Hide parameter list of class signature. It usually becomes rather overloaded once a lot fields are present. Additionally, it is redundant since fields are documented anyway.
+   Show pydantic validator methods. They can be hidden if they are irrelevant.
 
 
 .. tabdocconfig:: autopydantic_model
@@ -101,22 +113,32 @@ Model
 
    Order members groupwise by default in the following order: fields, validators and config.
 
-.. tabdocconfig:: autopydantic_model
-   :title: Show Config Member
-   :path: target.configuration.ModelShowConfigMember
-   :config: autodoc_pydantic_model_show_config_member
-   :option: model-show-config-member
-   :option_additional: members
-   :values: True, False
-
-   Show pydantic config class. It can be hidden if it is irrelevant.
 
 .. tabdocconfig:: autopydantic_model
-   :title: Show Validator Members
-   :path: target.configuration.ModelShowValidatorMembers
-   :config: autodoc_pydantic_model_show_validator_members
-   :option: model-show-validator-members
-   :option_additional: members
+   :title: Hide ParamList
+   :path: target.configuration.ModelHideParamList
+   :config: autodoc_pydantic_model_hide_paramlist
+   :option: model-hide-paramlist
    :values: True, False
 
-   Show pydantic validator methods. They can be hidden if they are irrelevant.
+   Hide parameter list of class signature. It usually becomes rather overloaded once a lot fields are present. Additionally, it is redundant since fields are documented anyway.
+
+
+.. tabdocconfig:: autopydantic_model
+   :title: Model Signature Prefix
+   :path: target.configuration.ModelSignaturePrefix
+   :config: autodoc_pydantic_model_signature_prefix
+   :option: model-signature-prefix
+   :values: pydantic model, class, foobar
+
+   Define the signature prefix for pydantic models.
+
+
+.. tabdocconfig:: autopydantic_settings
+   :title: Settings Signature Prefix
+   :path: target.configuration.SettingsSignaturePrefix
+   :config: autodoc_pydantic_settings_signature_prefix
+   :option: settings-signature-prefix
+   :values: pydantic settings, class, foobar
+
+   Define the signature prefix for pydantic settings.
