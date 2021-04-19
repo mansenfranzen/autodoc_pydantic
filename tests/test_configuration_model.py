@@ -1,6 +1,10 @@
 """This module contains tests for all configuration properties.
 
 """
+from docutils.nodes import paragraph
+from sphinx.addnodes import index, desc, desc_signature, desc_annotation, \
+    desc_addname, desc_name, desc_content
+from sphinx.testing.util import assert_node
 
 SETTING_MEMBER_ORDER = {
     "autodoc_pydantic_model_members": True,
@@ -851,3 +855,135 @@ def test_autodoc_pydantic_model_show_config_members_false(autodocument):
         options_doc={"model-show-config-member": False},
         deactivate_all=True)
     assert result == actual
+
+
+def test_autodoc_pydantic_model_signature_prefix(autodocument, parse_rst):
+    """Tests pydantic_model directive.
+
+    """
+
+    # default
+    result = [
+        '',
+        ".. py:pydantic_model:: ModelSignaturePrefix",
+        '   :module: target.configuration',
+        '',
+        '   ModelSignaturePrefix.',
+        ''
+    ]
+
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelSignaturePrefix',
+        deactivate_all=True)
+    assert result == actual
+
+    # explicit value
+    result = [
+        '',
+        ".. py:pydantic_model:: ModelSignaturePrefix",
+        '   :module: target.configuration',
+        '   :model-signature-prefix: foobar ',
+        '',
+        '   ModelSignaturePrefix.',
+        ''
+    ]
+
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelSignaturePrefix',
+        options_doc={"model-signature-prefix": "foobar "},
+        deactivate_all=True)
+    assert result == actual
+
+    # explict empty
+    result = [
+        '',
+        ".. py:pydantic_model:: ModelSignaturePrefix",
+        '   :module: target.configuration',
+        '   :model-signature-prefix: ',
+        '',
+        '   ModelSignaturePrefix.',
+        ''
+    ]
+
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelSignaturePrefix',
+        options_doc={"model-signature-prefix": ""},
+        deactivate_all=True)
+    assert result == actual
+
+
+def test_autodoc_pydantic_model_signature_prefix_directive(parse_rst):
+    """Tests pydantic_model directive.
+
+    """
+
+    # default
+    input_rst = [
+        '',
+        ".. py:pydantic_model:: ModelSignaturePrefix",
+        '   :module: target.configuration',
+        '',
+        '   ModelSignaturePrefix.',
+        ''
+    ]
+
+    output_nodes = (
+        index,
+        [desc, ([desc_signature, ([desc_annotation, "pydantic model "],
+                                  [desc_addname, "target.configuration."],
+                                  [desc_name, "ModelSignaturePrefix"])],
+                [desc_content, ([paragraph, "ModelSignaturePrefix."])])
+         ]
+    )
+
+    doctree = parse_rst(input_rst)
+    assert_node(doctree, output_nodes)
+
+    # empty
+    input_rst = [
+        '',
+        ".. py:pydantic_model:: ModelSignaturePrefix",
+        '   :module: target.configuration',
+        '',
+        '   ModelSignaturePrefix.',
+        ''
+    ]
+
+    output_nodes = (
+        index,
+        [desc, ([desc_signature, ([desc_annotation, "class "],
+                                  [desc_addname, "target.configuration."],
+                                  [desc_name, "ModelSignaturePrefix"])],
+                [desc_content, ([paragraph, "ModelSignaturePrefix."])])
+         ]
+    )
+
+    doctree = parse_rst(input_rst,
+                        conf={"autodoc_pydantic_model_signature_prefix": ""})
+    assert_node(doctree, output_nodes)
+
+    # custom
+    input_rst = [
+        '',
+        ".. py:pydantic_model:: ModelSignaturePrefix",
+        '   :module: target.configuration',
+        '   :model-signature-prefix: foobar',
+        '',
+        '   ModelSignaturePrefix.',
+        ''
+    ]
+
+    output_nodes = (
+        index,
+        [desc, ([desc_signature, ([desc_annotation, "foobar "],
+                                  [desc_addname, "target.configuration."],
+                                  [desc_name, "ModelSignaturePrefix"])],
+                [desc_content, ([paragraph, "ModelSignaturePrefix."])])
+         ]
+    )
+
+    doctree = parse_rst(input_rst)
+    assert_node(doctree, output_nodes)

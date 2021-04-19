@@ -1,4 +1,4 @@
-from pydantic import BaseModel, validator, Field
+from pydantic import BaseModel, validator, Field, BaseSettings
 
 
 class ModelShowJson(BaseModel):
@@ -84,3 +84,11 @@ class ModelShowConfigMember(BaseModel):
     class Config:
         """Config."""
         allow_mutation = True
+
+
+class ModelSignaturePrefix(BaseModel):
+    """ModelSignaturePrefix."""
+
+
+class SettingsSignaturePrefix(BaseSettings):
+    """SettingsSignaturePrefix."""
