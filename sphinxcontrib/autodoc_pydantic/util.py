@@ -90,7 +90,14 @@ class PydanticAutoDoc:
 
         """
 
-        return pydoc.locate(self.parent.name)
+        obj = pydoc.locate(self.parent.name)
+
+        if obj is None:
+            raise ValueError(f"Could not locate object from path "
+                             f"`{self.parent.name}` for "
+                             f"`{self.parent.object}`.")
+        else:
+            return obj
 
     def get_configuration_option_name(self, name: str) -> str:
         """Provide full app environment configuration name for given option
