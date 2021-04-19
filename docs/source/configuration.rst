@@ -116,7 +116,7 @@ Model / Settings
 
 .. tabdocconfig:: autopydantic_model
    :title: Hide ParamList
-   :path: target.configuration.ModelHideParamList
+   :path: target.configuration.ModelHideParamListSettings
    :config: autodoc_pydantic_model_hide_paramlist
    :option: model-hide-paramlist
    :values: True, False
