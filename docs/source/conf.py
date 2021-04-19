@@ -42,9 +42,8 @@ extensions = [
     "sphinx_rtd_theme",
     "sphinx.ext.napoleon",
     "sphinx.ext.autodoc",
-    "sphinxcontrib.autodoc_pydantic",
     "sphinx_tabs.tabs",
-    "sphinx.ext.autosectionlabel",
+    "sphinxcontrib.autodoc_pydantic",
     "extensions"
 ]
 
