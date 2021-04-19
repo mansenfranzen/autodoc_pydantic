@@ -47,8 +47,7 @@ def rootdir():
 def do_autodoc(app: Sphinx,
                documenter: str,
                object_path: str,
-               options_doc: Optional[Dict] = None,
-               options_app: Optional[Dict] = None) -> List[str]:
+               options_doc: Optional[Dict] = None) -> List[str]:
     """Run auto `documenter` for given object referenced by `object_path` within
     provided sphinx `app`. Optionally override app and documenter settings.
 
@@ -62,8 +61,6 @@ def do_autodoc(app: Sphinx,
         Full path to object to be documented.
     options_doc: dict
         Optional settings to be passed to documenter.
-    options_app: dict
-        Optional settings to be passed to app.
 
     Returns
     -------
@@ -74,9 +71,6 @@ def do_autodoc(app: Sphinx,
 
     # configure app
     app.env.temp_data.setdefault('docname', 'index')  # set dummy docname
-    if options_app:
-        for key, value in options_app.items():
-            app.config[key] = value
 
     # get documenter and its options
     options_doc = options_doc or {}
@@ -102,16 +96,22 @@ def test_app(make_app, sphinx_test_tempdir, rootdir):
 
     """
 
-    def create(testroot: str, deactivate_all: bool = False):
+    def create(testroot: str,
+               conf: Optional[Dict] = None,
+               deactivate_all: bool = False):
         srcdir = sphinx_test_tempdir / testroot
 
         if rootdir and not srcdir.exists():
             testroot_path = rootdir / ('test-' + testroot)
             testroot_path.copytree(srcdir)
 
-        kwargs = dict(srcdir=srcdir)
+        kwargs = dict(srcdir=srcdir, confoverrides={})
+
         if deactivate_all:
-            kwargs["confoverrides"] = CONF_DEACTIVATE
+            kwargs["confoverrides"].update(CONF_DEACTIVATE)
+
+        if conf:
+            kwargs["confoverrides"].update(conf)
 
         return make_app("html", **kwargs)
 
@@ -130,11 +130,13 @@ def autodocument(test_app):
               options_app: Optional[Dict] = None,
               testroot: str = "ext-autodoc_pydantic",
               deactivate_all: bool = False):
-        app = test_app(testroot, deactivate_all)
+        app = test_app(testroot,
+                       conf=options_app,
+                       deactivate_all=deactivate_all)
+
         return do_autodoc(app=app,
                           documenter=documenter,
                           object_path=object_path,
-                          options_app=options_app,
                           options_doc=options_doc)
 
     return _auto
@@ -148,10 +150,13 @@ def parse_rst(test_app):
 
     def _parse(text: List[str],
                testroot: str = "ext-autodoc_pydantic",
+               conf: Optional[Dict] = None,
                deactivate_all: bool = False):
 
         text = "\n".join(text)
-        app = test_app(testroot, deactivate_all)
+        app = test_app(testroot,
+                       conf=conf,
+                       deactivate_all=deactivate_all)
 
         return parse(app=app, text=text)
 
