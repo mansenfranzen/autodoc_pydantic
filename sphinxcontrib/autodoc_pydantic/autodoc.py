@@ -226,16 +226,26 @@ class PydanticModelDocumenter(ClassDocumenter):
                         "model-show-validator-summary": option_default_true,
                         "model-show-config-member": option_default_true,
                         "model-show-config-summary": option_default_true,
+                        "model-signature-prefix": unchanged,
                         "undoc-members": option_default_true,
                         "members": option_members,
                         "__doc_disable_except__": option_list_like})
 
+    pyautodoc_pass_to_directive = (
+        "model-signature-prefix",
+    )
+
+    pyautodoc_set_default_option = (
+        "member-order",
+        "undoc-members"
+    )
+
     def __init__(self, *args: Any) -> None:
         super().__init__(*args)
         self.pyautodoc = PydanticAutoDoc(self)
-        self.pyautodoc.set_default_option("member-order")
-        self.pyautodoc.set_default_option("undoc-members")
+
         self.pyautodoc.set_default_option_with_value("members", ALL)
+
         if self.options.get("undoc-members") is False:
             self.options.pop("undoc-members")
 
@@ -362,7 +372,15 @@ class PydanticModelDocumenter(ClassDocumenter):
 class PydanticSettingsDocumenter(PydanticModelDocumenter):
     objtype = 'pydantic_settings'
     directivetype = 'pydantic_settings'
+
+    option_spec = PydanticModelDocumenter.option_spec.copy()
+    option_spec.pop("model-signature-prefix")
+    option_spec.update({"settings-signature-prefix": unchanged})
     priority = 10 + PydanticModelDocumenter.priority
+
+    pyautodoc_pass_to_directive = (
+        "settings-signature-prefix",
+    )
 
     @classmethod
     def can_document_member(cls,
