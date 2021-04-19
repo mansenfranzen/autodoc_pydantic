@@ -38,8 +38,8 @@ Model
 
 .. tabdocconfig:: autopydantic_model
    :title: Show Config
-   :path: target.configuration.ModelShowConfig
-   :config: autodoc_pydantic_model_show_config
+   :path: target.configuration.ModelShowConfigSummary
+   :config: autodoc_pydantic_model_show_config_summary
    :option: model-show-config-summary
    :values: True, False
 
@@ -48,8 +48,8 @@ Model
 
 .. tabdocconfig:: autopydantic_model
    :title: Show Validators
-   :path: target.configuration.ModelShowValidators
-   :config: autodoc_pydantic_model_show_validators
+   :path: target.configuration.ModelShowValidatorsSummary
+   :config: autodoc_pydantic_model_show_validator_summary
    :option: model-show-validator-summary
    :values: True, False
 
