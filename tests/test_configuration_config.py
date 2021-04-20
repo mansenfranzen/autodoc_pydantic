@@ -5,9 +5,14 @@ from docutils.nodes import paragraph
 from sphinx.addnodes import index, desc, desc_signature, desc_annotation, \
     desc_addname, desc_name, desc_content
 from sphinx.testing.util import assert_node
+import sphinx
+import pytest
 
 
-def test_autodoc_pydantic_config_members_true(autodocument):
+@pytest.mark.skipif(sphinx.version_info[:2] <= (3, 4),
+                    reason="Older sphinx version to not document attribute "
+                           "doc string correctly.")
+def test_autodoc_pydantic_config_members_true_gt34(autodocument):
     result = [
         '',
         ".. py:pydantic_config:: Config()",
@@ -19,6 +24,53 @@ def test_autodoc_pydantic_config_members_true(autodocument):
         '      :value: True',
         '',
         '      Allow Mutation.',
+        '',
+        '',
+        '   .. py:attribute:: Config.title',
+        '      :module: target.configuration.ConfigMembers',
+        "      :value: 'foobar'",
+        ''
+    ]
+
+    # explict global
+    actual = autodocument(
+        documenter='pydantic_config',
+        object_path='target.configuration.ConfigMembers.Config',
+        options_app={"autodoc_pydantic_config_members": True},
+        deactivate_all=True)
+    assert result == actual
+
+    # explict local
+    actual = autodocument(
+        documenter='pydantic_config',
+        object_path='target.configuration.ConfigMembers.Config',
+        options_doc={"members": None},
+        deactivate_all=True)
+    assert result == actual
+
+    # explicit local overwrite global
+    actual = autodocument(
+        documenter='pydantic_config',
+        object_path='target.configuration.ConfigMembers.Config',
+        options_app={"autodoc_pydantic_config_members": False},
+        options_doc={"members": None},
+        deactivate_all=True)
+    assert result == actual
+
+
+@pytest.mark.skipif(sphinx.version_info[:2] > (3, 4),
+                    reason="Newer sphinx version correctly document attribute "
+                           "doc strings.")
+def test_autodoc_pydantic_config_members_true_le34(autodocument):
+    result = [
+        '',
+        ".. py:pydantic_config:: Config()",
+        '   :module: target.configuration.ConfigMembers',
+        '',
+        '',
+        '   .. py:attribute:: Config.allow_mutation',
+        '      :module: target.configuration.ConfigMembers',
+        '      :value: True',
         '',
         '',
         '   .. py:attribute:: Config.title',
