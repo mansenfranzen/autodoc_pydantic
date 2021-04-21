@@ -1,10 +1,8 @@
 """This module contains tests for pydantic settings configurations.
 
 """
-
-from docutils.nodes import paragraph
-from sphinx.addnodes import index, desc, desc_signature, desc_annotation, \
-    desc_addname, desc_name, desc_content
+import pydantic
+from sphinx.addnodes import desc_annotation
 from sphinx.testing.util import assert_node
 
 SETTING_MEMBER_ORDER = {
@@ -248,12 +246,21 @@ def test_autodoc_pydantic_settings_show_validator_summary_false(autodocument):
 
 
 def test_autodoc_pydantic_settings_hide_paramlist_false(autodocument):
+
+    params = [
+        "_env_file: Optional[Union[pathlib.Path, str]] = '<object object>', ",
+        "_env_file_encoding: Optional[str] = None, ",
+        "_secrets_dir: Optional[Union[pathlib.Path, str]] = None, ",
+        "*, field1: int = 5, field2: str = 'FooBar'"]
+
+    if pydantic.version.VERSION[:3] <= "1.6":
+        params.pop(2)
+
+    params = "".join(params)
+
     result = [
         '',
-        ".. py:pydantic_settings:: SettingsHideParamList(_env_file: "
- "Optional[Union[pathlib.Path, str]] = '<object object>', _env_file_encoding: "
- 'Optional[str] = None, _secrets_dir: Optional[Union[pathlib.Path, str]] = '
- "None, *, field1: int = 5, field2: str = 'FooBar')",
+        f".. py:pydantic_settings:: SettingsHideParamList({params})",
         '   :module: target.configuration',
         '',
         '   SettingsHideParamList.',
