@@ -30,6 +30,15 @@ CONF_DEACTIVATE = {
     "autodoc_pydantic_model_undoc_members": False,
     "autodoc_pydantic_model_members": False,
 
+    "autodoc_pydantic_settings_show_json": False,
+    "autodoc_pydantic_settings_show_config_member": False,
+    "autodoc_pydantic_settings_show_config_summary": False,
+    "autodoc_pydantic_settings_show_validator_members": False,
+    "autodoc_pydantic_settings_show_validator_summary": False,
+    "autodoc_pydantic_settings_hide_paramlist": True,
+    "autodoc_pydantic_settings_undoc_members": False,
+    "autodoc_pydantic_settings_members": False,
+
     "autodoc_pydantic_validator_replace_signature": False,
     "autodoc_pydantic_validator_list_fields": False,
 
