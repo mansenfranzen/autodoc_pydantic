@@ -192,3 +192,14 @@ class ConfigSignaturePrefix(BaseModel):
 
     class Config:
         """Config."""
+
+
+class ValidatorReplaceSignature(BaseModel):
+    """ValidatorReplaceSignature."""
+
+    field: int = 1
+
+    @validator("field")
+    def check(cls, v) -> str:
+        """Check."""
+        return v
