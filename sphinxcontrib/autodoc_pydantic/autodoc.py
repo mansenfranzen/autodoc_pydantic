@@ -30,7 +30,29 @@ from sphinxcontrib.autodoc_pydantic.util import (
     PydanticAutoDoc
 )
 
-tpl_collapse = """
+OPTION_SPEC_FIELD = {
+    "field-show-default": option_default_true,
+    "field_show_constraints": option_default_true,
+    "field_list_validators": option_default_true,
+    "__doc_disable_except__": option_list_like,
+    "field_doc_policy": option_one_of_factory({"both",
+                                               "docstring",
+                                               "description"})}
+
+OPTION_SPEC_VALIDATOR = {"validator-replace-signature": option_default_true,
+                         "validator-list-fields": option_default_true,
+                         "validator-signature_prefix": unchanged,
+                         "__doc_disable_except__": option_list_like}
+
+OPTION_SPEC_CONFIG = {"members": option_members,
+                      "config-signature-prefix": unchanged,
+                      "__doc_disable_except__": option_list_like}
+
+OPTION_SPEC_MERGED = {**OPTION_SPEC_FIELD,
+                      **OPTION_SPEC_VALIDATOR,
+                      **OPTION_SPEC_CONFIG}
+
+TPL_COLLAPSE = """
 .. raw:: html
 
    <p><details>
@@ -65,7 +87,8 @@ class PydanticModelDocumenter(ClassDocumenter):
                         "model-signature-prefix": unchanged,
                         "undoc-members": option_default_true,
                         "members": option_members,
-                        "__doc_disable_except__": option_list_like})
+                        "__doc_disable_except__": option_list_like,
+                        **OPTION_SPEC_MERGED})
 
     pyautodoc_pass_to_directive = (
         "model-signature-prefix",
@@ -125,7 +148,8 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         """
 
-        is_val = super().can_document_member(member, membername, isattr, parent)
+        is_val = super().can_document_member(member, membername, isattr,
+                                             parent)
         is_model = is_pydantic_model(member)
         return is_val and is_model
 
@@ -156,7 +180,7 @@ class PydanticModelDocumenter(ClassDocumenter):
         schema = json.dumps(json.loads(schema_json), default=str, indent=3)
         lines = [f"   {line}" for line in schema.split("\n")]
         lines = "\n".join(lines)
-        lines = tpl_collapse.format(lines).split("\n")
+        lines = TPL_COLLAPSE.format(lines).split("\n")
         source_name = self.get_sourcename()
 
         for line in lines:
@@ -221,7 +245,8 @@ class PydanticSettingsDocumenter(PydanticModelDocumenter):
                         "settings-signature-prefix": unchanged,
                         "undoc-members": option_default_true,
                         "members": option_members,
-                        "__doc_disable_except__": option_list_like})
+                        "__doc_disable_except__": option_list_like,
+                        **OPTION_SPEC_MERGED})
 
     pyautodoc_pass_to_directive = (
         "settings-signature-prefix",
@@ -244,12 +269,14 @@ class PydanticSettingsDocumenter(PydanticModelDocumenter):
 
         """
 
-        is_val = super().can_document_member(member, membername, isattr, parent)
+        is_val = super().can_document_member(member,
+                                             membername,
+                                             isattr,
+                                             parent)
         if is_val:
             return issubclass(member, BaseSettings)
         else:
             return False
-
 
 
 class PydanticFieldDocumenter(AttributeDocumenter):
@@ -261,7 +288,8 @@ class PydanticFieldDocumenter(AttributeDocumenter):
         {"field-show-default": option_default_true,
          "field_show_constraints": option_default_true,
          "field_list_validators": option_default_true,
-         "field_doc_policy": option_one_of_factory({"both", "docstring", "description"})})
+         "field_doc_policy": option_one_of_factory(
+             {"both", "docstring", "description"})})
     member_order = 0
 
     def __init__(self, *args):
@@ -290,7 +318,6 @@ class PydanticFieldDocumenter(AttributeDocumenter):
         super().add_directive_header(sig)
         if self.pyautodoc.get_option_value("field-show-default"):
             self.add_default_value()
-
 
     def add_default_value(self):
         """Adds default value.
@@ -408,7 +435,8 @@ class PydanticValidatorDocumenter(MethodDocumenter):
 
         """
 
-        is_val = super().can_document_member(member, membername, isattr, parent)
+        is_val = super().can_document_member(member, membername, isattr,
+                                             parent)
         is_validator = is_validator_by_name(membername, parent.object)
         return is_val and is_validator
 
@@ -473,7 +501,6 @@ class PydanticConfigClassDocumenter(ClassDocumenter):
         "config-signature-prefix",
     )
 
-
     def __init__(self, *args: Any) -> None:
         super().__init__(*args)
         self.pyautodoc = PydanticAutoDoc(self)
@@ -492,7 +519,8 @@ class PydanticConfigClassDocumenter(ClassDocumenter):
 
         """
 
-        is_val = super().can_document_member(member, membername, isattr, parent)
+        is_val = super().can_document_member(member, membername, isattr,
+                                             parent)
         is_parent_model = is_pydantic_model(parent.object)
         is_config = membername == "Config"
         is_class = isinstance(member, type)

@@ -275,11 +275,12 @@ Contains all modifications for pydantic `BaseSettings`.
 Validators
 ----------
 
-.. tabdocconfig:: autopydantic_validator
+.. tabdocconfig:: autopydantic_model
    :title: Replace signature
-   :path: target.configuration.ValidatorReplaceSignature.check
+   :path: target.configuration.ValidatorReplaceSignature
    :config: autodoc_pydantic_validator_replace_signature
    :option: validator-replace-signature
+   :option_additional: members, model-show-validator-members, undoc-members
    :values: True, False
 
    Replaces the validator signature with custom link to corresponding field.
@@ -288,11 +289,12 @@ Validators
 Config Class
 ------------
 
-.. tabdocconfig:: autopydantic_config
+.. tabdocconfig:: autopydantic_model
    :title: Show Members
-   :path: target.configuration.ConfigMembers.Config
+   :path: target.configuration.ConfigMembers
    :config: autodoc_pydantic_config_members
    :option: members
+   :option_additional: model-show-config-member, undoc-members
    :values: True, False
 
    Show members. By default, members are hidden for standard :code:`auto` directives. For pydantic class config, this is overwritten if enabled.
