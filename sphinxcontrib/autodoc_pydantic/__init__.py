@@ -24,6 +24,15 @@ def setup(app: Sphinx) -> None:
     app.add_config_value(f'{stem}config_signature_prefix', "model", True, str)
     app.add_config_value(f'{stem}config_members', True, True, bool)
 
+    app.add_config_value(f'{stem}settings_show_json', True, True, bool)
+    app.add_config_value(f'{stem}settings_show_config_member', True, True, bool)
+    app.add_config_value(f'{stem}settings_show_config_summary', True, True, bool)
+    app.add_config_value(f'{stem}settings_show_validator_members', True, True, bool)
+    app.add_config_value(f'{stem}settings_show_validator_summary', True, True, bool)
+    app.add_config_value(f'{stem}settings_hide_paramlist', True, True, bool)
+    app.add_config_value(f'{stem}settings_undoc_members', True, True, bool)
+    app.add_config_value(f'{stem}settings_members', True, True, bool)
+    app.add_config_value(f'{stem}settings_member_order', 'groupwise', True, str)
     app.add_config_value(f'{stem}settings_signature_prefix', "pydantic settings", True, str)
 
     app.add_config_value(f'{stem}model_show_json', True, True, bool)
