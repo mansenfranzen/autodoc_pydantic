@@ -275,7 +275,14 @@ Contains all modifications for pydantic `BaseSettings`.
 Validators
 ----------
 
+.. tabdocconfig:: autopydantic_validator
+   :title: Replace signature
+   :path: target.configuration.ValidatorReplaceSignature.check
+   :config: autodoc_pydantic_validator_replace_signature
+   :option: validator-replace-signature
+   :values: True, False
 
+   Replaces the validator signature with custom link to corresponding field.
 
 ------------
 Config Class
