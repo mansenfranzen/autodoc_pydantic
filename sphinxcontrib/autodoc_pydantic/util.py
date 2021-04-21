@@ -152,7 +152,7 @@ class PydanticAutoDirective:
         else:
             return name in available
 
-    def get_option_value(self, name: str) -> Any:
+    def get_option_value(self, name: str, prefix: bool = False) -> Any:
         """Get option value for given `name`. First, looks for explicit
         directive option values (e.g. :member-order:) which have highest
         priority. Second, if no directive option is given, get the default
@@ -162,8 +162,13 @@ class PydanticAutoDirective:
         ----------
         name: str
             Name of the option.
+        prefix: bool
+            If True, add `pyautodoc_prefix` to name.
 
         """
+
+        if prefix:
+            name = f"{self.parent.pyautodoc_prefix}-{name}"
 
         if name in self.parent.options:
             return self.parent.options[name]
