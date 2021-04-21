@@ -21,10 +21,33 @@ how pydantic objects are displayed:
          :model-show-json: True
          :model-show-config: False
 
+---------------------
+Default configuration
+---------------------
 
-----------------
-Model / Settings
-----------------
+.. tabs::
+
+   .. tab:: autodoc pydantic
+
+      .. autopydantic_settings:: target.ExampleSettings
+
+   .. tab:: autodoc sphinx
+
+      .. autopydantic_settings:: target.ExampleSettings
+         :members:
+         :__doc_disable_except__: members
+         :noindex:
+
+   .. tab:: *example code*
+
+      .. autocodeblock:: target.ExampleSettings
+
+
+---------
+BaseModel
+---------
+
+Contains all modifications for pydantic `BaseModel`.
 
 .. tabdocconfig:: autopydantic_model
    :title: Show JSON
@@ -116,7 +139,7 @@ Model / Settings
 
 .. tabdocconfig:: autopydantic_model
    :title: Hide ParamList
-   :path: target.configuration.ModelHideParamListSettings
+   :path: target.configuration.ModelHideParamList
    :config: autodoc_pydantic_model_hide_paramlist
    :option: model-hide-paramlist
    :values: True, False
@@ -134,6 +157,110 @@ Model / Settings
    Define the signature prefix for pydantic models.
 
 
+------------
+BaseSettings
+------------
+
+Contains all modifications for pydantic `BaseSettings`.
+
+.. tabdocconfig:: autopydantic_settings
+   :title: Show JSON
+   :path: target.configuration.SettingsShowJson
+   :config: autodoc_pydantic_settings_show_json
+   :option: settings-show-json
+   :values: True, False
+
+   Show the json representation of a pydantic settings within in the class doc string as a collapsable code block.
+
+
+.. tabdocconfig:: autopydantic_settings
+   :title: Show Config Summary
+   :path: target.configuration.SettingsShowConfigSummary
+   :config: autodoc_pydantic_settings_show_config_summary
+   :option: settings-show-config-summary
+   :values: True, False
+
+   Show settings config summary within the class doc string.
+
+
+.. tabdocconfig:: autopydantic_settings
+   :title: Show Config Member
+   :path: target.configuration.SettingsShowConfigMember
+   :config: autodoc_pydantic_settings_show_config_member
+   :option: settings-show-config-member
+   :option_additional: members
+   :values: True, False
+
+   Show pydantic config class. It can be hidden if it is irrelevant.
+
+
+.. tabdocconfig:: autopydantic_settings
+   :title: Show Validator Summary
+   :path: target.configuration.SettingsShowValidatorsSummary
+   :config: autodoc_pydantic_settings_show_validator_summary
+   :option: settings-show-validator-summary
+   :values: True, False
+
+   Show all validators along with corresponding fields within the class doc string. Hyperlinks are automatically created for validators and fields.
+
+
+.. tabdocconfig:: autopydantic_settings
+   :title: Show Validator Members
+   :path: target.configuration.SettingsShowValidatorMembers
+   :config: autodoc_pydantic_settings_show_validator_members
+   :option: settings-show-validator-members
+   :option_additional: members
+   :values: True, False
+
+   Show pydantic validator methods. They can be hidden if they are irrelevant.
+
+
+.. tabdocconfig:: autopydantic_settings
+   :title: Show Undoc Members
+   :path: target.configuration.SettingsUndocMembers
+   :config: autodoc_pydantic_settings_undoc_members
+   :option: undoc-members
+   :option_additional: members
+   :values: True, False
+
+   Show undocumented members. By default, undocumented members are hidden for standard :code:`auto` directives. For pydantic settingss, this is overwritten if enabled.
+
+.. note::
+
+   In order to show any members at all, you need to enable :ref:`autodoc_pydantic_settings_undoc_members<Show Members>`
+   or set :code:`:members:`.
+
+
+.. tabdocconfig:: autopydantic_settings
+   :title: Show Members
+   :path: target.configuration.SettingsMembers
+   :config: autodoc_pydantic_settings_members
+   :option: members
+   :values: True, False
+
+   Show members. By default, members are hidden for standard :code:`auto` directives. For pydantic settingss, this is overwritten if enabled.
+
+.. tabdocconfig:: autopydantic_settings
+   :title: Member Order
+   :path: target.configuration.SettingsMemberOrder
+   :config: autodoc_pydantic_settings_member_order
+   :option: member-order
+   :option_additional: members, settings-show-config-member, settings-show-validator-members
+   :values: groupwise, bysource, alphabetical
+
+   Order members groupwise by default in the following order: fields, validators and config.
+
+
+.. tabdocconfig:: autopydantic_settings
+   :title: Hide ParamList
+   :path: target.configuration.SettingsHideParamList
+   :config: autodoc_pydantic_settings_hide_paramlist
+   :option: settings-hide-paramlist
+   :values: True, False
+
+   Hide parameter list of class signature. It usually becomes rather overloaded once a lot fields are present. Additionally, it is redundant since fields are documented anyway.
+
+
 .. tabdocconfig:: autopydantic_settings
    :title: Settings Signature Prefix
    :path: target.configuration.SettingsSignaturePrefix
@@ -141,7 +268,13 @@ Model / Settings
    :option: settings-signature-prefix
    :values: pydantic settings, class, foobar
 
-   Define the signature prefix for pydantic settings.
+   Define the signature prefix for pydantic settingss.
+
+
+----------
+Validators
+----------
+
 
 
 ------------
