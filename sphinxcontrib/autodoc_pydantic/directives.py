@@ -24,7 +24,7 @@ class PydanticValidator(PyMethod):
     """
 
     option_spec = PyMethod.option_spec.copy()
-    option_spec.update({"validator_replace_signature": option_default_true,
+    option_spec.update({"validator-replace-signature": option_default_true,
                         "__doc_disable_except__": option_list_like,
                         "validator-signature-prefix": unchanged})
 
