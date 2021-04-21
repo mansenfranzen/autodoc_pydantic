@@ -384,13 +384,14 @@ class PydanticValidatorDocumenter(MethodDocumenter):
     member_order = 50
     priority = 10 + MethodDocumenter.priority
     option_spec = MethodDocumenter.option_spec.copy()
-    option_spec.update({"validator_replace_signature": option_default_true,
+    option_spec.update({"validator-replace-signature": option_default_true,
                         "validator-list-fields": option_default_true,
-                        "validator-signature_prefix": unchanged})
+                        "validator-signature_prefix": unchanged,
+                        "__doc_disable_except__": option_list_like})
 
     pyautodoc_pass_to_directive = (
         "validator-signature-prefix",
-        "validator_replace_signature"
+        "validator-replace-signature"
     )
 
     def __init__(self, *args: Any) -> None:
@@ -415,6 +416,8 @@ class PydanticValidatorDocumenter(MethodDocumenter):
 
         if self.pyautodoc.get_option_value("validator-replace-signature"):
             return ''
+        else:
+            return super().format_args(**kwargs)
 
     def add_content(self,
                     more_content: Optional[StringList],
