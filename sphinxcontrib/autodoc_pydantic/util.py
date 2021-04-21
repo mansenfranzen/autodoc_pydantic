@@ -6,7 +6,7 @@ import functools
 import pydoc
 from typing import Any, Union, List, Set, Callable, Optional
 
-from docutils.nodes import emphasis
+from docutils.nodes import emphasis, Node
 from docutils.parsers.rst import Directive
 from sphinx.addnodes import pending_xref
 from sphinx.environment import BuildEnvironment
@@ -34,6 +34,16 @@ def create_field_href(reference: NamedReference,
     return create_href(text=reference.name,
                        target=reference.ref,
                        env=env)
+
+
+def remove_node_by_tagname(nodes: List, tagname: str):
+    """Removes node from list of `nodes` with given `tagname` in place.
+
+    """
+
+    for remove in [node for node in nodes if node.tagname == tagname]:
+        nodes.remove(remove)
+
 
 
 def option_members(arg: Any) -> Union[object, List[str]]:
