@@ -144,8 +144,7 @@ def test_autodoc_pydantic_validator_replace_signature_true_directive(parse_rst):
         [desc, ([desc_signature, ([desc_annotation, "validator "],
                                   [desc_addname, "ValidatorReplaceSignature."],
                                   [desc_name, "check"],
-                                  [desc_parameterlist, ()],
-                                  [desc_annotation, " » "],
+                                  [desc_annotation, "  »  "],
                                   [pending_xref, ([emphasis, "field"])])],
                 [desc_content, ([paragraph, "Check."])])
          ]

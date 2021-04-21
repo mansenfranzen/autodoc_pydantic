@@ -153,8 +153,7 @@ def test_example_model_with_field_and_validator(parse_rst):
         [desc_signature,
          ([desc_annotation, "validator "],
           [desc_name, "is_integer"],
-          [desc_parameterlist, ()],
-          [desc_annotation, " » "],
+          [desc_annotation, "  »  "],
           [pending_xref, ([emphasis, "field"])])],
         [desc_content,
          ([paragraph, "Doc validator."],
@@ -362,8 +361,7 @@ def test_pydantic_validator(parse_rst):
         [desc, ([desc_signature, ([desc_annotation, "validator "],
                                   [desc_addname, "ModelWithFieldValidator."],
                                   [desc_name, "is_integer"],
-                                  [desc_parameterlist, ()],
-                                  [desc_annotation, " » "],
+                                  [desc_annotation, "  »  "],
                                   [pending_xref, ([emphasis, "field"])])],
                 [desc_content, ([paragraph, "Validator Plain."])])
          ]

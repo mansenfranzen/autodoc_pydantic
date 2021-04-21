@@ -14,7 +14,7 @@ from sphinxcontrib.autodoc_pydantic.util import (
     PydanticAutoDirective,
     option_default_true,
     option_list_like,
-    create_field_href
+    create_field_href, remove_node_by_tagname
 )
 
 
@@ -37,8 +37,10 @@ class PydanticValidator(PyMethod):
 
         """
 
+        remove_node_by_tagname(signode.children, "desc_parameterlist")
+
         # replace nodes
-        signode += desc_annotation("", " » ")
+        signode += desc_annotation("", "  »  ")
 
         # get imports, names and fields of validator
         validator_name = signode["fullname"].split(".")[-1]
