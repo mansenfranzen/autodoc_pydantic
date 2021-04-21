@@ -76,6 +76,8 @@ class PydanticModelDocumenter(ClassDocumenter):
         "undoc-members"
     )
 
+    pyautodoc_prefix = "model"
+
     def __init__(self, *args: Any) -> None:
         super().__init__(*args)
         self.pyautodoc = PydanticAutoDoc(self)
@@ -84,10 +86,10 @@ class PydanticModelDocumenter(ClassDocumenter):
         if self.options.get("undoc-members") is False:
             self.options.pop("undoc-members")
 
-        if not self.pyautodoc.get_option_value("model-show-config-member"):
+        if not self.pyautodoc.get_option_value("show-config-member", True):
             self.hide_config_member()
 
-        if not self.pyautodoc.get_option_value("model-show-validator-members"):
+        if not self.pyautodoc.get_option_value("show-validator-members", True):
             self.hide_validator_members()
 
     def hide_config_member(self):
@@ -128,7 +130,7 @@ class PydanticModelDocumenter(ClassDocumenter):
         return is_val and is_model
 
     def format_signature(self, **kwargs) -> str:
-        if self.pyautodoc.get_option_value("model-hide-paramlist"):
+        if self.pyautodoc.get_option_value("hide-paramlist", True):
             return ""
         else:
             return super().format_signature(**kwargs)
@@ -139,13 +141,13 @@ class PydanticModelDocumenter(ClassDocumenter):
                     ) -> None:
         super().add_content(more_content, no_docstring)
 
-        if self.pyautodoc.get_option_value("model-show-json"):
+        if self.pyautodoc.get_option_value("show-json", True):
             self.add_collapsable_schema()
 
-        if self.pyautodoc.get_option_value("model-show-config-summary"):
+        if self.pyautodoc.get_option_value("show-config-summary", True):
             self.add_config_summary()
 
-        if self.pyautodoc.get_option_value("model-show-validator-summary"):
+        if self.pyautodoc.get_option_value("show-validator-summary", True):
             self.add_validators_summary()
 
     def add_collapsable_schema(self):
@@ -208,14 +210,29 @@ class PydanticSettingsDocumenter(PydanticModelDocumenter):
     objtype = 'pydantic_settings'
     directivetype = 'pydantic_settings'
 
-    option_spec = PydanticModelDocumenter.option_spec.copy()
-    option_spec.pop("model-signature-prefix")
-    option_spec.update({"settings-signature-prefix": unchanged})
-    priority = 10 + PydanticModelDocumenter.priority
+    priority = 10 + ClassDocumenter.priority
+    option_spec = ClassDocumenter.option_spec.copy()
+    option_spec.update({"settings-show-json": option_default_true,
+                        "settings-hide-paramlist": option_default_true,
+                        "settings-show-validator-members": option_default_true,
+                        "settings-show-validator-summary": option_default_true,
+                        "settings-show-config-member": option_default_true,
+                        "settings-show-config-summary": option_default_true,
+                        "settings-signature-prefix": unchanged,
+                        "undoc-members": option_default_true,
+                        "members": option_members,
+                        "__doc_disable_except__": option_list_like})
 
     pyautodoc_pass_to_directive = (
         "settings-signature-prefix",
     )
+
+    pyautodoc_set_default_option = (
+        "member-order",
+        "undoc-members"
+    )
+
+    pyautodoc_prefix = "settings"
 
     @classmethod
     def can_document_member(cls,
@@ -371,11 +388,14 @@ class PydanticValidatorDocumenter(MethodDocumenter):
                         "validator-list-fields": option_default_true,
                         "validator-signature_prefix": unchanged})
 
+    pyautodoc_pass_to_directive = (
+        "validator-signature-prefix",
+        "validator_replace_signature"
+    )
+
     def __init__(self, *args: Any) -> None:
         super().__init__(*args)
         self.pyautodoc = PydanticAutoDoc(self)
-        self.pyautodoc.pass_option_to_directive("validator_replace_signature")
-        self.pyautodoc.pass_option_to_directive("validator-signature_prefix")
 
     @classmethod
     def can_document_member(cls,
