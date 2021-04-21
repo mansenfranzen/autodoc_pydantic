@@ -1,9 +1,17 @@
-"""This module contains tests for all configuration properties.
+"""This module contains tests for pydantic config class configurations.
 
 """
+
 from docutils.nodes import paragraph
-from sphinx.addnodes import index, desc, desc_signature, desc_annotation, \
-    desc_addname, desc_name, desc_content
+from sphinx.addnodes import (
+    index,
+    desc,
+    desc_signature,
+    desc_annotation,
+    desc_addname,
+    desc_name,
+    desc_content
+)
 from sphinx.testing.util import assert_node
 import sphinx
 import pytest
@@ -194,7 +202,7 @@ def test_autodoc_pydantic_config_signature_prefix(autodocument):
     assert result == actual
 
 
-def test_autodoc_pydantic_model_signature_prefix_directive(parse_rst):
+def test_autodoc_pydantic_config_signature_prefix_directive(parse_rst):
 
     # default
     input_rst = [
@@ -206,40 +214,13 @@ def test_autodoc_pydantic_model_signature_prefix_directive(parse_rst):
         ''
     ]
 
-    output_nodes = (
-        index,
-        [desc, ([desc_signature, ([desc_annotation, "model "],
-                                  [desc_addname, "target.configuration.ConfigSignaturePrefix."],
-                                  [desc_name, "Config"])],
-                [desc_content, ([paragraph, "Config."])])
-         ]
-    )
-
     doctree = parse_rst(input_rst)
-    assert_node(doctree, output_nodes)
+    assert_node(doctree[1][0][0], [desc_annotation, "model "])
 
     # empty
-    input_rst = [
-        '',
-        ".. py:pydantic_config:: Config()",
-        '   :module: target.configuration.ConfigSignaturePrefix',
-        '',
-        '   Config.',
-        ''
-    ]
-
-    output_nodes = (
-        index,
-        [desc, ([desc_signature, ([desc_annotation, "class "],
-                                  [desc_addname, "target.configuration.ConfigSignaturePrefix."],
-                                  [desc_name, "Config"])],
-                [desc_content, ([paragraph, "Config."])])
-         ]
-    )
-
     doctree = parse_rst(input_rst,
                         conf={"autodoc_pydantic_config_signature_prefix": ""})
-    assert_node(doctree, output_nodes)
+    assert_node(doctree[1][0][0], [desc_annotation, "class "])
 
     # custom
     input_rst = [
@@ -252,14 +233,5 @@ def test_autodoc_pydantic_model_signature_prefix_directive(parse_rst):
         ''
     ]
 
-    output_nodes = (
-        index,
-        [desc, ([desc_signature, ([desc_annotation, "foobar "],
-                                  [desc_addname, "target.configuration.ConfigSignaturePrefix."],
-                                  [desc_name, "Config"])],
-                [desc_content, ([paragraph, "Config."])])
-         ]
-    )
-
     doctree = parse_rst(input_rst)
-    assert_node(doctree, output_nodes)
+    assert_node(doctree[1][0][0], [desc_annotation, "foobar "])

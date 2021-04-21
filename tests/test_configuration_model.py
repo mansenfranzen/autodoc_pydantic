@@ -1,6 +1,7 @@
-"""This module contains tests for all configuration properties.
+"""This module contains tests for pydantic model configurations.
 
 """
+
 from docutils.nodes import paragraph
 from sphinx.addnodes import index, desc, desc_signature, desc_annotation, \
     desc_addname, desc_name, desc_content
@@ -949,40 +950,13 @@ def test_autodoc_pydantic_model_signature_prefix_directive(parse_rst):
         ''
     ]
 
-    output_nodes = (
-        index,
-        [desc, ([desc_signature, ([desc_annotation, "pydantic model "],
-                                  [desc_addname, "target.configuration."],
-                                  [desc_name, "ModelSignaturePrefix"])],
-                [desc_content, ([paragraph, "ModelSignaturePrefix."])])
-         ]
-    )
-
     doctree = parse_rst(input_rst)
-    assert_node(doctree, output_nodes)
+    assert_node(doctree[1][0][0], [desc_annotation, "pydantic model "])
 
     # empty
-    input_rst = [
-        '',
-        ".. py:pydantic_model:: ModelSignaturePrefix",
-        '   :module: target.configuration',
-        '',
-        '   ModelSignaturePrefix.',
-        ''
-    ]
-
-    output_nodes = (
-        index,
-        [desc, ([desc_signature, ([desc_annotation, "class "],
-                                  [desc_addname, "target.configuration."],
-                                  [desc_name, "ModelSignaturePrefix"])],
-                [desc_content, ([paragraph, "ModelSignaturePrefix."])])
-         ]
-    )
-
     doctree = parse_rst(input_rst,
                         conf={"autodoc_pydantic_model_signature_prefix": ""})
-    assert_node(doctree, output_nodes)
+    assert_node(doctree[1][0][0], [desc_annotation, "class "])
 
     # custom
     input_rst = [
@@ -995,14 +969,5 @@ def test_autodoc_pydantic_model_signature_prefix_directive(parse_rst):
         ''
     ]
 
-    output_nodes = (
-        index,
-        [desc, ([desc_signature, ([desc_annotation, "foobar "],
-                                  [desc_addname, "target.configuration."],
-                                  [desc_name, "ModelSignaturePrefix"])],
-                [desc_content, ([paragraph, "ModelSignaturePrefix."])])
-         ]
-    )
-
     doctree = parse_rst(input_rst)
-    assert_node(doctree, output_nodes)
+    assert_node(doctree[1][0][0], [desc_annotation, "foobar "])

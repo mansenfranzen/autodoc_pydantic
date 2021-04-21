@@ -1,6 +1,7 @@
-"""This module contains tests for all configuration properties.
+"""This module contains tests for pydantic settings configurations.
 
 """
+
 from docutils.nodes import paragraph
 from sphinx.addnodes import index, desc, desc_signature, desc_annotation, \
     desc_addname, desc_name, desc_content
@@ -953,40 +954,13 @@ def test_autodoc_pydantic_settings_signature_prefix_directive(parse_rst):
         ''
     ]
 
-    output_nodes = (
-        index,
-        [desc, ([desc_signature, ([desc_annotation, "pydantic settings "],
-                                  [desc_addname, "target.configuration."],
-                                  [desc_name, "SettingsSignaturePrefix"])],
-                [desc_content, ([paragraph, "SettingsSignaturePrefix."])])
-         ]
-    )
-
     doctree = parse_rst(input_rst)
-    assert_node(doctree, output_nodes)
+    assert_node(doctree[1][0][0], [desc_annotation, "pydantic settings "])
 
     # empty
-    input_rst = [
-        '',
-        ".. py:pydantic_settings:: SettingsSignaturePrefix",
-        '   :module: target.configuration',
-        '',
-        '   SettingsSignaturePrefix.',
-        ''
-    ]
-
-    output_nodes = (
-        index,
-        [desc, ([desc_signature, ([desc_annotation, "class "],
-                                  [desc_addname, "target.configuration."],
-                                  [desc_name, "SettingsSignaturePrefix"])],
-                [desc_content, ([paragraph, "SettingsSignaturePrefix."])])
-         ]
-    )
-
     doctree = parse_rst(input_rst,
                         conf={"autodoc_pydantic_settings_signature_prefix": ""})
-    assert_node(doctree, output_nodes)
+    assert_node(doctree[1][0][0], [desc_annotation, "class "])
 
     # custom
     input_rst = [
@@ -999,14 +973,5 @@ def test_autodoc_pydantic_settings_signature_prefix_directive(parse_rst):
         ''
     ]
 
-    output_nodes = (
-        index,
-        [desc, ([desc_signature, ([desc_annotation, "foobar "],
-                                  [desc_addname, "target.configuration."],
-                                  [desc_name, "SettingsSignaturePrefix"])],
-                [desc_content, ([paragraph, "SettingsSignaturePrefix."])])
-         ]
-    )
-
     doctree = parse_rst(input_rst)
-    assert_node(doctree, output_nodes)
+    assert_node(doctree[1][0][0], [desc_annotation, "foobar "])
