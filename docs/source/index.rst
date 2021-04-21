@@ -25,13 +25,13 @@ Features
 
 .. toctree::
    :maxdepth: 2
-   :caption: User guide:
+   :caption: User guide
 
    configuration
 
 .. toctree::
    :maxdepth: 2
-   :caption: Developer guide:
+   :caption: Developer guide
 
    developer_guide
 
