@@ -39,7 +39,7 @@ CONF_DEACTIVATE = {
     "autodoc_pydantic_settings_undoc_members": False,
     "autodoc_pydantic_settings_members": False,
 
-    "autodoc_pydantic_validator_replace_signature": False,
+    "autodoc_pydantic_validator_replace_signature": True,
     "autodoc_pydantic_validator_list_fields": False,
 
     "autodoc_pydantic_field_list_validators": False,
