@@ -203,3 +203,25 @@ class ValidatorReplaceSignature(BaseModel):
     def check(cls, v) -> str:
         """Check."""
         return v
+
+
+class ValidatorListFields(BaseModel):
+    """ValidatorListFields."""
+
+    field: int = 1
+
+    @validator("field")
+    def check(cls, v) -> str:
+        """Check."""
+        return v
+
+
+class ValidatorSignaturePrefix(BaseModel):
+    """ValidatorSignaturePrefix."""
+
+    field: int = 1
+
+    @validator("field")
+    def check(cls, v) -> str:
+        """Check."""
+        return v
