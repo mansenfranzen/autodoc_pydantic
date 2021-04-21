@@ -148,7 +148,7 @@ Contains all modifications for pydantic `BaseModel`.
 
 
 .. tabdocconfig:: autopydantic_model
-   :title: Model Signature Prefix
+   :title: Signature Prefix
    :path: target.configuration.ModelSignaturePrefix
    :config: autodoc_pydantic_model_signature_prefix
    :option: model-signature-prefix
@@ -262,13 +262,13 @@ Contains all modifications for pydantic `BaseSettings`.
 
 
 .. tabdocconfig:: autopydantic_settings
-   :title: Settings Signature Prefix
+   :title: Signature Prefix
    :path: target.configuration.SettingsSignaturePrefix
    :config: autodoc_pydantic_settings_signature_prefix
    :option: settings-signature-prefix
    :values: pydantic settings, class, foobar
 
-   Define the signature prefix for pydantic settingss.
+   Define the signature prefix for pydantic settings.
 
 
 ----------
@@ -284,6 +284,28 @@ Validators
    :values: True, False
 
    Replaces the validator signature with custom link to corresponding field.
+
+
+.. tabdocconfig:: autopydantic_model
+   :title: List fields
+   :path: target.configuration.ValidatorListFields
+   :config: autodoc_pydantic_validator_list_fields
+   :option: validator-list-fields
+   :option_additional: members, model-show-validator-members, undoc-members
+   :values: True, False
+
+   List all fields that are validated by given method.
+
+
+.. tabdocconfig:: autopydantic_model
+   :title: Signature Prefix
+   :path: target.configuration.ValidatorSignaturePrefix
+   :config: autodoc_pydantic_validator_signature_prefix
+   :option: validator-signature-prefix
+   :option_additional: members, model-show-validator-members, undoc-members
+   :values: validator, classmethod, foobar
+
+   Define the signature prefix for pydantic validator.
 
 ------------
 Config Class
