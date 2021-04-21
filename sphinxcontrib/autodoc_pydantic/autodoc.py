@@ -32,16 +32,16 @@ from sphinxcontrib.autodoc_pydantic.util import (
 
 OPTION_SPEC_FIELD = {
     "field-show-default": option_default_true,
-    "field_show_constraints": option_default_true,
-    "field_list_validators": option_default_true,
+    "field-show-constraints": option_default_true,
+    "field-list-validators": option_default_true,
     "__doc_disable_except__": option_list_like,
-    "field_doc_policy": option_one_of_factory({"both",
+    "field-doc-policy": option_one_of_factory({"both",
                                                "docstring",
                                                "description"})}
 
 OPTION_SPEC_VALIDATOR = {"validator-replace-signature": option_default_true,
                          "validator-list-fields": option_default_true,
-                         "validator-signature_prefix": unchanged,
+                         "validator-signature-prefix": unchanged,
                          "__doc_disable_except__": option_list_like}
 
 OPTION_SPEC_CONFIG = {"members": option_members,
@@ -284,12 +284,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
     directivetype = 'pydantic_field'
     priority = 10 + AttributeDocumenter.priority
     option_spec = dict(AttributeDocumenter.option_spec)
-    option_spec.update(
-        {"field-show-default": option_default_true,
-         "field_show_constraints": option_default_true,
-         "field_list_validators": option_default_true,
-         "field_doc_policy": option_one_of_factory(
-             {"both", "docstring", "description"})})
+    option_spec.update(OPTION_SPEC_FIELD)
     member_order = 0
 
     def __init__(self, *args):
@@ -411,10 +406,7 @@ class PydanticValidatorDocumenter(MethodDocumenter):
     member_order = 50
     priority = 10 + MethodDocumenter.priority
     option_spec = MethodDocumenter.option_spec.copy()
-    option_spec.update({"validator-replace-signature": option_default_true,
-                        "validator-list-fields": option_default_true,
-                        "validator-signature_prefix": unchanged,
-                        "__doc_disable_except__": option_list_like})
+    option_spec.update(OPTION_SPEC_VALIDATOR)
 
     pyautodoc_pass_to_directive = (
         "validator-signature-prefix",
@@ -491,9 +483,7 @@ class PydanticConfigClassDocumenter(ClassDocumenter):
     objtype = 'pydantic_config'
     directivetype = 'pydantic_config'
     option_spec = ClassDocumenter.option_spec.copy()
-    option_spec.update({"members": option_members,
-                        "config-signature-prefix": unchanged,
-                        "__doc_disable_except__": option_list_like})
+    option_spec.update(OPTION_SPEC_CONFIG)
     member_order = 100
     priority = 10 + ClassDocumenter.priority
 
