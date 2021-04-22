@@ -214,44 +214,6 @@ def test_autodoc_pydantic_field_doc_policy_both(autodocument):
     assert result == actual
 
 
-def test_autodoc_pydantic_field_list_validators_false(autodocument):
-    result = [
-        '',
-        '.. py:pydantic_field:: FieldListValidators.field',
-        '   :module: target.configuration',
-        '   :type: int',
-        '   :value: 1',
-        '',
-        '   Field.',
-        ''
-    ]
-
-    # explict global
-    actual = autodocument(
-        documenter='pydantic_field',
-        object_path='target.configuration.FieldListValidators.field',
-        options_app={"autodoc_pydantic_field_list_validators": False},
-        deactivate_all=True)
-    assert result == actual
-
-    # explicit local
-    actual = autodocument(
-        documenter='pydantic_field',
-        object_path='target.configuration.FieldListValidators.field',
-        options_doc={"field-list-validators": False},
-        deactivate_all=True)
-    assert result == actual
-
-    # explicit local overwrite global
-    actual = autodocument(
-        documenter='pydantic_field',
-        object_path='target.configuration.FieldListValidators.field',
-        options_app={"autodoc_pydantic_field_list_validators": True},
-        options_doc={"field-list-validators": False},
-        deactivate_all=True)
-    assert result == actual
-
-
 def test_autodoc_pydantic_field_show_constraints_true(autodocument):
     result = [
         '',
