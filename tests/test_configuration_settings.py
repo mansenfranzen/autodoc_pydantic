@@ -254,7 +254,10 @@ def test_autodoc_pydantic_settings_hide_paramlist_false(autodocument):
         "*, field1: int = 5, field2: str = 'FooBar'"]
 
     if pydantic.version.VERSION[:3] <= "1.6":
-        params.pop(2)
+        params.remove("_secrets_dir: Optional[Union[pathlib.Path, str]] = None, ")
+
+    if pydantic.version.VERSION[:3] <= "1.5":
+        params.remove("_env_file_encoding: Optional[str] = None, ")
 
     params = "".join(params)
 
