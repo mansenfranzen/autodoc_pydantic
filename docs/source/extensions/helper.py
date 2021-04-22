@@ -53,6 +53,28 @@ tab_tpl = """
 """
 
 
+def parse_option(option: str) -> str:
+    """Helper function to parse a provided option value.
+
+    """
+
+    if "=" in option:
+        key, value = option.split("=")
+        return f"         :{key.strip()}: {value.strip()}"
+    else:
+        return f"         :{option.strip()}:"
+
+
+def parse_options(options: str) -> str:
+    """Helper function to parse multiple option values.
+
+    """
+
+    options = options.split(",")
+    lines = [parse_option(option) for option in options]
+    return "\n" + "\n".join(lines)
+
+
 class TabDocDirective(SphinxDirective):
     """Generates documentation section describing configuration parameters.
 
@@ -68,9 +90,7 @@ class TabDocDirective(SphinxDirective):
 
         option_addition = self.options.get("option_additional", "")
         if option_addition:
-            add = option_addition.split(",")
-            lines = "\n".join([f"         :{option.strip()}:" for option in add])
-            option_addition = "\n" + lines
+            option_addition = parse_options(option_addition)
 
         defaults = self.options["values"].split(",")
         defaults = [x.strip() for x in defaults]
