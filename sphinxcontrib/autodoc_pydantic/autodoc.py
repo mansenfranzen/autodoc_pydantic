@@ -32,6 +32,8 @@ from sphinxcontrib.autodoc_pydantic.util import (
 
 OPTION_SPEC_FIELD = {
     "field-show-default": option_default_true,
+    "field-signature-prefix": unchanged,
+    "field-show-alias": option_default_true,
     "field-show-constraints": option_default_true,
     "field-list-validators": option_default_true,
     "__doc_disable_except__": option_list_like,
@@ -287,6 +289,11 @@ class PydanticFieldDocumenter(AttributeDocumenter):
     option_spec.update(OPTION_SPEC_FIELD)
     member_order = 0
 
+    pyautodoc_pass_to_directive = (
+        "field-show-alias",
+        "field-signature-prefix"
+    )
+
     def __init__(self, *args):
         super().__init__(*args)
         self.pyautodoc = PydanticAutoDoc(self)
@@ -332,16 +339,16 @@ class PydanticFieldDocumenter(AttributeDocumenter):
                     no_docstring: bool = False
                     ) -> None:
 
-        doc_policy = self.pyautodoc.get_option_value("field_doc_policy")
+        doc_policy = self.pyautodoc.get_option_value("field-doc-policy")
         if doc_policy in ("docstring", "both"):
             super().add_content(more_content, no_docstring)
         if doc_policy in ("both", "description"):
             self.add_description()
 
-        if self.pyautodoc.get_option_value("field_show_constraints"):
+        if self.pyautodoc.get_option_value("field-show-constraints"):
             self.add_constraints()
 
-        if self.pyautodoc.get_option_value("field_list_validators"):
+        if self.pyautodoc.get_option_value("field-list-validators"):
             self.add_validators()
 
     def add_constraints(self):
@@ -363,6 +370,8 @@ class PydanticFieldDocumenter(AttributeDocumenter):
             for key, value in constraints.items():
                 line = f"   - **{key}** = {value}"
                 self.add_line(line, source_name)
+
+            self.add_line("", source_name)
 
     def add_description(self):
         """Adds description from schema if present.
@@ -394,6 +403,8 @@ class PydanticFieldDocumenter(AttributeDocumenter):
             for validator in validators:
                 line = f"   - :py:obj:`{validator.name} <{validator.ref}>`"
                 self.add_line(line, source_name)
+
+            self.add_line("", source_name)
 
 
 class PydanticValidatorDocumenter(MethodDocumenter):
