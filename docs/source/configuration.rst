@@ -270,13 +270,82 @@ Contains all modifications for pydantic `BaseSettings`.
 
    Define the signature prefix for pydantic settings.
 
+------
+Fields
+------
+
+.. tabdocconfig:: autopydantic_model
+   :title: List Validators
+   :path: target.configuration.FieldListValidators
+   :config: autodoc_pydantic_field_list_validators
+   :option: field-list-validators
+   :option_additional: members, field-doc-policy=docstring
+   :values: True, False
+
+   Show all corresponding validators that process the current field.
+
+
+.. tabdocconfig:: autopydantic_model
+   :title: Docstring Policy
+   :path: target.configuration.FieldDocPolicy
+   :config: autodoc_pydantic_field_doc_policy
+   :option: field-doc-policy
+   :option_additional: members
+   :values: docstring, description, both
+
+   Define what content is displayed in the main field docstring. `docstring` shows the exact docstring of the python attribute. `description` displays the information provided via the pydantic field's description. `both` will output the attribute's docstring together with the pydantic field's description.
+
+
+.. tabdocconfig:: autopydantic_model
+   :title: Show Constraints
+   :path: target.configuration.FieldShowConstraints
+   :config: autodoc_pydantic_field_show_constraints
+   :option: field-show-constraints
+   :option_additional: members, field-doc-policy=docstring
+   :values: True, False
+
+   Displays all constraints that are associated with the given pydantic field.
+
+
+.. tabdocconfig:: autopydantic_model
+   :title: Show Alias
+   :path: target.configuration.FieldShowAlias
+   :config: autodoc_pydantic_field_show_alias
+   :option: field-show-alias
+   :option_additional: members, field-doc-policy=docstring
+   :values: True, False
+
+   Provides the pydantic field's alias in the signature.
+
+
+.. tabdocconfig:: autopydantic_model
+   :title: Show Default Value
+   :path: target.configuration.FieldShowDefault
+   :config: autodoc_pydantic_field_show_default
+   :option: field-show-default
+   :option_additional: members, field-doc-policy=docstring
+   :values: True, False
+
+   Provides the pydantic field's default value in the signature. Unfortunately this is not provided by standard autodoc (as of version 3.5.4).
+
+
+.. tabdocconfig:: autopydantic_model
+   :title: Signature Prefix
+   :path: target.configuration.FieldSignaturePrefix
+   :config: autodoc_pydantic_field_signature_prefix
+   :option: field-signature-prefix
+   :option_additional: members, field-doc-policy=docstring
+   :values: field, attribute, foobar
+
+   Define the signature prefix for pydantic field.
+
 
 ----------
 Validators
 ----------
 
 .. tabdocconfig:: autopydantic_model
-   :title: Replace signature
+   :title: Replace Signature
    :path: target.configuration.ValidatorReplaceSignature
    :config: autodoc_pydantic_validator_replace_signature
    :option: validator-replace-signature
@@ -287,7 +356,7 @@ Validators
 
 
 .. tabdocconfig:: autopydantic_model
-   :title: List fields
+   :title: List Fields
    :path: target.configuration.ValidatorListFields
    :config: autodoc_pydantic_validator_list_fields
    :option: validator-list-fields
