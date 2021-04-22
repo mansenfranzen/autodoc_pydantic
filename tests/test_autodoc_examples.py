@@ -72,6 +72,7 @@ def test_model_with_field_validator(autodocument):
         '      :Validated by:',
         '         - :py:obj:`is_integer <target.model.ModelWithFieldValidator.is_integer>`',
         '',
+        '',
         '   .. py:pydantic_validator:: ModelWithFieldValidator.is_integer',
         '      :module: target.model',
         '      :classmethod:',
