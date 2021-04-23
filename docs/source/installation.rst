@@ -37,3 +37,8 @@ pydantic settings, add the following to sphinx' :code:`conf.py`:
    autodoc_pydantic_settings_show_json = False
 
 All available options are covered in detail with examples in the :doc:`configuration` documentation.
+
+The default configuration already takes effect as soon as you enable *autodoc_pydantic*.
+More concretely, sphinx' autodoc directives like :code:`automodule` will already use the
+newly added pydantic documenters. To explicitly use the *autodoc_pydantic* directives,
+please visit the :doc:`usage` documentation.
