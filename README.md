@@ -24,74 +24,18 @@ Don't worry - just `pip install autodoc_pydantic` :relaxed:.
 - :books: sorts fields, validators and model config within models by type
 - 🍀 Supports `pydantic >= 1.5.0` and `sphinx >= 3.4.0`
 
-All of these addons are completely configurable.
+To see those features in action, jump over to the [example documentation](https://autodoc-pydantic.readthedocs.io/en/latest/examples.html#default-configuration) to compare
+the appearance of standard sphinx autodoc with *autodoc_pydantic*.
 
-## Installation
+## Documentation
 
-1. Install via `pip install autodoc_pydantic`
-2. Add `'sphinxcontrib.autodoc_pydantic'` to the `extensions` list in `conf.py`:
+For more details, please visit the official [documentation](https://autodoc-pydantic.readthedocs.io/en/latest/):
 
-   ```python
-   extensions = ['sphinxcontrib.autodoc_pydantic']
-   ```
+- [Installation](https://autodoc-pydantic.readthedocs.io/en/latest/installation.html)
+- [Configuration](https://autodoc-pydantic.readthedocs.io/en/latest/configuration.html)
+- [Usage](https://autodoc-pydantic.readthedocs.io/en/latest/usage.html)
+- [Examples](https://autodoc-pydantic.readthedocs.io/en/latest/examples.html)
 
-3. Configure `autodoc_pydantic` in `conf.py`:
+## Acknowledgements
 
-   ```python
-   autodoc_pydantic_field_show_constraints = True
-   autodoc_pydantic_model_show_schema = True
-   ```
- 
-## Usage
-
-The standard `automodule` directive already understands pydantic models that it encounters by default. No more tweaks are required.
-
-```rest
-.. automodule:: package.module
-   :members:
-```
-
-Additionally, autodoc_pydantic provides specific directives for models, settings, fields, validators and class config:
-
-```rest
-.. autopydantic_model:: package.module.MyModel
-   :members:
-   
-.. autopydantic_settings:: package.module.MySettings
-   :members:
-   
-.. autopydantic_field:: package.module.MyModel.foobar
-
-.. autopydantic_validator:: package.module.MyModel.validator
-
-.. autopydantic_class_config:: package.module.MyModel.Config
-   :members:
-```
- 
-## Configuration
-
-### General 
-
-- `autodoc_pydantic_show_config` = *True*: By default document `Config` class as class members. If *False*, hides it completely.
-- `autodoc_pydantic_show_validators` = *True*: By default document pydantic validators as class members. If *False*, hides it completely.
-
-### Models / Settings
-
-- `autodoc_pydantic_model_show_schema` = *True*: By default, adds collapsable section including formatted model json schema.
-- `autodoc_pydantic_model_show_config` = *True*: By default, adds model configuration settings to model doc string.
-- `autodoc_pydantic_model_show_validators` = *True*: By default, adds validator -> field mappings to model doc string.
-- `autodoc_pydantic_model_show_paramlist` = *False*: By default, hides overloaded and redundant parameter list from model signature.
-- `autodoc_pydantic_model_member_order` = *'groupwise'*: By default, sorts model members by type to group fields, validators and class config members.
-
-### Fields
-
-- `autodoc_pydantic_field_list_validators` = *True*: By default, lists all validators processing corresponding field.
-- `autodoc_pydantic_field_doc_policy` = *'both'*: By default, show doc string and and field description. If *'description'*, show field description only. If *'docstring'*, show doc string only.  
-- `autodoc_pydantic_field_show_constraints` = *True*: By default, show field constraints (e.g. minimum, maximum etc.).
-- `autodoc_pydantic_field_show_alias` = *True*: By default, show field alias in signature.
-
-### Validators
-
-- `autodoc_pydantic_validator_show_paramlist` = *False*: By default, hides meaningless parameter list from validators.
-- `autodoc_pydantic_validator_replace_retann` = *True*: By default, replaces validators' return annotation with references to processed fields.
-- `autodoc_pydantic_validator_list_fields` = *True*: By default, adds list of references to validators' doc string.
+Thanks to for the great open source projects [sphinx](https://www.sphinx-doc.org/en/master/), [pydantic](https://pydantic-docs.helpmanual.io/) and [poetry](https://python-poetry.org/) (and so many more) :heart: !
