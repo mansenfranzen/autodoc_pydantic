@@ -178,7 +178,7 @@ class PydanticModelDocumenter(ClassDocumenter):
 
     def add_collapsable_schema(self):
 
-        schema_json = self.object.schema_json()
+        schema_json = ModelWrapper(self.object).get_safe_schema_json()
         schema = json.dumps(json.loads(schema_json), default=str, indent=3)
         lines = [f"   {line}" for line in schema.split("\n")]
         lines = "\n".join(lines)
@@ -328,7 +328,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
 
         name = self.objpath[-1]
         wrapper = ModelWrapper(self.parent)
-        default = wrapper.get_field_properties_by_name(name).get("default")
+        default = wrapper.get_field_property(name, "default")
         if default is not None:
             value = object_description(default)
             sourcename = self.get_sourcename()
@@ -380,9 +380,8 @@ class PydanticFieldDocumenter(AttributeDocumenter):
 
         name = self.objpath[-1]
         wrapper = ModelWrapper(self.parent)
-        properties = wrapper.get_field_properties_by_name(name)
+        description = wrapper.get_field_property(name, "description")
 
-        description = properties.get("description")
         if description is not None:
             source_name = self.get_sourcename()
             self.add_line(description, source_name)

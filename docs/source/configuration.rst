@@ -29,13 +29,19 @@ BaseModel
 Contains all modifications for pydantic `BaseModel`.
 
 .. tabdocconfig:: autopydantic_model
-   :title: Show JSON
+   :title: Show Schema JSON
    :path: target.configuration.ModelShowJson
    :config: autodoc_pydantic_model_show_json
    :option: model-show-json
    :values: True, False
 
-   Show the json representation of a pydantic model within in the class doc string as a collapsable code block.
+   Show the schema json representation of a pydantic model within in the class doc string as a collapsable code block.
+
+.. warning::
+
+   Fields containing custom objects may not be serializable which would break schema generation.
+   To prevent this, such fields are kept however their type is changed to *str* and their default
+   values are changed to :code:`ERROR: Not serializable`.
 
 
 .. tabdocconfig:: autopydantic_model
@@ -143,13 +149,19 @@ BaseSettings
 Contains all modifications for pydantic `BaseSettings`.
 
 .. tabdocconfig:: autopydantic_settings
-   :title: Show JSON
+   :title: Show Schema JSON
    :path: target.configuration.SettingsShowJson
    :config: autodoc_pydantic_settings_show_json
    :option: settings-show-json
    :values: True, False
 
-   Show the json representation of a pydantic settings within in the class doc string as a collapsable code block.
+   Show the schema json representation of pydantic settings within in the class doc string as a collapsable code block.
+
+.. warning::
+
+   Fields containing custom objects may not be serializable which would break schema generation.
+   To prevent this, such fields are kept however their type is changed to *str* and their default
+   values are changed to :code:`ERROR: Not serializable`.
 
 
 .. tabdocconfig:: autopydantic_settings

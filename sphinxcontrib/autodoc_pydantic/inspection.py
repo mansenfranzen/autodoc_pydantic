@@ -1,11 +1,13 @@
 """This module contains inspection functionality for pydantic models.
 
 """
+import copy
 import functools
+import json
 import pydoc
 from collections import defaultdict
 from itertools import chain
-from typing import NamedTuple, Optional, Tuple, List, Dict, Any, Set
+from typing import NamedTuple, Tuple, List, Dict, Any, Set
 from pydantic import BaseModel
 from pydantic.fields import ModelField
 from sphinx.addnodes import desc_signature
@@ -31,6 +33,18 @@ def is_validator_by_name(name: str, obj: Any) -> bool:
         wrapper = ModelWrapper.factory(obj)
         return name in wrapper.get_validator_names()
     return False
+
+
+def is_not_serializable(obj: ModelField) -> bool:
+    """Check of object is serializable.
+
+    """
+
+    try:
+        json.dumps(obj.default)
+        return False
+    except Exception:
+        return True
 
 
 class NamedReference(NamedTuple):
@@ -82,7 +96,7 @@ class ModelWrapper:
 
         """
         try:
-            return self.model.__dict__["__validators__"]
+            return self.model.__validators__
         except KeyError:
             return {}
 
@@ -241,23 +255,41 @@ class ModelWrapper:
         return [NamedReference(mapping.validator.name, mapping.validator.ref)
                 for mapping in unique.values()]
 
-    def get_all_field_properties(self) -> Dict[str, Dict]:
-        """Return the field properties provided by schema.
-
-        """
-
-        return self.model.schema(by_alias=False)["properties"]
-
-    def get_field_properties_by_name(self, field_name: str) -> Dict[str, Any]:
-        """Return schema properties for given field name.
-
-        """
-
-        return self.get_all_field_properties()[field_name]
-
     def get_field_object_by_name(self, field_name: str) -> ModelField:
         """Return the field object for given field name.
 
         """
 
         return self.model.__dict__["__fields__"][field_name]
+
+    def get_field_property(self, field_name: str, property_name: str) -> Any:
+        """Return a property of a given field.
+
+        """
+
+        field = self.get_field_object_by_name(field_name)
+        return getattr(field.field_info, property_name, None)
+
+    def find_non_json_serializable_fields(self):
+        """Get all fields that can safely be serialized.
+
+        """
+
+        return [key for key, value in self.model.__fields__.items()
+                if is_not_serializable(value)]
+
+    def get_safe_schema_json(self):
+        """Get model's `schema_json` while ignoring all non serializable.
+
+        """
+
+        try:
+            return self.model.schema_json()
+        except TypeError:
+            invalid_keys = self.find_non_json_serializable_fields()
+            duplicate = copy.deepcopy(self.model)
+            for key in invalid_keys:
+                field = duplicate.__fields__[key]
+                setattr(field, "default", "ERROR: Not serializable")
+                setattr(field, "type_", str)
+            return duplicate.schema_json()
