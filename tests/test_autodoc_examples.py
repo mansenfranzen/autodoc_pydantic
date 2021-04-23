@@ -44,7 +44,8 @@ def test_model_with_field(autodocument):
 
 
 def test_model_with_field_validator(autodocument):
-    options_app = dict(autodoc_pydantic_model_show_json=False)
+    options_app = dict(autodoc_pydantic_model_show_json=False,
+                       autodoc_pydantic_validator_list_fields=True)
     options_doc = dict(members=None)
     actual = autodocument(documenter='pydantic_model',
                           object_path='target.model.ModelWithFieldValidator',
@@ -86,7 +87,8 @@ def test_model_with_field_validator(autodocument):
 
 
 def test_model_with_config(autodocument):
-    options_app = dict(autodoc_pydantic_model_show_json=False)
+    options_app = dict(autodoc_pydantic_model_show_json=False,
+                       autodoc_pydantic_model_show_config_member=True)
     options_doc = dict(members=None)
     actual = autodocument(documenter='pydantic_model',
                           object_path='target.model.ModelWithConfig',
@@ -132,8 +134,8 @@ def test_model_plain_show_json(autodocument):
         '',
         '   .. raw:: html',
         '',
-        '      <p><details>',
-        '      <summary><a>Show JSON schema</a></summary>',
+        '      <p><details  class="autodoc_pydantic_collapsable_json">',
+        '      <summary>Show JSON schema</summary>',
         '',
         '   .. code-block:: json',
         '',
