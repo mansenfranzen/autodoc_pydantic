@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from sphinx.application import Sphinx
 
 from sphinxcontrib.autodoc_pydantic.autodoc import (
@@ -16,6 +18,21 @@ from sphinxcontrib.autodoc_pydantic.directives import (
     PydanticSettings
 )
 
+def add_css_file(app: Sphinx, exception: Exception):
+    """Adds custom css to HTML output.
+
+    """
+
+    filename = "autodoc_pydantic.css"
+    static_path = (Path(app.outdir) / "_static").absolute()
+    path_css = Path(__file__).parent.joinpath("css", filename)
+
+    if not (static_path / filename).exists():
+        content = path_css.read_text()
+        (static_path / filename).write_text(content)
+
+    if exception:
+        raise exception
 
 
 def setup(app: Sphinx) -> None:
@@ -69,4 +86,7 @@ def setup(app: Sphinx) -> None:
     app.add_autodocumenter(PydanticSettingsDocumenter)
     app.add_autodocumenter(PydanticValidatorDocumenter)
     app.add_autodocumenter(PydanticConfigClassDocumenter)
+
+    app.add_css_file("autodoc_pydantic.css")
+    app.connect("build-finished", add_css_file)
 
