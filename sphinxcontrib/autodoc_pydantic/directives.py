@@ -40,7 +40,8 @@ class PydanticValidator(PyMethod):
         remove_node_by_tagname(signode.children, "desc_parameterlist")
 
         # replace nodes
-        signode += desc_annotation("", "  »  ")
+        class_name = "autodoc_pydantic_validator_arrow"
+        signode += desc_annotation("", "  »  ", classes=[class_name])
 
         # get imports, names and fields of validator
         validator_name = signode["fullname"].split(".")[-1]
