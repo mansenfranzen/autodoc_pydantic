@@ -21,7 +21,6 @@ from sphinx.ext.autodoc.directive import DummyOptionSpec
 from sphinx.util import nested_parse_with_titles
 from sphinx.util.docutils import switch_source_input, SphinxDirective
 
-
 tab_sub_tpl = """
    .. tab:: {value_label}
 
@@ -32,6 +31,8 @@ tab_sub_tpl = """
 """
 
 tab_tpl = """
+.. _{config}:
+
 {title}
 
 {description}
@@ -73,6 +74,52 @@ def parse_options(options: str) -> str:
     options = options.split(",")
     lines = [parse_option(option) for option in options]
     return "\n" + "\n".join(lines)
+
+
+class ConfigurationToc(SphinxDirective):
+    """Generates documentation section describing configuration parameters.
+
+    """
+
+    option_spec = DummyOptionSpec()
+    has_content = False
+    required_arguments = 1
+    optional_arguments = 0
+    final_argument_whitespace = True
+
+    def run(self) -> List[Node]:
+        name = self.arguments[0]
+        prefix = "autodoc_pydantic_"
+        startswith = f"{prefix}{name}_"
+        configs = [x for x in self.env.config.values.keys()
+                   if x.startswith(startswith)]
+
+        special = {f"{name}-undoc-members",
+                   f"{name}-members",
+                   f"{name}-member-order"}
+
+        def sanitize(option):
+            replaced = option.replace(prefix, "").replace("_", "-")
+            if replaced in special:
+                replaced = replaced.replace(f"{name}-", "")
+
+            return f":{replaced}:"
+
+        def create_link(option):
+            label = sanitize(option)
+            return f"   - :ref:`{label} <{option}>`"
+
+        content = [":Options:"]
+        content.extend([create_link(x) for x in configs])
+        content = StringList(content)
+
+        with switch_source_input(self.state, content):
+            node = nodes.section()  # type: Element
+            # necessary so that the child nodes get the right source/line set
+            node.document = self.state.document
+            nested_parse_with_titles(self.state, content, node)
+
+            return node.children
 
 
 class TabDocDirective(SphinxDirective):
