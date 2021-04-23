@@ -57,8 +57,8 @@ OPTION_SPEC_MERGED = {**OPTION_SPEC_FIELD,
 TPL_COLLAPSE = """
 .. raw:: html
 
-   <p><details>
-   <summary><a>Show JSON schema</a></summary>
+   <p><details  class="autodoc_pydantic_collapsable_json">
+   <summary>Show JSON schema</summary>
 
 .. code-block:: json
 
