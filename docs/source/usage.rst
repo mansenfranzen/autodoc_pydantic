@@ -65,7 +65,7 @@ sensible default settings.
 
    .. tab:: source code
 
-      .. autocodeblock:: target.example_setting
+      .. autocodeblock:: target.example_model
 
 To overwrite global defaults, the following directive options can be supplied:
 

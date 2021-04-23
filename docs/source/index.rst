@@ -22,9 +22,11 @@ Features
 - 📚 sorts fields, validators and model config within models by type
 - 🍀 Supports :code:`pydantic >= 1.5.0` and :code:`sphinx >= 3.4.0`
 
+If you want to see those features in action, jump over to the :ref:`example <showcase>` section comparing
+the appearance of standard sphinx autodoc with *autodoc_pydantic*.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: User guide
 
    installation

@@ -6,6 +6,8 @@ While the :doc:`configuration` documentation contains all available options in
 detail, this page shows them in cooperation to provide different examples on how to
 display pydantic models and settings.
 
+.. _showcase:
+
 Default configuration
 =====================
 
