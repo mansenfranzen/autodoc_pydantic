@@ -340,7 +340,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
                     ) -> None:
 
         doc_policy = self.pyautodoc.get_option_value("field-doc-policy")
-        if doc_policy in ("docstring", "both"):
+        if doc_policy in ("docstring", "both", None):
             super().add_content(more_content, no_docstring)
         if doc_policy in ("both", "description"):
             self.add_description()
