@@ -20,14 +20,17 @@ Features
 - 📋 shows summary section for model configuration and validators
 - 👀 hides overloaded and redundant model class signature
 - 📚 sorts fields, validators and model config within models by type
-- 🍀 Supports :code:`pydantic >= 1.0.0` and :code:`sphinx >= 3.4.0`
+- 🍀 Supports :code:`pydantic >= 1.5.0` and :code:`sphinx >= 3.4.0`
 
 
 .. toctree::
    :maxdepth: 2
    :caption: User guide
 
+   installation
+   usage
    configuration
+   examples
 
 .. toctree::
    :maxdepth: 2
