@@ -25,14 +25,12 @@ def add_css_file(app: Sphinx, exception: Exception):
 
     filename = "autodoc_pydantic.css"
     static_path = (Path(app.outdir) / "_static").absolute()
+    static_path.mkdir(exist_ok=True, parents=True)
     path_css = Path(__file__).parent.joinpath("css", filename)
 
     if not (static_path / filename).exists():
         content = path_css.read_text()
         (static_path / filename).write_text(content)
-
-    if exception:
-        raise exception
 
 
 def setup(app: Sphinx) -> None:
