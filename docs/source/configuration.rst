@@ -21,27 +21,6 @@ how pydantic objects are displayed:
          :model-show-json: True
          :model-show-config: False
 
----------------------
-Default configuration
----------------------
-
-.. tabs::
-
-   .. tab:: autodoc pydantic
-
-      .. autopydantic_settings:: target.ExampleSettings
-
-   .. tab:: autodoc sphinx
-
-      .. autopydantic_settings:: target.ExampleSettings
-         :members:
-         :__doc_disable_except__: members
-         :noindex:
-
-   .. tab:: *example code*
-
-      .. autocodeblock:: target.ExampleSettings
-
 
 ---------
 BaseModel
