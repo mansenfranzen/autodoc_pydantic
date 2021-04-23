@@ -2,11 +2,13 @@
 
 """
 import functools
+import pydoc
 from collections import defaultdict
 from itertools import chain
 from typing import NamedTuple, Optional, Tuple, List, Dict, Any, Set
 from pydantic import BaseModel
 from pydantic.fields import ModelField
+from sphinx.addnodes import desc_signature
 
 
 def is_pydantic_model(obj: Any) -> bool:
@@ -195,6 +197,16 @@ class ModelWrapper:
         mapping = ModelWrapper(model)
         cls.CACHED[model_id] = mapping
         return mapping
+
+    @classmethod
+    def from_signode(cls, signode: desc_signature) -> "ModelWrapper":
+        """Create instance from a `signode` as used within sphinx directives.
+
+        """
+
+        model_name, validator_name = signode["fullname"].split(".")
+        model = pydoc.locate(f"{signode['module']}.{model_name}")
+        return cls.factory(model)
 
     def get_fields_for_validator(self,
                                  validator_name: str) -> List[NamedReference]:

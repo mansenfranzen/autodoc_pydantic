@@ -22,7 +22,7 @@ Don't worry - just `pip install autodoc_pydantic` :relaxed:.
 - :clipboard: shows summary section for model configuration and validators
 - :eyes: hides overloaded and redundant model class signature
 - :books: sorts fields, validators and model config within models by type
-- 🍀 Supports `pydantic >= 1.0.0` and `sphinx >= 3.4.0`
+- 🍀 Supports `pydantic >= 1.5.0` and `sphinx >= 3.4.0`
 
 All of these addons are completely configurable.
 

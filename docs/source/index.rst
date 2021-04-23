@@ -20,18 +20,23 @@ Features
 - 📋 shows summary section for model configuration and validators
 - 👀 hides overloaded and redundant model class signature
 - 📚 sorts fields, validators and model config within models by type
-- 🍀 Supports :code:`pydantic >= 1.0.0` and :code:`sphinx >= 3.4.0`
+- 🍀 Supports :code:`pydantic >= 1.5.0` and :code:`sphinx >= 3.4.0`
 
+To see those features in action, jump over to the :ref:`example <showcase>` section comparing
+the appearance of standard sphinx autodoc with *autodoc_pydantic*.
+
+.. toctree::
+   :maxdepth: 1
+   :caption: User guide
+
+   installation
+   usage
+   configuration
+   examples
 
 .. toctree::
    :maxdepth: 2
-   :caption: User guide:
-
-   user_guide
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Developer guide:
+   :caption: Developer guide
 
    developer_guide
 

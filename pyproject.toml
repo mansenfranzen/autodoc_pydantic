@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "autodoc_pydantic"
-version = "0.1.1"
+version = "1.0.0"
 description = "Seamlessly integrate pydantic models in your Sphinx documentation."
 authors = ["mansenfranzen <franz.woellert@gmail.com>"]
 packages = [{ include = "sphinxcontrib" }]
@@ -15,20 +15,29 @@ classifiers = [
     "Topic :: Documentation :: Sphinx",
     "Topic :: Software Development :: Documentation"
 ]
+include = ["sphinxcontrib/autodoc_pydantic/css/autodoc_pydantic.css"]
 
 [tool.poetry.dependencies]
-python = ">=3.6.1"
-Sphinx = ">=3.0"
-pydantic = ">=1.0"
+python = "^3.6.1"
+Sphinx = ">=3.4"
+pydantic = ">=1.5"
+
+sphinx-rtd-theme = { version = "^0.5.1", optional = true }
+sphinx-tabs = { version = "^2", optional = true }
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.0"
 pytest-cov = "^2.0"
 sphinx-rtd-theme = "^0.5.1"
+sphinx-tabs = "^2"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
 addopts = "--cov-report term --cov-report xml:coverage.xml --cov=sphinxcontrib"
+
+[tool.poetry.extras]
+docs = ["sphinx-rtd-theme",
+        "sphinx-tabs"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
