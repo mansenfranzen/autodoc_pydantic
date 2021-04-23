@@ -59,11 +59,11 @@ def parse_option(option: str) -> str:
 
     """
 
-    if "=" in option:
-        key, value = option.split("=")
-        return f"         :{key.strip()}: {value.strip()}"
-    else:
+    if "=" not in option:
         return f"         :{option.strip()}:"
+
+    key, value = option.split("=")
+    return f"         :{key.strip()}: {value.strip()}"
 
 
 def parse_options(options: str) -> str:
@@ -216,6 +216,4 @@ class AutoCodeBlock(CodeBlock):
 
         obj = pydoc.locate(objpath)
         lines = inspect.getsourcelines(obj)[0]
-        sanitized = [line.replace("\n", "") for line in lines]
-
-        return sanitized
+        return [line.replace("\n", "") for line in lines]
