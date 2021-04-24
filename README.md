@@ -24,6 +24,8 @@ Don't worry - just `pip install autodoc_pydantic` :relaxed:.
 - :books: sorts fields, validators and model config within models by type
 - 🍀 Supports `pydantic >= 1.5.0` and `sphinx >= 3.4.0`
 
+[![Comparison](docs/source/material/example_comparison_v1.0.0.gif)](https://autodoc-pydantic.readthedocs.io/en/latest/examples.html#default-configuration)
+
 To see those features in action, jump over to the [example documentation](https://autodoc-pydantic.readthedocs.io/en/latest/examples.html#default-configuration) to compare
 the appearance of standard sphinx autodoc with *autodoc_pydantic*.
 
@@ -38,4 +40,4 @@ For more details, please visit the official [documentation](https://autodoc-pyda
 
 ## Acknowledgements
 
-Thanks to for the great open source projects [sphinx](https://www.sphinx-doc.org/en/master/), [pydantic](https://pydantic-docs.helpmanual.io/) and [poetry](https://python-poetry.org/) (and so many more) :heart: !
+Thanks to great open source projects [sphinx](https://www.sphinx-doc.org/en/master/), [pydantic](https://pydantic-docs.helpmanual.io/) and [poetry](https://python-poetry.org/) (and so many more) :heart: !
