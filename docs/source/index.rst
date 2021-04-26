@@ -35,10 +35,11 @@ the appearance of standard sphinx autodoc with *autodoc_pydantic*.
    examples
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Developer guide
 
    developer_guide
+   changelog
 
 
 Indices and tables
