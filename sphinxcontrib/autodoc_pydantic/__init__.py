@@ -1,3 +1,7 @@
+"""Contains the extension setup.
+
+"""
+
 from pathlib import Path
 
 from sphinx.application import Sphinx
@@ -18,6 +22,7 @@ from sphinxcontrib.autodoc_pydantic.directives import (
     PydanticSettings
 )
 
+
 def add_css_file(app: Sphinx, exception: Exception):
     """Adds custom css to HTML output.
 
@@ -35,42 +40,43 @@ def add_css_file(app: Sphinx, exception: Exception):
 
 def setup(app: Sphinx) -> None:
     stem = "autodoc_pydantic_"
+    add = app.add_config_value
 
-    app.add_config_value(f'{stem}config_signature_prefix', "model", True, str)
-    app.add_config_value(f'{stem}config_members', True, True, bool)
+    add(f'{stem}config_signature_prefix', "model", True, str)
+    add(f'{stem}config_members', True, True, bool)
 
-    app.add_config_value(f'{stem}settings_show_json', True, True, bool)
-    app.add_config_value(f'{stem}settings_show_config_member', False, True, bool)
-    app.add_config_value(f'{stem}settings_show_config_summary', True, True, bool)
-    app.add_config_value(f'{stem}settings_show_validator_members', True, True, bool)
-    app.add_config_value(f'{stem}settings_show_validator_summary', True, True, bool)
-    app.add_config_value(f'{stem}settings_hide_paramlist', True, True, bool)
-    app.add_config_value(f'{stem}settings_undoc_members', True, True, bool)
-    app.add_config_value(f'{stem}settings_members', True, True, bool)
-    app.add_config_value(f'{stem}settings_member_order', 'groupwise', True, str)
-    app.add_config_value(f'{stem}settings_signature_prefix', "pydantic settings", True, str)
+    add(f'{stem}settings_show_json', True, True, bool)
+    add(f'{stem}settings_show_config_member', False, True, bool)
+    add(f'{stem}settings_show_config_summary', True, True, bool)
+    add(f'{stem}settings_show_validator_members', True, True, bool)
+    add(f'{stem}settings_show_validator_summary', True, True, bool)
+    add(f'{stem}settings_hide_paramlist', True, True, bool)
+    add(f'{stem}settings_undoc_members', True, True, bool)
+    add(f'{stem}settings_members', True, True, bool)
+    add(f'{stem}settings_member_order', 'groupwise', True, str)
+    add(f'{stem}settings_signature_prefix', "pydantic settings", True, str)
 
-    app.add_config_value(f'{stem}model_show_json', True, True, bool)
-    app.add_config_value(f'{stem}model_show_config_member', False, True, bool)
-    app.add_config_value(f'{stem}model_show_config_summary', True, True, bool)
-    app.add_config_value(f'{stem}model_show_validator_members', True, True, bool)
-    app.add_config_value(f'{stem}model_show_validator_summary', True, True, bool)
-    app.add_config_value(f'{stem}model_hide_paramlist', True, True, bool)
-    app.add_config_value(f'{stem}model_undoc_members', True, True, bool)
-    app.add_config_value(f'{stem}model_members', True, True, bool)
-    app.add_config_value(f'{stem}model_member_order', 'groupwise', True, str)
-    app.add_config_value(f'{stem}model_signature_prefix', "pydantic model", True, str)
+    add(f'{stem}model_show_json', True, True, bool)
+    add(f'{stem}model_show_config_member', False, True, bool)
+    add(f'{stem}model_show_config_summary', True, True, bool)
+    add(f'{stem}model_show_validator_members', True, True, bool)
+    add(f'{stem}model_show_validator_summary', True, True, bool)
+    add(f'{stem}model_hide_paramlist', True, True, bool)
+    add(f'{stem}model_undoc_members', True, True, bool)
+    add(f'{stem}model_members', True, True, bool)
+    add(f'{stem}model_member_order', 'groupwise', True, str)
+    add(f'{stem}model_signature_prefix', "pydantic model", True, str)
 
-    app.add_config_value(f'{stem}validator_signature_prefix', "validator", True, str)
-    app.add_config_value(f'{stem}validator_replace_signature', True, True, bool)
-    app.add_config_value(f'{stem}validator_list_fields', False, True, bool)
+    add(f'{stem}validator_signature_prefix', "validator", True, str)
+    add(f'{stem}validator_replace_signature', True, True, bool)
+    add(f'{stem}validator_list_fields', False, True, bool)
 
-    app.add_config_value(f'{stem}field_list_validators', True, True, bool)
-    app.add_config_value(f'{stem}field_doc_policy', 'both', True, str)
-    app.add_config_value(f'{stem}field_show_constraints', True, True, bool)
-    app.add_config_value(f'{stem}field_show_alias', True, True, bool)
-    app.add_config_value(f'{stem}field_show_default', True, True, bool)
-    app.add_config_value(f'{stem}field_signature_prefix', "field", True, str)
+    add(f'{stem}field_list_validators', True, True, bool)
+    add(f'{stem}field_doc_policy', 'both', True, str)
+    add(f'{stem}field_show_constraints', True, True, bool)
+    add(f'{stem}field_show_alias', True, True, bool)
+    add(f'{stem}field_show_default', True, True, bool)
+    add(f'{stem}field_signature_prefix', "field", True, str)
 
     app.add_directive_to_domain("py", "pydantic_field", PydanticField)
     app.add_directive_to_domain("py", "pydantic_model", PydanticModel)
@@ -87,4 +93,3 @@ def setup(app: Sphinx) -> None:
 
     app.add_css_file("autodoc_pydantic.css")
     app.connect("build-finished", add_css_file)
-

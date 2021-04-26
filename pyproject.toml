@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "autodoc_pydantic"
-version = "1.1.0"
+version = "1.1.1"
 description = "Seamlessly integrate pydantic models in your Sphinx documentation."
 authors = ["mansenfranzen <franz.woellert@gmail.com>"]
 packages = [{ include = "sphinxcontrib" }]
@@ -30,6 +30,7 @@ pytest = "^6.0"
 pytest-cov = "^2.0"
 sphinx-rtd-theme = "^0.5.1"
 sphinx-tabs = "^2"
+myst-parser = "^0.13.7"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
