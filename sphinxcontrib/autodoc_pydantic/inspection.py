@@ -67,18 +67,18 @@ class ValidatorFieldMapping(NamedTuple):
 
 
 class ModelWrapper:
-    """Wraps pydantic models and provides additional inpsection functionality on
-    top of it.
+    """Wraps pydantic models and provides additional inpsection functionality
+    on top of it.
 
     Parameters
     ----------
     model: pydantic.BaseModel
-        The pydantic model for which validators field validator_field_mappings will be
-        extracted.
+        The pydantic model for which validators field validator_field_mappings
+        will be extracted.
 
     """
 
-    CACHED: Dict[str, "ModelWrapper"] = {}
+    CACHED: Dict[int, "ModelWrapper"] = {}
 
     def __init__(self, model: BaseModel):
         self.model = model
@@ -117,8 +117,8 @@ class ModelWrapper:
         return f"{self.get_model_path()}.{name}"
 
     def generate_mappings(self) -> Tuple[ValidatorFieldMapping]:
-        """Inspects pydantic model and gathers all validator_field_mappings between validators
-        and fields.
+        """Inspects pydantic model and gathers all validator_field_mappings
+        between validators and fields.
 
         """
 
@@ -185,7 +185,8 @@ class ModelWrapper:
 
     @functools.lru_cache(maxsize=128)
     def get_standard_validators(self) -> Dict[str, List[ValidatorFieldMapping]]:
-        """Get all validator field validator_field_mappings for standard validators.
+        """Get all validator field validator_field_mappings for standard
+        validators.
 
         """
 
