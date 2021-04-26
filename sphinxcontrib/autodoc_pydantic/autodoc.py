@@ -1,6 +1,7 @@
 """This module contains the autodoc extension classes.
 
 """
+
 import json
 from typing import Any, Optional
 
@@ -54,6 +55,28 @@ OPTION_SPEC_MERGED = {**OPTION_SPEC_FIELD,
                       **OPTION_SPEC_VALIDATOR,
                       **OPTION_SPEC_CONFIG}
 
+OPTION_SPEC_MODEL = {"model-show-json": option_default_true,
+                     "model-hide-paramlist": option_default_true,
+                     "model-show-validator-members": option_default_true,
+                     "model-show-validator-summary": option_default_true,
+                     "model-show-config-member": option_default_true,
+                     "model-show-config-summary": option_default_true,
+                     "model-signature-prefix": unchanged,
+                     "undoc-members": option_default_true,
+                     "members": option_members,
+                     "__doc_disable_except__": option_list_like}
+
+OPTION_SPEC_SETTINGS = {"settings-show-json": option_default_true,
+                        "settings-hide-paramlist": option_default_true,
+                        "settings-show-validator-members": option_default_true,
+                        "settings-show-validator-summary": option_default_true,
+                        "settings-show-config-member": option_default_true,
+                        "settings-show-config-summary": option_default_true,
+                        "settings-signature-prefix": unchanged,
+                        "undoc-members": option_default_true,
+                        "members": option_members,
+                        "__doc_disable_except__": option_list_like}
+
 TPL_COLLAPSE = """
 .. raw:: html
 
@@ -80,17 +103,7 @@ class PydanticModelDocumenter(ClassDocumenter):
     directivetype = 'pydantic_model'
     priority = 10 + ClassDocumenter.priority
     option_spec = ClassDocumenter.option_spec.copy()
-    option_spec.update({"model-show-json": option_default_true,
-                        "model-hide-paramlist": option_default_true,
-                        "model-show-validator-members": option_default_true,
-                        "model-show-validator-summary": option_default_true,
-                        "model-show-config-member": option_default_true,
-                        "model-show-config-summary": option_default_true,
-                        "model-signature-prefix": unchanged,
-                        "undoc-members": option_default_true,
-                        "members": option_members,
-                        "__doc_disable_except__": option_list_like,
-                        **OPTION_SPEC_MERGED})
+    option_spec.update({**OPTION_SPEC_MODEL, **OPTION_SPEC_MERGED})
 
     pyautodoc_pass_to_directive = (
         "model-signature-prefix",
@@ -102,6 +115,21 @@ class PydanticModelDocumenter(ClassDocumenter):
     )
 
     pyautodoc_prefix = "model"
+
+    @classmethod
+    def can_document_member(cls,
+                            member: Any,
+                            membername: str,
+                            isattr: bool,
+                            parent: Any) -> bool:
+        """Filter only pydantic models.
+
+        """
+
+        is_val = super().can_document_member(member, membername, isattr,
+                                             parent)
+        is_model = is_pydantic_model(member)
+        return is_val and is_model
 
     def __init__(self, *args: Any) -> None:
         super().__init__(*args)
@@ -140,22 +168,11 @@ class PydanticModelDocumenter(ClassDocumenter):
         else:
             self.options["exclude-members"].update(validators)
 
-    @classmethod
-    def can_document_member(cls,
-                            member: Any,
-                            membername: str,
-                            isattr: bool,
-                            parent: Any) -> bool:
-        """Filter only pydantic models.
+    def format_signature(self, **kwargs) -> str:
+        """If parameter list is to be hidden, return only empty signature.
 
         """
 
-        is_val = super().can_document_member(member, membername, isattr,
-                                             parent)
-        is_model = is_pydantic_model(member)
-        return is_val and is_model
-
-    def format_signature(self, **kwargs) -> str:
         if self.pyautodoc.get_option_value("hide-paramlist", True):
             return ""
         else:
@@ -165,6 +182,10 @@ class PydanticModelDocumenter(ClassDocumenter):
                     more_content: Optional[StringList],
                     no_docstring: bool = False
                     ) -> None:
+        """Delegate additional content creation.
+
+        """
+
         super().add_content(more_content, no_docstring)
 
         if self.pyautodoc.get_option_value("show-json", True):
@@ -177,6 +198,9 @@ class PydanticModelDocumenter(ClassDocumenter):
             self.add_validators_summary()
 
     def add_collapsable_schema(self):
+        """Adds collapse code block containing JSON schema.
+
+        """
 
         schema_json = ModelWrapper(self.object).get_safe_schema_json()
         schema = json.dumps(json.loads(schema_json), default=str, indent=3)
@@ -233,22 +257,16 @@ class PydanticModelDocumenter(ClassDocumenter):
 
 
 class PydanticSettingsDocumenter(PydanticModelDocumenter):
+    """Represents specialized Documenter subclass for pydantic settings.
+
+    """
+
     objtype = 'pydantic_settings'
     directivetype = 'pydantic_settings'
 
     priority = 10 + ClassDocumenter.priority
     option_spec = ClassDocumenter.option_spec.copy()
-    option_spec.update({"settings-show-json": option_default_true,
-                        "settings-hide-paramlist": option_default_true,
-                        "settings-show-validator-members": option_default_true,
-                        "settings-show-validator-summary": option_default_true,
-                        "settings-show-config-member": option_default_true,
-                        "settings-show-config-summary": option_default_true,
-                        "settings-signature-prefix": unchanged,
-                        "undoc-members": option_default_true,
-                        "members": option_members,
-                        "__doc_disable_except__": option_list_like,
-                        **OPTION_SPEC_MERGED})
+    option_spec.update({**OPTION_SPEC_SETTINGS, **OPTION_SPEC_MERGED})
 
     pyautodoc_pass_to_directive = (
         "settings-signature-prefix",
@@ -282,6 +300,10 @@ class PydanticSettingsDocumenter(PydanticModelDocumenter):
 
 
 class PydanticFieldDocumenter(AttributeDocumenter):
+    """Represents specialized Documenter subclass for pydantic fields.
+
+    """
+
     objtype = 'pydantic_field'
     directivetype = 'pydantic_field'
     priority = 10 + AttributeDocumenter.priority
@@ -308,12 +330,13 @@ class PydanticFieldDocumenter(AttributeDocumenter):
 
         """
 
-        is_val = super().can_document_member(member, membername, isattr, parent)
+        is_val = super().can_document_member(member, membername, isattr,
+                                             parent)
         is_parent_model = is_pydantic_model(parent.object)
         return is_val and is_parent_model and isattr
 
     def add_directive_header(self, sig: str) -> None:
-        """Add default value to header.
+        """Delegate header options.
 
         """
 
@@ -338,6 +361,9 @@ class PydanticFieldDocumenter(AttributeDocumenter):
                     more_content: Optional[StringList],
                     no_docstring: bool = False
                     ) -> None:
+        """Delegate additional content creation.
+
+        """
 
         doc_policy = self.pyautodoc.get_option_value("field-doc-policy")
         if doc_policy in ("docstring", "both", None):
@@ -443,6 +469,9 @@ class PydanticValidatorDocumenter(MethodDocumenter):
         return is_val and is_validator
 
     def format_args(self, **kwargs: Any) -> str:
+        """Return empty arguments if validator should be replaced.
+
+        """
 
         if self.pyautodoc.get_option_value("validator-replace-signature"):
             return ''
