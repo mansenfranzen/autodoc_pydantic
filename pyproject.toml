@@ -24,6 +24,7 @@ pydantic = ">=1.5"
 
 sphinx-rtd-theme = { version = "^0.5.1", optional = true }
 sphinx-tabs = { version = "^2", optional = true }
+myst-parser = { version = "^0.13.7", optional = true}
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.0"
@@ -38,7 +39,8 @@ addopts = "--cov-report term --cov-report xml:coverage.xml --cov=sphinxcontrib"
 
 [tool.poetry.extras]
 docs = ["sphinx-rtd-theme",
-        "sphinx-tabs"]
+        "sphinx-tabs",
+        "myst-parser"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
