@@ -6,7 +6,7 @@ import functools
 import pydoc
 from typing import Any, Union, List, Set, Callable, Optional
 
-from docutils.nodes import emphasis, Node
+from docutils.nodes import emphasis
 from docutils.parsers.rst import Directive
 from sphinx.addnodes import pending_xref
 from sphinx.environment import BuildEnvironment
@@ -17,23 +17,22 @@ from sphinxcontrib.autodoc_pydantic.inspection import NamedReference
 NONE = object()
 
 
-def create_href(text, target, env) -> pending_xref:
-    # create the reference node
+def create_field_href(reference: NamedReference,
+                      env: BuildEnvironment) -> pending_xref:
+    """Create `pending_xref` node with link to given `reference`.
+
+    """
+
+    text = reference.name
     options = {'refdoc': env.docname,
                'refdomain': "py",
                'reftype': "obj",
-               'reftarget': target}
-    refnode = pending_xref(text, **options)
+               'reftarget': reference.ref}
+
+    refnode = pending_xref(reference.name, **options)
     classes = ['xref', "py", '%s-%s' % ("py", "obj")]
     refnode += emphasis(text, text, classes=classes)
     return refnode
-
-
-def create_field_href(reference: NamedReference,
-                      env: BuildEnvironment) -> pending_xref:
-    return create_href(text=reference.name,
-                       target=reference.ref,
-                       env=env)
 
 
 def remove_node_by_tagname(nodes: List, tagname: str):
@@ -45,9 +44,11 @@ def remove_node_by_tagname(nodes: List, tagname: str):
         nodes.remove(remove)
 
 
-
 def option_members(arg: Any) -> Union[object, List[str]]:
-    """Used to convert the :members: option to auto directives."""
+    """Used to convert the :members: option to auto directives.
+
+    """
+
     if isinstance(arg, str):
         sanitized = arg.lower()
         if sanitized == "true":
@@ -129,7 +130,6 @@ class PydanticAutoDirective:
         options = getattr(self.parent, "pyautodoc_set_default_option", [])
         for option in options:
             self.set_default_option(option)
-
 
     def get_configuration_option_name(self, name: str) -> str:
         """Provide full app environment configuration name for given option
@@ -298,7 +298,6 @@ class PydanticAutoDoc(PydanticAutoDirective):
             return result
 
         self.parent.add_directive_header = wrapped
-
 
     def pass_option_to_directive(self, name: str):
         """Pass an autodoc option through to the generated directive.
