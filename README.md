@@ -1,4 +1,4 @@
-# autodoc_pydantic
+![Autodoc Pydantic](docs/source/material/logo_black.svg)
 
 [![PyPI version](https://badge.fury.io/py/autodoc-pydantic.svg)](https://badge.fury.io/py/autodoc-pydantic)
 ![Master](https://github.com/mansenfranzen/autodoc_pydantic/actions/workflows/tests.yml/badge.svg)
