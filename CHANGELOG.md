@@ -1,12 +1,23 @@
 # Changelog
 
-## v1.X.X - 2021-XX-XX Unreleased
+## v1.1.1 - 2021-04-26
+
+This is a minor release with focus on refactoring and doc strings.
+
+### Internal
+
+- Several minor readability refactorings.
+
+### Documentation
+
+- Add changelog and `myst_parser` for parsing markdown files.
 
 ### Project
 
 - Add animated example to showcase difference between standard sphinx autodoc
   and pydantic autodoc.
 - Add project logo.
+- Add changelog.
 
 
 ## v1.1.0 - 2021-04-24
