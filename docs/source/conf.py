@@ -44,6 +44,7 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx_tabs.tabs",
     "sphinxcontrib.autodoc_pydantic",
+    "myst_parser",
     "extensions"
 ]
 

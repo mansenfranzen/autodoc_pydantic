@@ -30,6 +30,7 @@ pytest = "^6.0"
 pytest-cov = "^2.0"
 sphinx-rtd-theme = "^0.5.1"
 sphinx-tabs = "^2"
+myst-parser = "^0.13.7"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
