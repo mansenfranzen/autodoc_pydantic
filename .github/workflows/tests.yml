@@ -8,7 +8,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [3.6]
+        python-version: [3.9, 3.8, 3.7, 3.6]
         os: [ubuntu-18.04]
         pydantic_version: ["=~1.8", "=~1.7", "=~1.6", "=~1.5", "@latest"]
         sphinx_version: ["=~3.5", "=~3.4", "@latest"]
