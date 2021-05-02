@@ -255,9 +255,7 @@ class PydanticAutoDirective:
         """
 
         if (name not in self.parent.options) and (self.is_available(name)):
-            config_name = self.get_configuration_option_name(name)
-            value = self.parent.env.config[config_name]
-            self.parent.options[name] = value
+            self.parent.options[name] = self.get_configuration_by_name(name)
 
     def set_default_option_with_value(self, name: str,
                                       value_true: Any,
@@ -280,8 +278,7 @@ class PydanticAutoDirective:
         value = self.parent.options.get(name)
 
         if value is not None and self.is_available(name):
-            config_name = self.get_configuration_option_name(name)
-            if self.parent.env.config[config_name]:
+            if self.get_configuration_by_name(name):
                 self.parent.options[name] = value_true
             elif value_false is not NONE:
                 self.parent.options[name] = value_false
