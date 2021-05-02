@@ -1,5 +1,21 @@
 # Changelog
 
+## v1.1.2 - 2021-05-XX
+
+This is a bug release fixing compatibility issues with sphinx autosummary.
+
+### Internal
+
+- Remove custom object import and use autodoc's provided functionality.
+- Add `option_is_true` and `option_is_false` for `PydanticAutoDirective` 
+  respecting missing values via custom `NONE` object.
+
+### Bugfix
+
+- Respect `.. currentmodule::` directive for object imports [#12](https://github.com/mansenfranzen/autodoc_pydantic/issues/12).
+- Make `autosummary`'s `FakeDirective` work with pydantic autodocumenters [#11](https://github.com/mansenfranzen/autodoc_pydantic/issues/11).
+
+
 ## v1.1.1 - 2021-04-26
 
 This is a minor release with focus on refactoring and doc strings.
