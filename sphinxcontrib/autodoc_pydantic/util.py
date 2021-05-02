@@ -172,6 +172,15 @@ class PydanticAutoDirective:
         else:
             return name in available
 
+    def get_configuration_by_name(self, name: str) -> Any:
+        """Get configuration value from app environment configuration.
+        If `name` does not exist, return NONE.
+
+        """
+
+        config_name = self.get_configuration_option_name(name)
+        return getattr(self.parent.env.config, config_name, NONE)
+
     def get_option_value(self, name: str, prefix: bool = False) -> Any:
         """Get option value for given `name`. First, looks for explicit
         directive option values (e.g. :member-order:) which have highest
@@ -193,8 +202,46 @@ class PydanticAutoDirective:
         if name in self.parent.options:
             return self.parent.options[name]
         elif self.is_available(name):
-            config_name = self.get_configuration_option_name(name)
-            return self.parent.env.config[config_name]
+            return self.get_configuration_by_name(name)
+
+    def option_is_false(self, name: str, prefix: bool = False) -> bool:
+        """Get option value for given `name`. First, looks for explicit
+        directive option values (e.g. :member-order:) which have highest
+        priority. Second, if no directive option is given, get the default
+        option value provided via the app environment configuration.
+
+        Enforces result to be either True or False.
+
+        Parameters
+        ----------
+        name: str
+            Name of the option.
+        prefix: bool
+            If True, add `pyautodoc_prefix` to name.
+
+        """
+
+        return self.get_option_value(name=name, prefix=prefix) is False
+
+    def option_is_true(self, name: str, prefix: bool = False) -> bool:
+        """Get option value for given `name`. First, looks for explicit
+        directive option values (e.g. :member-order:) which have highest
+        priority. Second, if no directive option is given, get the default
+        option value provided via the app environment configuration.
+
+        Enforces result to be either True or False.
+
+        Parameters
+        ----------
+        name: str
+            Name of the option.
+        prefix: bool
+            If True, add `pyautodoc_prefix` to name.
+
+        """
+
+        return self.get_option_value(name=name, prefix=prefix) is True
+
 
     def set_default_option(self, name: str):
         """Set default option value for given `name` from app environment
