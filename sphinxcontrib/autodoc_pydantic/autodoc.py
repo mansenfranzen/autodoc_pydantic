@@ -28,7 +28,8 @@ from sphinxcontrib.autodoc_pydantic.util import (
     option_one_of_factory,
     option_default_true,
     option_list_like,
-    PydanticAutoDoc
+    PydanticAutoDoc,
+    NONE
 )
 
 OPTION_SPEC_FIELD = {
@@ -167,9 +168,7 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         """
 
-        obj = self.pyautodoc.get_pydantic_object_from_name()
-
-        validators = ModelWrapper(obj).get_validator_names()
+        validators = ModelWrapper(self.object).get_validator_names()
         if "exclude-members" not in self.options:
             self.options["exclude-members"] = validators
         else:
@@ -180,7 +179,7 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         """
 
-        if self.pyautodoc.get_option_value("hide-paramlist", True):
+        if self.pyautodoc.option_is_true("hide-paramlist", True):
             return ""
         else:
             return super().format_signature(**kwargs)
@@ -195,13 +194,13 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         super().add_content(more_content, no_docstring)
 
-        if self.pyautodoc.get_option_value("show-json", True):
+        if self.pyautodoc.option_is_true("show-json", True):
             self.add_collapsable_schema()
 
-        if self.pyautodoc.get_option_value("show-config-summary", True):
+        if self.pyautodoc.option_is_true("show-config-summary", True):
             self.add_config_summary()
 
-        if self.pyautodoc.get_option_value("show-validator-summary", True):
+        if self.pyautodoc.option_is_true("show-validator-summary", True):
             self.add_validators_summary()
 
     def add_collapsable_schema(self):
@@ -348,7 +347,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
         """
 
         super().add_directive_header(sig)
-        if self.pyautodoc.get_option_value("field-show-default"):
+        if self.pyautodoc.option_is_true("field-show-default"):
             self.add_default_value()
 
     def add_default_value(self):
@@ -373,15 +372,15 @@ class PydanticFieldDocumenter(AttributeDocumenter):
         """
 
         doc_policy = self.pyautodoc.get_option_value("field-doc-policy")
-        if doc_policy in ("docstring", "both", None):
+        if doc_policy in ("docstring", "both", None, NONE):
             super().add_content(more_content, no_docstring)
         if doc_policy in ("both", "description"):
             self.add_description()
 
-        if self.pyautodoc.get_option_value("field-show-constraints"):
+        if self.pyautodoc.option_is_true("field-show-constraints"):
             self.add_constraints()
 
-        if self.pyautodoc.get_option_value("field-list-validators"):
+        if self.pyautodoc.option_is_true("field-list-validators"):
             self.add_validators()
 
     def add_constraints(self):
@@ -480,7 +479,7 @@ class PydanticValidatorDocumenter(MethodDocumenter):
 
         """
 
-        if self.pyautodoc.get_option_value("validator-replace-signature"):
+        if self.pyautodoc.option_is_true("validator-replace-signature"):
             return ''
         else:
             return super().format_args(**kwargs)
@@ -495,7 +494,7 @@ class PydanticValidatorDocumenter(MethodDocumenter):
 
         super().add_content(more_content, no_docstring)
 
-        if self.pyautodoc.get_option_value("validator-list-fields"):
+        if self.pyautodoc.option_is_true("validator-list-fields"):
             self.add_field_list()
 
     def add_field_list(self):
