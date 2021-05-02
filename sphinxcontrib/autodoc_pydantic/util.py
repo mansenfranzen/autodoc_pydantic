@@ -321,20 +321,6 @@ class PydanticAutoDoc(PydanticAutoDirective):
 
         return f"autodoc_pydantic_{sanitized}"
 
-    def get_pydantic_object_from_name(self) -> Any:
-        """Return the object referenced by name.
-
-        """
-
-        obj = pydoc.locate(self.parent.name)
-
-        if obj is None:
-            raise ValueError(f"Could not locate object from path "
-                             f"`{self.parent.name}` for "
-                             f"`{self.parent.object}`.")
-        else:
-            return obj
-
     def add_pass_through_to_directive(self):
         """Intercepts documenters `add_directive_header` and adds pass through.
 
