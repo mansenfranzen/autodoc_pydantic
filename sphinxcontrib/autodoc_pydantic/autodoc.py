@@ -139,11 +139,18 @@ class PydanticModelDocumenter(ClassDocumenter):
         if self.options.get("undoc-members") is False:
             self.options.pop("undoc-members")
 
-        if not self.pyautodoc.get_option_value("show-config-member", True):
+    def document_members(self, *args, **kwargs):
+        """Modify member options before starting to document members.
+
+        """
+
+        if self.pyautodoc.option_is_false("show-config-member", True):
             self.hide_config_member()
 
-        if not self.pyautodoc.get_option_value("show-validator-members", True):
+        if self.pyautodoc.option_is_false("show-validator-members", True):
             self.hide_validator_members()
+
+        super().document_members(*args, **kwargs)
 
     def hide_config_member(self):
         """Add `Config` to `exclude_members` option.
