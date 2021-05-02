@@ -3,7 +3,6 @@ and the PyAutoDoc composite class.
 
 """
 import functools
-import pydoc
 from typing import Any, Union, List, Set, Callable, Optional
 
 from docutils.nodes import emphasis
@@ -14,7 +13,18 @@ from sphinx.ext.autodoc import ALL, Documenter
 
 from sphinxcontrib.autodoc_pydantic.inspection import NamedReference
 
-NONE = object()
+
+class NullType:
+    """Helper class to present a Null value which is not the same
+    as python's `None`. This represents a missing value, or no
+    value at all by convention. It should be used as a singleton.
+
+    """
+
+    def __bool__(self):
+        return False
+
+NONE = NullType()
 
 
 def create_field_href(reference: NamedReference,
