@@ -182,3 +182,32 @@ directive is used by the :code:`autopydantic_model` and :code:`autopydantic_sett
 To overwrite global defaults, the following directive options can be supplied:
 
 .. configtoc:: config
+
+
+Autosummary
+===========
+
+You may also automatically document your pydantic models/settings with
+sphinx' :code:`autosummary` directive.
+
+.. tabs::
+
+   .. tab:: reST
+
+      .. code-block:: rest
+
+         .. autosummary::
+            :toctree: _autosummary
+
+            target.example_autosummary.AutoSummaryModel
+
+   .. tab:: rendered output
+
+      .. autosummary::
+         :toctree: _autosummary
+
+         target.example_autosummary.AutoSummaryModel
+
+   .. tab:: source code
+
+      .. autocodeblock:: target.example_autosummary.AutoSummaryModel
