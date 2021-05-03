@@ -31,7 +31,7 @@ copyright = '2021, Franz Wöllert'
 author = 'Franz Wöllert'
 
 # The full version, including alpha/beta/rc tags
-release = '1.1.1'
+release = '1.1.2'
 
 # -- General configuration ---------------------------------------------------
 
@@ -42,11 +42,14 @@ extensions = [
     "sphinx_rtd_theme",
     "sphinx.ext.napoleon",
     "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
     "sphinx_tabs.tabs",
     "sphinxcontrib.autodoc_pydantic",
     "myst_parser",
     "extensions"
 ]
+
+autosummary_generate = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
