@@ -136,14 +136,14 @@ class PydanticModelDocumenter(ClassDocumenter):
         super().__init__(*args)
         self.pyautodoc = PydanticAutoDoc(self)
 
-        self.pyautodoc.set_default_option_with_value("members", ALL)
-        if self.options.get("undoc-members") is False:
-            self.options.pop("undoc-members")
-
     def document_members(self, *args, **kwargs):
         """Modify member options before starting to document members.
 
         """
+
+        self.pyautodoc.set_default_option_with_value("members", ALL)
+        if self.options.get("undoc-members") is False:
+            self.options.pop("undoc-members")
 
         if self.pyautodoc.option_is_false("show-config-member", True):
             self.hide_config_member()
