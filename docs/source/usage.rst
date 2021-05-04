@@ -1,18 +1,76 @@
+.. _sphinx.ext.autosummary: https://www.sphinx-doc.org/en/master/usage/extensions/autosummary.html
+.. _sphinx.ext.autodoc: https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html
+.. _sphinx issue 6264: https://github.com/sphinx-doc/sphinx/issues/6264
+
 =====
 Usage
 =====
 
-Autodoc Sphinx
-==============
+*autodoc_pydantic* integrates seamlessly with sphinx' auto documentation
+utilities. Therefore, you might not need to modify your code at all when
+using :code:`autosummary` and :code:`automodule` directives.
 
-*autodoc_pydantic* integrates seamlessly with sphinx' autodoc. Therefore, you
-might not need to modify your code at all when using :code:`automodule`.
+autosummary
+===========
+
+Using the :code:`autosummary` directive of the `sphinx.ext.autosummary`_
+extension allows to create a table of contents. Each entry corresponds to a
+python object to be documented (including pydantic models/settings) for which
+individual documentation pages (called stubs) can be automatically generated:
+
+.. tabs::
+
+   .. tab:: reST
+
+      .. code-block:: rest
+
+         .. autosummary::
+            :toctree: _autosummary
+
+            target.example_autosummary.AutoSummaryModel
+            target.example_autosummary.AutoSummarySettings
+
+   .. tab:: rendered output
+
+      .. autosummary::
+         :toctree: _autosummary
+
+         target.example_autosummary.AutoSummaryModel
+         target.example_autosummary.AutoSummarySettings
+
+   .. tab:: source code
+
+      .. autocodeblock:: target.example_autosummary
+
+.. hint::
+
+   To automatically generate stubs for all autosummary entries, a few things
+   have to be done:
+
+   - Add the :code:`sphinx.ext.autosummary` extension in :code:`conf.py`.
+   - Set :code:`autosummary_generate = True` in :code:`conf.py`.
+   - Add :code:`:toctree:` option to the autosummary directive.
+
+   For more information, please visit the official documentation of
+   `sphinx.ext.autosummary`_.
+
+.. warning::
+
+   The generated stub pages do not follow the standard autosummary templates
+   (e.g. the class template which lists all methods and attributes). Currently
+   as of Sphinx 3.5.4, this is not possible because autosummary does not support
+   custom autodocumenters provided by extensions such as *autodoc_pydantic*
+   (see also `sphinx issue 6264`_). Instead, *autodoc_pydantic*'s
+   autodocumenters are used to render the object's documentation in the
+   generated stub pages of autosummary.
 
 automodule
-----------
+==========
 
-In this case, autodoc passes the documentation of all pydantic objects directly to
-*autodoc_pydantic*:
+One may wants to document the content of an entire module via the
+:code:`automodule` directive of the `sphinx.ext.autodoc`_ extension. The
+documentation of all pydantic objects is directly passed to
+*autodoc_pydantic*'s auto documenters:
 
 .. tabs::
 
@@ -34,14 +92,19 @@ In this case, autodoc passes the documentation of all pydantic objects directly 
       .. autocodeblock:: target.example_setting
 
 
-Autodoc Pydantic
-================
+autopydantic
+============
 
-If you don't want to rely on the :code:`automodule` directive, *autodoc_pydantic*
-adds custom directives for pydantic models, settings, fields, validators and config class.
+You may want to document pydantic objects directly. This is possible via the
+specialized directives provided by *autodoc_pydantic*:
 
-To completely customize a specific directive, you can use all available directive
-options, as explained in detail in the :doc:`configuration` section.
+- :ref:`autopydantic_model`
+- :ref:`autopydantic_settings`
+- :ref:`autopydantic_field`
+- :ref:`autopydantic_validator`
+- :ref:`autopydantic_config`
+
+.. _autopydantic_model:
 
 autopydantic_model
 ------------------
@@ -71,6 +134,7 @@ To overwrite global defaults, the following directive options can be supplied:
 
 .. configtoc:: model
 
+.. _autopydantic_settings:
 
 autopydantic_settings
 ---------------------
@@ -98,6 +162,7 @@ To overwrite global defaults, the following directive options can be supplied:
 
 .. configtoc:: settings
 
+.. _autopydantic_field:
 
 autopydantic_field
 ------------------
@@ -127,8 +192,10 @@ To overwrite global defaults, the following directive options can be supplied:
 .. configtoc:: field
 
 
+.. _autopydantic_validator:
+
 autopydantic_validator
--------------------------
+----------------------
 
 As with pydantic validators, one usually does not document validators separately
 from its corresponding pydantic model/settings but it is still possible.
@@ -154,9 +221,10 @@ To overwrite global defaults, the following directive options can be supplied:
 
 .. configtoc:: validator
 
+.. _autopydantic_config:
 
 autopydantic_config
-----------------------
+-------------------
 
 Very rarely, you may want to document a pydantic config class without the corresponding
 pydantic model/setting. However, technically it's possible since the :code:`autopydantic_config`
@@ -182,32 +250,3 @@ directive is used by the :code:`autopydantic_model` and :code:`autopydantic_sett
 To overwrite global defaults, the following directive options can be supplied:
 
 .. configtoc:: config
-
-
-Autosummary
-===========
-
-You may also automatically document your pydantic models/settings with
-sphinx' :code:`autosummary` directive.
-
-.. tabs::
-
-   .. tab:: reST
-
-      .. code-block:: rest
-
-         .. autosummary::
-            :toctree: _autosummary
-
-            target.example_autosummary.AutoSummaryModel
-
-   .. tab:: rendered output
-
-      .. autosummary::
-         :toctree: _autosummary
-
-         target.example_autosummary.AutoSummaryModel
-
-   .. tab:: source code
-
-      .. autocodeblock:: target.example_autosummary.AutoSummaryModel
