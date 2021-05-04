@@ -6,17 +6,18 @@
 Usage
 =====
 
-*autodoc_pydantic* integrates seamlessly with sphinx' auto documentation
-utilities. Therefore, you might not need to modify your code at all when
+*autodoc_pydantic* integrates seamlessly with sphinx' auto-documentation
+utilities. You might not need to modify your code at all when
 using :code:`autosummary` and :code:`automodule` directives.
 
 autosummary
 ===========
 
-Using the :code:`autosummary` directive of the `sphinx.ext.autosummary`_
-extension allows to create a table of contents. Each entry corresponds to a
-python object to be documented (including pydantic models/settings) for which
-individual documentation pages (called stubs) can be automatically generated:
+The :code:`autosummary` directive of the `sphinx.ext.autosummary`_
+extension generates a table of references and short descriptions for a list of
+python objects. Additionally, it can automatically generate individual
+documentation pages (called stubs) for each entry. This makes it fairly easy to
+sufficiently document several python objects at once:
 
 .. tabs::
 
@@ -46,13 +47,15 @@ individual documentation pages (called stubs) can be automatically generated:
 
       .. autocodeblock:: target.example_autosummary
 
+Please note, this example generates the autosummary table and the corresponding
+stub pages which are referenced when clicking on the table items.
+
 .. hint::
 
-   To automatically generate stubs for all autosummary entries, a few things
-   have to be done:
+   To enable automatic stub generation, remember the following steps:
 
-   - Add the :code:`sphinx.ext.autosummary` extension in :code:`conf.py`.
-   - Set :code:`autosummary_generate = True` in :code:`conf.py`.
+   - Add the :code:`sphinx.ext.autosummary` extension in *conf.py*.
+   - Set :code:`autosummary_generate = True` in *conf.py*.
    - Add :code:`:toctree:` option to the autosummary directive.
 
    For more information, please visit the official documentation of
@@ -60,21 +63,21 @@ individual documentation pages (called stubs) can be automatically generated:
 
 .. warning::
 
-   The generated stub pages do not follow the standard autosummary templates
-   (e.g. the class template which lists all methods and attributes). Currently
-   as of Sphinx 3.5.4, this is not possible because autosummary does not support
+   The generated stub pages do not use the standard autosummary templates
+   (e.g. the class template which lists all methods and attributes).
+   As of sphinx version 3.5.4, this is not possible because autosummary does not support
    custom autodocumenters provided by extensions such as *autodoc_pydantic*
-   (see also `sphinx issue 6264`_). Instead, *autodoc_pydantic*'s
+   (see `sphinx issue 6264`_). Instead, *autodoc_pydantic*'s
    autodocumenters are used to render the object's documentation in the
    generated stub pages of autosummary.
 
 automodule
 ==========
 
-One may wants to document the content of an entire module via the
-:code:`automodule` directive of the `sphinx.ext.autodoc`_ extension. The
-documentation of all pydantic objects is directly passed to
-*autodoc_pydantic*'s auto documenters:
+The :code:`automodule` directive of the `sphinx.ext.autodoc`_ extension
+documents the content of an entire python module. All pydantic objects that
+are encountered will be documented by *autodoc_pydantic*'s specialized
+auto-documenters:
 
 .. tabs::
 
@@ -99,7 +102,7 @@ documentation of all pydantic objects is directly passed to
 autopydantic
 ============
 
-You may want to document pydantic objects directly. This is possible via the
+You may want to document pydantic objects explicitly. This is possible via the
 specialized directives provided by *autodoc_pydantic*:
 
 - :ref:`autopydantic_model`
