@@ -1,16 +1,6 @@
 """This module contains tests for edgecases.
 
 """
-import pytest
-from sphinx.ext.autosummary import FakeDirective, get_documenter
-
-from sphinxcontrib.autodoc_pydantic import (
-    PydanticModelDocumenter,
-    PydanticSettingsDocumenter,
-    PydanticFieldDocumenter,
-    PydanticValidatorDocumenter,
-    PydanticConfigClassDocumenter
-)
 
 
 def test_not_json_compliant(autodocument):
@@ -128,18 +118,3 @@ def test_current_module_settings(parse_rst):
 
     parse_rst(input_rst,
               conf={"extensions": ["sphinxcontrib.autodoc_pydantic"]})
-
-
-@pytest.mark.parametrize("klass", [PydanticModelDocumenter,
-                                   PydanticSettingsDocumenter,
-                                   PydanticFieldDocumenter,
-                                   PydanticValidatorDocumenter,
-                                   PydanticConfigClassDocumenter])
-def test_autosummary(klass):
-    """Ensure that using autosummary's `FakeDirective` works with
-    pydantic autodocumenters.
-
-    This relates to issue #11.
-    """
-
-    klass(FakeDirective(), "")
