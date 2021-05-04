@@ -98,7 +98,7 @@ Contains all modifications for pydantic `BaseModel`.
 
 .. note::
 
-   In order to show any members at all, you need to enable :ref:`autodoc_pydantic_model_undoc_members<Show Members>`
+   In order to show any members at all, you need to enable :ref:`autodoc_pydantic_model_members<autodoc_pydantic_model_members>`
    or set :code:`:members:`.
 
 
@@ -218,7 +218,7 @@ Contains all modifications for pydantic `BaseSettings`.
 
 .. note::
 
-   In order to show any members at all, you need to enable :ref:`autodoc_pydantic_settings_undoc_members<Show Members>`
+   In order to show any members at all, you need to enable :ref:`autodoc_pydantic_settings_members<autodoc_pydantic_settings_members>`
    or set :code:`:members:`.
 
 
