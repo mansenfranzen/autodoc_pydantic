@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, Field, validator, BaseSettings
 
 
 class AutoSummaryModel(BaseModel):
@@ -32,3 +32,10 @@ class AutoSummaryModel(BaseModel):
     class Config:
         env_prefix = "foo_"
         allow_mutation = True
+
+
+class AutoSummarySettings(BaseSettings):
+    """Some settings with pydantic."""
+
+    field: int = 1
+    """Doc field"""
