@@ -24,19 +24,23 @@ individual documentation pages (called stubs) can be automatically generated:
 
       .. code-block:: rest
 
+         .. currentmodule:: target.example_autosummary
+
          .. autosummary::
             :toctree: _autosummary
 
-            target.example_autosummary.AutoSummaryModel
-            target.example_autosummary.AutoSummarySettings
+            AutoSummaryModel
+            AutoSummarySettings
 
    .. tab:: rendered output
+
+      .. currentmodule:: target.example_autosummary
 
       .. autosummary::
          :toctree: _autosummary
 
-         target.example_autosummary.AutoSummaryModel
-         target.example_autosummary.AutoSummarySettings
+         AutoSummaryModel
+         AutoSummarySettings
 
    .. tab:: source code
 
