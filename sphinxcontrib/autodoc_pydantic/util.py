@@ -141,9 +141,10 @@ class PydanticAutoDirective:
         for option in options:
             self.set_default_option(option)
 
-    def get_configuration_option_name(self, name: str) -> str:
+    @staticmethod
+    def sanitize_configuration_option_name(name: str) -> str:
         """Provide full app environment configuration name for given option
-        name.
+        name while converting "-" to "_".
 
         Parameters
         ----------
@@ -178,7 +179,7 @@ class PydanticAutoDirective:
 
         """
 
-        config_name = self.get_configuration_option_name(name)
+        config_name = self.sanitize_configuration_option_name(name)
         return getattr(self.parent.env.config, config_name, NONE)
 
     def get_option_value(self, name: str, prefix: bool = False) -> Any:
@@ -261,8 +262,9 @@ class PydanticAutoDirective:
                                       value_true: Any,
                                       value_false: Optional[Any] = NONE):
         """Set option value for given `name`. Depending on app environment
-        configuration boolean value choose either `value_true` or `value_false`.
-        This is only relevant if option value has not been set, yet.
+        configuration boolean value choose either `value_true` or
+        `value_false`. This is only relevant if option value has not been set,
+        yet.
 
         Parameters
         ----------
@@ -294,7 +296,7 @@ class PydanticAutoDoc(PydanticAutoDirective):
         super().__init__(*args)
         self.add_pass_through_to_directive()
 
-    def get_configuration_option_name(self, name: str) -> str:
+    def sanitize_configuration_option_name(self, name: str) -> str:
         """Provide full app environment configuration name for given option
         name.
 
