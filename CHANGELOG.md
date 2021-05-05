@@ -11,6 +11,8 @@ This is a bug release fixing compatibility issues with sphinx autosummary.
   respecting missing values via custom `NONE` object.
 - Move member option processing from `__init__` to `document_members` for
   `PydanticModelDocumenter`.
+- Introduce `PydanticDirectiveBase` base class for all pydantic directives to
+  remove code redundancies.
 
 ### Bugfix
 
