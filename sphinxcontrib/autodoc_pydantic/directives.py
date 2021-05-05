@@ -20,7 +20,30 @@ from sphinxcontrib.autodoc_pydantic.util import (
 TUPLE_STR = Tuple[str, str]
 
 
-class PydanticModel(PyClasslike):
+class PydanticDirectiveBase:
+    """Base class for pydantic directive providing common functionality.
+
+    """
+
+    config_name: str
+    default_prefix: str
+
+    def __init__(self, *args):
+        super().__init__(*args)
+        self.pyautodoc = PydanticAutoDirective(self)
+
+    def get_signature_prefix(self, sig: str) -> str:
+        """Overwrite original signature prefix with custom pydantic ones.
+
+        """
+
+        config_name = f"{self.config_name}-signature-prefix"
+        prefix = self.pyautodoc.get_option_value(config_name)
+        value = prefix or self.default_prefix
+        return f"{value} "
+
+
+class PydanticModel(PydanticDirectiveBase, PyClasslike):
     """Specialized directive for pydantic models.
 
     """
@@ -29,21 +52,11 @@ class PydanticModel(PyClasslike):
     option_spec.update({"__doc_disable_except__": option_list_like,
                         "model-signature-prefix": unchanged})
 
-    def __init__(self, *args):
-        super().__init__(*args)
-        self.pyautodoc = PydanticAutoDirective(self)
-
-    def get_signature_prefix(self, sig: str) -> str:
-        """Overwrite original signature prefix with custom pydantic ones.
-
-        """
-
-        prefix = self.pyautodoc.get_option_value("model-signature-prefix")
-        value = prefix or "class"
-        return f"{value} "
+    config_name = "model"
+    default_prefix = "class"
 
 
-class PydanticSettings(PyClasslike):
+class PydanticSettings(PydanticDirectiveBase, PyClasslike):
     """Specialized directive for pydantic settings.
 
     """
@@ -52,21 +65,11 @@ class PydanticSettings(PyClasslike):
     option_spec.update({"__doc_disable_except__": option_list_like,
                         "settings-signature-prefix": unchanged})
 
-    def __init__(self, *args):
-        super().__init__(*args)
-        self.pyautodoc = PydanticAutoDirective(self)
-
-    def get_signature_prefix(self, sig: str) -> str:
-        """Overwrite original signature prefix with custom pydantic ones.
-
-        """
-
-        prefix = self.pyautodoc.get_option_value("settings-signature-prefix")
-        value = prefix or "class"
-        return f"{value} "
+    config_name = "settings"
+    default_prefix = "class"
 
 
-class PydanticField(PyAttribute):
+class PydanticField(PydanticDirectiveBase, PyAttribute):
     """Specialized directive for pydantic fields.
 
     """
@@ -76,20 +79,11 @@ class PydanticField(PyAttribute):
                         "__doc_disable_except__": option_list_like,
                         "field-signature-prefix": unchanged})
 
-    def __init__(self, *args):
-        super().__init__(*args)
-        self.pyautodoc = PydanticAutoDirective(self)
+    config_name = "field"
+    default_prefix = "attribute"
 
-    def get_signature_prefix(self, sig: str) -> str:
-        """Overwrite original signature prefix with custom pydantic ones.
-
-        """
-
-        prefix = self.pyautodoc.get_option_value("field-signature-prefix")
-        value = prefix or "attribute"
-        return f"{value} "
-
-    def add_alias(self, signode: desc_signature):
+    @staticmethod
+    def add_alias(signode: desc_signature):
         """Replaces the return node with references to validated fields.
 
         """
@@ -116,7 +110,7 @@ class PydanticField(PyAttribute):
         return fullname, prefix
 
 
-class PydanticValidator(PyMethod):
+class PydanticValidator(PydanticDirectiveBase, PyMethod):
     """Specialized directive for pydantic validators.
 
     """
@@ -126,9 +120,8 @@ class PydanticValidator(PyMethod):
                         "__doc_disable_except__": option_list_like,
                         "validator-signature-prefix": unchanged})
 
-    def __init__(self, *args):
-        super().__init__(*args)
-        self.pyautodoc = PydanticAutoDirective(self)
+    config_name = "validator"
+    default_prefix = "classmethod"
 
     def replace_return_node(self, signode: desc_signature):
         """Replaces the return node with references to validated fields.
@@ -165,17 +158,8 @@ class PydanticValidator(PyMethod):
 
         return fullname, prefix
 
-    def get_signature_prefix(self, sig: str) -> str:
-        """Overwrite original signature prefix with custom pydantic ones.
 
-        """
-
-        prefix = self.pyautodoc.get_option_value("validator-signature-prefix")
-        value = prefix or "classmethod"
-        return f"{value} "
-
-
-class PydanticConfigClass(PyClasslike):
+class PydanticConfigClass(PydanticDirectiveBase, PyClasslike):
     """Specialized directive for pydantic config class.
 
     """
@@ -184,15 +168,5 @@ class PydanticConfigClass(PyClasslike):
     option_spec.update({"__doc_disable_except__": option_list_like,
                         "config-signature-prefix": unchanged})
 
-    def __init__(self, *args):
-        super().__init__(*args)
-        self.pyautodoc = PydanticAutoDirective(self)
-
-    def get_signature_prefix(self, sig: str) -> str:
-        """Overwrite original signature prefix with custom pydantic ones.
-
-        """
-
-        prefix = self.pyautodoc.get_option_value("config-signature-prefix")
-        value = prefix or "class"
-        return f"{value} "
+    config_name = "config"
+    default_prefix = "class"
