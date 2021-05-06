@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.1.2 - 2021-05-XX
+## v1.1.2 - 2021-05-06
 
 This is a bug release fixing compatibility issues with sphinx autosummary.
 
@@ -28,6 +28,11 @@ This is a bug release fixing compatibility issues with sphinx autosummary.
 ### Testing
 
 - Add test module for ensuring `autosummary` interoperability.
+
+### Contributors
+
+- Thanks to [antvig](https://github.com/antvig) for reporting and testing an
+  issue related to autosummary [#11](https://github.com/mansenfranzen/autodoc_pydantic/issues/11).
 
 
 ## v1.1.1 - 2021-04-26
