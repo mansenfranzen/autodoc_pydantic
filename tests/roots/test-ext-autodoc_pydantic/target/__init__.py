@@ -1,0 +1,1 @@
+from target.example_autosummary import AutoSummaryModel

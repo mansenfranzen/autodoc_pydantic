@@ -219,7 +219,7 @@ class ModelWrapper:
 
         """
 
-        model_name, validator_name = signode["fullname"].split(".")
+        model_name = signode["fullname"].split(".")[0]
         model = pydoc.locate(f"{signode['module']}.{model_name}")
         return cls.factory(model)
 

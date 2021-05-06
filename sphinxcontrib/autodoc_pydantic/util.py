@@ -3,7 +3,6 @@ and the PyAutoDoc composite class.
 
 """
 import functools
-import pydoc
 from typing import Any, Union, List, Set, Callable, Optional
 
 from docutils.nodes import emphasis
@@ -14,7 +13,18 @@ from sphinx.ext.autodoc import ALL, Documenter
 
 from sphinxcontrib.autodoc_pydantic.inspection import NamedReference
 
-NONE = object()
+
+class NullType:
+    """Helper class to present a Null value which is not the same
+    as python's `None`. This represents a missing value, or no
+    value at all by convention. It should be used as a singleton.
+
+    """
+
+    def __bool__(self):
+        return False
+
+NONE = NullType()
 
 
 def create_field_href(reference: NamedReference,
@@ -131,9 +141,10 @@ class PydanticAutoDirective:
         for option in options:
             self.set_default_option(option)
 
-    def get_configuration_option_name(self, name: str) -> str:
+    @staticmethod
+    def sanitize_configuration_option_name(name: str) -> str:
         """Provide full app environment configuration name for given option
-        name.
+        name while converting "-" to "_".
 
         Parameters
         ----------
@@ -162,6 +173,15 @@ class PydanticAutoDirective:
         else:
             return name in available
 
+    def get_configuration_by_name(self, name: str) -> Any:
+        """Get configuration value from app environment configuration.
+        If `name` does not exist, return NONE.
+
+        """
+
+        config_name = self.sanitize_configuration_option_name(name)
+        return getattr(self.parent.env.config, config_name, NONE)
+
     def get_option_value(self, name: str, prefix: bool = False) -> Any:
         """Get option value for given `name`. First, looks for explicit
         directive option values (e.g. :member-order:) which have highest
@@ -183,8 +203,46 @@ class PydanticAutoDirective:
         if name in self.parent.options:
             return self.parent.options[name]
         elif self.is_available(name):
-            config_name = self.get_configuration_option_name(name)
-            return self.parent.env.config[config_name]
+            return self.get_configuration_by_name(name)
+
+    def option_is_false(self, name: str, prefix: bool = False) -> bool:
+        """Get option value for given `name`. First, looks for explicit
+        directive option values (e.g. :member-order:) which have highest
+        priority. Second, if no directive option is given, get the default
+        option value provided via the app environment configuration.
+
+        Enforces result to be either True or False.
+
+        Parameters
+        ----------
+        name: str
+            Name of the option.
+        prefix: bool
+            If True, add `pyautodoc_prefix` to name.
+
+        """
+
+        return self.get_option_value(name=name, prefix=prefix) is False
+
+    def option_is_true(self, name: str, prefix: bool = False) -> bool:
+        """Get option value for given `name`. First, looks for explicit
+        directive option values (e.g. :member-order:) which have highest
+        priority. Second, if no directive option is given, get the default
+        option value provided via the app environment configuration.
+
+        Enforces result to be either True or False.
+
+        Parameters
+        ----------
+        name: str
+            Name of the option.
+        prefix: bool
+            If True, add `pyautodoc_prefix` to name.
+
+        """
+
+        return self.get_option_value(name=name, prefix=prefix) is True
+
 
     def set_default_option(self, name: str):
         """Set default option value for given `name` from app environment
@@ -198,16 +256,15 @@ class PydanticAutoDirective:
         """
 
         if (name not in self.parent.options) and (self.is_available(name)):
-            config_name = self.get_configuration_option_name(name)
-            value = self.parent.env.config[config_name]
-            self.parent.options[name] = value
+            self.parent.options[name] = self.get_configuration_by_name(name)
 
     def set_default_option_with_value(self, name: str,
                                       value_true: Any,
                                       value_false: Optional[Any] = NONE):
         """Set option value for given `name`. Depending on app environment
-        configuration boolean value choose either `value_true` or `value_false`.
-        This is only relevant if option value has not been set, yet.
+        configuration boolean value choose either `value_true` or
+        `value_false`. This is only relevant if option value has not been set,
+        yet.
 
         Parameters
         ----------
@@ -223,8 +280,7 @@ class PydanticAutoDirective:
         value = self.parent.options.get(name)
 
         if value is not None and self.is_available(name):
-            config_name = self.get_configuration_option_name(name)
-            if self.parent.env.config[config_name]:
+            if self.get_configuration_by_name(name):
                 self.parent.options[name] = value_true
             elif value_false is not NONE:
                 self.parent.options[name] = value_false
@@ -240,7 +296,7 @@ class PydanticAutoDoc(PydanticAutoDirective):
         super().__init__(*args)
         self.add_pass_through_to_directive()
 
-    def get_configuration_option_name(self, name: str) -> str:
+    def sanitize_configuration_option_name(self, name: str) -> str:
         """Provide full app environment configuration name for given option
         name.
 
@@ -263,20 +319,6 @@ class PydanticAutoDoc(PydanticAutoDirective):
             sanitized = f"{prefix}_{sanitized}"
 
         return f"autodoc_pydantic_{sanitized}"
-
-    def get_pydantic_object_from_name(self) -> Any:
-        """Return the object referenced by name.
-
-        """
-
-        obj = pydoc.locate(self.parent.name)
-
-        if obj is None:
-            raise ValueError(f"Could not locate object from path "
-                             f"`{self.parent.name}` for "
-                             f"`{self.parent.object}`.")
-        else:
-            return obj
 
     def add_pass_through_to_directive(self):
         """Intercepts documenters `add_directive_header` and adds pass through.
