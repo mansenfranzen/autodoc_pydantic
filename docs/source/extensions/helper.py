@@ -14,7 +14,7 @@ from docutils import nodes
 from docutils.nodes import Node
 from docutils.parsers.rst import directives
 from docutils.statemachine import StringList
-from sphinx.directives import CodeBlock
+from sphinx.directives.code import CodeBlock
 import pydoc
 
 from sphinx.ext.autodoc.directive import DummyOptionSpec
