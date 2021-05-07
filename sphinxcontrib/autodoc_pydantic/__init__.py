@@ -4,6 +4,7 @@
 
 from pathlib import Path
 
+from sphinx.domains import ObjType
 from sphinx.application import Sphinx
 
 from sphinxcontrib.autodoc_pydantic.autodoc import (
@@ -38,7 +39,29 @@ def add_css_file(app: Sphinx, exception: Exception):
         (static_path / filename).write_text(content)
 
 
-def setup(app: Sphinx) -> None:
+def add_domain_object_types(app: Sphinx):
+    """Hack to add object types to already instantiated python domain since
+    `add_object_type` currently only works for std domain.
+
+    """
+
+    object_types = app.registry.domain_object_types.setdefault("py", {})
+
+    obj_types = ["pydantic_model",
+                 "pydantic_settings",
+                 "pydantic_field",
+                 "pydantic_validator",
+                 "pydantic_config"]
+
+    for obj_type in obj_types:
+        object_types[obj_type] = ObjType(obj_type, "obj", "any")
+
+
+def add_configuration_values(app: Sphinx):
+    """Adds all configuration values to sphinx application.
+
+    """
+
     stem = "autodoc_pydantic_"
     add = app.add_config_value
 
