@@ -101,6 +101,13 @@ def add_configuration_values(app: Sphinx):
     add(f'{stem}field_show_default', True, True, bool)
     add(f'{stem}field_signature_prefix', "field", True, str)
 
+
+def add_directives_and_autodocumenters(app: Sphinx):
+    """Adds custom pydantic directives and autodocumenters to sphinx
+    application.
+
+    """
+
     app.add_directive_to_domain("py", "pydantic_field", PydanticField)
     app.add_directive_to_domain("py", "pydantic_model", PydanticModel)
     app.add_directive_to_domain("py", "pydantic_settings", PydanticSettings)
@@ -114,5 +121,10 @@ def add_configuration_values(app: Sphinx):
     app.add_autodocumenter(PydanticValidatorDocumenter)
     app.add_autodocumenter(PydanticConfigClassDocumenter)
 
+
+def setup(app: Sphinx) -> Dict[str, Any]:
+    add_configuration_values(app)
+    add_directives_and_autodocumenters(app)
+    add_domain_object_types(app)
     app.add_css_file("autodoc_pydantic.css")
     app.connect("build-finished", add_css_file)
