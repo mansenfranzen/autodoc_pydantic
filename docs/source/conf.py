@@ -18,7 +18,7 @@ path = Path(__file__)
 path_autodoc_pydantic = path.parents[2]
 path_examples = path.parents[2].joinpath("tests",
                                          "roots",
-                                         "test-ext-autodoc_pydantic")
+                                         "test-base")
 
 sys.path.insert(0, str(path.parent))
 sys.path.insert(0, str(path_examples))
