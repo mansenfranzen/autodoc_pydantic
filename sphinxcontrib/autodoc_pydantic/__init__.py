@@ -3,6 +3,7 @@
 """
 
 from pathlib import Path
+from typing import Dict, Any
 
 from sphinx.domains import ObjType
 from sphinx.application import Sphinx
@@ -22,6 +23,8 @@ from sphinxcontrib.autodoc_pydantic.directives import (
     PydanticModel,
     PydanticSettings
 )
+
+__version__ = "1.1.3"
 
 
 def add_css_file(app: Sphinx, exception: Exception):
@@ -128,3 +131,9 @@ def setup(app: Sphinx) -> Dict[str, Any]:
     add_domain_object_types(app)
     app.add_css_file("autodoc_pydantic.css")
     app.connect("build-finished", add_css_file)
+
+    return {
+        'version': __version__,
+        'parallel_read_safe': True,
+        'parallel_write_safe': True,
+    }
