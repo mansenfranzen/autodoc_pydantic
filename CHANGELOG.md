@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.1.3 - 2021-05-07
+## v1.1.3 - 2021-05-08
 
 This is a patch release addressing missing cross reference ability and minor
 refactorings.
@@ -26,6 +26,10 @@ refactorings.
 
 - Enable cross referencing of pydantic objects which are documented with
   *autodoc_pydantic* directives and linked via `:any:` role [3](https://github.com/mansenfranzen/autodoc_pydantic/issues/3).
+
+### Documentation
+
+- Add *complete configuration* and *fields only* example to documentation.
 
 ## v1.1.2 - 2021-05-06
 
