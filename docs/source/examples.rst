@@ -3,7 +3,7 @@ Examples
 ========
 
 While the :doc:`configuration` documentation contains all available options in
-detail, this page shows them in cooperation to provide different examples on how to
+detail, this page shows them in conjunction to provide different examples on how to
 display pydantic models and settings.
 
 .. _showcase:
@@ -12,7 +12,7 @@ Default configuration
 =====================
 
 This example shows the default out-of-the-box configuration of *autodoc_pydantic*.
-In contrast, it also shows how standard sphinx autodoc displays the same code.
+In contrast, it also shows how standard sphinx autodoc displays the same example code.
 
 .. tabs::
 
@@ -27,6 +27,75 @@ In contrast, it also shows how standard sphinx autodoc displays the same code.
          :undoc-members:
          :__doc_disable_except__: members, undoc-members, settings-show-validator-members, settings-show-config-member, config-members
          :noindex:
+
+   .. tab:: *example code*
+
+      .. autocodeblock:: target.example_setting
+
+
+Complete configuration
+======================
+
+This example represents a rendered output for which all features are enabled.
+It deviates from the default configuration above because it contains redundant
+information which is most likely not required. However, for demonstration purposes,
+this scenario covers all available display options for pydantic models/settings.
+
+
+.. tabs::
+
+   .. tab:: autodoc pydantic
+
+      .. autopydantic_settings:: target.example_setting.ExampleSettings
+         :noindex:
+         :settings-show-config-member: True
+         :validator-list-fields: True
+
+   .. tab:: reST
+
+      .. code-block::
+
+         .. autopydantic_settings:: target.example_setting.ExampleSettings
+            :noindex:
+            :settings-show-config-member: True
+            :validator-list-fields: True
+
+   .. tab:: *example code*
+
+      .. autocodeblock:: target.example_setting
+
+
+Fields only
+===========
+
+In this scenario everything is hidden except actual pydantic fields. Validators
+and model/setting config is hidden.
+
+.. tabs::
+
+   .. tab:: autodoc pydantic
+
+      .. autopydantic_settings:: target.example_setting.ExampleSettings
+         :noindex:
+         :settings-show-json: False
+         :settings-show-config-member: False
+         :settings-show-config-summary: False
+         :settings-show-validator-members: False
+         :settings-show-validator-summary: False
+         :field-list-validators: False
+
+
+   .. tab:: reST
+
+      .. code-block::
+
+         .. autopydantic_settings:: target.example_setting.ExampleSettings
+            :settings-show-json: False
+            :settings-show-config-member: False
+            :settings-show-config-summary: False
+            :settings-show-validator-members: False
+            :settings-show-validator-summary: False
+            :field-list-validators: False
 
    .. tab:: *example code*
 

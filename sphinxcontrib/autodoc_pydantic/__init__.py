@@ -3,7 +3,9 @@
 """
 
 from pathlib import Path
+from typing import Dict, Any
 
+from sphinx.domains import ObjType
 from sphinx.application import Sphinx
 
 from sphinxcontrib.autodoc_pydantic.autodoc import (
@@ -22,6 +24,8 @@ from sphinxcontrib.autodoc_pydantic.directives import (
     PydanticSettings
 )
 
+__version__ = "1.1.3"
+
 
 def add_css_file(app: Sphinx, exception: Exception):
     """Adds custom css to HTML output.
@@ -38,7 +42,29 @@ def add_css_file(app: Sphinx, exception: Exception):
         (static_path / filename).write_text(content)
 
 
-def setup(app: Sphinx) -> None:
+def add_domain_object_types(app: Sphinx):
+    """Hack to add object types to already instantiated python domain since
+    `add_object_type` currently only works for std domain.
+
+    """
+
+    object_types = app.registry.domain_object_types.setdefault("py", {})
+
+    obj_types = ["pydantic_model",
+                 "pydantic_settings",
+                 "pydantic_field",
+                 "pydantic_validator",
+                 "pydantic_config"]
+
+    for obj_type in obj_types:
+        object_types[obj_type] = ObjType(obj_type, "obj", "any")
+
+
+def add_configuration_values(app: Sphinx):
+    """Adds all configuration values to sphinx application.
+
+    """
+
     stem = "autodoc_pydantic_"
     add = app.add_config_value
 
@@ -78,6 +104,13 @@ def setup(app: Sphinx) -> None:
     add(f'{stem}field_show_default', True, True, bool)
     add(f'{stem}field_signature_prefix', "field", True, str)
 
+
+def add_directives_and_autodocumenters(app: Sphinx):
+    """Adds custom pydantic directives and autodocumenters to sphinx
+    application.
+
+    """
+
     app.add_directive_to_domain("py", "pydantic_field", PydanticField)
     app.add_directive_to_domain("py", "pydantic_model", PydanticModel)
     app.add_directive_to_domain("py", "pydantic_settings", PydanticSettings)
@@ -91,5 +124,16 @@ def setup(app: Sphinx) -> None:
     app.add_autodocumenter(PydanticValidatorDocumenter)
     app.add_autodocumenter(PydanticConfigClassDocumenter)
 
+
+def setup(app: Sphinx) -> Dict[str, Any]:
+    add_configuration_values(app)
+    add_directives_and_autodocumenters(app)
+    add_domain_object_types(app)
     app.add_css_file("autodoc_pydantic.css")
     app.connect("build-finished", add_css_file)
+
+    return {
+        'version': __version__,
+        'parallel_read_safe': True,
+        'parallel_write_safe': True,
+    }

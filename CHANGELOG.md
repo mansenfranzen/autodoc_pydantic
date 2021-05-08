@@ -1,8 +1,39 @@
 # Changelog
 
+## v1.1.3 - 2021-05-08
+
+This is a patch release addressing missing cross reference ability and minor
+refactorings.
+
+### Internal
+
+- Add `add_domain_object_types` to extension `setup`.
+- Add version and extension meta data to `setup`.
+- Refactor rather complex `setup` into separate functions.
+
+### Testing
+
+- Rename test directory `test-ext-autodoc-pydantic` to `test-base` to
+  streamline naming convention.
+- Add test directory `test-edgecase-any-reference` to mock issue with failing
+  `:any:` reference to pydantic objects including `test_any_reference` test.
+- Add `test_sphinx_build` test module to check that the sphinx docs build
+  without error and warning which can be seen as an end to end test because
+  *autodoc_pydantic*'s documentation is built with sphinx and contains an
+  entire collection of usage examples for *autodoc_pydantic* itself.
+
+### Bugfix
+
+- Enable cross referencing of pydantic objects which are documented with
+  *autodoc_pydantic* directives and linked via `:any:` role [3](https://github.com/mansenfranzen/autodoc_pydantic/issues/3).
+
+### Documentation
+
+- Add *complete configuration* and *fields only* example to documentation.
+
 ## v1.1.2 - 2021-05-06
 
-This is a bug release fixing compatibility issues with sphinx autosummary.
+This is a bugfix release on compatibility issues with sphinx autosummary.
 
 ### Internal
 

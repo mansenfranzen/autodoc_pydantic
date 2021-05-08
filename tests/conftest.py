@@ -137,7 +137,7 @@ def autodocument(test_app):
               object_path: str,
               options_doc: Optional[Dict] = None,
               options_app: Optional[Dict] = None,
-              testroot: str = "ext-autodoc_pydantic",
+              testroot: str = "base",
               deactivate_all: bool = False):
         app = test_app(testroot,
                        conf=options_app,
@@ -158,7 +158,7 @@ def parse_rst(test_app):
     """
 
     def _parse(text: List[str],
-               testroot: str = "ext-autodoc_pydantic",
+               testroot: str = "base",
                conf: Optional[Dict] = None,
                deactivate_all: bool = False):
 

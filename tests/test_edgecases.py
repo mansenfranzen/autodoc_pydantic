@@ -1,13 +1,17 @@
 """This module contains tests for edgecases.
 
 """
+import copy
+
+from sphinx.transforms.post_transforms import ReferencesResolver
 
 
 def test_not_json_compliant(autodocument):
-    actual = autodocument(documenter='pydantic_model',
-                          object_path='target.edgecases.NotJsonCompliant',
-                          options_app={"autodoc_pydantic_model_show_config_member": False,
-                                       "autodoc_pydantic_model_show_config_summary": False})
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.edgecases.NotJsonCompliant',
+        options_app={"autodoc_pydantic_model_show_config_member": False,
+                     "autodoc_pydantic_model_show_config_summary": False})
 
     assert actual == [
         '',
@@ -118,3 +122,27 @@ def test_current_module_settings(parse_rst):
 
     parse_rst(input_rst,
               conf={"extensions": ["sphinxcontrib.autodoc_pydantic"]})
+
+
+def test_any_reference(test_app, monkeypatch):
+    """Ensure that `:any:` reference does also work with directives provided
+    by autodoc_pydantic.
+
+    This relates to #3.
+
+    """
+
+    failed_targets = set()
+    func = copy.deepcopy(ReferencesResolver.warn_missing_reference)
+
+    def mock(self, refdoc, typ, target, node, domain):
+        failed_targets.add(target)
+        return func(self, refdoc, typ, target, node, domain)
+
+    with monkeypatch.context() as ctx:
+        ctx.setattr(ReferencesResolver, "warn_missing_reference", mock)
+        app = test_app("edgecase-any-reference")
+        app.build()
+
+    assert "does.not.exist" in failed_targets
+    assert "target.example_setting.ExampleSettings" not in failed_targets
