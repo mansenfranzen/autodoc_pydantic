@@ -17,6 +17,7 @@ from sphinx.ext.autodoc import (
     ALL)
 
 from sphinx.util.inspect import object_description
+from sphinx.util.typing import get_type_hints, stringify
 
 from sphinxcontrib.autodoc_pydantic.inspection import (
     is_pydantic_model,
@@ -60,6 +61,7 @@ OPTION_SPEC_MODEL = {"model-show-json": option_default_true,
                      "model-hide-paramlist": option_default_true,
                      "model-show-validator-members": option_default_true,
                      "model-show-validator-summary": option_default_true,
+                     "model-show-field-summary": option_default_true,
                      "model-show-config-member": option_default_true,
                      "model-show-config-summary": option_default_true,
                      "model-signature-prefix": unchanged,
@@ -71,6 +73,7 @@ OPTION_SPEC_SETTINGS = {"settings-show-json": option_default_true,
                         "settings-hide-paramlist": option_default_true,
                         "settings-show-validator-members": option_default_true,
                         "settings-show-validator-summary": option_default_true,
+                        "settings-show-field-summary": option_default_true,
                         "settings-show-config-member": option_default_true,
                         "settings-show-config-summary": option_default_true,
                         "settings-signature-prefix": unchanged,
@@ -200,6 +203,9 @@ class PydanticModelDocumenter(ClassDocumenter):
         if self.pyautodoc.option_is_true("show-config-summary", True):
             self.add_config_summary()
 
+        if self.pyautodoc.option_is_true("show-field-summary", True):
+            self.add_field_summary()
+
         if self.pyautodoc.option_is_true("show-validator-summary", True):
             self.add_validators_summary()
 
@@ -261,6 +267,28 @@ class PydanticModelDocumenter(ClassDocumenter):
 
             self.add_line("", source_name)
 
+    def add_field_summary(self):
+        """Adds summary section describing all fields.
+
+        """
+
+        wrapper = ModelWrapper(self.object)
+        fields = wrapper.get_fields()
+
+        if fields:
+            source_name = self.get_sourcename()
+            type_aliases = self.config.autodoc_type_aliases
+
+            self.add_line(":Fields:", source_name)
+            for name, model_field in fields.items():
+                ref = wrapper.get_reference(name)
+                annotations = get_type_hints(self.object, None, type_aliases)
+                typ = stringify(annotations.get(name, ""))
+
+                line = (f"   - :py:obj:`{name} ({typ}) <{ref}>`")
+                self.add_line(line, source_name)
+
+            self.add_line("", source_name)
 
 class PydanticSettingsDocumenter(PydanticModelDocumenter):
     """Represents specialized Documenter subclass for pydantic settings.
