@@ -1,5 +1,26 @@
 # Changelog
 
+## v1.2.0 - 2021-05-09
+
+This is a feature release adding the field summary for pydantic models/settings.
+
+### Documentation
+
+- Refactor and simplify sphinx extension `helper` module for better maintainability
+  and readability.
+- Improve many of the available descriptions in the `configuration` section.
+- Provide correct markers for the actual default values in the `configuration` section.
+
+### Added
+
+- Introduce `model-show-field-summary` and `settings-show-field-summary` which 
+  partially addresses #[14](https://github.com/mansenfranzen/autodoc_pydantic/issues/14).
+  
+### Internal
+
+- Add `get_fields` to `inspection` module.
+
+
 ## v1.1.3 - 2021-05-08
 
 This is a patch release addressing missing cross reference ability and minor
@@ -25,7 +46,7 @@ refactorings.
 ### Bugfix
 
 - Enable cross referencing of pydantic objects which are documented with
-  *autodoc_pydantic* directives and linked via `:any:` role [3](https://github.com/mansenfranzen/autodoc_pydantic/issues/3).
+  *autodoc_pydantic* directives and linked via `:any:` role #[3](https://github.com/mansenfranzen/autodoc_pydantic/issues/3).
 
 ### Documentation
 
