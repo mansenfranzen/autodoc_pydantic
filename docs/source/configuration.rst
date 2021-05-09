@@ -70,7 +70,7 @@ Contains all modifications for pydantic `BaseModel`.
    :config: autodoc_pydantic_model_show_config_member
    :option: model-show-config-member
    :option_additional: members
-   :values: False, True
+   :values: True, False*
 
    Show pydantic config class. It can be hidden if it is irrelevant or if
    replaced with :ref:`model-show-config-summary <autodoc_pydantic_model_show_config_summary>`.
@@ -217,7 +217,7 @@ Contains all modifications for pydantic `BaseSettings`.
    :config: autodoc_pydantic_settings_show_config_member
    :option: settings-show-config-member
    :option_additional: members
-   :values: False, True
+   :values: True, False*
 
    Show pydantic config class. It can be hidden if it is irrelevant or if
    replaced with :ref:`settings-show-config-summary <autodoc_pydantic_settings_show_config_summary>`.
@@ -342,7 +342,7 @@ Fields
    :config: autodoc_pydantic_field_doc_policy
    :option: field-doc-policy
    :option_additional: members
-   :values: docstring, description, both
+   :values: docstring, description, both*
 
    Define what content is displayed in the main field docstring. The following
    values are possible:
@@ -423,7 +423,7 @@ Validators
    :config: autodoc_pydantic_validator_list_fields
    :option: validator-list-fields
    :option_additional: members, model-show-validator-members, undoc-members
-   :values: True, False
+   :values: True, False*
 
    List all fields that are processed by current validator.
    This provides the same information as
