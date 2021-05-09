@@ -23,6 +23,13 @@ class ModelShowValidatorsSummary(BaseModel):
         return v
 
 
+class ModelShowFieldSummary(BaseModel):
+    """ModelShowFieldSummary."""
+
+    field1: int = 5
+    field2: str = "FooBar"
+
+
 class ModelHideParamList(BaseModel):
     """ModelHideParamList."""
 
@@ -110,6 +117,15 @@ class SettingsShowValidatorsSummary(BaseSettings):
     @validator("field")
     def check(cls, v) -> str:
         return v
+
+
+class SettingsShowFieldSummary(BaseSettings):
+    """SettingsShowFieldSummary."""
+
+    field1: int = 5
+    """Field1."""
+    field2: str = "FooBar"
+    """Field2."""
 
 
 class SettingsHideParamList(BaseSettings):

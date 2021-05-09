@@ -87,6 +87,16 @@ Contains all modifications for pydantic `BaseModel`.
 
 
 .. tabdocconfig:: autopydantic_model
+   :title: Show Field Summary
+   :path: target.configuration.ModelShowFieldSummary
+   :config: autodoc_pydantic_model_show_field_summary
+   :option: model-show-field-summary
+   :values: True, False
+
+   Show all fields within the class doc string. Hyperlinks are automatically created.
+
+
+.. tabdocconfig:: autopydantic_model
    :title: Show Undoc Members
    :path: target.configuration.ModelUndocMembers
    :config: autodoc_pydantic_model_undoc_members
@@ -204,6 +214,16 @@ Contains all modifications for pydantic `BaseSettings`.
    :values: True, False
 
    Show pydantic validator methods. They can be hidden if they are irrelevant.
+
+
+.. tabdocconfig:: autopydantic_settings
+   :title: Show Field Summary
+   :path: target.configuration.SettingsShowFieldSummary
+   :config: autodoc_pydantic_settings_show_field_summary
+   :option: settings-show-field-summary
+   :values: True, False
+
+   Show all fields within the class doc string. Hyperlinks are automatically created.
 
 
 .. tabdocconfig:: autopydantic_settings
