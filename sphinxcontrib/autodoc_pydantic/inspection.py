@@ -100,6 +100,16 @@ class ModelWrapper:
         except KeyError:
             return {}
 
+    def get_fields(self) -> Dict[str, ModelField]:
+        """Retrieves all fields from pydantic model.
+
+        """
+
+        try:
+            return self.model.__fields__
+        except KeyError:
+            return {}
+
     def get_validator_names(self) -> Set[str]:
         """Collect all names of the validator functions.
 
