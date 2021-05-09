@@ -107,8 +107,7 @@ class ConfigurationToc(SphinxDirective):
         configs = [x for x in self.env.config.values.keys()
                    if x.startswith(startswith)]
 
-        content = [":Options:"]
-        content.extend([self.create_link(x) for x in configs])
+        content = [":Options:", *[self.create_link(x) for x in configs]]
         content = StringList(content)
 
         return generate_nodes(self.state, content)
