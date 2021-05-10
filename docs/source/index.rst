@@ -5,11 +5,11 @@ Welcome to autodoc_pydantic's documentation!
 
 **Seamlessly integrate pydantic models in your Sphinx documentation.**
 
-You love `pydantic <https://pydantic-docs.helpmanual.io/>`_ ❤ and you want to
-document your models and configuration settings with `sphinx <https://www.sphinx-doc.org/en/master>`_?
+You love `pydantic <https://pydantic-docs.helpmanual.io/>`_ 💖 and you want to
+document your models and configuration settings with `sphinx`_?
 Perfect, let's go. But wait, sphinx' `autodoc <https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html>`_
 does not integrate too well with pydantic models 😕.
-Don't worry - just :code:`pip install autodoc_pydantic` ☺.
+Don't worry - just :code:`pip install autodoc_pydantic` 😉.
 
 Features
 --------
@@ -44,6 +44,14 @@ the appearance of standard sphinx autodoc with *autodoc_pydantic*.
    changelog
 
 
+Acknowledgements
+================
+
+Thanks to great open source projects `sphinx`_,
+`pydantic <https://pydantic-docs.helpmanual.io/>`_ and
+`poetry <https://python-poetry.org/>`_ (and many more) ❤!
+
+
 Indices and tables
 ==================
 
@@ -51,6 +59,7 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
+.. _sphinx: https://www.sphinx-doc.org/en/master
 
 .. |PyPIBadge| image:: https://badge.fury.io/py/autodoc-pydantic.svg
 .. _PyPIBadge: https://pypi.org/project/autodoc-pydantic/
