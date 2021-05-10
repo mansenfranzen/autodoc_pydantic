@@ -1,7 +1,7 @@
 Changelog
 =========
 
-v1.2.1 - 2021-05-09
+v1.2.1 - 2021-05-10
 -------------------
 
 This is minor release dropping ``myst-parser`` as a dependency.
@@ -9,7 +9,21 @@ This is minor release dropping ``myst-parser`` as a dependency.
 Documentation
 ~~~~~~~~~~~~~
 
--  Update feature section
+- Add acknowledgements.
+- Add detailed description for running tests.
+
+Testing
+~~~~~~~
+
+- Use tox for defining different test environments (specific stable, stable
+  latest, developement).
+- Remove test environment specifications from github ci.
+
+Packaging
+~~~~~~~~~
+
+- Replace ``pytest-cov`` with ``coverage``.
+- Add ``tox`` for executing tests in CI.
 
 v1.2.0 - 2021-05-09
 -------------------
