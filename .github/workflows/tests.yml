@@ -46,8 +46,9 @@ jobs:
         with:
           python-version: '3.x'
       - uses: abatilo/actions-poetry@v2.0.0
-      - run: poetry remove sphinx-tabs && poetry add git+https://github.com/executablebooks/sphinx-tabs.git pydantic@latest sphinx@latest
+      - run: poetry add git+https://github.com/executablebooks/sphinx-tabs.git --optional
+      - run: poetry add pydantic@latest sphinx@latest
       - name: Install packages
-        run: poetry install
+        run: poetry install -E dev
       - name: run pytest
         run: poetry run pytest
