@@ -31,7 +31,7 @@ jobs:
       - name: Update required deps
         run: poetry add pydantic${{ matrix.pydantic_version }} sphinx${{ matrix.sphinx_version }}
       - name: Install packages
-        run: poetry install
+        run: poetry install -E dev
       - name: run pytest
         run: poetry run pytest
       - name: Run codacy-coverage-reporter
