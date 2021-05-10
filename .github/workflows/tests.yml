@@ -9,24 +9,24 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - python-version: 3.6
-            pydantic-version: "=~1.5"
-            sphinx-version: "=~3.4"
-          - python-version: 3.7
-            pydantic-version: "=~1.6"
-            sphinx-version: "=~3.4"
-          - python-version: 3.8
-            pydantic-version: "=~1.7"
-            sphinx-version: "=~3.4"
-          - python-version: 3.9
-            pydantic-version: "=~1.8"
-            sphinx-version: "=~3.5"
+          - python_version: 3.6
+            pydantic_version: "=~1.5"
+            sphinx_version: "=~3.4"
+          - python_version: 3.7
+            pydantic_version: "=~1.6"
+            sphinx_version: "=~3.4"
+          - python_version: 3.8
+            pydantic_version: "=~1.7"
+            sphinx_version: "=~3.4"
+          - python_version: 3.9
+            pydantic_version: "=~1.8"
+            sphinx_version: "=~3.5"
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ matrix.python_version }}
       - uses: abatilo/actions-poetry@v2.0.0
       - name: Update required deps
         run: poetry add pydantic${{ matrix.pydantic_version }} sphinx${{ matrix.sphinx_version }}
@@ -46,8 +46,7 @@ jobs:
         with:
           python-version: '3.x'
       - uses: abatilo/actions-poetry@v2.0.0
-      - run: poetry remove sphinx-tabs && poetry add git+https://github.com/executablebooks/sphinx-tabs.git
-      - run: poetry add pydantic@latest sphinx@latest
+      - run: poetry remove sphinx-tabs && poetry add git+https://github.com/executablebooks/sphinx-tabs.git pydantic@latest sphinx@latest
       - name: Install packages
         run: poetry install
       - name: run pytest
