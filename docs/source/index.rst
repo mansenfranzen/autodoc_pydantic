@@ -5,9 +5,11 @@ Welcome to autodoc_pydantic's documentation!
 
 **Seamlessly integrate pydantic models in your Sphinx documentation.**
 
-You love `pydantic <https://pydantic-docs.helpmanual.io/>`_ ❤️ and you want to document your models and configuration settings with `sphinx <https://www.sphinx-doc.org/en/master>`_?
-Perfect, let's go. But wait, sphinx' `autodoc <https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html>`_ does not integrate too well with pydantic models 😕.
-Don't worry - just :code:`pip install autodoc_pydantic` ☺️.
+You love `pydantic <https://pydantic-docs.helpmanual.io/>`_ ❤ and you want to
+document your models and configuration settings with `sphinx <https://www.sphinx-doc.org/en/master>`_?
+Perfect, let's go. But wait, sphinx' `autodoc <https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html>`_
+does not integrate too well with pydantic models 😕.
+Don't worry - just :code:`pip install autodoc_pydantic` ☺.
 
 Features
 --------
@@ -15,12 +17,12 @@ Features
 - 💬 provides default values, alias and constraints for model fields
 - 🔗 adds references between validators and corresponding fields
 - 📃 includes collapsable model json schema
-- 🏄 natively integrates with autodoc extension
+- 🏄 natively integrates with autodoc and autosummary extensions
 - 📎 defines explicit pydantic prefixes for models, settings, fields, validators and model config
-- 📋 shows summary section for model configuration and validators
+- 📋 shows summary section for model configuration, fields and validators
 - 👀 hides overloaded and redundant model class signature
 - 📚 sorts fields, validators and model config within models by type
-- 🍀 Supports :code:`pydantic >= 1.5.0` and :code:`sphinx >= 3.4.0`
+- 🍀 Supports `pydantic >= 1.5.0` and `sphinx >= 3.4.0`
 
 To see those features in action, jump over to the :ref:`example <showcase>` section comparing
 the appearance of standard sphinx autodoc with *autodoc_pydantic*.
