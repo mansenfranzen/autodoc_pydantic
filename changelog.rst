@@ -4,26 +4,33 @@ Changelog
 v1.2.1 - 2021-05-10
 -------------------
 
-This is minor release dropping ``myst-parser`` as a dependency.
+This is minor release focussing on testing and packaging. It includes tests for
+sphinx 4.0 support. Additionally, it moves all test invocation specifications
+to ``tox.ini``.
 
 Documentation
 ~~~~~~~~~~~~~
 
-- Add acknowledgements.
-- Add detailed description for running tests.
+- Add acknowledgements to index.
+- Add detailed description for running tests with pytest and tox.
 
 Testing
 ~~~~~~~
 
-- Use tox for defining different test environments (specific stable, stable
-  latest, developement).
-- Remove test environment specifications from github ci.
+- Use tox for defining different test environments (specific stable, latest
+  stable and development).
+- Remove test environment specifications from github ci and move it to
+  ``tox.ini``.
+- Add sphinx 4.0 to test environments.
+- Define specific test environments instead of testing all matrix combinations.
 
 Packaging
 ~~~~~~~~~
 
 - Replace ``pytest-cov`` with ``coverage``.
 - Add ``tox`` for executing tests in CI.
+- Remove poetry development dependencies and replace it with explicit
+  ``extras`` for docs, test and dev.
 
 v1.2.0 - 2021-05-09
 -------------------
