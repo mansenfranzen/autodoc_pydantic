@@ -25,8 +25,8 @@ pydantic = ">=1.5"
 sphinx-rtd-theme = { version = "^0.5", optional = true }
 sphinx-tabs = { version = "^2", optional = true }
 pytest = {version = "^6", optional = true }
-pytest-cov = { version = "^2", optional = true }
 coverage = { version ="^5", optional = true }
+tox = { version ="^3", optional = true }
 
 [tool.pytest.ini_options]
 minversion = "6.0"
@@ -36,12 +36,13 @@ docs = ["sphinx-rtd-theme",
         "sphinx-tabs"]
 
 test = ["pytest",
-       "coverage"]
+        "coverage"]
 
 dev = ["pytest",
        "coverage",
        "sphinx-rtd-theme",
-       "sphinx-tabs"]
+       "sphinx-tabs",
+       "tox"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
