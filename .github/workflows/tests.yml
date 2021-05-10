@@ -53,4 +53,3 @@ jobs:
           python-version: '3.x'
       - run: pip install tox
       - run: tox -e development
-      - run: export CODACY_PROJECT_TOKEN=${{ secrets.CODACY_PROJECT_TOKEN }} && bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r coverage.xml
