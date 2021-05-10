@@ -24,7 +24,7 @@ from sphinxcontrib.autodoc_pydantic.directives import (
     PydanticSettings
 )
 
-__version__ = "1.1.3"
+__version__ = "1.2.0"
 
 
 def add_css_file(app: Sphinx, exception: Exception):
@@ -76,6 +76,7 @@ def add_configuration_values(app: Sphinx):
     add(f'{stem}settings_show_config_summary', True, True, bool)
     add(f'{stem}settings_show_validator_members', True, True, bool)
     add(f'{stem}settings_show_validator_summary', True, True, bool)
+    add(f'{stem}settings_show_field_summary', True, True, bool)
     add(f'{stem}settings_hide_paramlist', True, True, bool)
     add(f'{stem}settings_undoc_members', True, True, bool)
     add(f'{stem}settings_members', True, True, bool)
@@ -87,6 +88,7 @@ def add_configuration_values(app: Sphinx):
     add(f'{stem}model_show_config_summary', True, True, bool)
     add(f'{stem}model_show_validator_members', True, True, bool)
     add(f'{stem}model_show_validator_summary', True, True, bool)
+    add(f'{stem}model_show_field_summary', True, True, bool)
     add(f'{stem}model_hide_paramlist', True, True, bool)
     add(f'{stem}model_undoc_members', True, True, bool)
     add(f'{stem}model_members', True, True, bool)

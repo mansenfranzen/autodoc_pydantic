@@ -246,6 +246,82 @@ def test_autodoc_pydantic_model_show_validator_summary_false(autodocument):
     assert result == actual
 
 
+def test_autodoc_pydantic_model_show_field_summary_true(autodocument):
+    result = [
+        '',
+        '.. py:pydantic_model:: ModelShowFieldSummary',
+        '   :module: target.configuration',
+        '',
+        '   ModelShowFieldSummary.',
+        '',
+        '   :Fields:',
+        '      - :py:obj:`field1 (int) <target.configuration.ModelShowFieldSummary.field1>`',
+        '      - :py:obj:`field2 (str) <target.configuration.ModelShowFieldSummary.field2>`',
+        ''
+    ]
+
+    # explict global
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelShowFieldSummary',
+        options_app={"autodoc_pydantic_model_show_field_summary": True},
+        deactivate_all=True)
+    assert result == actual
+
+    # explict local
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelShowFieldSummary',
+        options_doc={"model-show-field-summary": True},
+        deactivate_all=True)
+    assert result == actual
+
+    # explicit local overwrite global
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelShowFieldSummary',
+        options_app={"autodoc_pydantic_model_show_field_summary": False},
+        options_doc={"model-show-field-summary": True},
+        deactivate_all=True)
+    assert result == actual
+
+
+def test_autodoc_pydantic_model_show_field_summary_false(autodocument):
+    result = [
+        '',
+        '.. py:pydantic_model:: ModelShowFieldSummary',
+        '   :module: target.configuration',
+        '',
+        '   ModelShowFieldSummary.',
+        ''
+    ]
+
+    # explict global
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelShowFieldSummary',
+        options_app={"autodoc_pydantic_model_show_field_summary": False},
+        deactivate_all=True)
+    assert result == actual
+
+    # explict local
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelShowFieldSummary',
+        options_doc={"model-show-field-summary": False},
+        deactivate_all=True)
+    assert result == actual
+
+    # explicit local overwrite global
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelShowFieldSummary',
+        options_app={"autodoc_pydantic_model_show_field_summary": True},
+        options_doc={"model-show-field-summary": False},
+        deactivate_all=True)
+    assert result == actual
+
+
 def test_autodoc_pydantic_model_hide_paramlist_false(autodocument):
     result = [
         '',

@@ -8,7 +8,7 @@ documentation section for config parameters.
 """
 
 import inspect
-from typing import List
+from typing import List, Tuple
 
 from docutils import nodes
 from docutils.nodes import Node
@@ -21,16 +21,7 @@ from sphinx.ext.autodoc.directive import DummyOptionSpec
 from sphinx.util import nested_parse_with_titles
 from sphinx.util.docutils import switch_source_input, SphinxDirective
 
-tab_sub_tpl = """
-   .. tab:: {value_label}
-
-      .. {directive}:: {path}
-         :__doc_disable_except__: {option}
-         :{option}: {value}{option_additional}
-         :noindex:
-"""
-
-tab_tpl = """
+TAB_TEMPLATE = """
 .. _{config}:
 
 {title}
@@ -51,6 +42,15 @@ tab_tpl = """
 
       .. autocodeblock:: {path}
 
+"""
+
+TAB_TEMPLATE_SUB = """
+   .. tab:: {value_label}
+
+      .. {directive}:: {path}
+         :__doc_disable_except__: {option}
+         :{option}: {value}{option_additional}
+         :noindex:
 """
 
 
@@ -76,6 +76,19 @@ def parse_options(options: str) -> str:
     return "\n" + "\n".join(lines)
 
 
+def generate_nodes(state, content: StringList):
+    """Helper function that takes reST and generates nodes.
+
+    """
+
+    with switch_source_input(state, content):
+        node = nodes.section()  # type: Element
+        node.document = state.document
+        nested_parse_with_titles(state, content, node)
+
+        return node.children
+
+
 class ConfigurationToc(SphinxDirective):
     """Generates documentation section describing configuration parameters.
 
@@ -94,32 +107,35 @@ class ConfigurationToc(SphinxDirective):
         configs = [x for x in self.env.config.values.keys()
                    if x.startswith(startswith)]
 
+        content = [":Options:"] + [self.create_link(x) for x in configs]
+        content = StringList(content)
+
+        return generate_nodes(self.state, content)
+
+    def sanitize(self, option: str) -> str:
+        """Helper function to sanitize option name.
+
+        """
+
+        name = self.arguments[0]
+        prefix = "autodoc_pydantic_"
         special = {f"{name}-undoc-members",
                    f"{name}-members",
                    f"{name}-member-order"}
 
-        def sanitize(option):
-            replaced = option.replace(prefix, "").replace("_", "-")
-            if replaced in special:
-                replaced = replaced.replace(f"{name}-", "")
+        replaced = option.replace(prefix, "").replace("_", "-")
+        if replaced in special:
+            replaced = replaced.replace(f"{name}-", "")
 
-            return f":{replaced}:"
+        return f":{replaced}:"
 
-        def create_link(option):
-            label = sanitize(option)
-            return f"   - :ref:`{label} <{option}>`"
+    def create_link(self, option: str) -> str:
+        """Creates reST reference for given option to configuration section.
 
-        content = [":Options:"]
-        content.extend([create_link(x) for x in configs])
-        content = StringList(content)
+        """
 
-        with switch_source_input(self.state, content):
-            node = nodes.section()  # type: Element
-            # necessary so that the child nodes get the right source/line set
-            node.document = self.state.document
-            nested_parse_with_titles(self.state, content, node)
-
-            return node.children
+        label = self.sanitize(option)
+        return f"   - :ref:`{label} <{option}>`"
 
 
 class TabDocDirective(SphinxDirective):
@@ -133,54 +149,85 @@ class TabDocDirective(SphinxDirective):
     optional_arguments = 2
     final_argument_whitespace = True
 
-    def run(self) -> List[Node]:
+    def process_values(self) -> List[Tuple[str, str]]:
+        """Parse the list of provided values and return list of tuples
+        representing the actual value and its label.
+
+        Please note, that an asterisk marks the default value. If not asterisk
+        is provided, the first value is marked as the default value.
+
+        """
+
+        values = self.options["values"].split(",")
+        stripped = [x.strip() for x in values]
+
+        if "*" not in self.options["values"]:
+            stripped[0] = stripped[0] + "*"
+
+        return [(x.replace("*", ""), x.replace("*", " (default)"))
+                for x in stripped]
+
+    def process_options_additional(self) -> str:
+        """Parse the list of additional options.
+
+        """
 
         option_addition = self.options.get("option_additional", "")
         if option_addition:
             option_addition = parse_options(option_addition)
 
-        defaults = self.options["values"].split(",")
-        defaults = [x.strip() for x in defaults]
-        defaults_remaining = ", ".join(defaults[1:])
+        return option_addition
+
+    def process_tabs(self):
+        """Create the tab content.
+
+        """
+
+        option_additional = self.process_options_additional()
 
         tabs = []
-        for default in defaults:
-            value_label = default if len(tabs) else default + " (default)"
-            tab_rst = tab_sub_tpl.format(
-                value=default,
-                value_label=value_label,
+        for value, label in self.process_values():
+            tab_rst = TAB_TEMPLATE_SUB.format(
+                value=value,
+                value_label=label,
                 path=self.options["path"],
                 config=self.options["config"],
                 option=self.options["option"],
-                option_additional=option_addition,
+                option_additional=option_additional,
                 directive=self.arguments[0]
             )
             tabs.append(tab_rst)
 
-        title = self.options["title"]
-        title = title + "\n" + ("-" * len(title))
+        return "\n".join(tabs)
 
-        content = tab_tpl.format(
+    def process_title(self) -> str:
+        """Generate title.
+
+        """
+
+        title = self.options["title"]
+        return title + "\n" + ("-" * len(title))
+
+    def run(self) -> List[Node]:
+        """Generate reST.
+
+        """
+
+        tabs = self.process_tabs()
+        title = self.process_title()
+
+        content = TAB_TEMPLATE.format(
             title=title,
-            description=" ".join(self.content),
-            tabs="\n".join(tabs),
+            description="\n".join(self.content),
+            tabs=tabs,
             directive=self.arguments[0],
             path=self.options["path"],
             config=self.options["config"],
-            option=self.options["option"],
-            option_additional=option_addition,
-            default=defaults[0],
-            default_remaining=defaults_remaining,
+            option=self.options["option"]
         )
 
         content = StringList(content.split("\n"))
-        with switch_source_input(self.state, content):
-            node = nodes.section()  # type: Element
-            # necessary so that the child nodes get the right source/line set
-            node.document = self.state.document
-            nested_parse_with_titles(self.state, content, node)
-
-            return node.children
+        return generate_nodes(self.state, content)
 
 
 class AutoCodeBlock(CodeBlock):
