@@ -1,18 +1,27 @@
-name: CI
+name: continuous_integration
 on: push
 
 jobs:
-  ci:
+  test-stable-versions:
     if: "!contains(github.event.head_commit.message, 'ci skip')"
     environment: ci
     strategy:
       fail-fast: false
       matrix:
-        python-version: [3.9, 3.8, 3.7, 3.6]
-        os: [ubuntu-18.04]
-        pydantic_version: ["=~1.8", "=~1.7", "=~1.6", "=~1.5", "@latest"]
-        sphinx_version: ["=~3.5", "=~3.4"]
-    runs-on: ${{ matrix.os }}
+        include:
+          - python-version: 3.6
+            pydantic-version: "=~1.5"
+            sphinx-version: "=~3.4"
+          - python-version: 3.7
+            pydantic-version: "=~1.6"
+            sphinx-version: "=~3.4"
+          - python-version: 3.8
+            pydantic-version: "=~1.7"
+            sphinx-version: "=~3.4"
+          - python-version: 3.9
+            pydantic-version: "=~1.8"
+            sphinx-version: "=~3.5"
+    runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
@@ -27,3 +36,19 @@ jobs:
         run: poetry run pytest
       - name: Run codacy-coverage-reporter
         run: export CODACY_PROJECT_TOKEN=${{ secrets.CODACY_PROJECT_TOKEN }} && bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r coverage.xml
+
+  test-latest-versions:
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - uses: abatilo/actions-poetry@v2.0.0
+      - run: poetry remove sphinx-tabs && poetry add git+https://github.com/executablebooks/sphinx-tabs.git
+      - run: poetry add pydantic@latest sphinx@latest
+      - name: Install packages
+        run: poetry install
+      - name: run pytest
+        run: poetry run pytest
