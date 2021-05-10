@@ -273,7 +273,7 @@ class FieldShowConstraints(BaseModel):
 class FieldShowAlias(BaseModel):
     """FieldShowConstraints."""
 
-    field: int = Field(1, alias="field2")
+    field: int = Field(1, alias="field2", env="field2")
     """Field."""
 
 
