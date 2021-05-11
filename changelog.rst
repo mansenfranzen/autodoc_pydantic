@@ -1,10 +1,10 @@
 Changelog
 =========
 
-v1.2.1 - 2021-05-10
+v1.3.0 - 2021-05-10
 -------------------
 
-This is minor release focussing on testing and packaging. It includes tests for
+This is a release focusing on testing and packaging. It includes tests for
 sphinx 4.0 support. Additionally, it moves all test invocation specifications
 to ``tox.ini``.
 
@@ -13,24 +13,38 @@ Documentation
 
 - Add acknowledgements to index.
 - Add detailed description for running tests with pytest and tox.
+- Convert changelog page from markdown to reST.
 
 Testing
 ~~~~~~~
 
 - Use tox for defining different test environments (specific stable, latest
-  stable and development).
-- Remove test environment specifications from github ci and move it to
-  ``tox.ini``.
-- Add sphinx 4.0 to test environments.
+  stable and development). Remove test environment specifications from github
+  ci and move it to ``tox.ini`` addressing #\ `7 <https://github.com/mansenfranzen/autodoc_pydantic/issues/7>`__.
+- Add sphinx 4.0 to test environments addressing #\ `16 <https://github.com/mansenfranzen/autodoc_pydantic/issues/16>`__.
 - Define specific test environments instead of testing all matrix combinations.
+- Provide version information about *autdoc_pydantic* and relevant
+  dependencies.
 
 Packaging
 ~~~~~~~~~
 
 - Replace ``pytest-cov`` with ``coverage``.
+- Remove ``myst-parser`` dependency addressing #\ `16 <https://github.com/mansenfranzen/autodoc_pydantic/issues/16>`__.
 - Add ``tox`` for executing tests in CI.
 - Remove poetry development dependencies and replace it with explicit
-  ``extras`` for docs, test and dev.
+  ``extras`` for *docs*, *test* and *dev*.
+
+Internal
+~~~~~~~~
+
+- Rename ``util`` module to ``composites`` to improve naming convention.
+
+Added
+~~~~~
+
+- ``show_versions`` function to show important dependency information which are
+ relevant for tracking down bugs as part of the new ``utility`` module.
 
 v1.2.0 - 2021-05-09
 -------------------
