@@ -49,7 +49,7 @@ def show_versions():
 
     print(
         f"Version info: "
-        f"autodoc_pydantic: {get_version('sphinxcontrib.autodoc_pydantic')} |"
+        f"autodoc_pydantic: {get_version('sphinxcontrib.autodoc_pydantic')} | "
         f"pydantic: {get_version_special('pydantic')} | "
         f"sphinx: {get_version('sphinx')} | "
         f"sphinx_rtd_theme: {get_version('sphinx_rtd_theme')} | "
