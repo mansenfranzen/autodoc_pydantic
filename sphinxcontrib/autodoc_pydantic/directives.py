@@ -10,7 +10,7 @@ from sphinx.addnodes import (
 )
 from sphinx.domains.python import PyMethod, PyAttribute, PyClasslike
 from sphinxcontrib.autodoc_pydantic.inspection import ModelWrapper
-from sphinxcontrib.autodoc_pydantic.util import (
+from sphinxcontrib.autodoc_pydantic.composites import (
     PydanticAutoDirective,
     option_default_true,
     option_list_like,

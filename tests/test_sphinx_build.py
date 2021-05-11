@@ -1,5 +1,10 @@
+import pytest
 from sphinx.cmd.build import build_main
 from pathlib import Path
+
+pytest.importorskip('sphinx_rtd_theme')
+pytest.importorskip('sphinx_tabs')
+
 
 def test_sphinx_build_without_warnings(tmpdir, recwarn):
     """Ensure that the build succeeds and no warning is raised.
@@ -10,5 +15,6 @@ def test_sphinx_build_without_warnings(tmpdir, recwarn):
     path_docs = path_root.joinpath("docs", "source")
 
     status_code = build_main([str(path_docs), str(tmpdir)])
+
     assert status_code == 0
-    assert len(recwarn) == 0
+    assert len(recwarn) == 0, str([str(x) for x in recwarn.list])

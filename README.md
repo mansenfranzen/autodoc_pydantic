@@ -7,22 +7,24 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/30a083d784f245a98a0d5e6857708cc8)](https://www.codacy.com/gh/mansenfranzen/autodoc_pydantic/dashboard?utm_source=github.com&utm_medium=referral&utm_content=mansenfranzen/autodoc_pydantic&utm_campaign=Badge_Coverage)
 [![Documentation Status](https://readthedocs.org/projects/autodoc-pydantic/badge/?version=latest)](https://autodoc-pydantic.readthedocs.io/en/latest/?badge=latest)
 
-You love [pydantic](https://pydantic-docs.helpmanual.io/) :heart: and you want to document your models and configuration settings with [sphinx](https://www.sphinx-doc.org/en/master/)? 
+You love [pydantic](https://pydantic-docs.helpmanual.io/) ❤ and you want to
+document your models and configuration settings with [sphinx](https://www.sphinx-doc.org/en/master/)?
 
-Perfect, let's go. But wait, sphinx' [autodoc](https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html) does not integrate too well with pydantic models :confused:. 
+Perfect, let's go. But wait, sphinx' [autodoc](https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html)
+does not integrate too well with pydantic models 😕.
 
-Don't worry - just `pip install autodoc_pydantic` :relaxed:.
+Don't worry - just `pip install autodoc_pydantic` ☺.
 
 ## Features
 
-- :speech_balloon: provides default values, alias and constraints for model fields
-- :link: adds references between validators and corresponding fields
-- :page_with_curl: includes collapsable model json schema
-- :surfer: natively integrates with autodoc extension
-- :paperclip: defines explicit pydantic prefixes for models, settings, fields, validators and model config
-- :clipboard: shows summary section for model configuration and validators
-- :eyes: hides overloaded and redundant model class signature
-- :books: sorts fields, validators and model config within models by type
+- 💬 provides default values, alias and constraints for model fields
+- 🔗 adds references between validators and corresponding fields
+- 📃 includes collapsable model json schema
+- 🏄 natively integrates with autodoc and autosummary extensions
+- 📎 defines explicit pydantic prefixes for models, settings, fields, validators and model config
+- 📋 shows summary section for model configuration, fields and validators
+- 👀 hides overloaded and redundant model class signature
+- 📚 sorts fields, validators and model config within models by type
 - 🍀 Supports `pydantic >= 1.5.0` and `sphinx >= 3.4.0`
 
 ### Comparison between autodoc sphinx and autodoc pydantic
@@ -43,4 +45,6 @@ For more details, please visit the official [documentation](https://autodoc-pyda
 
 ## Acknowledgements
 
-Thanks to great open source projects [sphinx](https://www.sphinx-doc.org/en/master/), [pydantic](https://pydantic-docs.helpmanual.io/) and [poetry](https://python-poetry.org/) (and so many more) :heart: !
+Thanks to great open source projects [sphinx](https://www.sphinx-doc.org/en/master/),
+[pydantic](https://pydantic-docs.helpmanual.io/) and
+[poetry](https://python-poetry.org/) (and so many more) ❤!

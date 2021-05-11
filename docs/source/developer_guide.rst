@@ -17,15 +17,40 @@ Creating environment
 
 .. code-block:: bash
 
-   poetry install
+   poetry install -E dev
 
 -----------------------
 Running & writing tests
 -----------------------
 
-.. code-block:: bash
+pytest
+------
 
-   poetry run pytest
+To quickly execute the test suite within your current developer environment
+with pytest directly, run ``poetry run pytest``.
+
+tox
+---
+
+For more sophisticated testing, you can use tox for different test
+environments. A test environment is characterized by varying versions of
+*autodoc_pydantic*'s dependencies like pydantic, sphinx and sphinx-tabs:
+
+- Test a specific environment: ``poetry run tox -e py38-pydantic17-sphinx34``
+- Test the latest stable versions from pypi: ``poetry run tox -e latest``
+- Test the current developer versions from git repositories: ``poetry run tox -e development``
+- Test all available environments: ``poetry run tox`` (not recommended)
+
+Please visit the ``tox.ini`` for all available test environments.
+
+Using tox has the benefit that it also executes the following steps:
+
+1. build source distribution from ``pyproject.toml``
+2. create specified virtual environment for test execution
+3. install source distribution in virtual environment
+4. run tests within virtual environment via pytest
+5. provide test coverage report
+
 
 -----------------------
 Building & writing docs

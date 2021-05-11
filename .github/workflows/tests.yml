@@ -1,29 +1,58 @@
-name: CI
+name: ci
 on: push
 
 jobs:
-  ci:
+  test-stable-versions:
     if: "!contains(github.event.head_commit.message, 'ci skip')"
-    environment: ci
     strategy:
       fail-fast: false
       matrix:
-        python-version: [3.9, 3.8, 3.7, 3.6]
-        os: [ubuntu-18.04]
-        pydantic_version: ["=~1.8", "=~1.7", "=~1.6", "=~1.5", "@latest"]
-        sphinx_version: ["=~3.5", "=~3.4"]
-    runs-on: ${{ matrix.os }}
+        include:
+          - python_version: 3.6
+            pydantic_version: "15"
+            sphinx_version: "34"
+          - python_version: 3.7
+            pydantic_version: "16"
+            sphinx_version: "34"
+          - python_version: 3.8
+            pydantic_version: "17"
+            sphinx_version: "35"
+          - python_version: 3.9
+            pydantic_version: "18"
+            sphinx_version: "35"
+          - python_version: 3.9
+            pydantic_version: "18"
+            sphinx_version: "40"
+    runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
-          python-version: ${{ matrix.python-version }}
-      - uses: abatilo/actions-poetry@v2.0.0
-      - name: Update required deps
-        run: poetry add pydantic${{ matrix.pydantic_version }} sphinx${{ matrix.sphinx_version }}
-      - name: Install packages
-        run: poetry install
-      - name: run pytest
-        run: poetry run pytest
-      - name: Run codacy-coverage-reporter
-        run: export CODACY_PROJECT_TOKEN=${{ secrets.CODACY_PROJECT_TOKEN }} && bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r coverage.xml
+          python-version: ${{ matrix.python_version }}
+      - run: pip install tox
+      - run: tox -e pydantic${{ matrix.pydantic_version }}-sphinx${{ matrix.sphinx_version }}
+
+  test-latest-version-with-coverage:
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    environment: ci
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - run: pip install tox
+      - run: tox -e latest
+      - run: export CODACY_PROJECT_TOKEN=${{ secrets.CODACY_PROJECT_TOKEN }} && bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r coverage.xml
+
+  test-development-versions-deps:
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    environment: ci
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - run: pip install tox
+      - run: tox -e development
