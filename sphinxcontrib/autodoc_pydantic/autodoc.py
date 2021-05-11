@@ -24,7 +24,7 @@ from sphinxcontrib.autodoc_pydantic.inspection import (
     is_validator_by_name,
     ModelWrapper
 )
-from sphinxcontrib.autodoc_pydantic.util import (
+from sphinxcontrib.autodoc_pydantic.composites import (
     option_members,
     option_one_of_factory,
     option_default_true,
