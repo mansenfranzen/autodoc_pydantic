@@ -31,6 +31,8 @@ class ExampleSettings(BaseSettings):
         if not len(v) < 10:
             raise ValueError("No more than 10 characters allowed")
 
+        return v
+
     class Config:
         env_prefix = "foo_"
         allow_mutation = True
