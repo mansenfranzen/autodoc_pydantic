@@ -8,6 +8,8 @@ import pydoc
 from collections import defaultdict
 from itertools import chain
 from typing import NamedTuple, Tuple, List, Dict, Any, Set
+
+import pydantic
 from pydantic import BaseModel
 from pydantic.fields import ModelField
 from sphinx.addnodes import desc_signature
@@ -24,7 +26,7 @@ def is_pydantic_model(obj: Any) -> bool:
 
 
 def is_validator_by_name(name: str, obj: Any) -> bool:
-    """Determine if a validator is present under provided`name` for given
+    """Determine if a validator is present under provided `name` for given
     `model`.
 
     """
@@ -82,7 +84,8 @@ class ModelWrapper:
 
     def __init__(self, model: BaseModel):
         self.model = model
-        self.validator_field_mappings = self.generate_mappings()
+        self.field_validator_names = self.get_field_validator_names()
+        self.field_validator_mappings = self.generate_field_validator_mappings()
 
     def get_model_path(self) -> str:
         """Retrieve the full path to given model.
@@ -91,14 +94,33 @@ class ModelWrapper:
 
         return f"{self.model.__module__}.{self.model.__name__}"
 
-    def get_validators(self) -> Dict[str, List]:
-        """Retrieves validators from pydantic model.
+    def get_field_validator_names(self) -> Dict[str, List[str]]:
+        """Retrieve function names from pydantic Validator wrapper objects.
 
         """
-        try:
-            return self.model.__validators__
-        except KeyError:
-            return {}
+
+        def get_name(validators):
+            return [validator.func.__name__ for validator in validators]
+
+        validators = self.model.__validators__.items()
+        field_names = {field: get_name(validators) for field, validators in validators}
+
+        field_names.setdefault("*", [])
+        field_names["*"].extend(self.get_names_from_root_validators())
+        return field_names
+
+    def get_names_from_root_validators(self) -> List[str]:
+        """Retrieve function names from pydantic root validator objects.
+
+        """
+
+        def get_name(validators):
+            return [validator[1].__name__ for validator in validators]
+
+        pre_root = get_name(self.model.__pre_root_validators__)
+        post_root = get_name(self.model.__post_root_validators__)
+
+        return pre_root + post_root
 
     def get_fields(self) -> Dict[str, ModelField]:
         """Retrieves all fields from pydantic model.
@@ -115,9 +137,8 @@ class ModelWrapper:
 
         """
 
-        validators = self.get_validators()
-        return {validator.func.__name__
-                for validator in chain.from_iterable(validators.values())}
+        names = self.get_field_validator_names().values()
+        return set(chain.from_iterable(names))
 
     def get_reference(self, name: str):
         """Create reference path to given name.
@@ -126,50 +147,54 @@ class ModelWrapper:
 
         return f"{self.get_model_path()}.{name}"
 
-    def generate_mappings(self) -> Tuple[ValidatorFieldMapping]:
-        """Inspects pydantic model and gathers all validator_field_mappings
-        between validators and fields.
+    def generate_mappings_asterisk_validators(self) -> List[ValidatorFieldMapping]:
+        """Generate references between fields and asterisk validators.
 
         """
 
-        validators = self.get_validators()
         mappings = []
+        if "*" not in self.field_validator_names:
+            return []
 
-        # handle asterisk when single validator process all fields
-        ignore_funcs = set()
-        if "*" in validators:
-            for validator in validators["*"]:
-                func_name = validator.func.__name__
-                ignore_funcs.add(func_name)
-                for field in validators.keys():
-                    _validator = NamedReference(
-                        name=func_name,
-                        ref=self.get_reference(func_name))
-                    _field = NamedReference(
-                        name=field,
-                        ref=self.get_reference(field)
-                    )
-                    mapping = ValidatorFieldMapping(
-                        validator=_validator,
-                        field=_field,
-                        is_asterisk=True
-                    )
-                    mappings.append(mapping)
+        fields = self.field_validator_names.keys()
 
-            validators = {field: _validators
-                          for field, _validators in validators.items()
-                          if field != "*"}
+        for name in self.field_validator_names["*"]:
+            for field in fields:
+                _validator = NamedReference(
+                    name=name,
+                    ref=self.get_reference(name))
+                _field = NamedReference(
+                    name=field,
+                    ref=self.get_reference(field)
+                )
+                mapping = ValidatorFieldMapping(
+                    validator=_validator,
+                    field=_field,
+                    is_asterisk=True
+                )
+                mappings.append(mapping)
 
-        # handle standard validators
-        for field, _validators in validators.items():
-            for validator in _validators:
-                func_name = validator.func.__name__
-                if func_name in ignore_funcs:
+        return mappings
+
+    def generate_mappings_standard_validators(self) -> List[ValidatorFieldMapping]:
+        """Generate references between fields and standard validators.
+
+        """
+
+        mappings = []
+        standard_validators = {field: validator
+                               for field, validator in self.field_validator_names.items()
+                               if field != "*"}
+        to_ignore = set(self.field_validator_names.get("*", []))
+
+        for field, validators in standard_validators.items():
+            for name in validators:
+                if name in to_ignore:
                     continue
 
                 _validator = NamedReference(
-                    name=func_name,
-                    ref=self.get_reference(func_name))
+                    name=name,
+                    ref=self.get_reference(name))
                 _field = NamedReference(
                     name=field,
                     ref=self.get_reference(field)
@@ -181,7 +206,18 @@ class ModelWrapper:
                 )
                 mappings.append(mapping)
 
-        return tuple(mappings)
+        return mappings
+
+    def generate_field_validator_mappings(self) -> Tuple[ValidatorFieldMapping]:
+        """Inspects pydantic model and gathers all validator_field_mappings
+        between validators and fields.
+
+        """
+
+        asterisk = self.generate_mappings_asterisk_validators()
+        standard = self.generate_mappings_standard_validators()
+
+        return tuple(asterisk + standard)
 
     @functools.lru_cache(maxsize=128)
     def get_asterisk_validators(self) -> Dict[str, ValidatorFieldMapping]:
@@ -190,7 +226,7 @@ class ModelWrapper:
         """
 
         return {mapping.validator.name: mapping
-                for mapping in self.validator_field_mappings
+                for mapping in self.field_validator_mappings
                 if mapping.is_asterisk}
 
     @functools.lru_cache(maxsize=128)
@@ -201,7 +237,7 @@ class ModelWrapper:
         """
 
         result = defaultdict(list)
-        for mapping in self.validator_field_mappings:
+        for mapping in self.field_validator_mappings:
             if mapping.is_asterisk:
                 continue
             result[mapping.validator.name].append(mapping)
@@ -252,7 +288,7 @@ class ModelWrapper:
 
         """
 
-        return [x.validator for x in self.validator_field_mappings
+        return [x.validator for x in self.field_validator_mappings
                 if x.field.name == field_name]
 
     def get_named_references_for_validators(self) -> List[NamedReference]:
@@ -261,7 +297,7 @@ class ModelWrapper:
         """
 
         unique = {mapping.validator.name: mapping
-                  for mapping in self.validator_field_mappings}
+                  for mapping in self.field_validator_mappings}
 
         return [NamedReference(mapping.validator.name, mapping.validator.ref)
                 for mapping in unique.values()]
