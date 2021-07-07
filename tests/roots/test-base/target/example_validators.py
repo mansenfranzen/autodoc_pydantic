@@ -28,7 +28,7 @@ class ExampleValidators(BaseModel):
         """
 
         for key, value in values.items():
-            has_letter = any([x.isalpha() for x in value])
+            has_letter = any(x.isalpha() for x in value)
             if not has_letter:
                 raise ValueError(f"Field '{key}' does not contain a letter.")
 
