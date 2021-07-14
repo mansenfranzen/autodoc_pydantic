@@ -258,32 +258,19 @@ class PydanticAutoDirective:
         if (name not in self.parent.options) and (self.is_available(name)):
             self.parent.options[name] = self.get_configuration_by_name(name)
 
-    def set_default_option_with_value(self, name: str,
-                                      value_true: Any,
-                                      value_false: Optional[Any] = NONE):
-        """Set option value for given `name`. Depending on app environment
-        configuration boolean value choose either `value_true` or
-        `value_false`. This is only relevant if option value has not been set,
-        yet.
-
-        Parameters
-        ----------
-        name: str
-            Name of the option.
-        value_true:
-            Value to be set if True.
-        value_false:
-            Value to be set if False.
+    def set_members_all(self):
+        """Specifically sets the :members: option to ALL if activated via
+        app environment settings and not deactivated locally by directive
+        option.
 
         """
 
-        value = self.parent.options.get(name)
-
-        if value is not None and self.is_available(name):
-            if self.get_configuration_by_name(name):
-                self.parent.options[name] = value_true
-            elif value_false is not NONE:
-                self.parent.options[name] = value_false
+        option = self.parent.options.get("members", NONE)
+        if option is None or option is False:
+            self.parent.options["members"] = []
+        else:
+            if self.get_app_cfg_by_name("members"):
+                self.parent.options["members"] = ALL
 
 
 class PydanticAutoDoc(PydanticAutoDirective):

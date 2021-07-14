@@ -144,7 +144,7 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         """
 
-        self.pyautodoc.set_default_option_with_value("members", ALL)
+        self.pyautodoc.set_members_all()
         if self.options.get("undoc-members") is False:
             self.options.pop("undoc-members")
 
