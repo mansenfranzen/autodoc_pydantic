@@ -140,3 +140,49 @@ def test_any_reference(test_app, monkeypatch):
 
     assert "does.not.exist" in failed_targets
     assert "target.example_setting.ExampleSettings" not in failed_targets
+
+
+def test_autodoc_member_order(autodocument):
+    """Ensure that member order does not change when pydantic models are used.
+
+    This relates to #21.
+
+    """
+
+    actual = autodocument(
+        documenter='module',
+        object_path='target.edgecase_member_order',
+        options_app={"autodoc_member_order": "bysource"},
+        options_doc={"members": None},
+        deactivate_all=True)
+
+    assert actual == [
+        '',
+        '.. py:module:: target.edgecase_member_order',
+        '',
+        'Module doc string.',
+        '',
+        '',
+        '.. py:pydantic_model:: C',
+        '   :module: target.edgecase_member_order',
+        '',
+        '   Class C',
+        '',
+        '',
+        '.. py:class:: D()',
+        '   :module: target.edgecase_member_order',
+        '',
+        '   Class D',
+        '',
+        '',
+        '.. py:pydantic_model:: A',
+        '   :module: target.edgecase_member_order',
+        '',
+        '   Class A',
+        '',
+        '',
+        '.. py:class:: B()',
+        '   :module: target.edgecase_member_order',
+        '',
+        '   Class B',
+        '']
