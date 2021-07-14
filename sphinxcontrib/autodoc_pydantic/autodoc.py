@@ -568,10 +568,6 @@ class PydanticConfigClassDocumenter(ClassDocumenter):
         super().__init__(*args)
         self.pyautodoc = PydanticAutoDoc(self)
 
-        self.pyautodoc.set_default_option_with_value("members", ALL)
-        if self.options.get("members"):
-            self.options["undoc-members"] = True
-
     @classmethod
     def can_document_member(cls,
                             member: Any,
