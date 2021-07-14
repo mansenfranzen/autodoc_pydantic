@@ -279,9 +279,8 @@ class PydanticAutoDirective:
         option = self.parent.options.get("members", NONE)
         if option is None or option is False:
             self.parent.options["members"] = []
-        else:
-            if self.get_app_cfg_by_name("members"):
-                self.parent.options["members"] = ALL
+        elif self.get_app_cfg_by_name("members"):
+            self.parent.options["members"] = ALL
 
 
 class PydanticAutoDoc(PydanticAutoDirective):
