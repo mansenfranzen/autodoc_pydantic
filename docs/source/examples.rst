@@ -126,3 +126,10 @@ with a simple ``all fields`` marker which hyperlinks to the related model itself
    .. tab:: *example code*
 
       .. autocodeblock:: target.example_validators
+
+
+.. note::
+
+   By default the function signature of validators is replaced with hyperlinks
+   to validated fields by ``autodoc_pydantic``. You can disable this behaviour
+   via :ref:`validator-replace-signature <autodoc_pydantic_validator_replace_signature>`.
