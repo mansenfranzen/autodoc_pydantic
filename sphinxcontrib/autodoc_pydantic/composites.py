@@ -11,7 +11,7 @@ from sphinx.addnodes import pending_xref
 from sphinx.environment import BuildEnvironment
 from sphinx.ext.autodoc import ALL, Documenter
 
-from sphinxcontrib.autodoc_pydantic.inspection import NamedReference
+from sphinxcontrib.autodoc_pydantic.inspection import NamedRef
 
 
 class NullType:
@@ -27,7 +27,7 @@ class NullType:
 NONE = NullType()
 
 
-def create_field_href(reference: NamedReference,
+def create_field_href(reference: NamedRef,
                       env: BuildEnvironment) -> pending_xref:
     """Create `pending_xref` node with link to given `reference`.
 

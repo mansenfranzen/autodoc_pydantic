@@ -49,7 +49,7 @@ def is_not_serializable(obj: ModelField) -> bool:
         return True
 
 
-class NamedReference(NamedTuple):
+class NamedRef(NamedTuple):
     """Contains the name and full path of an object.
 
     """
@@ -58,13 +58,13 @@ class NamedReference(NamedTuple):
     ref: str
 
 
-class ValidatorFieldMapping(NamedTuple):
+class ValidatorFieldMap(NamedTuple):
     """Contains single mapping of a pydantic validator and field.
 
     """
 
-    validator: NamedReference
-    field: NamedReference
+    validator: NamedRef
+    field: NamedRef
     is_asterisk: bool = False
 
 
@@ -85,7 +85,7 @@ class ModelWrapper:
     def __init__(self, model: BaseModel):
         self.model = model
         self.field_validator_names = self.get_field_validator_names()
-        self.field_validator_mappings = self.generate_field_validator_mappings()
+        self.field_validator_mappings = self.generate_field_validator_map()
 
     def get_model_path(self) -> str:
         """Retrieve the full path to given model.
@@ -103,7 +103,8 @@ class ModelWrapper:
             return [validator.func.__name__ for validator in validators]
 
         validators = self.model.__validators__.items()
-        field_names = {field: get_name(validators) for field, validators in validators}
+        field_names = {field: get_name(validators) for field, validators in
+                       validators}
 
         field_names.setdefault("*", [])
         field_names["*"].extend(self.get_names_from_root_validators())
@@ -147,7 +148,7 @@ class ModelWrapper:
 
         return f"{self.get_model_path()}.{name}"
 
-    def generate_mappings_asterisk_validators(self) -> List[ValidatorFieldMapping]:
+    def generate_mappings_asterisk_validators(self) -> List[ValidatorFieldMap]:
         """Generate references between fields and asterisk validators.
 
         """
@@ -160,14 +161,14 @@ class ModelWrapper:
 
         for name in self.field_validator_names["*"]:
             for field in fields:
-                _validator = NamedReference(
+                _validator = NamedRef(
                     name=name,
                     ref=self.get_reference(name))
-                _field = NamedReference(
+                _field = NamedRef(
                     name=field,
                     ref=self.get_reference(field)
                 )
-                mapping = ValidatorFieldMapping(
+                mapping = ValidatorFieldMap(
                     validator=_validator,
                     field=_field,
                     is_asterisk=True
@@ -176,30 +177,31 @@ class ModelWrapper:
 
         return mappings
 
-    def generate_mappings_standard_validators(self) -> List[ValidatorFieldMapping]:
+    def generate_mappings_standard_validators(self) -> List[ValidatorFieldMap]:
         """Generate references between fields and standard validators.
 
         """
 
-        mappings = []
+        items = self.field_validator_names.items()
         standard_validators = {field: validator
-                               for field, validator in self.field_validator_names.items()
+                               for field, validator in items
                                if field != "*"}
         to_ignore = set(self.field_validator_names.get("*", []))
 
+        mappings = []
         for field, validators in standard_validators.items():
             for name in validators:
                 if name in to_ignore:
                     continue
 
-                _validator = NamedReference(
+                _validator = NamedRef(
                     name=name,
                     ref=self.get_reference(name))
-                _field = NamedReference(
+                _field = NamedRef(
                     name=field,
                     ref=self.get_reference(field)
                 )
-                mapping = ValidatorFieldMapping(
+                mapping = ValidatorFieldMap(
                     validator=_validator,
                     field=_field,
                     is_asterisk=False
@@ -208,7 +210,7 @@ class ModelWrapper:
 
         return mappings
 
-    def generate_field_validator_mappings(self) -> Tuple[ValidatorFieldMapping]:
+    def generate_field_validator_map(self) -> Tuple[ValidatorFieldMap]:
         """Inspects pydantic model and gathers all validator_field_mappings
         between validators and fields.
 
@@ -220,7 +222,7 @@ class ModelWrapper:
         return tuple(asterisk + standard)
 
     @functools.lru_cache(maxsize=128)
-    def get_asterisk_validators(self) -> Dict[str, ValidatorFieldMapping]:
+    def get_asterisk_validators(self) -> Dict[str, ValidatorFieldMap]:
         """Get single validator field mapping per asterisk validator.
 
         """
@@ -230,7 +232,8 @@ class ModelWrapper:
                 if mapping.is_asterisk}
 
     @functools.lru_cache(maxsize=128)
-    def get_standard_validators(self) -> Dict[str, List[ValidatorFieldMapping]]:
+    def get_standard_validators(self) -> Dict[
+        str, List[ValidatorFieldMap]]:
         """Get all validator field validator_field_mappings for standard
         validators.
 
@@ -270,20 +273,20 @@ class ModelWrapper:
         return cls.factory(model)
 
     def get_fields_for_validator(self,
-                                 validator_name: str) -> List[NamedReference]:
+                                 validator_name: str) -> List[NamedRef]:
         """Return all fields for a given validator.
 
         """
 
         asterisk = self.get_asterisk_validators().get(validator_name)
         if asterisk:
-            return [NamedReference("all fields", self.get_model_path())]
+            return [NamedRef("all fields", self.get_model_path())]
 
         else:
-            return [NamedReference(x.field.name, x.field.ref)
+            return [NamedRef(x.field.name, x.field.ref)
                     for x in self.get_standard_validators()[validator_name]]
 
-    def get_validators_for_field(self, field_name: str) -> List[NamedReference]:
+    def get_validators_for_field(self, field_name: str) -> List[NamedRef]:
         """Return all validators for given field.
 
         """
@@ -291,7 +294,7 @@ class ModelWrapper:
         return [x.validator for x in self.field_validator_mappings
                 if x.field.name == field_name]
 
-    def get_named_references_for_validators(self) -> List[NamedReference]:
+    def get_named_references_for_validators(self) -> List[NamedRef]:
         """Return named references for all validators.
 
         """
@@ -299,7 +302,7 @@ class ModelWrapper:
         unique = {mapping.validator.name: mapping
                   for mapping in self.field_validator_mappings}
 
-        return [NamedReference(mapping.validator.name, mapping.validator.ref)
+        return [NamedRef(mapping.validator.name, mapping.validator.ref)
                 for mapping in unique.values()]
 
     def get_field_object_by_name(self, field_name: str) -> ModelField:
@@ -317,7 +320,7 @@ class ModelWrapper:
         field = self.get_field_object_by_name(field_name)
         return getattr(field.field_info, property_name, None)
 
-    def find_non_json_serializable_fields(self):
+    def find_non_json_serializable_fields(self) -> List[str]:
         """Get all fields that can safely be serialized.
 
         """
@@ -325,7 +328,7 @@ class ModelWrapper:
         return [key for key, value in self.model.__fields__.items()
                 if is_not_serializable(value)]
 
-    def get_safe_schema_json(self):
+    def get_safe_schema_json(self) -> str:
         """Get model's `schema_json` while ignoring all non serializable.
 
         """
