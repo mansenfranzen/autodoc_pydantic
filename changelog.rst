@@ -19,13 +19,13 @@ Testing
 Internal
 ~~~~~~~~
 
-- Refactor and simplify field validator mapping generation of ``inspection.ModelWrapper`.
+- Refactor and simplify field validator mapping generation of ``inspection.ModelWrapper``.
 
 Contributors
 ~~~~~~~~~~~~
 
--  Thanks to `roguh <https://github.com/roguh>`__ for requesting support for ``root_validators``
-   `#20 <https://github.com/mansenfranzen/autodoc_pydantic/issues/20>`__.
+- Thanks to `roguh <https://github.com/roguh>`__ for submitting a feature request
+  for ``root_validators`` `#20 <https://github.com/mansenfranzen/autodoc_pydantic/issues/20>`__.
 
 
 v1.3.0 - 2021-05-10
@@ -71,7 +71,7 @@ Added
 ~~~~~
 
 - ``show_versions`` function to show important dependency information which are
- relevant for tracking down bugs as part of the new ``utility`` module.
+  relevant for tracking down bugs as part of the new ``utility`` module.
 
 v1.2.0 - 2021-05-09
 -------------------
