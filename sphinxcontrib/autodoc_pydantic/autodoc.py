@@ -144,7 +144,7 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         """
 
-        self.pyautodoc.set_default_option_with_value("members", ALL)
+        self.pyautodoc.set_members_all()
         if self.options.get("undoc-members") is False:
             self.options.pop("undoc-members")
 
@@ -568,10 +568,6 @@ class PydanticConfigClassDocumenter(ClassDocumenter):
         super().__init__(*args)
         self.pyautodoc = PydanticAutoDoc(self)
 
-        self.pyautodoc.set_default_option_with_value("members", ALL)
-        if self.options.get("members"):
-            self.options["undoc-members"] = True
-
     @classmethod
     def can_document_member(cls,
                             member: Any,
@@ -588,3 +584,24 @@ class PydanticConfigClassDocumenter(ClassDocumenter):
         is_config = membername == "Config"
         is_class = isinstance(member, type)
         return is_val and is_parent_model and is_config and is_class
+
+    def document_members(self, *args, **kwargs):
+        """Modify member options before starting to document members.
+
+        """
+
+        self.pyautodoc.set_members_all()
+        if self.options.get("members"):
+            self.options["undoc-members"] = True
+
+        # handle special case when Config is documented as an attribute
+        # in which case `all_members` defaults to True which has to be
+        # overruled by `autodoc_pydantic_config_members` app cfg
+        hide_members = self.pyautodoc.get_app_cfg_by_name("members") is False
+        no_members = bool(self.options.get("members")) is False
+
+        if hide_members and no_members:
+            super().document_members(all_members=False, **kwargs)
+        else:
+            super().document_members(*args, **kwargs)
+

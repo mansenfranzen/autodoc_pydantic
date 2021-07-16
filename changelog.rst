@@ -4,7 +4,10 @@ Changelog
 v1.3.1 - 2021-XX-XX
 -------------------
 
-This is a minor release providing support for ``root_validator``.
+This is a minor release providing support for
+
+- providing support for ``root_validator`` `#20 <https://github.com/mansenfranzen/autodoc_pydantic/issues/20>`__
+- fixing a bug concerning overwriting ``member-order``  `#21 <https://github.com/mansenfranzen/autodoc_pydantic/issues/21>`__
 
 Documentation
 ~~~~~~~~~~~~~
@@ -15,17 +18,23 @@ Testing
 ~~~~~~~
 
 - Add explicit tests for asterisk and root validators.
+- Add test case ensuring that ``member-order`` is not affected by other auto-documenters.
+- Fix several tests which in fact tested wrong behaviour.
 
 Internal
 ~~~~~~~~
 
 - Refactor and simplify field validator mapping generation of ``inspection.ModelWrapper``.
+- Replace ``set_default_option_with_value`` with specific ``set_members_all``.
+- Create separate copy for every auto-documenters ``option`` object to prevent shared options.
 
 Contributors
 ~~~~~~~~~~~~
 
 - Thanks to `roguh <https://github.com/roguh>`__ for submitting a feature request
   for ``root_validators`` `#20 <https://github.com/mansenfranzen/autodoc_pydantic/issues/20>`__.
+- Thanks to `ybnd <https://github.com/ybnd>`__ for submitting a bug report concerning
+  incorrect behaviour for ``member-order`` `#21 <https://github.com/mansenfranzen/autodoc_pydantic/issues/21>`__
 
 
 v1.3.0 - 2021-05-10

@@ -3,13 +3,13 @@ and the PyAutoDoc composite class.
 
 """
 import functools
-from typing import Any, Union, List, Set, Callable, Optional
+from typing import Any, Union, List, Set, Callable
 
 from docutils.nodes import emphasis
 from docutils.parsers.rst import Directive
 from sphinx.addnodes import pending_xref
 from sphinx.environment import BuildEnvironment
-from sphinx.ext.autodoc import ALL, Documenter
+from sphinx.ext.autodoc import ALL, Documenter, Options
 
 from sphinxcontrib.autodoc_pydantic.inspection import NamedRef
 
@@ -123,13 +123,24 @@ def option_list_like(arg: Any) -> Set[str]:
 
 
 class PydanticAutoDirective:
-    """Composite class providing methods to handle getting and setting
-    directive option values.
+    """Composite class providing methods to manage getting and setting
+    configuration values from global app configuration and local directive
+    options.
+
+    This class is tightly coupled with autodoc pydantic autodocumenters because
+    it accesses class attributes of the parent class.
+
+    The documenter class' `option` attribute is sometimes modified in order to
+    apply autodoc pydantic's rules (e.g. modifying :members:). Since the
+    `option` attribute may be shared between documenter instances (may be a
+    bug) in sphinx, an independent copy of the `option` attribute is created
+    for every autodoc pydantic autodocumenter. This relates to #21.
 
     """
 
     def __init__(self, parent: Union[Documenter, Directive]):
         self.parent = parent
+        self.parent.options = Options(self.parent.options)
         self.add_default_options()
 
     def add_default_options(self):
@@ -173,7 +184,7 @@ class PydanticAutoDirective:
         else:
             return name in available
 
-    def get_configuration_by_name(self, name: str) -> Any:
+    def get_app_cfg_by_name(self, name: str) -> Any:
         """Get configuration value from app environment configuration.
         If `name` does not exist, return NONE.
 
@@ -203,7 +214,7 @@ class PydanticAutoDirective:
         if name in self.parent.options:
             return self.parent.options[name]
         elif self.is_available(name):
-            return self.get_configuration_by_name(name)
+            return self.get_app_cfg_by_name(name)
 
     def option_is_false(self, name: str, prefix: bool = False) -> bool:
         """Get option value for given `name`. First, looks for explicit
@@ -256,34 +267,20 @@ class PydanticAutoDirective:
         """
 
         if (name not in self.parent.options) and (self.is_available(name)):
-            self.parent.options[name] = self.get_configuration_by_name(name)
+            self.parent.options[name] = self.get_app_cfg_by_name(name)
 
-    def set_default_option_with_value(self, name: str,
-                                      value_true: Any,
-                                      value_false: Optional[Any] = NONE):
-        """Set option value for given `name`. Depending on app environment
-        configuration boolean value choose either `value_true` or
-        `value_false`. This is only relevant if option value has not been set,
-        yet.
-
-        Parameters
-        ----------
-        name: str
-            Name of the option.
-        value_true:
-            Value to be set if True.
-        value_false:
-            Value to be set if False.
+    def set_members_all(self):
+        """Specifically sets the :members: option to ALL if activated via
+        app environment settings and not deactivated locally by directive
+        option.
 
         """
 
-        value = self.parent.options.get(name)
-
-        if value is not None and self.is_available(name):
-            if self.get_configuration_by_name(name):
-                self.parent.options[name] = value_true
-            elif value_false is not NONE:
-                self.parent.options[name] = value_false
+        option = self.parent.options.get("members", NONE)
+        if option is None or option is False:
+            self.parent.options["members"] = []
+        elif self.get_app_cfg_by_name("members"):
+            self.parent.options["members"] = ALL
 
 
 class PydanticAutoDoc(PydanticAutoDirective):

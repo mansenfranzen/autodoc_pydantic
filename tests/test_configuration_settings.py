@@ -595,11 +595,6 @@ def test_autodoc_pydantic_settings_member_order_groupwise(autodocument):
         '      :module: target.configuration',
         '',
         '      Config.',
-        '',
-        '',
-        '      .. py:attribute:: SettingsMemberOrder.Config.allow_mutation',
-        '         :module: target.configuration',
-        '         :value: True',
         ''
     ]
 
@@ -654,11 +649,6 @@ def test_autodoc_pydantic_settings_member_order_bysource(autodocument):
         '      Config.',
         '',
         '',
-        '      .. py:attribute:: SettingsMemberOrder.Config.allow_mutation',
-        '         :module: target.configuration',
-        '         :value: True',
-        '',
-        '',
         '   .. py:pydantic_field:: SettingsMemberOrder.field',
         '      :module: target.configuration',
         '      :type: int',
@@ -710,11 +700,6 @@ def test_autodoc_pydantic_settings_member_order_alphabetical(autodocument):
         '      :module: target.configuration',
         '',
         '      Config.',
-        '',
-        '',
-        '      .. py:attribute:: SettingsMemberOrder.Config.allow_mutation',
-        '         :module: target.configuration',
-        '         :value: True',
         '',
         '',
         '   .. py:pydantic_validator:: SettingsMemberOrder.dummy',
@@ -896,7 +881,8 @@ def test_autodoc_pydantic_settings_show_config_members_true(autodocument):
         documenter='pydantic_settings',
         object_path='target.configuration.SettingsShowConfigMember',
         options_app={"autodoc_pydantic_settings_members": True,
-                     "autodoc_pydantic_settings_show_config_member": True},
+                     "autodoc_pydantic_settings_show_config_member": True,
+                     "autodoc_pydantic_config_members": True},
         deactivate_all=True)
     assert result == actual
 
@@ -904,7 +890,8 @@ def test_autodoc_pydantic_settings_show_config_members_true(autodocument):
     actual = autodocument(
         documenter='pydantic_settings',
         object_path='target.configuration.SettingsShowConfigMember',
-        options_app={"autodoc_pydantic_settings_members": True},
+        options_app={"autodoc_pydantic_settings_members": True,
+                     "autodoc_pydantic_config_members": True},
         options_doc={"settings-show-config-member": True},
         deactivate_all=True)
     assert result == actual
@@ -914,7 +901,8 @@ def test_autodoc_pydantic_settings_show_config_members_true(autodocument):
         documenter='pydantic_settings',
         object_path='target.configuration.SettingsShowConfigMember',
         options_app={"autodoc_pydantic_settings_members": True,
-                     "autodoc_pydantic_settings_show_config_member": False},
+                     "autodoc_pydantic_settings_show_config_member": False,
+                     "autodoc_pydantic_config_members": True},
         options_doc={"settings-show-config-member": True},
         deactivate_all=True)
     assert result == actual
