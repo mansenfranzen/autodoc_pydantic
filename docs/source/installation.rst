@@ -28,7 +28,7 @@ Once installed, you'll need to enable it within sphinx' :code:`conf.py`:
 ================
 
 *autodoc_pydantic* can be completely customized to meet your individual requirements.
-As an example, to display the collapsible json for pydantic models, but to hide for
+As an example, to display the collapsible json for pydantic models but to hide them for
 pydantic settings, add the following to sphinx' :code:`conf.py`:
 
 .. code-block:: python

@@ -342,3 +342,61 @@ def test_autodoc_pydantic_validator_signature_prefix_directive(parse_rst):
 
     doctree = parse_rst(input_rst)
     assert_node(doctree[1][0][0], [desc_annotation, "foobar "])
+
+
+def test_autodoc_pydantic_validator_asterisk(parse_rst):
+    """Tests correct modification for asterisk validator adding " » all fields".
+
+    """
+
+    output_nodes = (
+        index,
+        [desc, ([desc_signature, ([desc_annotation, "validator "],
+                                  [desc_addname, "ValidatorAsteriskRootValidator."],
+                                  [desc_name, "check"],
+                                  [desc_annotation, "  »  "],
+                                  [pending_xref, ([emphasis, "all fields"])])],
+                [desc_content])
+         ]
+    )
+
+    # explicit local
+    input_rst = [
+        '',
+        '.. py:pydantic_validator:: ValidatorAsteriskRootValidator.check',
+        '   :module: target.configuration',
+        '   :classmethod:',
+        '   :validator-replace-signature: True',
+        ''
+    ]
+    doctree = parse_rst(input_rst)
+    assert_node(doctree, output_nodes)
+
+
+def test_autodoc_pydantic_validator_root(parse_rst):
+    """Tests correct modification for root validator adding " » all fields".
+
+    """
+
+    output_nodes = (
+        index,
+        [desc, ([desc_signature, ([desc_annotation, "validator "],
+                                  [desc_addname, "ValidatorAsteriskRootValidator."],
+                                  [desc_name, "check_root"],
+                                  [desc_annotation, "  »  "],
+                                  [pending_xref, ([emphasis, "all fields"])])],
+                [desc_content])
+         ]
+    )
+
+    # explicit local
+    input_rst = [
+        '',
+        '.. py:pydantic_validator:: ValidatorAsteriskRootValidator.check_root',
+        '   :module: target.configuration',
+        '   :classmethod:',
+        '   :validator-replace-signature: True',
+        ''
+    ]
+    doctree = parse_rst(input_rst)
+    assert_node(doctree, output_nodes)

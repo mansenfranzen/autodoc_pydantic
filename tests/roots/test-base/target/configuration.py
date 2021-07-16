@@ -1,4 +1,4 @@
-from pydantic import BaseModel, validator, Field, BaseSettings
+from pydantic import BaseModel, validator, Field, BaseSettings, root_validator
 
 
 class ModelShowJson(BaseModel):
@@ -243,6 +243,21 @@ class ValidatorSignaturePrefix(BaseModel):
         """Check."""
         return v
 
+
+class ValidatorAsteriskRootValidator(BaseModel):
+    """ValidatorAsteriskRootValidator"""
+
+    field: int = 1
+
+    @validator("*")
+    def check(cls, v):
+        """Check."""
+        return v
+
+    @root_validator
+    def check_root(cls, values):
+        """Check root."""
+        return values
 
 class FieldListValidators(BaseModel):
     """FieldListValidators."""
