@@ -27,6 +27,7 @@ sphinx-tabs = { version = "^2", optional = true }
 sphinx-copybutton = { version = "^0.4", optional = true }
 pytest = {version = "^6", optional = true }
 coverage = { version ="^5", optional = true }
+flake8 = { version = "^3", optional = true }
 tox = { version ="^3", optional = true }
 
 [tool.pytest.ini_options]
@@ -45,6 +46,7 @@ dev = ["pytest",
        "sphinx-rtd-theme",
        "sphinx-tabs",
        "sphinx-copybutton",
+       "flake8",
        "tox"]
 
 [build-system]
