@@ -9,7 +9,6 @@ from collections import defaultdict
 from itertools import chain
 from typing import NamedTuple, Tuple, List, Dict, Any, Set
 
-import pydantic
 from pydantic import BaseModel
 from pydantic.fields import ModelField
 from sphinx.addnodes import desc_signature
@@ -65,11 +64,11 @@ class ValidatorFieldMap(NamedTuple):
 
     validator: NamedRef
     field: NamedRef
-    is_asterisk: bool = False
+    is_asterisk: bool
 
 
 class ModelWrapper:
-    """Wraps pydantic models and provides additional inpsection functionality
+    """Wraps pydantic models and provides additional inspection functionality
     on top of it.
 
     Parameters
@@ -232,8 +231,7 @@ class ModelWrapper:
                 if mapping.is_asterisk}
 
     @functools.lru_cache(maxsize=128)
-    def get_standard_validators(self) -> Dict[
-        str, List[ValidatorFieldMap]]:
+    def get_standard_validators(self) -> Dict[str, List[ValidatorFieldMap]]:
         """Get all validator field validator_field_mappings for standard
         validators.
 
@@ -340,6 +338,7 @@ class ModelWrapper:
             duplicate = copy.deepcopy(self.model)
             for key in invalid_keys:
                 field = duplicate.__fields__[key]
-                setattr(field, "default", "ERROR: Not serializable")
-                setattr(field, "type_", str)
+                err = "ERROR: Not serializable"
+                setattr(field, "default", err)  # noqa: B010
+                setattr(field, "type_", str)  # noqa: B010
             return duplicate.schema_json()

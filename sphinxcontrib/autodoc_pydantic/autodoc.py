@@ -13,8 +13,7 @@ from pydantic.schema import get_field_schema_validations
 from sphinx.ext.autodoc import (
     MethodDocumenter,
     ClassDocumenter,
-    AttributeDocumenter,
-    ALL)
+    AttributeDocumenter)
 
 from sphinx.util.inspect import object_description
 from sphinx.util.typing import get_type_hints, stringify
@@ -94,7 +93,7 @@ TPL_COLLAPSE = """
 .. raw:: html
 
    </details></p>
-   
+
 """
 
 
@@ -280,7 +279,7 @@ class PydanticModelDocumenter(ClassDocumenter):
             type_aliases = self.config.autodoc_type_aliases
 
             self.add_line(":Fields:", source_name)
-            for name, model_field in fields.items():
+            for name in fields.keys():
                 ref = wrapper.get_reference(name)
                 annotations = get_type_hints(self.object, None, type_aliases)
                 typ = stringify(annotations.get(name, ""))
@@ -289,6 +288,7 @@ class PydanticModelDocumenter(ClassDocumenter):
                 self.add_line(line, source_name)
 
             self.add_line("", source_name)
+
 
 class PydanticSettingsDocumenter(PydanticModelDocumenter):
     """Represents specialized Documenter subclass for pydantic settings.
@@ -604,4 +604,3 @@ class PydanticConfigClassDocumenter(ClassDocumenter):
             super().document_members(all_members=False, **kwargs)
         else:
             super().document_members(*args, **kwargs)
-

@@ -24,6 +24,7 @@ class NullType:
     def __bool__(self):
         return False
 
+
 NONE = NullType()
 
 
@@ -253,7 +254,6 @@ class PydanticAutoDirective:
         """
 
         return self.get_option_value(name=name, prefix=prefix) is True
-
 
     def set_default_option(self, name: str):
         """Set default option value for given `name` from app environment
