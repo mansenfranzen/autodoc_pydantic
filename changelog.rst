@@ -1,7 +1,7 @@
 Changelog
 =========
 
-v1.3.1 - 2021-XX-XX
+v1.3.1 - 2021-07-21
 -------------------
 
 This is a minor release including the following:
