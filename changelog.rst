@@ -4,10 +4,11 @@ Changelog
 v1.3.1 - 2021-XX-XX
 -------------------
 
-This is a minor release providing support for
+This is a minor release including the following:
 
-- providing support for ``root_validator`` `#20 <https://github.com/mansenfranzen/autodoc_pydantic/issues/20>`__
-- fixing a bug concerning overwriting ``member-order``  `#21 <https://github.com/mansenfranzen/autodoc_pydantic/issues/21>`__
+- Providing support for ``root_validator`` `#20 <https://github.com/mansenfranzen/autodoc_pydantic/issues/20>`__ .
+- Fixing a bug concerning overwriting ``member-order`` `#21 <https://github.com/mansenfranzen/autodoc_pydantic/issues/21>`__ .
+- Integrating flake8 for static code analysis.
 
 Bugfix
 ~~~~~~
