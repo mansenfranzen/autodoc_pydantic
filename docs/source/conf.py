@@ -44,6 +44,7 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "sphinx_tabs.tabs",
+    "sphinx_copybutton",
     "sphinxcontrib.autodoc_pydantic",
     "extensions"
 ]

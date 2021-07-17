@@ -9,10 +9,16 @@ This is a minor release providing support for
 - providing support for ``root_validator`` `#20 <https://github.com/mansenfranzen/autodoc_pydantic/issues/20>`__
 - fixing a bug concerning overwriting ``member-order``  `#21 <https://github.com/mansenfranzen/autodoc_pydantic/issues/21>`__
 
+Bugfix
+~~~~~~
+
+- Fix ``member-order`` being overwritten by autodoc pydantic's autodocumenters `#21 <https://github.com/mansenfranzen/autodoc_pydantic/issues/21>`__.
+
 Documentation
 ~~~~~~~~~~~~~
 
 - Add example showing representation of asterisk and root validators.
+- Add `sphinx-copybutton` extension.
 
 Testing
 ~~~~~~~

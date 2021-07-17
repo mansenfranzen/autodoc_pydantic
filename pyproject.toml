@@ -24,6 +24,7 @@ pydantic = ">=1.5"
 
 sphinx-rtd-theme = { version = "^0.5", optional = true }
 sphinx-tabs = { version = "^2", optional = true }
+sphinx-copybutton = { version = "^0.4", optional = true }
 pytest = {version = "^6", optional = true }
 coverage = { version ="^5", optional = true }
 tox = { version ="^3", optional = true }
@@ -33,7 +34,8 @@ minversion = "6.0"
 
 [tool.poetry.extras]
 docs = ["sphinx-rtd-theme",
-        "sphinx-tabs"]
+        "sphinx-tabs",
+        "sphinx-copybutton"]
 
 test = ["pytest",
         "coverage"]
@@ -42,6 +44,7 @@ dev = ["pytest",
        "coverage",
        "sphinx-rtd-theme",
        "sphinx-tabs",
+       "sphinx-copybutton",
        "tox"]
 
 [build-system]
