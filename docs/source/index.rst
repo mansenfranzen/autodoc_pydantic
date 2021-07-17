@@ -15,7 +15,7 @@ Features
 --------
 
 - 💬 provides default values, alias and constraints for model fields
-- 🔗 adds references between validators and corresponding fields
+- 🔗 adds hyperlinks between validators and corresponding fields
 - 📃 includes collapsable model json schema
 - 🏄 natively integrates with autodoc and autosummary extensions
 - 📎 defines explicit pydantic prefixes for models, settings, fields, validators and model config

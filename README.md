@@ -1,4 +1,4 @@
-![Autodoc Pydantic](docs/source/material/logo_black.svg)
+![Autodoc Pydantic](https://raw.githubusercontent.com/mansenfranzen/autodoc_pydantic/main/docs/source/material/logo_black.svg)
 
 [![PyPI version](https://badge.fury.io/py/autodoc-pydantic.svg)](https://badge.fury.io/py/autodoc-pydantic)
 ![Master](https://github.com/mansenfranzen/autodoc_pydantic/actions/workflows/tests.yml/badge.svg)
@@ -18,7 +18,7 @@ Don't worry - just `pip install autodoc_pydantic` ☺.
 ## Features
 
 - 💬 provides default values, alias and constraints for model fields
-- 🔗 adds references between validators and corresponding fields
+- 🔗 adds hyperlinks between validators and corresponding fields
 - 📃 includes collapsable model json schema
 - 🏄 natively integrates with autodoc and autosummary extensions
 - 📎 defines explicit pydantic prefixes for models, settings, fields, validators and model config
@@ -29,7 +29,7 @@ Don't worry - just `pip install autodoc_pydantic` ☺.
 
 ### Comparison between autodoc sphinx and autodoc pydantic
 
-[![Comparison](docs/source/material/example_comparison_v1.0.0.gif)](https://autodoc-pydantic.readthedocs.io/en/latest/examples.html#default-configuration)
+[![Comparison](https://raw.githubusercontent.com/mansenfranzen/autodoc_pydantic/main/docs/source/material/example_comparison_v1.0.0.gif)](https://autodoc-pydantic.readthedocs.io/en/latest/examples.html#default-configuration)
 
 To see those features in action, jump over to the [example documentation](https://autodoc-pydantic.readthedocs.io/en/latest/examples.html#default-configuration) to compare
 the appearance of standard sphinx autodoc with *autodoc_pydantic*.
