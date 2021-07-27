@@ -1,6 +1,28 @@
 Changelog
 =========
 
+v1.3.2 - 2021-07-XX
+-------------------
+
+This is a minor release containing bug fixes.
+
+Bugfix
+~~~~~~
+
+- Allow typed fields within doc strings to successfully reference pydantic models
+  and settings `#27 <https://github.com/mansenfranzen/autodoc_pydantic/issues/20>`__.
+
+Testing
+~~~~~~~
+
+- Add explicit tests for references originating from typed fields.
+
+Contributors
+~~~~~~~~~~~~
+
+- Thanks to `tahoward <https://github.com/tahoward>`__ for reporting a bug related to
+  missing references in typed fields `#27 <https://github.com/mansenfranzen/autodoc_pydantic/issues/20>`__.
+
 v1.3.1 - 2021-07-21
 -------------------
 
