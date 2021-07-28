@@ -3,13 +3,12 @@
 """
 import copy
 import functools
-import json
 import pydoc
 from collections import defaultdict
 from itertools import chain
-from typing import NamedTuple, Tuple, List, Dict, Any, Set
+from typing import NamedTuple, Tuple, List, Dict, Any, Set, TypeVar
 
-from pydantic import BaseModel
+from pydantic import BaseModel, create_model
 from pydantic.fields import ModelField
 from sphinx.addnodes import desc_signature
 
@@ -36,16 +35,19 @@ def is_validator_by_name(name: str, obj: Any) -> bool:
     return False
 
 
-def is_not_serializable(obj: ModelField) -> bool:
-    """Check of object is serializable.
+def is_serializable(field: ModelField) -> bool:
+    """Check of pydantic field is schema serializable.
 
     """
 
+    class Cfg:
+        arbitrary_types_allowed = True
+
     try:
-        json.dumps(obj.default)
-        return False
-    except Exception:
+        create_model("_", t=(field.type_, field.default), Config=Cfg).schema()
         return True
+    except:
+        return False
 
 
 class NamedRef(NamedTuple):
@@ -324,21 +326,21 @@ class ModelWrapper:
         """
 
         return [key for key, value in self.model.__fields__.items()
-                if is_not_serializable(value)]
+                if not is_serializable(value)]
 
-    def get_safe_schema_json(self) -> str:
-        """Get model's `schema_json` while ignoring all non serializable.
+    def get_safe_schema_json(self) -> Tuple[Dict, List[str]]:
+        """Get model's `schema_json` while handling non serializable fields.
 
         """
 
         try:
-            return self.model.schema_json()
-        except TypeError:
+            return self.model.schema(), []
+        except (TypeError, ValueError):
             invalid_keys = self.find_non_json_serializable_fields()
-            duplicate = copy.deepcopy(self.model)
+            model_copy = copy.deepcopy(self.model)
             for key in invalid_keys:
-                field = duplicate.__fields__[key]
-                err = "ERROR: Not serializable"
-                setattr(field, "default", err)  # noqa: B010
-                setattr(field, "type_", str)  # noqa: B010
-            return duplicate.schema_json()
+                field = model_copy.__fields__[key]
+                type_ = TypeVar(field.type_.__name__)
+                setattr(field, "type_", type_)  # noqa: B010
+                setattr(field, "default", None)  # noqa: B010
+            return model_copy.schema(), invalid_keys
