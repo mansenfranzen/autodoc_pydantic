@@ -31,6 +31,19 @@ from sphinxcontrib.autodoc_pydantic.composites import (
     PydanticAutoDoc,
     NONE
 )
+from sphinxcontrib.autodoc_pydantic.utility import CustomEnum
+
+
+class OptionsJsonErrorStrategy(CustomEnum):
+    RAISE = "raise"
+    COERCE = "coerce"
+
+
+class OptionsFieldDocPolicy(CustomEnum):
+    BOTH = "both"
+    DOCSTRING = "docstring"
+    DESCRIPTION = "description"
+
 
 OPTION_SPEC_FIELD = {
     "field-show-default": option_default_true,
@@ -39,9 +52,7 @@ OPTION_SPEC_FIELD = {
     "field-show-constraints": option_default_true,
     "field-list-validators": option_default_true,
     "__doc_disable_except__": option_list_like,
-    "field-doc-policy": option_one_of_factory({"both",
-                                               "docstring",
-                                               "description"})}
+    "field-doc-policy": option_one_of_factory(OptionsFieldDocPolicy.values())}
 
 OPTION_SPEC_VALIDATOR = {"validator-replace-signature": option_default_true,
                          "validator-list-fields": option_default_true,
@@ -56,29 +67,37 @@ OPTION_SPEC_MERGED = {**OPTION_SPEC_FIELD,
                       **OPTION_SPEC_VALIDATOR,
                       **OPTION_SPEC_CONFIG}
 
-OPTION_SPEC_MODEL = {"model-show-json": option_default_true,
-                     "model-hide-paramlist": option_default_true,
-                     "model-show-validator-members": option_default_true,
-                     "model-show-validator-summary": option_default_true,
-                     "model-show-field-summary": option_default_true,
-                     "model-show-config-member": option_default_true,
-                     "model-show-config-summary": option_default_true,
-                     "model-signature-prefix": unchanged,
-                     "undoc-members": option_default_true,
-                     "members": option_members,
-                     "__doc_disable_except__": option_list_like}
+OPTION_SPEC_MODEL = {
+    "model-show-json": option_default_true,
+    "model-show-json-error-strategy": option_one_of_factory(
+        OptionsJsonErrorStrategy.values()
+    ),
+    "model-hide-paramlist": option_default_true,
+    "model-show-validator-members": option_default_true,
+    "model-show-validator-summary": option_default_true,
+    "model-show-field-summary": option_default_true,
+    "model-show-config-member": option_default_true,
+    "model-show-config-summary": option_default_true,
+    "model-signature-prefix": unchanged,
+    "undoc-members": option_default_true,
+    "members": option_members,
+    "__doc_disable_except__": option_list_like}
 
-OPTION_SPEC_SETTINGS = {"settings-show-json": option_default_true,
-                        "settings-hide-paramlist": option_default_true,
-                        "settings-show-validator-members": option_default_true,
-                        "settings-show-validator-summary": option_default_true,
-                        "settings-show-field-summary": option_default_true,
-                        "settings-show-config-member": option_default_true,
-                        "settings-show-config-summary": option_default_true,
-                        "settings-signature-prefix": unchanged,
-                        "undoc-members": option_default_true,
-                        "members": option_members,
-                        "__doc_disable_except__": option_list_like}
+OPTION_SPEC_SETTINGS = {
+    "settings-show-json": option_default_true,
+    "settings-show-json-error-strategy": option_one_of_factory(
+        OptionsJsonErrorStrategy.values()
+    ),
+    "settings-hide-paramlist": option_default_true,
+    "settings-show-validator-members": option_default_true,
+    "settings-show-validator-summary": option_default_true,
+    "settings-show-field-summary": option_default_true,
+    "settings-show-config-member": option_default_true,
+    "settings-show-config-summary": option_default_true,
+    "settings-signature-prefix": unchanged,
+    "undoc-members": option_default_true,
+    "members": option_members,
+    "__doc_disable_except__": option_list_like}
 
 TPL_COLLAPSE = """
 .. raw:: html
