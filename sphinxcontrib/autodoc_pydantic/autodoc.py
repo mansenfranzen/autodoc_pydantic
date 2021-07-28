@@ -3,9 +3,10 @@
 """
 
 import json
-from typing import Any, Optional
+from typing import Any, Optional, Dict
 
 import pydantic
+import sphinx
 from docutils.parsers.rst.directives import unchanged
 from docutils.statemachine import StringList
 from pydantic import BaseSettings
@@ -114,6 +115,19 @@ TPL_COLLAPSE = """
    </details></p>
 
 """
+
+
+def convert_json_schema_to_rest(schema: Dict) -> str:
+    """Convert model's schema dict into reST.
+
+    """
+
+    schema = json.dumps(schema, default=str, indent=3)
+    lines = [f"   {line}" for line in schema.split("\n")]
+    lines = "\n".join(lines)
+    lines = TPL_COLLAPSE.format(lines).split("\n")
+
+    return lines
 
 
 class PydanticModelDocumenter(ClassDocumenter):
@@ -232,14 +246,32 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         """
 
-        schema_json = ModelWrapper(self.object).get_safe_schema_json()
-        schema = json.dumps(json.loads(schema_json), default=str, indent=3)
-        lines = [f"   {line}" for line in schema.split("\n")]
-        lines = "\n".join(lines)
-        lines = TPL_COLLAPSE.format(lines).split("\n")
+        wrapper = ModelWrapper(self.object)
+        schema, non_serializable = wrapper.get_safe_schema_json()
+
+        # handle non serializable fields
+        strategy = self.pyautodoc.get_option_value("show-json-error-strategy")
+        if non_serializable:
+            error_msg = (
+                "Following pydantic fields could not be serialized "
+                f"properly for json schema generation: {non_serializable}."
+            )
+
+            if strategy == "coerce":
+                logger = sphinx.util.logging.getLogger(__name__)
+                logger.warning(error_msg, location="autodoc_pydantic")
+            elif strategy == "raise":
+                raise sphinx.errors.ExtensionError(error_msg)
+            else:
+                raise sphinx.errors.ExtensionError(
+                    f"Invalid option provided for 'show-json-error-strategy'. "
+                    f"Allowed values are f{OptionsJsonErrorStrategy.values()}"
+                )
+
+        schema_rest = convert_json_schema_to_rest(schema)
         source_name = self.get_sourcename()
 
-        for line in lines:
+        for line in schema_rest:
             self.add_line(line, source_name)
 
     def add_config_summary(self):
@@ -419,9 +451,12 @@ class PydanticFieldDocumenter(AttributeDocumenter):
         """
 
         doc_policy = self.pyautodoc.get_option_value("field-doc-policy")
-        if doc_policy in ("docstring", "both", None, NONE):
+        if doc_policy in (OptionsFieldDocPolicy.DOCSTRING,
+                          OptionsFieldDocPolicy.BOTH,
+                          None, NONE):
             super().add_content(more_content, no_docstring)
-        if doc_policy in ("both", "description"):
+        if doc_policy in (OptionsFieldDocPolicy.BOTH,
+                          OptionsFieldDocPolicy.DESCRIPTION):
             self.add_description()
 
         if self.pyautodoc.option_is_true("field-show-constraints"):
