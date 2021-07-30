@@ -321,7 +321,7 @@ class ModelWrapper:
         return getattr(field.field_info, property_name, None)
 
     def find_non_json_serializable_fields(self) -> List[str]:
-        """Get all fields that can safely be serialized.
+        """Get all fields that can't be safely serialized.
 
         """
 
@@ -336,11 +336,15 @@ class ModelWrapper:
         try:
             return self.model.schema(), []
         except (TypeError, ValueError):
-            invalid_keys = self.find_non_json_serializable_fields()
-            model_copy = copy.deepcopy(self.model)
-            for key in invalid_keys:
-                field = model_copy.__fields__[key]
-                type_ = TypeVar(field.type_.__name__)
-                setattr(field, "type_", type_)  # noqa: B010
-                setattr(field, "default", None)  # noqa: B010
-            return model_copy.schema(), invalid_keys
+            invalid_fields = self.find_non_json_serializable_fields()
+            new_model = self.copy_sanitized_model(invalid_fields)
+            return new_model.schema(), invalid_fields
+
+    def copy_sanitized_model(self, invalid_fields: List[str]) -> BaseModel:
+        """Generates a new pydantic model from the original one while
+        substituting invalid fields with typevars.
+
+        """
+
+        new = {name: (TypeVar(name), None) for name in invalid_fields}
+        return create_model(self.model.__name__, __base__=self.model,  **new)
