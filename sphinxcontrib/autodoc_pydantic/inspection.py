@@ -1,7 +1,6 @@
 """This module contains inspection functionality for pydantic models.
 
 """
-import copy
 import functools
 import pydoc
 from collections import defaultdict
@@ -46,7 +45,7 @@ def is_serializable(field: ModelField) -> bool:
     try:
         create_model("_", t=(field.type_, field.default), Config=Cfg).schema()
         return True
-    except:
+    except Exception:
         return False
 
 
