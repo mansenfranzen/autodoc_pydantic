@@ -38,6 +38,7 @@ from sphinxcontrib.autodoc_pydantic.utility import CustomEnum
 class OptionsJsonErrorStrategy(CustomEnum):
     RAISE = "raise"
     COERCE = "coerce"
+    IGNORE = "ignore"
 
 
 class OptionsFieldDocPolicy(CustomEnum):
@@ -253,15 +254,18 @@ class PydanticModelDocumenter(ClassDocumenter):
         strategy = self.pyautodoc.get_option_value("show-json-error-strategy")
         if non_serializable:
             error_msg = (
-                "Following pydantic fields could not be serialized "
-                f"properly for json schema generation: {non_serializable}."
+                f"JSON schema can't be generated for '{self.fullname}' "
+                f"because the following pydantic fields can't be serialized "
+                f"properly: {non_serializable}."
             )
 
-            if strategy == "coerce":
+            if strategy == OptionsJsonErrorStrategy.COERCE:
                 logger = sphinx.util.logging.getLogger(__name__)
                 logger.warning(error_msg, location="autodoc_pydantic")
-            elif strategy == "raise":
+            elif strategy == OptionsJsonErrorStrategy.RAISE:
                 raise sphinx.errors.ExtensionError(error_msg)
+            elif strategy == OptionsJsonErrorStrategy.IGNORE:
+                pass
             else:
                 raise sphinx.errors.ExtensionError(
                     f"Invalid option provided for 'show-json-error-strategy'. "
