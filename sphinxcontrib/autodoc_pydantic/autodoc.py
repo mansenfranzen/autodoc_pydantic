@@ -38,7 +38,7 @@ from sphinxcontrib.autodoc_pydantic.utility import CustomEnum
 class OptionsJsonErrorStrategy(CustomEnum):
     RAISE = "raise"
     COERCE = "coerce"
-    IGNORE = "ignore"
+    WARN = "warn"
 
 
 class OptionsFieldDocPolicy(CustomEnum):
@@ -259,12 +259,12 @@ class PydanticModelDocumenter(ClassDocumenter):
                 f"properly: {non_serializable}."
             )
 
-            if strategy == OptionsJsonErrorStrategy.COERCE:
+            if strategy == OptionsJsonErrorStrategy.WARN:
                 logger = sphinx.util.logging.getLogger(__name__)
                 logger.warning(error_msg, location="autodoc_pydantic")
             elif strategy == OptionsJsonErrorStrategy.RAISE:
                 raise sphinx.errors.ExtensionError(error_msg)
-            elif strategy == OptionsJsonErrorStrategy.IGNORE:
+            elif strategy == OptionsJsonErrorStrategy.COERCE:
                 pass
             else:
                 raise sphinx.errors.ExtensionError(
