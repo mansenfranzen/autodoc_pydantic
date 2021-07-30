@@ -114,6 +114,7 @@ def test_app(make_app, sphinx_test_tempdir, rootdir):
                conf: Optional[Dict] = None,
                deactivate_all: bool = False):
         srcdir = sphinx_test_tempdir / testroot
+        srcdir.rmtree(ignore_errors=True)
 
         if rootdir and not srcdir.exists():
             testroot_path = rootdir / ('test-' + testroot)
