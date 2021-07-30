@@ -264,9 +264,7 @@ class PydanticModelDocumenter(ClassDocumenter):
                 logger.warning(error_msg, location="autodoc_pydantic")
             elif strategy == OptionsJsonErrorStrategy.RAISE:
                 raise sphinx.errors.ExtensionError(error_msg)
-            elif strategy == OptionsJsonErrorStrategy.COERCE:
-                pass
-            else:
+            elif strategy != OptionsJsonErrorStrategy.COERCE:
                 raise sphinx.errors.ExtensionError(
                     f"Invalid option provided for 'show-json-error-strategy'. "
                     f"Allowed values are f{OptionsJsonErrorStrategy.values()}"
