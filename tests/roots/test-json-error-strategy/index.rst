@@ -1,2 +1,2 @@
-.. automodule:: target.example
+.. automodule:: example
    :members:
