@@ -18,7 +18,6 @@ def test_sphinx_build_without_error(tmpdir):
     assert status_code == 0
 
 
-@pytest.mark.xfail
 def test_sphinx_build_emits_no_sphinx_log_warnings(tmpdir, log_capturer):
     """Ensure that the build succeeds and no warning is raised.
 
@@ -29,4 +28,4 @@ def test_sphinx_build_emits_no_sphinx_log_warnings(tmpdir, log_capturer):
         path_docs = path_root.joinpath("docs", "source")
         build_main([str(path_docs), str(tmpdir)])
 
-    assert logs(log_capturer) == 0
+    assert len(logs) == 0
