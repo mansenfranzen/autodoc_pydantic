@@ -1,11 +1,14 @@
 """Pytest configuration which is partially borrowed from sphinx conftest.py.
 
 """
-
+import copy
+import logging
+from logging.handlers import MemoryHandler
 from typing import Optional, Dict, List
 from unittest.mock import Mock
 
 import pytest
+import sphinx
 from sphinx.application import Sphinx
 from sphinx.testing.path import path
 from sphinx.testing.restructuredtext import parse
@@ -172,3 +175,52 @@ def parse_rst(test_app):
         return parse(app=app, text=text)
 
     return _parse
+
+
+@pytest.fixture(scope="function")
+def log_capturer(monkeypatch):
+    """Provides a context manager to intercept all log messages emitted under
+    the sphinx namespace for given log level. The returned value is the buffer
+    of the user `MemoryHandler` which simply is a list of recored logs.
+
+    To successfully intercept sphinx logs, we need to monkeypatch
+    `sphinx.util.logging.setup` because this function removes all handlers
+    from the sphinx main logger which we might have added before. Additionally,
+    it prevents propagating messages to the root logger. Therefore, we have to
+    add our log handler after this function was called.
+
+    Example
+    -------
+
+    >>> with log_capturer() as logs:
+    >>>     path_root = Path(__file__).parents[1]
+    >>>     path_docs = path_root.joinpath("docs", "source")
+    >>>     build_main([str(path_docs), str(tmpdir)])
+    >>> assert len(logs) == 0
+
+    """
+
+    # deep copy setup to prevent infinite recursion upon mockup
+    setup = copy.deepcopy(sphinx.util.logging.setup)
+
+    class LogCapturer:
+        def __init__(self, capacity: int = 100, level: int = logging.WARNING):
+            self.handler = MemoryHandler(capacity=capacity)
+            self.handler.setLevel(level)
+
+        def __enter__(self):
+
+            def mock_logging(*args, **kwargs):
+                result = setup(*args, **kwargs)
+                logger = logging.getLogger("sphinx")
+                logger.addHandler(self.handler)
+                return result
+
+            monkeypatch.setattr(sphinx.util.logging, "setup", mock_logging)
+            return self.handler.buffer
+
+        def __exit__(self, type, value, traceback):
+            if type:
+                raise
+
+    return LogCapturer
