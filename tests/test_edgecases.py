@@ -6,8 +6,6 @@ import copy
 import pytest
 import sphinx.errors
 from sphinx.transforms.post_transforms import ReferencesResolver
-import logging
-from logging.handlers import MemoryHandler
 
 
 def test_not_json_compliant(autodocument):
@@ -204,7 +202,7 @@ def test_json_error_strategy_raise(test_app):
         app.build()
 
 
-def test_json_error_strategy_coerce(test_app):
+def test_json_error_strategy_warn(test_app, log_capturer):
     """Confirm that a non serializable field triggers a warning during build
     process.
 
@@ -212,19 +210,31 @@ def test_json_error_strategy_coerce(test_app):
 
     """
 
+    conf = {"autodoc_pydantic_model_show_json_error_strategy": "warn"}
+
+    with log_capturer() as logs:
+        app = test_app("json-error-strategy", conf=conf)
+        app.build()
+
+    assert logs[0].msg == (
+        "JSON schema can't be generated for 'example.NonSerializable' "
+        "because the following pydantic fields can't be serialized properly: "
+        "['field']."
+    )
+
+
+def test_json_error_strategy_coerce(test_app, log_capturer):
+    """Confirm that a non serializable field triggers no warning during build
+    process.
+
+    This relates to #28.
+
+    """
+
     conf = {"autodoc_pydantic_model_show_json_error_strategy": "coerce"}
-    app = test_app("json-error-strategy", conf=conf)
 
-    # add logging handler to catch raised warnings
-    logger = logging.getLogger("sphinx.sphinxcontrib.autodoc_pydantic")
-    handler = MemoryHandler(1000)
-    handler.setLevel(logging.WARNING)
-    logger.addHandler(handler)
+    with log_capturer() as logs:
+        app = test_app("json-error-strategy", conf=conf)
+        app.build()
 
-    # run build
-    app.build()
-
-    assert bool(handler.buffer)
-    assert handler.buffer[0].msg == "Following pydantic fields could not be " \
-                                    "serialized properly for json schema " \
-                                    "generation: ['field']."
+    assert len(logs) == 0
