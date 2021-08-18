@@ -54,3 +54,27 @@ def show_versions():
         f"sphinx: {get_version('sphinx')} | "
         f"sphinx_rtd_theme: {get_version('sphinx_rtd_theme')} | "
         f"sphinx_tabs: {get_version('sphinx_tabs')}")
+
+
+class CustomEnum:
+    """Customized enum to provide all values via `values` and
+    which allows direct value access upon lookup.
+
+    Examples
+    --------
+
+    >>> class Options(CustomEnum):
+    >>>     OPTION1 = "opt1"
+    >>>     OPTION2 = "opt2"
+
+    >>> Options.OPTION1
+    "opt1"
+    >>> Options.values()
+    {"opt1", "opt2"}
+
+    """
+
+    @classmethod
+    def values(cls):
+        attributes = {x for x in cls.__dict__ if not x.startswith("_")}
+        return {getattr(cls, attr) for attr in attributes}

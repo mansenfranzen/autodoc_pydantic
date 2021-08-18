@@ -13,7 +13,7 @@ from sphinxcontrib.autodoc_pydantic.autodoc import (
     PydanticModelDocumenter,
     PydanticConfigClassDocumenter,
     PydanticFieldDocumenter,
-    PydanticSettingsDocumenter
+    PydanticSettingsDocumenter, OptionsFieldDocPolicy, OptionsJsonErrorStrategy
 )
 
 from sphinxcontrib.autodoc_pydantic.directives import (
@@ -24,7 +24,7 @@ from sphinxcontrib.autodoc_pydantic.directives import (
     PydanticSettings
 )
 
-__version__ = "1.3.2"
+__version__ = "1.4.0"
 
 
 def add_css_file(app: Sphinx, exception: Exception):
@@ -67,11 +67,13 @@ def add_configuration_values(app: Sphinx):
 
     stem = "autodoc_pydantic_"
     add = app.add_config_value
+    json_strategy = OptionsJsonErrorStrategy.WARN
 
     add(f'{stem}config_signature_prefix', "model", True, str)
     add(f'{stem}config_members', True, True, bool)
 
     add(f'{stem}settings_show_json', True, True, bool)
+    add(f'{stem}settings_show_json_error_strategy', json_strategy, True, bool)
     add(f'{stem}settings_show_config_member', False, True, bool)
     add(f'{stem}settings_show_config_summary', True, True, bool)
     add(f'{stem}settings_show_validator_members', True, True, bool)
@@ -84,6 +86,7 @@ def add_configuration_values(app: Sphinx):
     add(f'{stem}settings_signature_prefix', "pydantic settings", True, str)
 
     add(f'{stem}model_show_json', True, True, bool)
+    add(f'{stem}model_show_json_error_strategy', json_strategy, True, bool)
     add(f'{stem}model_show_config_member', False, True, bool)
     add(f'{stem}model_show_config_summary', True, True, bool)
     add(f'{stem}model_show_validator_members', True, True, bool)
@@ -100,7 +103,7 @@ def add_configuration_values(app: Sphinx):
     add(f'{stem}validator_list_fields', False, True, bool)
 
     add(f'{stem}field_list_validators', True, True, bool)
-    add(f'{stem}field_doc_policy', 'both', True, str)
+    add(f'{stem}field_doc_policy', OptionsFieldDocPolicy.BOTH, True, str)
     add(f'{stem}field_show_constraints', True, True, bool)
     add(f'{stem}field_show_alias', True, True, bool)
     add(f'{stem}field_show_default', True, True, bool)

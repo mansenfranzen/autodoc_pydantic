@@ -3,6 +3,8 @@
 """
 import copy
 
+import pytest
+import sphinx.errors
 from sphinx.transforms.post_transforms import ReferencesResolver
 
 
@@ -31,9 +33,7 @@ def test_not_json_compliant(autodocument):
         '         "type": "object",',
         '         "properties": {',
         '            "field": {',
-        '               "title": "Field",',
-        '               "default": "ERROR: Not serializable",',
-        '               "type": "string"',
+        '               "title": "Field"',
         '            }',
         '         }',
         '      }',
@@ -207,3 +207,55 @@ def test_typed_field_reference(test_app, monkeypatch):
         ctx.setattr(ReferencesResolver, "warn_missing_reference", mock)
         app = test_app("edgecase-typed-field-reference")
         app.build()
+
+
+def test_json_error_strategy_raise(test_app):
+    """Confirm that a non serializable field raises an exception if strategy
+    is to raise.
+
+    This relates to #28.
+
+    """
+
+    with pytest.raises(sphinx.errors.ExtensionError):
+        conf = {"autodoc_pydantic_model_show_json_error_strategy": "raise"}
+        app = test_app("json-error-strategy", conf=conf)
+        app.build()
+
+
+def test_json_error_strategy_warn(test_app, log_capturer):
+    """Confirm that a non serializable field triggers a warning during build
+    process.
+
+    This relates to #28.
+
+    """
+
+    conf = {"autodoc_pydantic_model_show_json_error_strategy": "warn"}
+
+    with log_capturer() as logs:
+        app = test_app("json-error-strategy", conf=conf)
+        app.build()
+
+    assert logs[0].msg == (
+        "JSON schema can't be generated for 'example.NonSerializable' "
+        "because the following pydantic fields can't be serialized properly: "
+        "['field']."
+    )
+
+
+def test_json_error_strategy_coerce(test_app, log_capturer):
+    """Confirm that a non serializable field triggers no warning during build
+    process.
+
+    This relates to #28.
+
+    """
+
+    conf = {"autodoc_pydantic_model_show_json_error_strategy": "coerce"}
+
+    with log_capturer() as logs:
+        app = test_app("json-error-strategy", conf=conf)
+        app.build()
+
+    assert len(logs) == 0

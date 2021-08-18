@@ -1,15 +1,13 @@
 """This module contains inspection functionality for pydantic models.
 
 """
-import copy
 import functools
-import json
 import pydoc
 from collections import defaultdict
 from itertools import chain
-from typing import NamedTuple, Tuple, List, Dict, Any, Set
+from typing import NamedTuple, Tuple, List, Dict, Any, Set, TypeVar
 
-from pydantic import BaseModel
+from pydantic import BaseModel, create_model
 from pydantic.fields import ModelField
 from sphinx.addnodes import desc_signature
 
@@ -36,16 +34,19 @@ def is_validator_by_name(name: str, obj: Any) -> bool:
     return False
 
 
-def is_not_serializable(obj: ModelField) -> bool:
-    """Check of object is serializable.
+def is_serializable(field: ModelField) -> bool:
+    """Check of pydantic field is schema serializable.
 
     """
 
+    class Cfg:
+        arbitrary_types_allowed = True
+
     try:
-        json.dumps(obj.default)
-        return False
-    except Exception:
+        create_model("_", t=(field.type_, field.default), Config=Cfg).schema()
         return True
+    except Exception:
+        return False
 
 
 class NamedRef(NamedTuple):
@@ -319,26 +320,30 @@ class ModelWrapper:
         return getattr(field.field_info, property_name, None)
 
     def find_non_json_serializable_fields(self) -> List[str]:
-        """Get all fields that can safely be serialized.
+        """Get all fields that can't be safely serialized.
 
         """
 
         return [key for key, value in self.model.__fields__.items()
-                if is_not_serializable(value)]
+                if not is_serializable(value)]
 
-    def get_safe_schema_json(self) -> str:
-        """Get model's `schema_json` while ignoring all non serializable.
+    def get_safe_schema_json(self) -> Tuple[Dict, List[str]]:
+        """Get model's `schema_json` while handling non serializable fields.
 
         """
 
         try:
-            return self.model.schema_json()
-        except TypeError:
-            invalid_keys = self.find_non_json_serializable_fields()
-            duplicate = copy.deepcopy(self.model)
-            for key in invalid_keys:
-                field = duplicate.__fields__[key]
-                err = "ERROR: Not serializable"
-                setattr(field, "default", err)  # noqa: B010
-                setattr(field, "type_", str)  # noqa: B010
-            return duplicate.schema_json()
+            return self.model.schema(), []
+        except (TypeError, ValueError):
+            invalid_fields = self.find_non_json_serializable_fields()
+            new_model = self.copy_sanitized_model(invalid_fields)
+            return new_model.schema(), invalid_fields
+
+    def copy_sanitized_model(self, invalid_fields: List[str]) -> BaseModel:
+        """Generates a new pydantic model from the original one while
+        substituting invalid fields with typevars.
+
+        """
+
+        new = {name: (TypeVar(name), None) for name in invalid_fields}
+        return create_model(self.model.__name__, __base__=self.model,  **new)
