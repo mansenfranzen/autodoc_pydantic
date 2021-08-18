@@ -1,27 +1,47 @@
 Changelog
 =========
 
-v1.3.2 - 2021-07-XX
+v1.4.0 - 2021-XX-XX
 -------------------
 
-This is a minor release containing bug fixes.
+This is a feature and bug release.
+
+Added
+~~~~~
+
+- Include ``show-json-error-strategy`` for pydantic models and settings to define
+  error handling in case a pydantic field breaks the JSON schema generation.
 
 Bugfix
 ~~~~~~
 
+- Improve handling of non serializable pydantic fields for JSON model generation.
+  Using ``pd.DataFrame`` as a type annotation raised an exception instead of being
+  handled appropriately `#28 <https://github.com/mansenfranzen/autodoc_pydantic/issues/28>`__.
 - Allow typed fields within doc strings to successfully reference pydantic models
-  and settings `#27 <https://github.com/mansenfranzen/autodoc_pydantic/issues/20>`__.
+  and settings `#27 <https://github.com/mansenfranzen/autodoc_pydantic/issues/27>`__.
 
 Testing
 ~~~~~~~
 
 - Add explicit tests for references originating from typed fields.
+- Add more diverse tests for handling non serializable fields breaking JSON model
+  generation.
+- Add tests for different error handling strategies regarding ``show-json-error-strategy``.
+
+Documentation
+~~~~~~~~~~~~~
+
+- Add sections in configuration page for describing ``show-json-error-strategy``.
 
 Contributors
 ~~~~~~~~~~~~
 
 - Thanks to `tahoward <https://github.com/tahoward>`__ for reporting a bug related to
-  missing references in typed fields `#27 <https://github.com/mansenfranzen/autodoc_pydantic/issues/20>`__.
+  missing references in typed fields `#27 <https://github.com/mansenfranzen/autodoc_pydantic/issues/27>`__.
+- Thanks to `thomas-pedot <https://github.com/thomas-pedot>`__ for reporting a bug related to
+  error handling of pydantic fields breaking JSON schema generation `#28 <https://github.com/mansenfranzen/autodoc_pydantic/issues/28>`__.
+
 
 v1.3.1 - 2021-07-21
 -------------------
