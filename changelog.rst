@@ -9,6 +9,11 @@ This is a feature and bug release.
 Added
 ~~~~~
 
+- Provide ``field-show-required`` configuration property. If activated, it adds
+  a ``[Required]`` marker for pydantic fields which do not have a default value.
+  Otherwise, misleading default values like *Ellipsis* or *PydanticUndefined*
+  are shown.
+  `#34 <https://github.com/mansenfranzen/autodoc_pydantic/issues/34>`__.
 - Include ``show-json-error-strategy`` for pydantic models and settings to define
   error handling in case a pydantic field breaks the JSON schema generation
   `#8 <https://github.com/mansenfranzen/autodoc_pydantic/issues/8>`__.
@@ -21,6 +26,7 @@ Bugfix
   handled appropriately `#28 <https://github.com/mansenfranzen/autodoc_pydantic/issues/28>`__.
 - Allow typed fields within doc strings to successfully reference pydantic models
   and settings `#27 <https://github.com/mansenfranzen/autodoc_pydantic/issues/27>`__.
+- Remove ``env`` key from field constraints.
 
 Testing
 ~~~~~~~
@@ -29,15 +35,19 @@ Testing
 - Add more diverse tests for handling non serializable fields breaking JSON model
   generation.
 - Add tests for different error handling strategies regarding ``show-json-error-strategy``.
+- Add tests for ``field-show-required``.
 
 Documentation
 ~~~~~~~~~~~~~
 
-- Add sections in configuration page for describing ``show-json-error-strategy``.
+- Add section in configuration page describing ``show-json-error-strategy``.
+- Add section in configuration page describing ``field-show-required``.
 
 Contributors
 ~~~~~~~~~~~~
 
+- Thanks to `davidchall <https://github.com/davidchall>`__ for suggesting to add a
+  ``[Required]`` marker for mandatory pydantic fields `#34 <https://github.com/mansenfranzen/autodoc_pydantic/issues/34>`__.
 - Thanks to `tahoward <https://github.com/tahoward>`__ for reporting a bug related to
   missing references in typed fields `#27 <https://github.com/mansenfranzen/autodoc_pydantic/issues/27>`__.
 - Thanks to `thomas-pedot <https://github.com/thomas-pedot>`__ for reporting a bug related to
