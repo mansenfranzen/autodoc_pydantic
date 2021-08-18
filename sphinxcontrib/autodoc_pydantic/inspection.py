@@ -8,7 +8,7 @@ from itertools import chain
 from typing import NamedTuple, Tuple, List, Dict, Any, Set, TypeVar
 
 from pydantic import BaseModel, create_model
-from pydantic.fields import ModelField
+from pydantic.fields import ModelField, UndefinedType
 from sphinx.addnodes import desc_signature
 
 
@@ -318,6 +318,16 @@ class ModelWrapper:
 
         field = self.get_field_object_by_name(field_name)
         return getattr(field.field_info, property_name, None)
+
+    def field_is_required(self, field_name: str) -> bool:
+        """Check if a field is required.
+
+        """
+
+        types_to_check = (UndefinedType, type(...))
+        default_value = self.get_field_property(field_name=field_name,
+                                                property_name="default")
+        return isinstance(default_value, types_to_check)
 
     def find_non_json_serializable_fields(self) -> List[str]:
         """Get all fields that can't be safely serialized.
