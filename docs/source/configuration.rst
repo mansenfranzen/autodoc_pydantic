@@ -171,8 +171,8 @@ Contains all modifications for pydantic `BaseModel`.
 
 .. warning::
 
-   Fields containing custom objects may not be serializable which breaks schema generation.
-   How to handle this case can be defined via :ref:`Show Schema JSON Error Strategy <autodoc_pydantic_model_show_json_error_strategy>`.
+   Fields containing custom objects may not be JSON serializable. This will break
+   the schema generation by default. However, it can be handled via :ref:`Show Schema JSON Error Strategy <autodoc_pydantic_model_show_json_error_strategy>`.
 
 
 .. _autodoc_pydantic_model_show_json_error_strategy:
@@ -180,8 +180,8 @@ Contains all modifications for pydantic `BaseModel`.
 Show Schema JSON Error Strategy
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Define the behaviour in case a pydantic field breaks the pydantic model schema
-generation because it is not JSON serializable.
+Define error handling in case a pydantic field breaks pydantic model schema
+generation. This occurs if a pydantic field is not JSON serializable.
 
 :conf.py: *autodoc_pydantic_model_show_json_error_strategy*
 
@@ -189,11 +189,11 @@ generation because it is not JSON serializable.
 
 **Available values:**
 
-- ``coerce``: Keeps violating field in resulting schema but only shows the title. Do not
-  provide a warning during the doc build process.
-- ``warn`` (default): Keeps violating field in resulting schema but only shows the title. Provides
-  a warning during the doc build process.
-- ``raise``: Raises an ``sphinx.errors.ExtensionError`` during the building process.
+- ``coerce``: Keep violating fields in resulting schema but only show the title. Do not
+  provide a warning during doc building process.
+- ``warn`` (default): Keep violating fields in resulting schema but only show the title. Provide
+  a warning during the doc building process.
+- ``raise``: Raises an ``sphinx.errors.ExtensionError`` during building process.
 
 
 ------------
@@ -337,16 +337,16 @@ Contains all modifications for pydantic `BaseSettings`.
 
 .. warning::
 
-   Fields containing custom objects may not be serializable which breaks schema generation.
-   How to handle this case can be defined via :ref:`Show Schema JSON Error Strategy <autodoc_pydantic_settings_show_json_error_strategy>`.
+   Fields containing custom objects may not be JSON serializable. This will break
+   the schema generation by default. However, it can be handled via  :ref:`Show Schema JSON Error Strategy <autodoc_pydantic_settings_show_json_error_strategy>`.
 
 .. _autodoc_pydantic_settings_show_json_error_strategy:
 
 Show Schema JSON Error Strategy
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Define the behaviour in case a pydantic field breaks the pydantic settings schema
-generation because it is not JSON serializable.
+Define error handling in case a pydantic field breaks pydantic settings schema
+generation. This occurs if a pydantic field is not JSON serializable.
 
 :conf.py: *autodoc_pydantic_settings_show_json_error_strategy*
 
@@ -354,11 +354,11 @@ generation because it is not JSON serializable.
 
 **Available values:**
 
-- ``coerce``: Keeps violating field in resulting schema but only shows the title. Do not
-  provide a warning during the doc build process.
-- ``warn`` (default): Keeps violating field in resulting schema but only shows the title. Provides
-  a warning during the doc build process.
-- ``raise``: Raises an ``sphinx.errors.ExtensionError`` during the building process.
+- ``coerce``: Keep violating fields in resulting schema but only show the title. Do not
+  provide a warning during doc building process.
+- ``warn`` (default): Keep violating fields in resulting schema but only show the title. Provide
+  a warning during the doc building process.
+- ``raise``: Raises an ``sphinx.errors.ExtensionError`` during building process.
 
 
 ------
