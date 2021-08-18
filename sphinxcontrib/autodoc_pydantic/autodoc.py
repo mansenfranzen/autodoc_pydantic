@@ -478,7 +478,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
 
         constraints = get_field_schema_validations(field)
         constraints = {key: value for key, value in constraints.items()
-                       if key not in {"env_names"}}
+                       if key not in {"env_names", "env"}}
 
         if constraints:
             source_name = self.get_sourcename()
