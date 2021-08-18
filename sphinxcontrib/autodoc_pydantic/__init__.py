@@ -24,7 +24,7 @@ from sphinxcontrib.autodoc_pydantic.directives import (
     PydanticSettings
 )
 
-__version__ = "1.3.1"
+__version__ = "1.3.2"
 
 
 def add_css_file(app: Sphinx, exception: Exception):
@@ -50,14 +50,14 @@ def add_domain_object_types(app: Sphinx):
 
     object_types = app.registry.domain_object_types.setdefault("py", {})
 
-    obj_types = ["pydantic_model",
-                 "pydantic_settings",
-                 "pydantic_field",
-                 "pydantic_validator",
-                 "pydantic_config"]
+    obj_types_mapping = {
+        ("field", "validator", "config"): ("obj", "any"),
+        ("model", "settings"): ("obj", "any", "class")
+    }
 
-    for obj_type in obj_types:
-        object_types[obj_type] = ObjType(obj_type, "obj", "any")
+    for obj_types, roles in obj_types_mapping.items():
+        for obj_type in obj_types:
+            object_types[f"pydantic_{obj_type}"] = ObjType(obj_type, *roles)
 
 
 def add_configuration_values(app: Sphinx):

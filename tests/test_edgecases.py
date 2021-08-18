@@ -186,3 +186,24 @@ def test_autodoc_member_order(autodocument):
         '',
         '   Class B',
         '']
+
+
+def test_typed_field_reference(test_app, monkeypatch):
+    """Ensure that typed fields within doc strings successfully reference
+    pydantic models/settings.
+
+    This relates to #27.
+
+    """
+
+    failed_targets = set()
+    func = copy.deepcopy(ReferencesResolver.warn_missing_reference)
+
+    def mock(self, refdoc, typ, target, node, domain):
+        failed_targets.add(target)
+        return func(self, refdoc, typ, target, node, domain)
+
+    with monkeypatch.context() as ctx:
+        ctx.setattr(ReferencesResolver, "warn_missing_reference", mock)
+        app = test_app("edgecase-typed-field-reference")
+        app.build()
