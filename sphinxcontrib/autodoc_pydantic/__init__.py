@@ -107,6 +107,7 @@ def add_configuration_values(app: Sphinx):
     add(f'{stem}field_show_constraints', True, True, bool)
     add(f'{stem}field_show_alias', True, True, bool)
     add(f'{stem}field_show_default', True, True, bool)
+    add(f'{stem}field_show_required', True, True, bool)
     add(f'{stem}field_signature_prefix', "field", True, str)
 
 
