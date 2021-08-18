@@ -10,7 +10,8 @@ Added
 ~~~~~
 
 - Include ``show-json-error-strategy`` for pydantic models and settings to define
-  error handling in case a pydantic field breaks the JSON schema generation.
+  error handling in case a pydantic field breaks the JSON schema generation
+  `#8 <https://github.com/mansenfranzen/autodoc_pydantic/issues/8>`__.
 
 Bugfix
 ~~~~~~
