@@ -400,8 +400,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
     member_order = 0
 
     pyautodoc_pass_to_directive = (
-        "field-show-alias",
-        "field-signature-prefix"
+        "field-signature-prefix",
     )
 
     def __init__(self, *args):
@@ -456,6 +455,19 @@ class PydanticFieldDocumenter(AttributeDocumenter):
             value = object_description(default)
             sourcename = self.get_sourcename()
             self.add_line('   :value: ' + value, sourcename)
+
+    def add_alias(self):
+        """Adds alias directive option.
+
+        """
+
+        field_name = self.objpath[-1]
+        wrapper = ModelWrapper(self.parent)
+        alias = wrapper.get_field_object_by_name(field_name).alias
+
+        if alias != field_name:
+            sourcename = self.get_sourcename()
+            self.add_line('   :alias: ' + alias, sourcename)
 
     def add_content(self,
                     more_content: Optional[StringList],
