@@ -7,6 +7,9 @@ class ExampleSettings(BaseSettings):
 
     """
 
+    field_without_default: str
+    """Shows the *[Required]* marker in the signature."""
+
     field_plain_with_validator: int = 100
     """Show standard field with type annotation."""
 
