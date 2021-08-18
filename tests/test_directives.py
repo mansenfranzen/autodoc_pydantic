@@ -371,8 +371,7 @@ def test_pydantic_validator(parse_rst):
     assert_node(doctree, output_nodes)
 
 
-
-def test_pydantic_field(parse_rst):
+def test_pydantic_field_with_default_value(parse_rst):
     """Tests pydantic_field directive.
 
     """
@@ -382,6 +381,7 @@ def test_pydantic_field(parse_rst):
         '   :module: target.model',
         '   :value: 5',
         '   :type: int',
+        '   :alias: aliased',
         '',
         '   Alias Plain.',
         '']
@@ -396,6 +396,38 @@ def test_pydantic_field(parse_rst):
                   [desc_annotation, " = 5"],
                   [desc_annotation, " (alias 'aliased')"])],
                 [desc_content, ([paragraph, "Alias Plain."])])
+         ]
+    )
+
+    doctree = parse_rst(input_rst)
+    assert_node(doctree, output_nodes)
+
+
+def test_pydantic_field_with_required(parse_rst):
+    """Tests pydantic_field directive.
+
+    """
+
+    input_rst = [
+        '.. py:pydantic_field:: ModelWithAlias.field',
+        '   :module: target.model',
+        '   :type: int',
+        '   :required:',
+        '   :alias: Alias',
+        '',
+        '   Required.',
+        '']
+
+    output_nodes = (
+        index,
+        [desc, ([desc_signature,
+                 ([desc_annotation, "field "],
+                  [desc_addname, "ModelWithAlias."],
+                  [desc_name, "field"],
+                  [desc_annotation, (": ", [pending_xref, "int"])],
+                  [desc_annotation, " [Required]"],
+                  [desc_annotation, " (alias 'Alias')"])],
+                [desc_content, ([paragraph, "Required."])])
          ]
     )
 
