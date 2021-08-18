@@ -75,26 +75,29 @@ class PydanticField(PydanticDirectiveBase, PyAttribute):
     """
 
     option_spec = PyAttribute.option_spec.copy()
-    option_spec.update({"field-show-alias": option_default_true,
+    option_spec.update({"alias": unchanged,
+                        "required": option_default_true,
                         "__doc_disable_except__": option_list_like,
                         "field-signature-prefix": unchanged})
 
     config_name = "field"
     default_prefix = "attribute"
 
-    @staticmethod
-    def add_alias(signode: desc_signature):
-        """Replaces the return node with references to validated fields.
+    def add_required(self, signode: desc_signature):
+        """Add `[Required]` if directive option `required` is set.
 
         """
 
-        # get imports, names and fields of validator
-        field_name = signode["fullname"].split(".")[-1]
-        wrapper = ModelWrapper.from_signode(signode)
-        field = wrapper.get_field_object_by_name(field_name)
-        alias = field.alias
+        if self.options.get("required"):
+            signode += desc_annotation("", " [Required]")
 
-        if alias != field_name:
+    def add_alias(self, signode: desc_signature):
+        """Add alias to signature if alias is provided via directive option.
+
+        """
+
+        alias = self.options.get("alias")
+        if alias:
             signode += desc_annotation("", f" (alias '{alias}')")
 
     def handle_signature(self, sig: str, signode: desc_signature) -> TUPLE_STR:
@@ -103,9 +106,8 @@ class PydanticField(PydanticDirectiveBase, PyAttribute):
         """
 
         fullname, prefix = super().handle_signature(sig, signode)
-
-        if self.pyautodoc.get_option_value("field-show-alias"):
-            self.add_alias(signode)
+        self.add_required(signode)
+        self.add_alias(signode)
 
         return fullname, prefix
 
