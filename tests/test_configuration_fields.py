@@ -601,13 +601,14 @@ def test_autodoc_pydantic_field_show_required_true(field, autodocument):
     result = [
         f'',
         f'.. py:pydantic_field:: FieldShowRequired.{field}',
-        f'   :module: target.configuration',
-        f'   :type: int',
-        f'   :required:',
+        '   :module: target.configuration',
+        '   :type: int',
+        '   :required:',
         f'',
         f'   {field}',
-        f''
+        f'',
     ]
+
 
     kwargs = dict(
         documenter='pydantic_field',
@@ -638,12 +639,13 @@ def test_autodoc_pydantic_field_show_required_false(field, autodocument):
     result = [
         f'',
         f'.. py:pydantic_field:: FieldShowRequired.{field}',
-        f'   :module: target.configuration',
-        f'   :type: int',
+        '   :module: target.configuration',
+        '   :type: int',
         f'',
         f'   {field}',
-        f''
+        f'',
     ]
+
 
     kwargs = dict(
         documenter='pydantic_field',
@@ -679,13 +681,14 @@ def test_autodoc_pydantic_field_show_required_false_show_default_true(
     result = [
         f'',
         f'.. py:pydantic_field:: FieldShowRequired.{field}',
-        f'   :module: target.configuration',
-        f'   :type: int',
+        '   :module: target.configuration',
+        '   :type: int',
         f'   :value: {value}',
         f'',
         f'   {field}',
-        f''
+        f'',
     ]
+
 
     kwargs = dict(
         documenter='pydantic_field',
