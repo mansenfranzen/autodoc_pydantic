@@ -308,9 +308,12 @@ class PydanticModelDocumenter(ClassDocumenter):
         validators = wrapper.get_named_references_for_validators()
         if validators:
             source_name = self.get_sourcename()
-            self.add_line(":Validators:", source_name)
+            valid_members = self.pyautodoc.get_filtered_member_names()
+            filtered_members = [validator for validator in validators
+                                if validator.name in valid_members]
 
-            for validator in validators:
+            self.add_line(":Validators:", source_name)
+            for validator in filtered_members:
                 for field in wrapper.get_fields_for_validator(validator.name):
                     line = (f"   - "
                             f":py:obj:`{validator.name} <{validator.ref}>`"
@@ -331,14 +334,17 @@ class PydanticModelDocumenter(ClassDocumenter):
         if fields:
             source_name = self.get_sourcename()
             type_aliases = self.config.autodoc_type_aliases
+            valid_members = self.pyautodoc.get_filtered_member_names()
+            filtered_members = [field for field in fields
+                                if field in valid_members]
 
             self.add_line(":Fields:", source_name)
-            for name in fields.keys():
-                ref = wrapper.get_reference(name)
+            for member_name in filtered_members:
+                ref = wrapper.get_reference(member_name)
                 annotations = get_type_hints(self.object, None, type_aliases)
-                typ = stringify(annotations.get(name, ""))
+                typ = stringify(annotations.get(member_name, ""))
 
-                line = (f"   - :py:obj:`{name} ({typ}) <{ref}>`")
+                line = (f"   - :py:obj:`{member_name} ({typ}) <{ref}>`")
                 self.add_line(line, source_name)
 
             self.add_line("", source_name)
