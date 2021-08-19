@@ -259,3 +259,110 @@ def test_json_error_strategy_coerce(test_app, log_capturer):
         app.build()
 
     assert len(logs) == 0
+
+
+def test_autodoc_pydantic_model_show_field_summary_not_inherited(autodocument):
+    """Ensure that autodoc pydantic respects `:inherited-members:` option when
+    listing fields in model/settings. More concretely, fields from base classes
+    should not be listed be default.
+
+    This relates to #32.
+
+    """
+
+    result = [
+        '',
+        '.. py:pydantic_model:: ModelShowFieldSummaryInherited',
+        '   :module: target.configuration',
+        '',
+        '   ModelShowFieldSummaryInherited.',
+        '',
+        '   :Fields:',
+        '      - :py:obj:`field3 (int) <target.configuration.ModelShowFieldSummaryInherited.field3>`',
+        ''
+    ]
+
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelShowFieldSummaryInherited',
+        options_app={"autodoc_pydantic_model_show_field_summary": True},
+        deactivate_all=True)
+    assert result == actual
+
+
+def test_autodoc_pydantic_model_show_field_summary_inherited(autodocument):
+    """Ensure that autodoc pydantic respects `:inherited-members:` option when
+    listing fields in model/settings. More concretely, fields from base classes
+    should be listed if `:inherited-members:` is given.
+
+    This relates to #32.
+
+    """
+    result = [
+        '',
+        '.. py:pydantic_model:: ModelShowFieldSummaryInherited',
+        '   :module: target.configuration',
+        '',
+        '   ModelShowFieldSummaryInherited.',
+        '',
+        '   :Fields:',
+        '      - :py:obj:`field1 (int) <target.configuration.ModelShowFieldSummaryInherited.field1>`',
+        '      - :py:obj:`field2 (str) <target.configuration.ModelShowFieldSummaryInherited.field2>`',
+        '      - :py:obj:`field3 (int) <target.configuration.ModelShowFieldSummaryInherited.field3>`',
+        ''
+    ]
+
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelShowFieldSummaryInherited',
+        options_app={"autodoc_pydantic_model_show_field_summary": True,
+                     "autodoc_pydantic_model_members": True},
+        options_doc={"inherited-members": "BaseModel"},
+        deactivate_all=True)
+    assert result == actual
+
+
+def test_autodoc_pydantic_model_show_validator_summary_inherited(autodocument):
+    result = [
+        '',
+        '.. py:pydantic_model:: ModelShowValidatorsSummaryInherited',
+        '   :module: target.configuration',
+        '',
+        '   ModelShowValidatorsSummaryInherited.',
+        '',
+        '   :Validators:',
+        '      - :py:obj:`check <target.configuration.ModelShowValidatorsSummaryInherited.check>` » :py:obj:`field <target.configuration.ModelShowValidatorsSummaryInherited.field>`',
+        '      - :py:obj:`check_inherited <target.configuration.ModelShowValidatorsSummaryInherited.check_inherited>` » :py:obj:`field <target.configuration.ModelShowValidatorsSummaryInherited.field>`',
+        ''
+    ]
+
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelShowValidatorsSummaryInherited',
+        options_app={"autodoc_pydantic_model_show_validator_summary": True,
+                     "autodoc_pydantic_model_members": True},
+        options_doc={"inherited-members": "BaseModel"},
+        deactivate_all=True)
+    assert result == actual
+
+
+def test_autodoc_pydantic_model_show_validator_summary_not_inherited(autodocument):
+    result = [
+        '',
+        '.. py:pydantic_model:: ModelShowValidatorsSummaryInherited',
+        '   :module: target.configuration',
+        '',
+        '   ModelShowValidatorsSummaryInherited.',
+        '',
+        '   :Validators:',
+        '      - :py:obj:`check_inherited <target.configuration.ModelShowValidatorsSummaryInherited.check_inherited>` » :py:obj:`field <target.configuration.ModelShowValidatorsSummaryInherited.field>`',
+        ''
+    ]
+
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.ModelShowValidatorsSummaryInherited',
+        options_app={"autodoc_pydantic_model_show_validator_summary": True,
+                     "autodoc_pydantic_model_members": True},
+        deactivate_all=True)
+    assert result == actual
