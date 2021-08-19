@@ -3,6 +3,7 @@
 """
 import sys
 
+import pydantic
 import pytest
 from docutils.nodes import (
     paragraph,
@@ -678,8 +679,8 @@ def test_autodoc_pydantic_field_show_required_false(field, autodocument):
 def test_autodoc_pydantic_field_show_required_false_show_default_true(
         field, value, autodocument):
 
-    if sys.version_info < (3, 9):
-        value = "PydanticUndefined"
+    if pydantic.VERSION < "1.8":
+        value = "Ellipsis"
 
     result = [
         '',
