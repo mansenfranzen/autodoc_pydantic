@@ -35,6 +35,7 @@ the appearance of standard sphinx autodoc with *autodoc_pydantic*.
    usage
    configuration
    examples
+   faq
 
 .. toctree::
    :maxdepth: 1
