@@ -49,6 +49,7 @@ class OptionsFieldDocPolicy(CustomEnum):
 
 OPTION_SPEC_FIELD = {
     "field-show-default": option_default_true,
+    "field-show-required": option_default_true,
     "field-signature-prefix": unchanged,
     "field-show-alias": option_default_true,
     "field-show-constraints": option_default_true,
@@ -399,8 +400,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
     member_order = 0
 
     pyautodoc_pass_to_directive = (
-        "field-show-alias",
-        "field-signature-prefix"
+        "field-signature-prefix",
     )
 
     def __init__(self, *args):
@@ -428,21 +428,46 @@ class PydanticFieldDocumenter(AttributeDocumenter):
         """
 
         super().add_directive_header(sig)
-        if self.pyautodoc.option_is_true("field-show-default"):
-            self.add_default_value()
 
-    def add_default_value(self):
-        """Adds default value.
+        self.add_default_value_or_required()
+
+        if self.pyautodoc.option_is_true("field-show-alias"):
+            self.add_alias()
+
+    def add_default_value_or_required(self):
+        """Adds default value or required marker.
 
         """
 
-        name = self.objpath[-1]
+        field_name = self.objpath[-1]
         wrapper = ModelWrapper(self.parent)
-        default = wrapper.get_field_property(name, "default")
-        if default is not None:
+
+        show_default = self.pyautodoc.option_is_true("field-show-default")
+        show_required = self.pyautodoc.option_is_true("field-show-required")
+        is_required = wrapper.field_is_required(field_name)
+
+        if show_required and is_required:
+            sourcename = self.get_sourcename()
+            self.add_line('   :required:', sourcename)
+
+        elif show_default:
+            default = wrapper.get_field_property(field_name, "default")
             value = object_description(default)
             sourcename = self.get_sourcename()
             self.add_line('   :value: ' + value, sourcename)
+
+    def add_alias(self):
+        """Adds alias directive option.
+
+        """
+
+        field_name = self.objpath[-1]
+        wrapper = ModelWrapper(self.parent)
+        alias = wrapper.get_field_object_by_name(field_name).alias
+
+        if alias != field_name:
+            sourcename = self.get_sourcename()
+            self.add_line('   :alias: ' + alias, sourcename)
 
     def add_content(self,
                     more_content: Optional[StringList],
@@ -472,13 +497,13 @@ class PydanticFieldDocumenter(AttributeDocumenter):
 
         """
 
-        name = self.objpath[-1]
+        field_name = self.objpath[-1]
         wrapper = ModelWrapper(self.parent)
-        field = wrapper.get_field_object_by_name(name)
+        field = wrapper.get_field_object_by_name(field_name)
 
         constraints = get_field_schema_validations(field)
         constraints = {key: value for key, value in constraints.items()
-                       if key not in {"env_names"}}
+                       if key not in {"env_names", "env"}}
 
         if constraints:
             source_name = self.get_sourcename()

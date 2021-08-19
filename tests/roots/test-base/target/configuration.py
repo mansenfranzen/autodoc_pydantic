@@ -304,3 +304,14 @@ class FieldSignaturePrefix(BaseModel):
 
     field: int = 1
     """Field."""
+
+
+class FieldShowRequired(BaseModel):
+    """FieldShowRequired."""
+
+    field1: int
+    """field1"""
+    field2: int = ...
+    """field2"""
+    field3: int = Field(default=...)
+    """field3"""

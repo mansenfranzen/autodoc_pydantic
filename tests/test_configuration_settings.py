@@ -420,13 +420,11 @@ def test_autodoc_pydantic_settings_undoc_members_true(autodocument):
         '   .. py:pydantic_field:: SettingsUndocMembers.field1',
         '      :module: target.configuration',
         '      :type: int',
-        '      :value: 5',
         '',
         '',
         '   .. py:pydantic_field:: SettingsUndocMembers.field2',
         '      :module: target.configuration',
         '      :type: str',
-        "      :value: 'FooBar'",
         ''
     ]
 
@@ -491,7 +489,6 @@ def test_autodoc_pydantic_settings_members_true(autodocument):
         '   .. py:pydantic_field:: SettingsMembers.field1',
         '      :module: target.configuration',
         '      :type: int',
-        '      :value: 5',
         '',
         '      Doc field 1',
         '',
@@ -499,7 +496,6 @@ def test_autodoc_pydantic_settings_members_true(autodocument):
         '   .. py:pydantic_field:: SettingsMembers.field2',
         '      :module: target.configuration',
         '      :type: str',
-        "      :value: 'FooBar'",
         '',
         '      Doc field 2',
         ''
@@ -579,7 +575,6 @@ def test_autodoc_pydantic_settings_member_order_groupwise(autodocument):
         '   .. py:pydantic_field:: SettingsMemberOrder.field',
         '      :module: target.configuration',
         '      :type: int',
-        '      :value: 1',
         '',
         '      Field.',
         '',
@@ -652,7 +647,6 @@ def test_autodoc_pydantic_settings_member_order_bysource(autodocument):
         '   .. py:pydantic_field:: SettingsMemberOrder.field',
         '      :module: target.configuration',
         '      :type: int',
-        '      :value: 1',
         '',
         '      Field.',
         ''
@@ -712,7 +706,6 @@ def test_autodoc_pydantic_settings_member_order_alphabetical(autodocument):
         '   .. py:pydantic_field:: SettingsMemberOrder.field',
         '      :module: target.configuration',
         '      :type: int',
-        '      :value: 1',
         '',
         '      Field.',
         ''
@@ -759,7 +752,6 @@ def test_autodoc_pydantic_settings_show_validator_members_true(autodocument):
         '   .. py:pydantic_field:: SettingsShowValidatorMembers.field',
         '      :module: target.configuration',
         '      :type: int',
-        '      :value: 1',
         '',
         '      Field.',
         '',
@@ -813,7 +805,6 @@ def test_autodoc_pydantic_settings_show_validator_members_false(autodocument):
         '   .. py:pydantic_field:: SettingsShowValidatorMembers.field',
         '      :module: target.configuration',
         '      :type: int',
-        '      :value: 1',
         '',
         '      Field.',
         ''
@@ -860,7 +851,6 @@ def test_autodoc_pydantic_settings_show_config_members_true(autodocument):
         '   .. py:pydantic_field:: SettingsShowConfigMember.field',
         '      :module: target.configuration',
         '      :type: int',
-        '      :value: 1',
         '',
         '      Field.',
         '',
@@ -920,7 +910,6 @@ def test_autodoc_pydantic_settings_show_config_members_false(autodocument):
         '   .. py:pydantic_field:: SettingsShowConfigMember.field',
         '      :module: target.configuration',
         '      :type: int',
-        '      :value: 1',
         '',
         '      Field.',
         '',
