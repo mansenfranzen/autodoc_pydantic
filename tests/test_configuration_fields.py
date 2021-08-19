@@ -1,6 +1,8 @@
 """This module contains tests for pydantic validator configurations.
 
 """
+import sys
+
 import pytest
 from docutils.nodes import (
     paragraph,
@@ -609,7 +611,6 @@ def test_autodoc_pydantic_field_show_required_true(field, autodocument):
         f'',
     ]
 
-
     kwargs = dict(
         documenter='pydantic_field',
         object_path=f'target.configuration.FieldShowRequired.{field}',
@@ -637,15 +638,14 @@ def test_autodoc_pydantic_field_show_required_true(field, autodocument):
 @pytest.mark.parametrize("field", ["field1", "field2", "field3"])
 def test_autodoc_pydantic_field_show_required_false(field, autodocument):
     result = [
-        f'',
+        '',
         f'.. py:pydantic_field:: FieldShowRequired.{field}',
         '   :module: target.configuration',
         '   :type: int',
-        f'',
+        '',
         f'   {field}',
-        f'',
+        '',
     ]
-
 
     kwargs = dict(
         documenter='pydantic_field',
@@ -678,17 +678,19 @@ def test_autodoc_pydantic_field_show_required_false(field, autodocument):
 def test_autodoc_pydantic_field_show_required_false_show_default_true(
         field, value, autodocument):
 
+    if sys.version_info < (3, 9):
+        value = "PydanticUndefined"
+
     result = [
-        f'',
+        '',
         f'.. py:pydantic_field:: FieldShowRequired.{field}',
         '   :module: target.configuration',
         '   :type: int',
         f'   :value: {value}',
-        f'',
+        '',
         f'   {field}',
-        f'',
+        '',
     ]
-
 
     kwargs = dict(
         documenter='pydantic_field',
