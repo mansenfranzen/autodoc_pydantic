@@ -103,6 +103,15 @@
         "ideas",
         "userTesting"
       ]
+    },
+    {
+      "login": "Yoshanuikabundi",
+      "name": "Josh A. Mitchell",
+      "avatar_url": "https://avatars.githubusercontent.com/u/28590748?v=4",
+      "profile": "https://yoshanuikabundi.me",
+      "contributions": [
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
