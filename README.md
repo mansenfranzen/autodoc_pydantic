@@ -6,7 +6,7 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/30a083d784f245a98a0d5e6857708cc8)](https://www.codacy.com/gh/mansenfranzen/autodoc_pydantic/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=mansenfranzen/autodoc_pydantic&amp;utm_campaign=Badge_Grade)
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/30a083d784f245a98a0d5e6857708cc8)](https://www.codacy.com/gh/mansenfranzen/autodoc_pydantic/dashboard?utm_source=github.com&utm_medium=referral&utm_content=mansenfranzen/autodoc_pydantic&utm_campaign=Badge_Coverage)
 [![Documentation Status](https://readthedocs.org/projects/autodoc-pydantic/badge/?version=latest)](https://autodoc-pydantic.readthedocs.io/en/latest/?badge=latest) <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 You love [pydantic](https://pydantic-docs.helpmanual.io/) ❤ and you want to
@@ -62,6 +62,7 @@ Thanks to great open source projects [sphinx](https://www.sphinx-doc.org/en/mast
     <td align="center"><a href="https://github.com/antvig"><img src="https://avatars.githubusercontent.com/u/25105210?v=4?s=100" width="100px;" alt=""/><br /><sub><b>antvig</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/issues?q=author%3Aantvig" title="Bug reports">🐛</a> <a href="#userTesting-antvig" title="User Testing">📓</a></td>
     <td align="center"><a href="https://roguh.com"><img src="https://avatars.githubusercontent.com/u/6373447?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Hugo O Rivera</b></sub></a><br /><a href="#ideas-roguh" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://github.com/ybnd"><img src="https://avatars.githubusercontent.com/u/31547038?v=4?s=100" width="100px;" alt=""/><br /><sub><b>yura bondarenko</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/issues?q=author%3Aybnd" title="Bug reports">🐛</a> <a href="#userTesting-ybnd" title="User Testing">📓</a></td>
+    <td align="center"><a href="http://tahoward.github.io"><img src="https://avatars.githubusercontent.com/u/547570?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Trevor Howard</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/issues?q=author%3Atahoward" title="Bug reports">🐛</a> <a href="#userTesting-tahoward" title="User Testing">📓</a></td>
   </tr>
 </table>
 
