@@ -22,7 +22,7 @@ Bugfix
 ~~~~~~
 
 - Respect ``inherited-members`` for field and validator summaries to prevent
-  different members being display between summary and body `#32 <https://github.com/mansenfranzen/autodoc_pydantic/issues/32>`__.
+  different members being displayed between header and body `#32 <https://github.com/mansenfranzen/autodoc_pydantic/issues/32>`__.
 - Improve handling of non serializable pydantic fields for JSON model generation.
   Using ``pd.DataFrame`` as a type annotation raised an exception instead of being
   handled appropriately `#28 <https://github.com/mansenfranzen/autodoc_pydantic/issues/28>`__.
@@ -46,6 +46,7 @@ Documentation
 - Add section in configuration page describing ``show-json-error-strategy``.
 - Add section in configuration page describing ``field-show-required``.
 - Add FAQ page with section about using ``inherited-members``.
+- Generally overhaul the documentation to improve readability and conciseness.
 
 Contributors
 ~~~~~~~~~~~~
