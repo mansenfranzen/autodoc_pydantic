@@ -73,6 +73,16 @@
         "bug",
         "userTesting"
       ]
+    },
+    {
+      "login": "thomas-pedot",
+      "name": "thomas-pedot",
+      "avatar_url": "https://avatars.githubusercontent.com/u/86731212?v=4",
+      "profile": "https://github.com/thomas-pedot",
+      "contributions": [
+        "bug",
+        "userTesting"
+      ]
     }
   ],
   "contributorsPerLine": 7,
