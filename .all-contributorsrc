@@ -83,6 +83,16 @@
         "bug",
         "userTesting"
       ]
+    },
+    {
+      "login": "matutter",
+      "name": "Mat Utter",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2701379?v=4",
+      "profile": "https://github.com/matutter",
+      "contributions": [
+        "bug",
+        "userTesting"
+      ]
     }
   ],
   "contributorsPerLine": 7,
