@@ -1,4 +1,7 @@
 ![Autodoc Pydantic](https://raw.githubusercontent.com/mansenfranzen/autodoc_pydantic/main/docs/source/material/logo_black.svg)
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![PyPI version](https://badge.fury.io/py/autodoc-pydantic.svg)](https://badge.fury.io/py/autodoc-pydantic)
 ![Master](https://github.com/mansenfranzen/autodoc_pydantic/actions/workflows/tests.yml/badge.svg)
@@ -48,3 +51,23 @@ For more details, please visit the official [documentation](https://autodoc-pyda
 Thanks to great open source projects [sphinx](https://www.sphinx-doc.org/en/master/),
 [pydantic](https://pydantic-docs.helpmanual.io/) and
 [poetry](https://python-poetry.org/) (and so many more) ❤!
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/mansenfranzen"><img src="https://avatars.githubusercontent.com/u/18086180?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Franz Wöllert</b></sub></a><br /><a href="#maintenance-mansenfranzen" title="Maintenance">🚧</a> <a href="https://github.com/mansenfranzen/autodoc_pydantic/commits?author=mansenfranzen" title="Documentation">📖</a> <a href="https://github.com/mansenfranzen/autodoc_pydantic/commits?author=mansenfranzen" title="Tests">⚠️</a> <a href="#content-mansenfranzen" title="Content">🖋</a></td>
+  </tr>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
