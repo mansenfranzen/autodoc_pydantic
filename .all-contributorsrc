@@ -63,6 +63,16 @@
         "bug",
         "userTesting"
       ]
+    },
+    {
+      "login": "tahoward",
+      "name": "Trevor Howard",
+      "avatar_url": "https://avatars.githubusercontent.com/u/547570?v=4",
+      "profile": "http://tahoward.github.io",
+      "contributions": [
+        "bug",
+        "userTesting"
+      ]
     }
   ],
   "contributorsPerLine": 7,
