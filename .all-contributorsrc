@@ -44,6 +44,15 @@
         "bug",
         "userTesting"
       ]
+    },
+    {
+      "login": "roguh",
+      "name": "Hugo O Rivera",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6373447?v=4",
+      "profile": "https://roguh.com",
+      "contributions": [
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
