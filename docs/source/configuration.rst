@@ -6,14 +6,16 @@ One major strength of **autodoc_pydantic** is that every feature is completely
 configurable to allow maximum customization. There are two ways to configure
 how pydantic objects are displayed:
 
-- **conf.py**: Globally define the default configuration via :code:`conf.py` which takes effect for all pydantic objects like:
+- **conf.py**: Globally define the default configuration via :code:`conf.py`
+  which takes effect for all pydantic objects like:
 
    .. code-block:: python
 
       autodoc_pydantic_model_show_json = True
       autodoc_pydantic_model_show_config = False
 
-- **option**: Locally define the specific configuration for individual directives. This overrides global configuration settings:
+- **option**: Locally define specific configurations via directive options.
+  This overrides global configuration settings:
 
    .. code-block::
 

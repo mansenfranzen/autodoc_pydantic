@@ -6,9 +6,36 @@
 Usage
 =====
 
-*autodoc_pydantic* integrates seamlessly with sphinx' auto-documentation
+**autodoc_pydantic** integrates seamlessly with sphinx' auto-documentation
 utilities. You might not need to modify your code at all when
-using :code:`autosummary` and :code:`automodule` directives.
+using :code:`automodule` or :code:`autosummary` directives.
+
+automodule
+==========
+
+The :code:`automodule` directive of the `sphinx.ext.autodoc`_ extension
+documents the content of an entire python module. All pydantic objects that
+are encountered will be documented by *autodoc_pydantic*'s specialized
+auto-documenters:
+
+.. tabs::
+
+   .. tab:: reST
+
+      .. code-block:: rest
+
+         .. automodule:: target.example_setting
+            :members:
+
+   .. tab:: *rendered output*
+
+      .. automodule:: target.example_setting
+         :members:
+         :noindex:
+
+   .. tab:: python
+
+      .. autocodeblock:: target.example_setting
 
 autosummary
 ===========
@@ -33,7 +60,7 @@ sufficiently document several python objects at once:
             AutoSummaryModel
             AutoSummarySettings
 
-   .. tab:: rendered output
+   .. tab:: *rendered output*
 
       .. currentmodule:: target.example_autosummary
 
@@ -43,12 +70,12 @@ sufficiently document several python objects at once:
          AutoSummaryModel
          AutoSummarySettings
 
-   .. tab:: source code
+   .. tab:: python
 
       .. autocodeblock:: target.example_autosummary
 
-Please note, this example generates the autosummary table and the corresponding
-stub pages which are referenced when clicking on the table items.
+Please note, this example generates the autosummary table with hyperlinks to
+the corresponding stub pages.
 
 .. hint::
 
@@ -71,33 +98,6 @@ stub pages which are referenced when clicking on the table items.
    autodocumenters are used to render the object's documentation in the
    generated stub pages of autosummary.
 
-automodule
-==========
-
-The :code:`automodule` directive of the `sphinx.ext.autodoc`_ extension
-documents the content of an entire python module. All pydantic objects that
-are encountered will be documented by *autodoc_pydantic*'s specialized
-auto-documenters:
-
-.. tabs::
-
-   .. tab:: reST
-
-      .. code-block:: rest
-
-         .. automodule:: target.example_setting
-            :members:
-
-   .. tab:: rendered output
-
-      .. automodule:: target.example_setting
-         :members:
-         :noindex:
-
-   .. tab:: source code
-
-      .. autocodeblock:: target.example_setting
-
 
 autopydantic
 ============
@@ -117,7 +117,7 @@ autopydantic_model
 ------------------
 
 In comparison the :code:`automodule`, you don't need to add directive options
-like :code:`:members:` to show all members. Instead, *autodoc_pydantic* supplies
+like :code:`:members:` to show all members. Instead, **autodoc_pydantic** supplies
 sensible default settings.
 
 .. tabs::
@@ -128,12 +128,12 @@ sensible default settings.
 
          .. autopydantic_model:: target.example_model.ExampleModel
 
-   .. tab:: rendered output
+   .. tab:: *rendered output*
 
       .. autopydantic_model:: target.example_model.ExampleModel
          :noindex:
 
-   .. tab:: source code
+   .. tab:: python
 
       .. autocodeblock:: target.example_model
 
@@ -156,12 +156,12 @@ Documenting pydantic models behaves exactly like :code:`autopydantic_model`.
 
          .. autopydantic_settings:: target.example_setting.ExampleSettings
 
-   .. tab:: rendered output
+   .. tab:: *rendered output*
 
       .. autopydantic_settings:: target.example_setting.ExampleSettings
          :noindex:
 
-   .. tab:: source code
+   .. tab:: python
 
       .. autocodeblock:: target.example_setting
 
@@ -185,12 +185,12 @@ pydantic fields are documented along with its corresponding pydantic model/setti
 
          .. autopydantic_field:: target.example_setting.ExampleSettings.field_with_constraints_and_description
 
-   .. tab:: rendered output
+   .. tab:: *rendered output*
 
       .. autopydantic_field:: target.example_setting.ExampleSettings.field_with_constraints_and_description
          :noindex:
 
-   .. tab:: source code
+   .. tab:: python
 
       .. autocodeblock:: target.example_setting
 
@@ -215,12 +215,12 @@ from its corresponding pydantic model/settings but it is still possible.
 
          .. autopydantic_validator:: target.example_setting.ExampleSettings.check_max_length_ten
 
-   .. tab:: rendered output
+   .. tab:: *rendered output*
 
       .. autopydantic_validator:: target.example_setting.ExampleSettings.check_max_length_ten
          :noindex:
 
-   .. tab:: source code
+   .. tab:: python
 
       .. autocodeblock:: target.example_setting
 
@@ -245,12 +245,12 @@ directive is used by the :code:`autopydantic_model` and :code:`autopydantic_sett
 
          .. autopydantic_config:: target.example_setting.ExampleSettings.Config
 
-   .. tab:: rendered output
+   .. tab:: *rendered output*
 
       .. autopydantic_config:: target.example_setting.ExampleSettings.Config
          :noindex:
 
-   .. tab:: source code
+   .. tab:: python
 
       .. autocodeblock:: target.example_setting
 

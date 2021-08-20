@@ -21,6 +21,8 @@ Added
 Bugfix
 ~~~~~~
 
+- Respect ``inherited-members`` for field and validator summaries to prevent
+  different members being displayed between header and body `#32 <https://github.com/mansenfranzen/autodoc_pydantic/issues/32>`__.
 - Improve handling of non serializable pydantic fields for JSON model generation.
   Using ``pd.DataFrame`` as a type annotation raised an exception instead of being
   handled appropriately `#28 <https://github.com/mansenfranzen/autodoc_pydantic/issues/28>`__.
@@ -36,23 +38,28 @@ Testing
   generation.
 - Add tests for different error handling strategies regarding ``show-json-error-strategy``.
 - Add tests for ``field-show-required``.
+- Add tests for field and validator summaries respecting ``inherited-members``.
 
 Documentation
 ~~~~~~~~~~~~~
 
 - Add section in configuration page describing ``show-json-error-strategy``.
 - Add section in configuration page describing ``field-show-required``.
+- Add FAQ page with section about using ``inherited-members``.
+- Generally overhaul the documentation to improve readability and conciseness.
 
 Contributors
 ~~~~~~~~~~~~
 
 - Thanks to `davidchall <https://github.com/davidchall>`__ for suggesting to add a
   ``[Required]`` marker for mandatory pydantic fields `#34 <https://github.com/mansenfranzen/autodoc_pydantic/issues/34>`__.
-- Thanks to `tahoward <https://github.com/tahoward>`__ for reporting a bug related to
-  missing references in typed fields `#27 <https://github.com/mansenfranzen/autodoc_pydantic/issues/27>`__.
+- Thanks to `matutter <https://github.com/matutter>`__ for reporting a bug
+  related to incorrect field and validator summaries not respecting ``inherited-members``
+  `#32 <https://github.com/mansenfranzen/autodoc_pydantic/issues/32>`__.
 - Thanks to `thomas-pedot <https://github.com/thomas-pedot>`__ for reporting a bug related to
   error handling of pydantic fields breaking JSON schema generation `#28 <https://github.com/mansenfranzen/autodoc_pydantic/issues/28>`__.
-
+- Thanks to `tahoward <https://github.com/tahoward>`__ for reporting a bug related to
+  missing references in typed fields `#27 <https://github.com/mansenfranzen/autodoc_pydantic/issues/27>`__.
 
 v1.3.1 - 2021-07-21
 -------------------

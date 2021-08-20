@@ -23,11 +23,25 @@ class ModelShowValidatorsSummary(BaseModel):
         return v
 
 
+class ModelShowValidatorsSummaryInherited(ModelShowValidatorsSummary):
+    """ModelShowValidatorsSummaryInherited."""
+
+    @validator("field")
+    def check_inherited(cls, v) -> str:
+        return v
+
+
 class ModelShowFieldSummary(BaseModel):
     """ModelShowFieldSummary."""
 
     field1: int = 5
     field2: str = "FooBar"
+
+
+class ModelShowFieldSummaryInherited(ModelShowFieldSummary):
+    """ModelShowFieldSummaryInherited."""
+
+    field3: int = 5
 
 
 class ModelHideParamList(BaseModel):
