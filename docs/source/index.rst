@@ -25,7 +25,7 @@ Features
 - 🍀 Supports `pydantic >= 1.5.0` and `sphinx >= 3.4.0`
 
 To see those features in action, jump over to the :ref:`example <showcase>` section comparing
-the appearance of standard sphinx autodoc with *autodoc_pydantic*.
+the appearance of standard sphinx autodoc with **autodoc_pydantic**.
 
 .. toctree::
    :maxdepth: 1

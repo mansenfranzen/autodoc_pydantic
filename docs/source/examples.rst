@@ -11,16 +11,16 @@ display pydantic models and settings.
 Default configuration
 =====================
 
-This example shows the default out-of-the-box configuration of *autodoc_pydantic*.
+This example shows the default out-of-the-box configuration of **autodoc_pydantic**.
 In contrast, it also shows how standard sphinx autodoc displays the same example code.
 
 .. tabs::
 
-   .. tab:: autodoc pydantic
+   .. tab:: *rendered output pydantic*
 
       .. autopydantic_settings:: target.example_setting.ExampleSettings
 
-   .. tab:: autodoc sphinx
+   .. tab:: *rendered output sphinx*
 
       .. autopydantic_settings:: target.example_setting.ExampleSettings
          :members:
@@ -28,9 +28,15 @@ In contrast, it also shows how standard sphinx autodoc displays the same example
          :__doc_disable_except__: members, undoc-members, settings-show-validator-members, settings-show-config-member, config-members
          :noindex:
 
-   .. tab:: *example code*
+   .. tab:: python
 
       .. autocodeblock:: target.example_setting
+
+   .. tab:: reST
+
+      .. code-block::
+
+         .. autopydantic_settings:: target.example_setting.ExampleSettings
 
 
 Complete configuration
@@ -44,7 +50,7 @@ this scenario covers all available display options for pydantic models/settings.
 
 .. tabs::
 
-   .. tab:: autodoc pydantic
+   .. tab:: *rendered output*
 
       .. autopydantic_settings:: target.example_setting.ExampleSettings
          :noindex:
@@ -60,7 +66,7 @@ this scenario covers all available display options for pydantic models/settings.
             :settings-show-config-member: True
             :validator-list-fields: True
 
-   .. tab:: *example code*
+   .. tab:: python
 
       .. autocodeblock:: target.example_setting
 
@@ -73,7 +79,7 @@ and model/setting config is hidden.
 
 .. tabs::
 
-   .. tab:: autodoc pydantic
+   .. tab:: *rendered output*
 
       .. autopydantic_settings:: target.example_setting.ExampleSettings
          :noindex:
@@ -97,7 +103,7 @@ and model/setting config is hidden.
             :settings-show-validator-summary: False
             :field-list-validators: False
 
-   .. tab:: *example code*
+   .. tab:: python
 
       .. autocodeblock:: target.example_setting
 
@@ -112,7 +118,7 @@ with a simple ``all fields`` marker which hyperlinks to the related model itself
 
 .. tabs::
 
-   .. tab:: autodoc pydantic
+   .. tab:: *rendered output*
 
       .. autopydantic_model:: target.example_validators.ExampleValidators
 
@@ -123,7 +129,7 @@ with a simple ``all fields`` marker which hyperlinks to the related model itself
 
          .. autopydantic_model:: target.example_validators.ExampleValidators
 
-   .. tab:: *example code*
+   .. tab:: python
 
       .. autocodeblock:: target.example_validators
 
@@ -131,5 +137,5 @@ with a simple ``all fields`` marker which hyperlinks to the related model itself
 .. note::
 
    By default the function signature of validators is replaced with hyperlinks
-   to validated fields by ``autodoc_pydantic``. You can disable this behaviour
+   to validated fields by **autodoc_pydantic**. You can disable this behaviour
    via :ref:`validator-replace-signature <autodoc_pydantic_validator_replace_signature>`.

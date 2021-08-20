@@ -7,9 +7,9 @@ Show inherited fields/validators
 
 Pydantic models can be subclassed to inherit fields and validators from base
 classes. Naturally, **autodoc_pydantic** should also show these members.
-Though, sphinx autodoc does not include any member from base classes by default.
-However, sphinx autodoc offers a directive option named ``:inherited-members:``
-which allows to include all members from all base classes except from `object`
+By default, sphinx autodoc does not include any member from base classes, though.
+However, sphinx autodoc provides a directive option named ``:inherited-members:``
+which allows to include all members from all base classes except `object`
 (see docs `here <https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#directives>`_).
 
 Unfortunately, this will also include all members from ``pydantic.BaseModel``
@@ -20,11 +20,11 @@ irrelevant members are ignored:
 
 .. tabs::
 
-   .. tab:: inherited_members.py
+   .. tab:: python
 
       .. autocodeblock:: target.faq.inherited_members
 
-   .. tab:: inherited_members.rst
+   .. tab:: reST
 
       .. code-block::
 

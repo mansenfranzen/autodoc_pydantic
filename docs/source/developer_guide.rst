@@ -2,7 +2,8 @@
 Setting up developer environment
 --------------------------------
 
-*autodoc_pydantic* uses poetry for environment and package management.
+**autodoc_pydantic** uses `poetry <https://python-poetry.org/>`__ for environment
+and package management.
 
 Cloning repository
 ------------------
@@ -27,7 +28,7 @@ pytest
 ------
 
 To quickly execute the test suite within your current developer environment
-with pytest directly, run ``poetry run pytest``.
+with pytest, run ``poetry run pytest``.
 
 tox
 ---
@@ -43,21 +44,28 @@ environments. A test environment is characterized by varying versions of
 
 Please visit the ``tox.ini`` for all available test environments.
 
-Using tox has the benefit that it also executes the following steps:
+.. note::
 
-1. build source distribution from ``pyproject.toml``
-2. create specified virtual environment for test execution
-3. install source distribution in virtual environment
-4. run tests within virtual environment via pytest
-5. provide test coverage report
+   Using tox has the benefit of completing the entire build-deploy-test-cycle:
+
+   1. build source distribution from ``pyproject.toml``
+   2. create specified virtual environment for test execution
+   3. install source distribution in virtual environment
+   4. run tests within virtual environment via pytest
+   5. provide test coverage report
 
 
 -----------------------
 Building & writing docs
 -----------------------
 
+**autodoc_pydantic**'s documentation is generated with `sphinx <https://www.sphinx-doc.org>`__.
+To generate the HTML documentation, please use the following:
+
 .. code-block:: bash
 
    poetry shell
    cd docs
    make clean && make html
+
+The generated documentation can be found under ``docs/build/html/index.html``.
