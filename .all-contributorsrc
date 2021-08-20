@@ -53,6 +53,16 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "ybnd",
+      "name": "yura bondarenko",
+      "avatar_url": "https://avatars.githubusercontent.com/u/31547038?v=4",
+      "profile": "https://github.com/ybnd",
+      "contributions": [
+        "bug",
+        "userTesting"
+      ]
     }
   ],
   "contributorsPerLine": 7,
