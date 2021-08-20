@@ -93,6 +93,16 @@
         "bug",
         "userTesting"
       ]
+    },
+    {
+      "login": "davidchall",
+      "name": "David C Hall",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1804856?v=4",
+      "profile": "https://github.com/davidchall",
+      "contributions": [
+        "ideas",
+        "userTesting"
+      ]
     }
   ],
   "contributorsPerLine": 7,
