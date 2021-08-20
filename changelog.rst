@@ -1,7 +1,7 @@
 Changelog
 =========
 
-v1.4.0 - 2021-XX-XX
+v1.4.0 - 2021-08-20
 -------------------
 
 This is a feature and bug release.
