@@ -5,7 +5,7 @@
 ![Python](https://img.shields.io/badge/python-3.6+-blue.svg)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/30a083d784f245a98a0d5e6857708cc8)](https://www.codacy.com/gh/mansenfranzen/autodoc_pydantic/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=mansenfranzen/autodoc_pydantic&amp;utm_campaign=Badge_Grade)
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/30a083d784f245a98a0d5e6857708cc8)](https://www.codacy.com/gh/mansenfranzen/autodoc_pydantic/dashboard?utm_source=github.com&utm_medium=referral&utm_content=mansenfranzen/autodoc_pydantic&utm_campaign=Badge_Coverage)
-[![Documentation Status](https://readthedocs.org/projects/autodoc-pydantic/badge/?version=stable)](https://autodoc-pydantic.readthedocs.io/en/latest/?badge=stable) <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![Documentation Status](https://readthedocs.org/projects/autodoc-pydantic/badge/?version=stable)](https://autodoc-pydantic.readthedocs.io/en/stable/?badge=stable) <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-11-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
