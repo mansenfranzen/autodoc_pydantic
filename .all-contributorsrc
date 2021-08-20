@@ -34,6 +34,16 @@
       "contributions": [
         "security"
       ]
+    },
+    {
+      "login": "antvig",
+      "name": "antvig",
+      "avatar_url": "https://avatars.githubusercontent.com/u/25105210?v=4",
+      "profile": "https://github.com/antvig",
+      "contributions": [
+        "bug",
+        "userTesting"
+      ]
     }
   ],
   "contributorsPerLine": 7,
