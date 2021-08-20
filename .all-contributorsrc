@@ -1,0 +1,27 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "mansenfranzen",
+      "name": "Franz Wöllert",
+      "avatar_url": "https://avatars.githubusercontent.com/u/18086180?v=4",
+      "profile": "https://github.com/mansenfranzen",
+      "contributions": [
+        "maintenance",
+        "doc",
+        "test",
+        "content"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "autodoc_pydantic",
+  "projectOwner": "mansenfranzen",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
