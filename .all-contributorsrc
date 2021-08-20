@@ -25,6 +25,15 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "vlcinsky",
+      "name": "Jan Vlčinský",
+      "avatar_url": "https://avatars.githubusercontent.com/u/635911?v=4",
+      "profile": "https://github.com/vlcinsky",
+      "contributions": [
+        "security"
+      ]
     }
   ],
   "contributorsPerLine": 7,
