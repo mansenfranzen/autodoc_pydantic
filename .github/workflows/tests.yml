@@ -3,7 +3,7 @@ on: push
 
 jobs:
   test-stable-versions:
-    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
     strategy:
       fail-fast: false
       matrix:
@@ -33,7 +33,7 @@ jobs:
       - run: tox -e pydantic${{ matrix.pydantic_version }}-sphinx${{ matrix.sphinx_version }}
 
   test-latest-version-with-coverage:
-    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
     environment: ci
     runs-on: ubuntu-18.04
     steps:
@@ -46,7 +46,7 @@ jobs:
       - run: export CODACY_PROJECT_TOKEN=${{ secrets.CODACY_PROJECT_TOKEN }} && bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r coverage.xml
 
   test-development-versions-deps:
-    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
     environment: ci
     runs-on: ubuntu-18.04
     steps:
@@ -58,7 +58,7 @@ jobs:
       - run: tox -e development
 
   test-linter:
-    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
     environment: ci
     runs-on: ubuntu-18.04
     steps:
