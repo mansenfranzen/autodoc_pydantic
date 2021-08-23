@@ -305,23 +305,24 @@ class PydanticModelDocumenter(ClassDocumenter):
         """
 
         wrapper = ModelWrapper(self.object)
-        validators = wrapper.get_named_references_for_validators()
-        if validators:
-            source_name = self.get_sourcename()
-            valid_members = self.pyautodoc.get_filtered_member_names()
-            filtered_members = [validator for validator in validators
-                                if validator.name in valid_members]
+        mappings = wrapper.wrapper.references.mapping
+        if not mappings:
+            return
 
-            self.add_line(":Validators:", source_name)
-            for validator in filtered_members:
-                for field in wrapper.get_fields_for_validator(validator.name):
-                    line = (f"   - "
-                            f":py:obj:`{validator.name} <{validator.ref}>`"
-                            f" » "
-                            f":py:obj:`{field.name} <{field.ref}>`")
-                    self.add_line(line, source_name)
+        source_name = self.get_sourcename()
+        valid_members = self.pyautodoc.get_filtered_member_names()
+        filtered_members = [mapping for mapping in mappings
+                            if mapping.validator in valid_members]
 
-            self.add_line("", source_name)
+        self.add_line(":Validators:", source_name)
+        for mapping in filtered_members:
+            line = (f"   - "
+                    f":py:obj:`{mapping.validator} <{mapping.validator_ref}>`"
+                    f" » "
+                    f":py:obj:`{mapping.field} <{mapping.field_ref}>`")
+            self.add_line(line, source_name)
+
+        self.add_line("", source_name)
 
     def add_field_summary(self):
         """Adds summary section describing all fields.
@@ -542,12 +543,14 @@ class PydanticFieldDocumenter(AttributeDocumenter):
         name = self.objpath[-1]
         wrapper = ModelWrapper(self.parent)
 
-        validators = wrapper.get_validators_for_field(name)
-        if validators:
+        mappings = wrapper.get_validators_for_field(name)
+        if mappings:
             source_name = self.get_sourcename()
             self.add_line(":Validated by:", source_name)
-            for validator in validators:
-                line = f"   - :py:obj:`{validator.name} <{validator.ref}>`"
+            for mapping in mappings:
+                name = mapping.validator
+                ref = mapping.validator_ref
+                line = f"   - :py:obj:`{name} <{ref}>`"
                 self.add_line(line, source_name)
 
             self.add_line("", source_name)
@@ -619,16 +622,16 @@ class PydanticValidatorDocumenter(MethodDocumenter):
         """
 
         wrapper = ModelWrapper(self.parent)
-        fields = wrapper.get_fields_for_validator(self.object_name)
+        mappings = wrapper.get_fields_for_validator(self.object_name)
 
-        if not fields:
+        if not mappings:
             return
 
         source_name = self.get_sourcename()
         self.add_line(":Validates:", source_name)
 
-        for field in fields:
-            line = f"   - :py:obj:`{field.name} <{field.ref}>`"
+        for mapping in mappings:
+            line = f"   - :py:obj:`{mapping.field} <{mapping.field_ref}>`"
             self.add_line(line, source_name)
 
         self.add_line("", source_name)

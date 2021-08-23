@@ -11,8 +11,6 @@ from sphinx.addnodes import pending_xref
 from sphinx.environment import BuildEnvironment
 from sphinx.ext.autodoc import ALL, Documenter, Options
 
-from sphinxcontrib.autodoc_pydantic.inspection import NamedRef
-
 
 class NullType:
     """Helper class to present a Null value which is not the same
@@ -28,21 +26,21 @@ class NullType:
 NONE = NullType()
 
 
-def create_field_href(reference: NamedRef,
+def create_field_href(name: str,
+                      ref: str,
                       env: BuildEnvironment) -> pending_xref:
     """Create `pending_xref` node with link to given `reference`.
 
     """
 
-    text = reference.name
     options = {'refdoc': env.docname,
                'refdomain': "py",
                'reftype': "obj",
-               'reftarget': reference.ref}
+               'reftarget': ref}
 
-    refnode = pending_xref(reference.name, **options)
+    refnode = pending_xref(name, **options)
     classes = ['xref', "py", '%s-%s' % ("py", "obj")]
-    refnode += emphasis(text, text, classes=classes)
+    refnode += emphasis(name, name, classes=classes)
     return refnode
 
 

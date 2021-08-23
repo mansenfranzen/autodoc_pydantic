@@ -139,14 +139,18 @@ class PydanticValidator(PydanticDirectiveBase, PyMethod):
         # get imports, names and fields of validator
         validator_name = signode["fullname"].split(".")[-1]
         wrapper = ModelWrapper.from_signode(signode)
-        fields = wrapper.get_fields_for_validator(validator_name)
+        mappings = wrapper.get_fields_for_validator(validator_name)
 
         # add field reference nodes
-        first_field = fields[0]
-        signode += create_field_href(first_field, env=self.env)
-        for field in fields[1:]:
+        mapping_first = mappings[0]
+        signode += create_field_href(name=mapping_first.field,
+                                     ref=mapping_first.field_ref,
+                                     env=self.env)
+        for mapping in mappings[1:]:
             signode += desc_annotation("", ", ")
-            signode += create_field_href(field, self.env)
+            signode += create_field_href(name=mapping.field,
+                                         ref=mapping.field_ref,
+                                         env=self.env)
 
     def handle_signature(self, sig: str, signode: desc_signature) -> TUPLE_STR:
         """Optionally call replace return node method.
