@@ -7,47 +7,11 @@ from collections import defaultdict
 from itertools import chain
 from typing import NamedTuple, Tuple, List, Dict, Any, Set, TypeVar, Iterator
 
+import pydantic
 from pydantic import BaseModel, create_model
 from pydantic.class_validators import Validator
 from pydantic.fields import ModelField, UndefinedType
 from sphinx.addnodes import desc_signature
-
-
-def is_pydantic_model(obj: Any) -> bool:
-    """Determine if object is a valid pydantic model.
-
-    """
-
-    if isinstance(obj, type):
-        return issubclass(obj, BaseModel)
-    return False
-
-
-def is_validator_by_name(name: str, obj: Any) -> bool:
-    """Determine if a validator is present under provided `name` for given
-    `model`.
-
-    """
-
-    if is_pydantic_model(obj):
-        wrapper = ModelWrapper.factory(obj)
-        return name in wrapper.get_validator_names()
-    return False
-
-
-def is_serializable(field: ModelField) -> bool:
-    """Check of pydantic field is schema serializable.
-
-    """
-
-    class Cfg:
-        arbitrary_types_allowed = True
-
-    try:
-        create_model("_", t=(field.type_, field.default), Config=Cfg).schema()
-        return True
-    except Exception:
-        return False
 
 
 class ValidatorFieldMap(NamedTuple):
@@ -88,44 +52,32 @@ class ValidatorFieldMap(NamedTuple):
         return self._get_ref(self.validator)
 
 
-class ValidatorFieldMappings:
-    """Represents a container of `ValidatorFieldMap` instances with
-    convenient accessor methods.
+class StaticInspector:
+    """Namespace under `ModelInspector` for static methods.
 
     """
 
-    def __init__(self, mappings: List[ValidatorFieldMap]):
-        self.mappings = mappings
-
-    def filter_by_validator_name(self, name: str) -> List[ValidatorFieldMap]:
-        """Return mappings for given validator `name`.
+    @staticmethod
+    def is_pydantic_model(obj: Any) -> bool:
+        """Determine if object is a valid pydantic model.
 
         """
 
-        return [mapping for mapping in self.mappings
-                if mapping.validator == name]
+        if isinstance(obj, type):
+            return issubclass(obj, BaseModel)
+        return False
 
-    def filter_by_field_name(self, name: str) -> List[ValidatorFieldMap]:
-        """Return mappings for given field `name`.
-
-        """
-
-        return [mapping for mapping in self.mappings
-                if mapping.field in (name, "all fields")]
-
-    def __bool__(self):
-        """Equals to `True` if not empty.
+    @classmethod
+    def is_validator_by_name(cls, name: str, obj: Any) -> bool:
+        """Determine if a validator is present under provided `name` for given
+        `model`.
 
         """
 
-        return bool(self.mappings)
-
-    def __iter__(self):
-        """Allow iteration over mappings.
-
-        """
-
-        return iter(self.mappings)
+        if cls.is_pydantic_model(obj):
+            wrapper = ModelWrapper.factory(obj)
+            return name in wrapper.get_validator_names()
+        return False
 
 
 class BaseInspectionComposite:
@@ -199,6 +151,86 @@ class FieldInspector(BaseInspectionComposite):
         """
 
         return list(self.attribute.keys())
+
+    def get(self, name: str) -> ModelField:
+        """Get the instance of `ModelField` for given field `name`.
+
+        """
+
+        return self.attribute[name]
+
+    def get_property_from_field_info(self, field_name: str,
+                                     property_name: str) -> Any:
+        """Get specific property value from pydantic's field info.
+
+        """
+
+        field = self.get(field_name)
+        return getattr(field.field_info, property_name, None)
+
+    def is_required(self, field_name: str) -> bool:
+        """Check if a given pydantic field is required/mandatory. Returns True,
+        if a value for this field needs to provided upon model creation.
+
+        """
+
+        types_to_check = (UndefinedType, type(...))
+        default_value = self.get_property_from_field_info(
+            field_name=field_name,
+            property_name="default")
+
+        return isinstance(default_value, types_to_check)
+
+    def is_json_serializable(self, field_name: str) -> bool:
+        """Check if given pydantic field is JSON serializable by calling
+        pydantic's `model.json()` method. Custom objects might not be
+        serializable and hence would break JSON schema generation.
+
+        """
+
+        field = self.get(field_name)
+
+        class Cfg:
+            arbitrary_types_allowed = True
+
+        try:
+            field_args = (field.type_, field.default)
+            model = create_model("_", test_field=field_args, Config=Cfg)
+            model.schema()
+            return True
+        except Exception:
+            return False
+
+    @property
+    def non_json_serializable(self) -> List[str]:
+        """Get all fields that can't be safely serialized.
+
+        """
+
+        return [name for name in self.names
+                if not self.is_json_serializable(name)]
+
+
+class ConfigInspector(BaseInspectionComposite):
+    """Provide namespace for inspection methods for config class of pydantic
+    models.
+
+    """
+
+    def __init__(self, parent: 'ModelInspector'):
+        super().__init__(parent)
+        self.attribute: Dict = self.model.Config
+
+    @property
+    def items(self) -> Dict:
+        """Return all non private (without leading underscore `_`) items of
+        pydantic configuration class.
+
+        """
+
+        return {key: getattr(self.attribute, key)
+                for key in dir(self.attribute)
+                if not key.startswith("_")}
 
 
 class ValidatorInspector(BaseInspectionComposite):
@@ -286,11 +318,34 @@ class ValidatorInspector(BaseInspectionComposite):
         return name in self.names_asterisk_validators
 
 
-class PropertyInspector(BaseInspectionComposite):
+class SchemaInspector(BaseInspectionComposite):
     """Provide namespace for inspection methods for general properties of
     pydantic models.
 
     """
+
+    @property
+    def sanitized(self) -> Dict:
+        """Get model's `schema` while handling non serializable fields. Such
+        fields will be replaced by TypeVars.
+
+        """
+
+        try:
+            return self.model.schema()
+        except (TypeError, ValueError):
+            new_model = self.create_sanitized_model()
+            return new_model.schema()
+
+    def create_sanitized_model(self) -> BaseModel:
+        """Generates a new pydantic model from the original one while
+        substituting invalid fields with typevars.
+
+        """
+
+        invalid_fields = self._parent.fields.non_json_serializable
+        new = {name: (TypeVar(name), None) for name in invalid_fields}
+        return create_model(self.model.__name__, __base__=self.model, **new)
 
 
 class ReferenceInspector(BaseInspectionComposite):
@@ -298,6 +353,13 @@ class ReferenceInspector(BaseInspectionComposite):
     mainly between pydantic fields and validators.
 
     """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        mappings_asterisk = self._create_mappings_asterisk()
+        mappings_standard = self._create_mappings_standard()
+        self.mappings = mappings_standard.union(mappings_asterisk)
 
     @property
     def model_path(self) -> str:
@@ -351,14 +413,21 @@ class ReferenceInspector(BaseInspectionComposite):
 
         return references
 
-    @property
-    def mapping(self) -> ValidatorFieldMappings:
-        """"""
-        mappings_asterisk = self._create_mappings_asterisk()
-        mappings_standard = self._create_mappings_standard()
-        mappings = mappings_standard.union(mappings_asterisk)
+    def filter_by_validator_name(self, name: str) -> List[ValidatorFieldMap]:
+        """Return mappings for given validator `name`.
 
-        return ValidatorFieldMappings(mappings)
+        """
+
+        return [mapping for mapping in self.mappings
+                if mapping.validator == name]
+
+    def filter_by_field_name(self, name: str) -> List[ValidatorFieldMap]:
+        """Return mappings for given field `name`.
+
+        """
+
+        return [mapping for mapping in self.mappings
+                if mapping.field in (name, "all fields")]
 
 
 class ModelInspector:
@@ -366,12 +435,25 @@ class ModelInspector:
 
     """
 
+    static = StaticInspector
+
     def __init__(self, model: BaseModel):
         self.model = model
+        self.config = ConfigInspector(self)
+        self.schema = SchemaInspector(self)
         self.fields = FieldInspector(self)
         self.validators = ValidatorInspector(self)
-        self.properties = PropertyInspector(self)
         self.references = ReferenceInspector(self)
+
+    @classmethod
+    def from_signode(cls, signode: desc_signature) -> "ModelInspector":
+        """Create instance from a `signode` as used within sphinx directives.
+
+        """
+
+        model_name = signode["fullname"].split(".")[0]
+        model = pydoc.locate(f"{signode['module']}.{model_name}")
+        return cls(model)
 
 
 class ModelWrapper:
@@ -459,7 +541,7 @@ class ModelWrapper:
 
         """
 
-        return self.wrapper.references.mapping.filter_by_validator_name(
+        return self.wrapper.references.filter_by_validator_name(
             validator_name)
 
     def get_validators_for_field(self, field_name: str) -> List[
@@ -468,60 +550,40 @@ class ModelWrapper:
 
         """
 
-        return self.wrapper.references.mapping.filter_by_field_name(
+        return self.wrapper.references.filter_by_field_name(
             field_name)
-
 
     def get_field_object_by_name(self, field_name: str) -> ModelField:
         """Return the field object for given field name.
 
         """
-
-        return self.model.__dict__["__fields__"][field_name]
+        return self.wrapper.fields.get(field_name)
 
     def get_field_property(self, field_name: str, property_name: str) -> Any:
         """Return a property of a given field.
 
         """
 
-        field = self.get_field_object_by_name(field_name)
-        return getattr(field.field_info, property_name, None)
+        return self.wrapper.fields.get_property_from_field_info(field_name,
+                                                                property_name)
 
     def field_is_required(self, field_name: str) -> bool:
         """Check if a field is required.
 
         """
 
-        types_to_check = (UndefinedType, type(...))
-        default_value = self.get_field_property(field_name=field_name,
-                                                property_name="default")
-        return isinstance(default_value, types_to_check)
+        return self.wrapper.fields.is_required(field_name)
 
     def find_non_json_serializable_fields(self) -> List[str]:
         """Get all fields that can't be safely serialized.
 
         """
 
-        return [key for key, value in self.model.__fields__.items()
-                if not is_serializable(value)]
+        return self.wrapper.fields.non_json_serializable
 
-    def get_safe_schema_json(self) -> Tuple[Dict, List[str]]:
+    def get_safe_schema_json(self) -> Dict:
         """Get model's `schema_json` while handling non serializable fields.
 
         """
 
-        try:
-            return self.model.schema(), []
-        except (TypeError, ValueError):
-            invalid_fields = self.find_non_json_serializable_fields()
-            new_model = self.copy_sanitized_model(invalid_fields)
-            return new_model.schema(), invalid_fields
-
-    def copy_sanitized_model(self, invalid_fields: List[str]) -> BaseModel:
-        """Generates a new pydantic model from the original one while
-        substituting invalid fields with typevars.
-
-        """
-
-        new = {name: (TypeVar(name), None) for name in invalid_fields}
-        return create_model(self.model.__name__, __base__=self.model, **new)
+        return self.wrapper.schema.sanitized

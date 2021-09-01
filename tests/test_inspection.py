@@ -7,8 +7,7 @@ import pytest
 from pydantic import BaseModel
 
 from sphinxcontrib.autodoc_pydantic.inspection import (
-    is_serializable,
-    ModelWrapper
+    ModelWrapper, ModelInspector
 )
 
 
@@ -17,7 +16,7 @@ def serializable():
     class Serializable(BaseModel):
         field_one: str
 
-    return ModelWrapper(Serializable)
+    return ModelInspector(Serializable)
 
 
 @pytest.fixture(scope="session")
@@ -39,7 +38,7 @@ def non_serializable():
         class Config:
             arbitrary_types_allowed = True
 
-    return ModelWrapper(NonSerializable)
+    return ModelInspector(NonSerializable)
 
 
 @pytest.mark.parametrize("field_test", [("field_1", True),
@@ -50,8 +49,8 @@ def non_serializable():
                                         ("field_6", True)])
 def test_is_serializable(non_serializable, field_test):
     field_name, test_result = field_test
-    field = non_serializable.get_field_object_by_name(field_name)
-    assert is_serializable(field) is test_result
+    result = non_serializable.fields.is_json_serializable(field_name)
+    assert result is test_result
 
 
 def test_find_non_json_serializable_fields(serializable,

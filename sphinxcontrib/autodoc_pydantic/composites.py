@@ -121,7 +121,7 @@ def option_list_like(arg: Any) -> Set[str]:
         return {x.strip() for x in arg.split(",")}
 
 
-class PydanticAutoDirective:
+class PydanticDirectiveOptions:
     """Composite class providing methods to manage getting and setting
     configuration values from global app configuration and local directive
     options.
@@ -192,7 +192,7 @@ class PydanticAutoDirective:
         config_name = self.sanitize_configuration_option_name(name)
         return getattr(self.parent.env.config, config_name, NONE)
 
-    def get_option_value(self, name: str, prefix: bool = False) -> Any:
+    def get_value(self, name: str, prefix: bool = False) -> Any:
         """Get option value for given `name`. First, looks for explicit
         directive option values (e.g. :member-order:) which have highest
         priority. Second, if no directive option is given, get the default
@@ -215,7 +215,7 @@ class PydanticAutoDirective:
         elif self.is_available(name):
             return self.get_app_cfg_by_name(name)
 
-    def option_is_false(self, name: str, prefix: bool = False) -> bool:
+    def is_false(self, name: str, prefix: bool = False) -> bool:
         """Get option value for given `name`. First, looks for explicit
         directive option values (e.g. :member-order:) which have highest
         priority. Second, if no directive option is given, get the default
@@ -232,9 +232,9 @@ class PydanticAutoDirective:
 
         """
 
-        return self.get_option_value(name=name, prefix=prefix) is False
+        return self.get_value(name=name, prefix=prefix) is False
 
-    def option_is_true(self, name: str, prefix: bool = False) -> bool:
+    def is_true(self, name: str, prefix: bool = False) -> bool:
         """Get option value for given `name`. First, looks for explicit
         directive option values (e.g. :member-order:) which have highest
         priority. Second, if no directive option is given, get the default
@@ -251,7 +251,7 @@ class PydanticAutoDirective:
 
         """
 
-        return self.get_option_value(name=name, prefix=prefix) is True
+        return self.get_value(name=name, prefix=prefix) is True
 
     def set_default_option(self, name: str):
         """Set default option value for given `name` from app environment
@@ -281,7 +281,7 @@ class PydanticAutoDirective:
             self.parent.options["members"] = ALL
 
 
-class PydanticAutoDoc(PydanticAutoDirective):
+class PydanticDocumenterOptions(PydanticDirectiveOptions):
     """Composite class providing methods to handle getting and setting
     autodoc directive option values.
 

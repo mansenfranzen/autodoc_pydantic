@@ -11,7 +11,7 @@ from sphinx.addnodes import (
 from sphinx.domains.python import PyMethod, PyAttribute, PyClasslike
 from sphinxcontrib.autodoc_pydantic.inspection import ModelWrapper
 from sphinxcontrib.autodoc_pydantic.composites import (
-    PydanticAutoDirective,
+    PydanticDirectiveOptions,
     option_default_true,
     option_list_like,
     create_field_href, remove_node_by_tagname
@@ -30,7 +30,7 @@ class PydanticDirectiveBase:
 
     def __init__(self, *args):
         super().__init__(*args)
-        self.pyautodoc = PydanticAutoDirective(self)
+        self.pyautodoc = PydanticDirectiveOptions(self)
 
     def get_signature_prefix(self, sig: str) -> str:
         """Overwrite original signature prefix with custom pydantic ones.
@@ -38,7 +38,7 @@ class PydanticDirectiveBase:
         """
 
         config_name = f"{self.config_name}-signature-prefix"
-        prefix = self.pyautodoc.get_option_value(config_name)
+        prefix = self.pyautodoc.get_value(config_name)
         value = prefix or self.default_prefix
         return f"{value} "
 
@@ -159,7 +159,7 @@ class PydanticValidator(PydanticDirectiveBase, PyMethod):
 
         fullname, prefix = super().handle_signature(sig, signode)
 
-        if self.pyautodoc.get_option_value("validator-replace-signature"):
+        if self.pyautodoc.get_value("validator-replace-signature"):
             self.replace_return_node(signode)
 
         return fullname, prefix
