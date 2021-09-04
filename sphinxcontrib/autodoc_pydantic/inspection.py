@@ -203,12 +203,19 @@ class FieldInspector(BaseInspectionComposite):
 
     @property
     def non_json_serializable(self) -> List[str]:
-        """Get all fields that can't be safely serialized.
+        """Get all fields that can't be safely JSON serialized.
 
         """
 
         return [name for name in self.names
                 if not self.is_json_serializable(name)]
+
+    def __bool__(self):
+        """Equals to False if no fields are present.
+
+        """
+
+        return bool(self.attribute)
 
 
 class ConfigInspector(BaseInspectionComposite):
@@ -332,6 +339,13 @@ class ValidatorInspector(BaseInspectionComposite):
         """
 
         return name in self.names_asterisk_validators
+
+    def __bool__(self):
+        """Equals to False if no validators are present.
+
+        """
+
+        return bool(self.attribute)
 
 
 class SchemaInspector(BaseInspectionComposite):
