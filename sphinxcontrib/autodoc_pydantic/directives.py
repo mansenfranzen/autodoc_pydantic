@@ -9,7 +9,7 @@ from sphinx.addnodes import (
     desc_annotation
 )
 from sphinx.domains.python import PyMethod, PyAttribute, PyClasslike
-from sphinxcontrib.autodoc_pydantic.inspection import ModelWrapper
+from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector
 from sphinxcontrib.autodoc_pydantic.composites import (
     PydanticDirectiveOptions,
     option_default_true,
@@ -137,9 +137,9 @@ class PydanticValidator(PydanticDirectiveBase, PyMethod):
         signode += desc_annotation("", "  »  ", classes=[class_name])
 
         # get imports, names and fields of validator
-        validator_name = signode["fullname"].split(".")[-1]
-        wrapper = ModelWrapper.from_signode(signode)
-        mappings = wrapper.get_fields_for_validator(validator_name)
+        name = signode["fullname"].split(".")[-1]
+        inspector = ModelInspector.from_signode(signode)
+        mappings = inspector.references.filter_by_validator_name(name)
 
         # add field reference nodes
         mapping_first = mappings[0]
