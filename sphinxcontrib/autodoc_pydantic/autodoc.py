@@ -14,7 +14,7 @@ from pydantic.schema import get_field_schema_validations
 from sphinx.ext.autodoc import (
     MethodDocumenter,
     ClassDocumenter,
-    AttributeDocumenter)
+    AttributeDocumenter, Documenter)
 
 from sphinx.util.inspect import object_description
 from sphinx.util.typing import get_type_hints, stringify
@@ -117,6 +117,41 @@ TPL_COLLAPSE = """
 """
 
 
+class PydanticDocumenterNamespace:
+    """Composite to provide single namespace to access all **autodoc_pydantic**
+    relevant documenter directive functionalities. This includes documenter
+    options `PydanticDocumenterOptions` via `options` and `ModelInspector` via
+    `inspect`. 
+
+    """
+
+    def __init__(self, documenter: Documenter, is_child: bool):
+        self._documenter = documenter
+        self._is_child = is_child
+            
+        self.options = PydanticDocumenterOptions(self._documenter)
+        
+    @property
+    def inspect(self) -> ModelInspector:
+        """Documenters do not have their `object` attribute (referring to 
+        pydantic models) set after instantiation (__init__). Instead, `object`
+        is `None` after plain instantiation. However, this composite class is
+        added during instantiation for consistency reasons. Therefore, 
+        `ModelInspector` can't be created at instantiation time of this class,
+        neither. Hence, it is lazily created once the inspection methods are 
+        first required. It is guaranteed by the documenter base class that 
+        `object` is then already correctly provided.
+         
+        """
+        
+        if self._is_child:
+            obj = self._documenter.parent.object
+        else:
+            obj = self._documenter.object
+        
+        return ModelInspector(obj)
+
+
 class PydanticModelDocumenter(ClassDocumenter):
     """Represents specialized Documenter subclass for pydantic models.
 
@@ -156,22 +191,21 @@ class PydanticModelDocumenter(ClassDocumenter):
 
     def __init__(self, *args: Any) -> None:
         super().__init__(*args)
-        self._pydantic_options = PydanticDocumenterOptions(self)
-        self._pydantic_inspect = ModelInspector(self.object)
+        self.pydantic = PydanticDocumenterNamespace(self, is_child=False)
 
     def document_members(self, *args, **kwargs):
         """Modify member options before starting to document members.
 
         """
 
-        self._pydantic_options.set_members_all()
+        self.pydantic.options.set_members_all()
         if self.options.get("undoc-members") is False:
             self.options.pop("undoc-members")
 
-        if self._pydantic_options.is_false("show-config-member", True):
+        if self.pydantic.options.is_false("show-config-member", True):
             self.hide_config_member()
 
-        if self._pydantic_options.is_false("show-validator-members", True):
+        if self.pydantic.options.is_false("show-validator-members", True):
             self.hide_validator_members()
 
         super().document_members(*args, **kwargs)
@@ -191,7 +225,7 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         """
 
-        validators = self._pydantic_inspect.validators.names
+        validators = self.pydantic.inspect.validators.names
         if "exclude-members" not in self.options:
             self.options["exclude-members"] = validators
         else:
@@ -202,7 +236,7 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         """
 
-        if self._pydantic_options.is_true("hide-paramlist", True):
+        if self.pydantic.options.is_true("hide-paramlist", True):
             return ""
         else:
             return super().format_signature(**kwargs)
@@ -217,16 +251,16 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         super().add_content(more_content, no_docstring)
 
-        if self._pydantic_options.is_true("show-json", True):
+        if self.pydantic.options.is_true("show-json", True):
             self.add_collapsable_schema()
 
-        if self._pydantic_options.is_true("show-config-summary", True):
+        if self.pydantic.options.is_true("show-config-summary", True):
             self.add_config_summary()
 
-        if self._pydantic_options.is_true("show-field-summary", True):
+        if self.pydantic.options.is_true("show-field-summary", True):
             self.add_field_summary()
 
-        if self._pydantic_options.is_true("show-validator-summary", True):
+        if self.pydantic.options.is_true("show-validator-summary", True):
             self.add_validators_summary()
 
     def add_collapsable_schema(self):
@@ -234,11 +268,11 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         """
 
-        schema = self._pydantic_inspect.schema.sanitized
-        non_serializable = self._pydantic_inspect.fields.non_json_serializable
+        schema = self.pydantic.inspect.schema.sanitized
+        non_serializable = self.pydantic.inspect.fields.non_json_serializable
 
         # handle non serializable fields
-        strategy = self._pydantic_options.get_value("show-json-error-strategy")
+        strategy = self.pydantic.options.get_value("show-json-error-strategy")
         if non_serializable:
             error_msg = (
                 f"JSON schema can't be generated for '{self.fullname}' "
@@ -268,9 +302,10 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         """
 
-        cfg_items = self._pydantic_inspect.config.items
-        if not cfg_items:
+        if not self.pydantic.inspect.config.is_configured:
             return
+
+        cfg_items = self.pydantic.inspect.config.items
 
         source_name = self.get_sourcename()
         self.add_line(":Config:", source_name)
@@ -285,11 +320,11 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         """
 
-        mappings = self._pydantic_inspect.references.mappings
+        mappings = self.pydantic.inspect.references.mappings
         if not mappings:
             return
 
-        valid_members = self._pydantic_options.get_filtered_member_names()
+        valid_members = self.pydantic.options.get_filtered_member_names()
         filtered_members = [mapping for mapping in mappings
                             if mapping.validator in valid_members]
 
@@ -309,18 +344,18 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         """
 
-        fields = self._pydantic_inspect.fields.names
+        fields = self.pydantic.inspect.fields.names
         if not fields:
             return
 
-        valid_members = self._pydantic_options.get_filtered_member_names()
+        valid_members = self.pydantic.options.get_filtered_member_names()
         filtered_members = [field for field in fields
                             if field in valid_members]
 
         type_aliases = self.config.autodoc_type_aliases
         source_name = self.get_sourcename()
         self.add_line(":Fields:", source_name)
-        ref_func = self._pydantic_inspect.references.create_model_reference
+        ref_func = self.pydantic.inspect.references.create_model_reference
         for member_name in filtered_members:
             ref = ref_func(member_name)
             annotations = get_type_hints(self.object, None, type_aliases)
@@ -584,7 +619,7 @@ class PydanticValidatorDocumenter(MethodDocumenter):
 
         is_val = super().can_document_member(member, membername, isattr,
                                              parent)
-        is_validator = is_validator_by_name(membername, parent.object)
+        is_validator = ModelInspector.static.is_validator_by_name(membername, parent.object)
         return is_val and is_validator
 
     def format_args(self, **kwargs: Any) -> str:
@@ -665,7 +700,7 @@ class PydanticConfigClassDocumenter(ClassDocumenter):
 
         is_val = super().can_document_member(member, membername, isattr,
                                              parent)
-        is_parent_model = is_pydantic_model(parent.object)
+        is_parent_model = ModelInspector.static.is_pydantic_model(parent.object)
         is_config = membername == "Config"
         is_class = isinstance(member, type)
         return is_val and is_parent_model and is_config and is_class
