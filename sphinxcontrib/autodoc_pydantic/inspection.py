@@ -222,6 +222,22 @@ class ConfigInspector(BaseInspectionComposite):
         self.attribute: Dict = self.model.Config
 
     @property
+    def is_configured(self) -> bool:
+        """Check if pydantic model config was explicitly configured. If not,
+        it defaults to the standard configuration provided by pydantic and
+        typically does not required documentation.
+
+        """
+
+        cfg = self.attribute
+
+        is_main_config = cfg is pydantic.main.BaseConfig
+        is_setting_config = cfg is pydantic.env_settings.BaseSettings.Config
+        is_default_config = is_main_config or is_setting_config
+
+        return not is_default_config
+
+    @property
     def items(self) -> Dict:
         """Return all non private (without leading underscore `_`) items of
         pydantic configuration class.
