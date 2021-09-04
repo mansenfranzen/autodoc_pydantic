@@ -55,23 +55,21 @@ def test_is_serializable(non_serializable, field_test):
 
 def test_find_non_json_serializable_fields(serializable,
                                            non_serializable):
-    assert serializable.find_non_json_serializable_fields() == []
-    assert non_serializable.find_non_json_serializable_fields() == ["field_2",
-                                                                    "field_3",
-                                                                    "field_4"]
+    assert serializable.fields.non_json_serializable == []
+    assert non_serializable.fields.non_json_serializable == ["field_2",
+                                                             "field_3",
+                                                             "field_4"]
 
 
 def test_get_safe_schema_json_serializable(serializable):
-    json_result, invalid = serializable.get_safe_schema_json()
+    json_result = serializable.schema.sanitized
 
-    assert invalid == []
     assert "field_one" in json_result["properties"]
 
 
 def test_get_safe_schema_json_non_serializable(non_serializable):
-    json_result, invalid = non_serializable.get_safe_schema_json()
+    json_result = non_serializable.schema.sanitized
+    invalid_fields = non_serializable.fields.non_json_serializable
 
-    invalid_expected = ["field_2", "field_3", "field_4"]
-    assert invalid == invalid_expected
-    for invalid_field in invalid_expected:
+    for invalid_field in invalid_fields:
         assert "type" not in json_result["properties"][invalid_field]
