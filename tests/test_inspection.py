@@ -6,9 +6,7 @@ from typing import TypeVar
 import pytest
 from pydantic import BaseModel
 
-from sphinxcontrib.autodoc_pydantic.inspection import (
-    ModelWrapper, ModelInspector
-)
+from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector
 
 
 @pytest.fixture(scope="session")
