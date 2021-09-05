@@ -3,7 +3,7 @@
 """
 
 import json
-from typing import Any, Optional, Dict, List
+from typing import Any, Optional, Dict, List, Iterable
 
 import sphinx
 from docutils.parsers.rst.directives import unchanged
@@ -42,6 +42,11 @@ class OptionsFieldDocPolicy(CustomEnum):
     DESCRIPTION = "description"
 
 
+class OptionsSummaryListOrder(CustomEnum):
+    ALPHABETICALLY = "alphabetically"
+    BYSOURCE = "bysource"
+
+
 OPTION_SPEC_FIELD = {
     "field-show-default": option_default_true,
     "field-show-required": option_default_true,
@@ -74,6 +79,9 @@ OPTION_SPEC_MODEL = {
     "model-show-validator-members": option_default_true,
     "model-show-validator-summary": option_default_true,
     "model-show-field-summary": option_default_true,
+    "model-summary-list-order": option_one_of_factory(
+        OptionsSummaryListOrder.values()
+    ),
     "model-show-config-member": option_default_true,
     "model-show-config-summary": option_default_true,
     "model-signature-prefix": unchanged,
@@ -90,6 +98,9 @@ OPTION_SPEC_SETTINGS = {
     "settings-show-validator-members": option_default_true,
     "settings-show-validator-summary": option_default_true,
     "settings-show-field-summary": option_default_true,
+    "settings-summary-list-order": option_one_of_factory(
+        OptionsSummaryListOrder.values()
+    ),
     "settings-show-config-member": option_default_true,
     "settings-show-config-summary": option_default_true,
     "settings-signature-prefix": unchanged,
@@ -327,12 +338,18 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         references = self.pydantic.inspect.references.mappings
         valid_members = self.pydantic.options.get_filtered_member_names()
-        filtered_references = [reference for reference in references
-                               if reference.validator in valid_members]
+        filtered_references = {reference.validator: reference
+                               for reference in references
+                               if reference.validator in valid_members}
+
+        # get correct sort order
+        validator_names = filtered_references.keys()
+        sorted_validator_names = self._sort_summary_list(validator_names)
 
         source_name = self.get_sourcename()
         self.add_line(":Validators:", source_name)
-        for ref in filtered_references:
+        for validator_name in sorted_validator_names:
+            ref = filtered_references[validator_name]
             line = (f"   - "
                     f":py:obj:`{ref.validator} <{ref.validator_ref}>`"
                     f" » "
@@ -353,14 +370,38 @@ class PydanticModelDocumenter(ClassDocumenter):
         valid_members = self.pydantic.options.get_filtered_member_names()
         filtered_fields = [field for field in fields
                            if field in valid_members]
+        sorted_fields = self._sort_summary_list(filtered_fields)
 
         source_name = self.get_sourcename()
         self.add_line(":Fields:", source_name)
-        for field_name in filtered_fields:
+        for field_name in sorted_fields:
             line = self._get_field_summary_line(field_name)
             self.add_line(line, source_name)
 
         self.add_line("", source_name)
+
+    def _sort_summary_list(self, names: Iterable[str]) -> List[str]:
+        """Sort member names according to given sort order
+        `OptionsSummaryListOrder`.
+
+        """
+
+        sort_order = self.pydantic.options.get_value(name="summary-list-order",
+                                                     prefix=True)
+
+        if sort_order == OptionsSummaryListOrder.ALPHABETICALLY:
+            def sort_func(name: str):
+                return name
+        elif sort_order == OptionsSummaryListOrder.BYSOURCE:
+            def sort_func(name: str):
+                name_with_class = f"{self.object_name}.{name}"
+                return self.analyzer.tagorder.get(name_with_class)
+        else:
+            raise ValueError(
+                "Invalid value provided for `summary_list_order`. Valid "
+                f"options are: {OptionsSummaryListOrder.values()}")
+
+        return sorted(names, key=sort_func)
 
     def _get_field_summary_line(self, field_name: str) -> str:
         """Get reST for field summary for given `member_name`.
