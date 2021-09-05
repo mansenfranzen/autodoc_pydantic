@@ -72,7 +72,8 @@ Contains all modifications for pydantic `BaseModel`.
    Show all validators along with corresponding fields within the class doc
    string. Hyperlinks are automatically created for validators and fields. This
    is especially useful when dealing with large models having a lot of
-   validators.
+   validators. Please note, the sort order of summary items can be configured via
+   :ref:`model-summary-list-order <autodoc_pydantic_model_summary_list_order>`.
 
 
 .. tabdocconfig:: autopydantic_model
@@ -95,7 +96,8 @@ Contains all modifications for pydantic `BaseModel`.
 
    Show all fields within the class doc string. Hyperlinks are automatically
    created. This is especially useful when dealing with large models having a
-   lot of fields.
+   lot of fields. Please note, the sort order of summary items can be configured via
+   :ref:`model-summary-list-order <autodoc_pydantic_model_summary_list_order>`.
 
 
 .. tabdocconfig:: autopydantic_model
@@ -104,12 +106,12 @@ Contains all modifications for pydantic `BaseModel`.
    :config: autodoc_pydantic_model_summary_list_order
    :option: model-summary-list-order
    :option_additional: model-show-validator-summary, model-show-field-summary
-   :values: asd, alphabetical, bysource
+   :values: alphabetical, bysource
 
-   Define the sort order within validator and field summaries which can be
+   Define the sort order within validator and field summaries (which can be
    activated via :ref:`model-show-validator-summary <autodoc_pydantic_model_show_validator_summary>`
    and :ref:`model-show-field-summary <autodoc_pydantic_model_show_field_summary>`,
-   respectively.
+   respectively).
 
 
 .. tabdocconfig:: autopydantic_model
@@ -253,7 +255,8 @@ Contains all modifications for pydantic `BaseSettings`.
    Show all validators along with corresponding fields within the class doc
    string. Hyperlinks are automatically created for validators and fields. This
    is especially useful when dealing with large models having a lot of
-   validators.
+   validators. Please note, the sort order of summary items can be configured via
+   :ref:`settings-summary-list-order <autodoc_pydantic_settings_summary_list_order>`.
 
 
 .. tabdocconfig:: autopydantic_settings
@@ -276,7 +279,23 @@ Contains all modifications for pydantic `BaseSettings`.
 
    Show all fields within the class doc string. Hyperlinks are automatically
    created. This is especially useful when dealing with large models having a
-   lot of fields.
+   lot of fields. Please note, the sort order of summary items can be configured via
+   :ref:`settings-summary-list-order <autodoc_pydantic_settings_summary_list_order>`.
+
+
+.. tabdocconfig:: autopydantic_settings
+   :title: Summary List Order
+   :path: target.configuration.SettingsSummaryListOrder
+   :config: autodoc_pydantic_settings_summary_list_order
+   :option: settings-summary-list-order
+   :option_additional: settings-show-validator-summary, settings-show-field-summary
+   :values: alphabetical, bysource
+
+   Define the sort order within validator and field summaries (which can be
+   activated via :ref:`settings-show-validator-summary <autodoc_pydantic_settings_show_validator_summary>`
+   and :ref:`settings-show-field-summary <autodoc_pydantic_settings_show_field_summary>`,
+   respectively).
+
 
 .. tabdocconfig:: autopydantic_settings
    :title: Show Undoc Members
