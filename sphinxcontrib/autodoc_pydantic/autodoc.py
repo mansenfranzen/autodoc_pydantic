@@ -43,7 +43,7 @@ class OptionsFieldDocPolicy(CustomEnum):
 
 
 class OptionsSummaryListOrder(CustomEnum):
-    ALPHABETICALLY = "alphabetically"
+    ALPHABETICAL = "alphabetical"
     BYSOURCE = "bysource"
 
 
@@ -389,7 +389,7 @@ class PydanticModelDocumenter(ClassDocumenter):
         sort_order = self.pydantic.options.get_value(name="summary-list-order",
                                                      prefix=True)
 
-        if sort_order == OptionsSummaryListOrder.ALPHABETICALLY:
+        if sort_order == OptionsSummaryListOrder.ALPHABETICAL:
             def sort_func(name: str):
                 return name
         elif sort_order == OptionsSummaryListOrder.BYSOURCE:
@@ -398,8 +398,9 @@ class PydanticModelDocumenter(ClassDocumenter):
                 return self.analyzer.tagorder.get(name_with_class)
         else:
             raise ValueError(
-                "Invalid value provided for `summary_list_order`. Valid "
-                f"options are: {OptionsSummaryListOrder.values()}")
+                f"Invalid value `{sort_order}` provided for "
+                f"`summary_list_order`. Valid options are: "
+                f"{OptionsSummaryListOrder.values()}")
 
         return sorted(names, key=sort_func)
 

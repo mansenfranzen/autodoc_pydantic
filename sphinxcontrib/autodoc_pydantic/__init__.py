@@ -69,7 +69,7 @@ def add_configuration_values(app: Sphinx):
     stem = "autodoc_pydantic_"
     add = app.add_config_value
     json_strategy = OptionsJsonErrorStrategy.WARN
-    summary_list_order = OptionsSummaryListOrder.ALPHABETICALLY
+    summary_list_order = OptionsSummaryListOrder.ALPHABETICAL
 
     add(f'{stem}config_signature_prefix', "model", True, str)
     add(f'{stem}config_members', True, True, bool)
