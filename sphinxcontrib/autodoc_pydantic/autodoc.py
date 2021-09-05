@@ -387,7 +387,8 @@ class PydanticModelDocumenter(ClassDocumenter):
         """
 
         sort_order = self.pydantic.options.get_value(name="summary-list-order",
-                                                     prefix=True)
+                                                     prefix=True,
+                                                     force_availability=True)
 
         if sort_order == OptionsSummaryListOrder.ALPHABETICAL:
             def sort_func(name: str):

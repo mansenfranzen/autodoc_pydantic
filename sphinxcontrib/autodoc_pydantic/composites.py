@@ -173,7 +173,9 @@ class PydanticDirectiveOptions:
         return f"autodoc_pydantic_{sanitized}"
 
     def is_available(self, name: str) -> bool:
-        """Check if option is usable.
+        """Configurations may be disabled for documentation purposes. If the
+        directive option `__doc_disable_except__` exists, it contains the
+        only available configurations.
 
         """
 
@@ -192,7 +194,9 @@ class PydanticDirectiveOptions:
         config_name = self.sanitize_configuration_option_name(name)
         return getattr(self.parent.env.config, config_name, NONE)
 
-    def get_value(self, name: str, prefix: bool = False) -> Any:
+    def get_value(self, name: str,
+                  prefix: bool = False,
+                  force_availability: bool = False) -> Any:
         """Get option value for given `name`. First, looks for explicit
         directive option values (e.g. :member-order:) which have highest
         priority. Second, if no directive option is given, get the default
@@ -204,6 +208,9 @@ class PydanticDirectiveOptions:
             Name of the option.
         prefix: bool
             If True, add `pyautodoc_prefix` to name.
+        force_availability: bool
+            It is disabled by default however some default configurations like
+            `model-summary-list-order` need to be activated all the time.
 
         """
 
@@ -212,7 +219,7 @@ class PydanticDirectiveOptions:
 
         if name in self.parent.options:
             return self.parent.options[name]
-        elif self.is_available(name):
+        elif force_availability or self.is_available(name):
             return self.get_app_cfg_by_name(name)
 
     def is_false(self, name: str, prefix: bool = False) -> bool:
