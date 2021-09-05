@@ -321,6 +321,109 @@ def test_autodoc_pydantic_settings_show_field_summary_false(autodocument):
     assert result == actual
 
 
+def test_autodoc_pydantic_settings_summary_list_order_alphabetically(autodocument):
+    result = [
+        '',
+        '.. py:pydantic_settings:: SettingsSummaryListOrder',
+        '   :module: target.configuration',
+        '',
+        '   SettingsSummaryListOrder.',
+        '',
+        '   :Fields:',
+        '      - :py:obj:`field_a (int) <target.configuration.SettingsSummaryListOrder.field_a>`',
+        '      - :py:obj:`field_b (int) <target.configuration.SettingsSummaryListOrder.field_b>`',
+        '',
+        '   :Validators:',
+        '      - :py:obj:`validate_a <target.configuration.SettingsSummaryListOrder.validate_a>` » :py:obj:`field_a <target.configuration.SettingsSummaryListOrder.field_a>`',
+        '      - :py:obj:`validate_b <target.configuration.SettingsSummaryListOrder.validate_b>` » :py:obj:`field_b <target.configuration.SettingsSummaryListOrder.field_b>`',
+        ''
+    ]
+
+    # explict global
+    actual = autodocument(
+        documenter='pydantic_settings',
+        object_path='target.configuration.SettingsSummaryListOrder',
+        options_app={
+            "autodoc_pydantic_settings_show_validator_summary": True,
+            "autodoc_pydantic_settings_show_field_summary": True,
+            "autodoc_pydantic_settings_summary_list_order": "alphabetically"},
+        deactivate_all=True)
+    assert result == actual
+
+    # explict local
+    actual = autodocument(
+        documenter='pydantic_settings',
+        object_path='target.configuration.SettingsSummaryListOrder',
+        options_app={"autodoc_pydantic_settings_show_validator_summary": True,
+                     "autodoc_pydantic_settings_show_field_summary": True},
+        options_doc={"settings-summary-list-order": "alphabetically"},
+        deactivate_all=True)
+    assert result == actual
+
+    # explicit local overwrite global
+    actual = autodocument(
+        documenter='pydantic_settings',
+        object_path='target.configuration.SettingsSummaryListOrder',
+        options_app={"autodoc_pydantic_settings_show_validator_summary": True,
+                     "autodoc_pydantic_settings_show_field_summary": True,
+                     "autodoc_pydantic_settings_summary_list_order": "bysource"},
+        options_doc={"settings-summary-list-order": "alphabetically"},
+        deactivate_all=True)
+    assert result == actual
+
+
+def test_autodoc_pydantic_settings_summary_list_order_bysource(autodocument):
+    result = [
+        '',
+        '.. py:pydantic_settings:: SettingsSummaryListOrder',
+        '   :module: target.configuration',
+        '',
+        '   SettingsSummaryListOrder.',
+        '',
+        '   :Fields:',
+        '      - :py:obj:`field_b (int) <target.configuration.SettingsSummaryListOrder.field_b>`',
+        '      - :py:obj:`field_a (int) <target.configuration.SettingsSummaryListOrder.field_a>`',
+        '',
+        '   :Validators:',
+        '      - :py:obj:`validate_b <target.configuration.SettingsSummaryListOrder.validate_b>` » :py:obj:`field_b <target.configuration.SettingsSummaryListOrder.field_b>`',
+        '      - :py:obj:`validate_a <target.configuration.SettingsSummaryListOrder.validate_a>` » :py:obj:`field_a <target.configuration.SettingsSummaryListOrder.field_a>`',
+
+        ''
+    ]
+
+    # explict global
+    actual = autodocument(
+        documenter='pydantic_settings',
+        object_path='target.configuration.SettingsSummaryListOrder',
+        options_app={"autodoc_pydantic_settings_show_validator_summary": True,
+                     "autodoc_pydantic_settings_show_field_summary": True,
+                     "autodoc_pydantic_settings_summary_list_order": "bysource"},
+        deactivate_all=True)
+    assert result == actual
+
+    # explict local
+    actual = autodocument(
+        documenter='pydantic_settings',
+        object_path='target.configuration.SettingsSummaryListOrder',
+        options_app={"autodoc_pydantic_settings_show_validator_summary": True,
+                     "autodoc_pydantic_settings_show_field_summary": True},
+        options_doc={"settings-summary-list-order": "bysource"},
+        deactivate_all=True)
+    assert result == actual
+
+    # explicit local overwrite global
+    actual = autodocument(
+        documenter='pydantic_settings',
+        object_path='target.configuration.SettingsSummaryListOrder',
+        options_app={
+            "autodoc_pydantic_settings_show_validator_summary": True,
+            "autodoc_pydantic_settings_show_field_summary": True,
+            "autodoc_pydantic_settings_summary_list_order": "alphabetically"},
+        options_doc={"settings-summary-list-order": "bysource"},
+        deactivate_all=True)
+    assert result == actual
+
+
 def test_autodoc_pydantic_settings_hide_paramlist_false(autodocument):
 
     params = [
