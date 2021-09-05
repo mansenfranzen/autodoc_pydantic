@@ -382,6 +382,9 @@ class ReferenceInspector(BaseInspectionComposite):
     """Provide namespace for inspection methods for creating references
     mainly between pydantic fields and validators.
 
+    Importantly, `mappings` provides the set of all `ValidatorFieldMap`
+    instances which contain all references between fields and validators.
+
     """
 
     def __init__(self, *args, **kwargs):
