@@ -321,7 +321,7 @@ def test_autodoc_pydantic_settings_show_field_summary_false(autodocument):
     assert result == actual
 
 
-def test_autodoc_pydantic_settings_summary_list_order_alphabetically(autodocument):
+def test_autodoc_pydantic_settings_summary_list_order_alphabetical(autodocument):
     result = [
         '',
         '.. py:pydantic_settings:: SettingsSummaryListOrder',
@@ -346,7 +346,7 @@ def test_autodoc_pydantic_settings_summary_list_order_alphabetically(autodocumen
         options_app={
             "autodoc_pydantic_settings_show_validator_summary": True,
             "autodoc_pydantic_settings_show_field_summary": True,
-            "autodoc_pydantic_settings_summary_list_order": "alphabetically"},
+            "autodoc_pydantic_settings_summary_list_order": "alphabetical"},
         deactivate_all=True)
     assert result == actual
 
@@ -356,7 +356,7 @@ def test_autodoc_pydantic_settings_summary_list_order_alphabetically(autodocumen
         object_path='target.configuration.SettingsSummaryListOrder',
         options_app={"autodoc_pydantic_settings_show_validator_summary": True,
                      "autodoc_pydantic_settings_show_field_summary": True},
-        options_doc={"settings-summary-list-order": "alphabetically"},
+        options_doc={"settings-summary-list-order": "alphabetical"},
         deactivate_all=True)
     assert result == actual
 
@@ -367,7 +367,7 @@ def test_autodoc_pydantic_settings_summary_list_order_alphabetically(autodocumen
         options_app={"autodoc_pydantic_settings_show_validator_summary": True,
                      "autodoc_pydantic_settings_show_field_summary": True,
                      "autodoc_pydantic_settings_summary_list_order": "bysource"},
-        options_doc={"settings-summary-list-order": "alphabetically"},
+        options_doc={"settings-summary-list-order": "alphabetical"},
         deactivate_all=True)
     assert result == actual
 
@@ -418,7 +418,7 @@ def test_autodoc_pydantic_settings_summary_list_order_bysource(autodocument):
         options_app={
             "autodoc_pydantic_settings_show_validator_summary": True,
             "autodoc_pydantic_settings_show_field_summary": True,
-            "autodoc_pydantic_settings_summary_list_order": "alphabetically"},
+            "autodoc_pydantic_settings_summary_list_order": "alphabetical"},
         options_doc={"settings-summary-list-order": "bysource"},
         deactivate_all=True)
     assert result == actual
