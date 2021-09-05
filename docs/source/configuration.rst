@@ -99,6 +99,20 @@ Contains all modifications for pydantic `BaseModel`.
 
 
 .. tabdocconfig:: autopydantic_model
+   :title: Summary List Order
+   :path: target.configuration.ModelSummaryListOrder
+   :config: autodoc_pydantic_model_summary_list_order
+   :option: model-summary-list-order
+   :option_additional: model-show-validator-summary, model-show-field-summary
+   :values: asd, alphabetical, bysource
+
+   Define the sort order within validator and field summaries which can be
+   activated via :ref:`model-show-validator-summary <autodoc_pydantic_model_show_validator_summary>`
+   and :ref:`model-show-field-summary <autodoc_pydantic_model_show_field_summary>`,
+   respectively.
+
+
+.. tabdocconfig:: autopydantic_model
    :title: Show Undoc Members
    :path: target.configuration.ModelUndocMembers
    :config: autodoc_pydantic_model_undoc_members
