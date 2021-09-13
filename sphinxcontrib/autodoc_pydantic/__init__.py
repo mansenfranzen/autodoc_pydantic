@@ -8,16 +8,17 @@ from typing import Dict, Any
 from sphinx.domains import ObjType
 from sphinx.application import Sphinx
 
-from sphinxcontrib.autodoc_pydantic.autodoc import (
+from sphinxcontrib.autodoc_pydantic.directives.autodocumenters import (
     PydanticValidatorDocumenter,
     PydanticModelDocumenter,
     PydanticConfigClassDocumenter,
     PydanticFieldDocumenter,
-    PydanticSettingsDocumenter, OptionsFieldDocPolicy,
-    OptionsJsonErrorStrategy, OptionsSummaryListOrder
+    PydanticSettingsDocumenter
 )
+from sphinxcontrib.autodoc_pydantic.directives.options.enums import \
+    OptionsJsonErrorStrategy, OptionsFieldDocPolicy, OptionsSummaryListOrder
 
-from sphinxcontrib.autodoc_pydantic.directives import (
+from sphinxcontrib.autodoc_pydantic.directives.directives import (
     PydanticField,
     PydanticConfigClass,
     PydanticValidator,

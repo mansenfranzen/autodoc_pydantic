@@ -1,6 +1,7 @@
-"""This module contains pydantic specific directives.
+"""This module contains **autodoc_pydantic**'s directives.
 
 """
+
 from typing import Tuple
 
 from docutils.parsers.rst.directives import unchanged
@@ -10,12 +11,13 @@ from sphinx.addnodes import (
 )
 from sphinx.domains.python import PyMethod, PyAttribute, PyClasslike
 from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector
-from sphinxcontrib.autodoc_pydantic.composites import (
-    PydanticDirectiveOptions,
-    option_default_true,
-    option_list_like,
-    create_field_href, remove_node_by_tagname
+from sphinxcontrib.autodoc_pydantic.directives.composites import (
+    PydanticDirectiveOptions
 )
+from sphinxcontrib.autodoc_pydantic.directives.utility import \
+    create_field_href, remove_node_by_tagname
+from sphinxcontrib.autodoc_pydantic.directives.options.validators import \
+    option_default_true, option_list_like
 
 TUPLE_STR = Tuple[str, str]
 
@@ -143,12 +145,12 @@ class PydanticValidator(PydanticDirectiveBase, PyMethod):
 
         # add field reference nodes
         mapping_first = mappings[0]
-        signode += create_field_href(name=mapping_first.field,
+        signode += create_field_href(name=mapping_first.field_name,
                                      ref=mapping_first.field_ref,
                                      env=self.env)
         for mapping in mappings[1:]:
             signode += desc_annotation("", ", ")
-            signode += create_field_href(name=mapping.field,
+            signode += create_field_href(name=mapping.field_name,
                                          ref=mapping.field_ref,
                                          env=self.env)
 
