@@ -1,17 +1,21 @@
-"""This module contains inspection functionality for pydantic models.
+"""This module contains the inspection functionality for pydantic models. It
+is used to retrieve relevant information about fields, validators, config and
+schema of pydantical models.
 
 """
-import functools
+
 import pydoc
-from collections import defaultdict
 from itertools import chain
-from typing import NamedTuple, Tuple, List, Dict, Any, Set, TypeVar, Iterator
+from typing import NamedTuple, List, Dict, Any, Set, TypeVar, Iterator, Type
 
 import pydantic
 from pydantic import BaseModel, create_model
 from pydantic.class_validators import Validator
 from pydantic.fields import ModelField, UndefinedType
+from pydantic.schema import get_field_schema_validations
 from sphinx.addnodes import desc_signature
+
+ASTERISK_FIELD_NAME = "all fields"
 
 
 class ValidatorFieldMap(NamedTuple):
@@ -19,10 +23,14 @@ class ValidatorFieldMap(NamedTuple):
 
     """
 
-    field: str
-    validator: str
-    is_asterisk: bool
-    model_path: str
+    field_name: str
+    """Name of the field."""
+
+    validator_name: str
+    """Name of the validator."""
+
+    model_ref: str
+    """Reference corresponding parent pydantic model."""
 
     def _get_ref(self, name: str) -> str:
         """Create reference for given `name` while prefixing it with model
@@ -30,54 +38,23 @@ class ValidatorFieldMap(NamedTuple):
 
         """
 
-        return f"{self.model_path}.{name}"
+        return f"{self.model_ref}.{name}"
 
     @property
     def field_ref(self):
-        """Create reference to field object.
+        """Reference to field..
 
         """
 
-        if self.is_asterisk:
-            return self.model_path
-
-        return self._get_ref(self.field)
+        return self._get_ref(self.field_name)
 
     @property
     def validator_ref(self):
-        """Create reference to validator object.
+        """Reference to validator.
 
         """
 
-        return self._get_ref(self.validator)
-
-
-class StaticInspector:
-    """Namespace under `ModelInspector` for static methods.
-
-    """
-
-    @staticmethod
-    def is_pydantic_model(obj: Any) -> bool:
-        """Determine if object is a valid pydantic model.
-
-        """
-
-        if isinstance(obj, type):
-            return issubclass(obj, BaseModel)
-        return False
-
-    @classmethod
-    def is_validator_by_name(cls, name: str, obj: Any) -> bool:
-        """Determine if a validator is present under provided `name` for given
-        `model`.
-
-        """
-
-        if cls.is_pydantic_model(obj):
-            inspector = ModelInspector(obj)
-            return name in inspector.validators.names
-        return False
+        return self._get_ref(self.validator_name)
 
 
 class BaseInspectionComposite:
@@ -168,6 +145,18 @@ class FieldInspector(BaseInspectionComposite):
         field = self.get(field_name)
         return getattr(field.field_info, property_name, None)
 
+    def get_constraints(self, field_name: str) -> Dict[str, Any]:
+        """Get constraints for given `field_name`.
+
+        """
+
+        field = self.get(field_name)
+        constraints = get_field_schema_validations(field)
+        filtered = {key: value for key, value in constraints.items()
+                    if key not in {"env_names", "env"}}
+
+        return filtered
+
     def is_required(self, field_name: str) -> bool:
         """Check if a given pydantic field is required/mandatory. Returns True,
         if a value for this field needs to provided upon model creation.
@@ -216,44 +205,6 @@ class FieldInspector(BaseInspectionComposite):
         """
 
         return bool(self.attribute)
-
-
-class ConfigInspector(BaseInspectionComposite):
-    """Provide namespace for inspection methods for config class of pydantic
-    models.
-
-    """
-
-    def __init__(self, parent: 'ModelInspector'):
-        super().__init__(parent)
-        self.attribute: Dict = self.model.Config
-
-    @property
-    def is_configured(self) -> bool:
-        """Check if pydantic model config was explicitly configured. If not,
-        it defaults to the standard configuration provided by pydantic and
-        typically does not required documentation.
-
-        """
-
-        cfg = self.attribute
-
-        is_main_config = cfg is pydantic.main.BaseConfig
-        is_setting_config = cfg is pydantic.env_settings.BaseSettings.Config
-        is_default_config = is_main_config or is_setting_config
-
-        return not is_default_config
-
-    @property
-    def items(self) -> Dict:
-        """Return all non private (without leading underscore `_`) items of
-        pydantic configuration class.
-
-        """
-
-        return {key: getattr(self.attribute, key)
-                for key in dir(self.attribute)
-                if not key.startswith("_")}
 
 
 class ValidatorInspector(BaseInspectionComposite):
@@ -348,34 +299,42 @@ class ValidatorInspector(BaseInspectionComposite):
         return bool(self.attribute)
 
 
-class SchemaInspector(BaseInspectionComposite):
-    """Provide namespace for inspection methods for general properties of
-    pydantic models.
+class ConfigInspector(BaseInspectionComposite):
+    """Provide namespace for inspection methods for config class of pydantic
+    models.
 
     """
 
+    def __init__(self, parent: 'ModelInspector'):
+        super().__init__(parent)
+        self.attribute: Dict = self.model.Config
+
     @property
-    def sanitized(self) -> Dict:
-        """Get model's `schema` while handling non serializable fields. Such
-        fields will be replaced by TypeVars.
+    def is_configured(self) -> bool:
+        """Check if pydantic model config was explicitly configured. If not,
+        it defaults to the standard configuration provided by pydantic and
+        typically does not required documentation.
 
         """
 
-        try:
-            return self.model.schema()
-        except (TypeError, ValueError):
-            new_model = self.create_sanitized_model()
-            return new_model.schema()
+        cfg = self.attribute
 
-    def create_sanitized_model(self) -> BaseModel:
-        """Generates a new pydantic model from the original one while
-        substituting invalid fields with typevars.
+        is_main_config = cfg is pydantic.main.BaseConfig
+        is_setting_config = cfg is pydantic.env_settings.BaseSettings.Config
+        is_default_config = is_main_config or is_setting_config
+
+        return not is_default_config
+
+    @property
+    def items(self) -> Dict:
+        """Return all non private (without leading underscore `_`) items of
+        pydantic configuration class.
 
         """
 
-        invalid_fields = self._parent.fields.non_json_serializable
-        new = {name: (TypeVar(name), None) for name in invalid_fields}
-        return create_model(self.model.__name__, __base__=self.model, **new)
+        return {key: getattr(self.attribute, key)
+                for key in dir(self.attribute)
+                if not key.startswith("_")}
 
 
 class ReferenceInspector(BaseInspectionComposite):
@@ -419,10 +378,9 @@ class ReferenceInspector(BaseInspectionComposite):
         asterisk_validators = field_validator_names.pop("*")
         model_path = self.model_path
 
-        return {ValidatorFieldMap(field="all fields",
-                                  validator=validator,
-                                  is_asterisk=True,
-                                  model_path=model_path)
+        return {ValidatorFieldMap(field_name=ASTERISK_FIELD_NAME,
+                                  validator_name=validator,
+                                  model_ref=model_path)
                 for validator in asterisk_validators}
 
     def _create_mappings_standard(self) -> Set[ValidatorFieldMap]:
@@ -436,10 +394,9 @@ class ReferenceInspector(BaseInspectionComposite):
 
         references = set()
         for field, validators in field_validator_names.items():
-            refs = {ValidatorFieldMap(field=field,
-                                      validator=validator,
-                                      is_asterisk=False,
-                                      model_path=model_path)
+            refs = {ValidatorFieldMap(field_name=field,
+                                      validator_name=validator,
+                                      model_ref=model_path)
                     for validator in validators
                     if not is_asterisk(validator)}
             references.update(refs)
@@ -452,7 +409,7 @@ class ReferenceInspector(BaseInspectionComposite):
         """
 
         return [mapping for mapping in self.mappings
-                if mapping.validator == name]
+                if mapping.validator_name == name]
 
     def filter_by_field_name(self, name: str) -> List[ValidatorFieldMap]:
         """Return mappings for given field `name`.
@@ -460,7 +417,65 @@ class ReferenceInspector(BaseInspectionComposite):
         """
 
         return [mapping for mapping in self.mappings
-                if mapping.field in (name, "all fields")]
+                if mapping.field_name in (name, ASTERISK_FIELD_NAME)]
+
+
+class SchemaInspector(BaseInspectionComposite):
+    """Provide namespace for inspection methods for general properties of
+    pydantic models.
+
+    """
+
+    @property
+    def sanitized(self) -> Dict:
+        """Get model's `schema` while handling non serializable fields. Such
+        fields will be replaced by TypeVars.
+
+        """
+
+        try:
+            return self.model.schema()
+        except (TypeError, ValueError):
+            new_model = self.create_sanitized_model()
+            return new_model.schema()
+
+    def create_sanitized_model(self) -> BaseModel:
+        """Generates a new pydantic model from the original one while
+        substituting invalid fields with typevars.
+
+        """
+
+        invalid_fields = self._parent.fields.non_json_serializable
+        new = {name: (TypeVar(name), None) for name in invalid_fields}
+        return create_model(self.model.__name__, __base__=self.model, **new)
+
+
+class StaticInspector:
+    """Namespace under `ModelInspector` for static methods.
+
+    """
+
+    @staticmethod
+    def is_pydantic_model(obj: Any) -> bool:
+        """Determine if object is a valid pydantic model.
+
+        """
+
+        if isinstance(obj, type):
+            return issubclass(obj, BaseModel)
+        return False
+
+    @classmethod
+    def is_validator_by_name(cls, name: str, obj: Any) -> bool:
+        """Determine if a validator is present under provided `name` for given
+        `model`.
+
+        """
+
+        if cls.is_pydantic_model(obj):
+            inspector = ModelInspector(obj)
+            return name in inspector.validators.names
+        return False
 
 
 class ModelInspector:
@@ -470,7 +485,7 @@ class ModelInspector:
 
     static = StaticInspector
 
-    def __init__(self, model: BaseModel):
+    def __init__(self, model: Type[BaseModel]):
         self.model = model
         self.config = ConfigInspector(self)
         self.schema = SchemaInspector(self)

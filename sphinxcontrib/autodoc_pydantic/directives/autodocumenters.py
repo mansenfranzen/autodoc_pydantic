@@ -1,4 +1,4 @@
-"""This module contains the autodoc extension classes.
+"""This module contains **autodoc_pydantic**'s autodocumenters.
 
 """
 
@@ -6,123 +6,37 @@ import json
 from typing import Any, Optional, Dict, List, Iterable
 
 import sphinx
-from docutils.parsers.rst.directives import unchanged
 from docutils.statemachine import StringList
 from pydantic import BaseSettings
-from pydantic.schema import get_field_schema_validations
 from sphinx.ext.autodoc import (
     MethodDocumenter,
     ClassDocumenter,
-    AttributeDocumenter, Documenter)
+    AttributeDocumenter,
+    Documenter
+)
 
 from sphinx.util.inspect import object_description
 from sphinx.util.typing import get_type_hints, stringify
 
-from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector
-from sphinxcontrib.autodoc_pydantic.composites import (
-    option_members,
-    option_one_of_factory,
-    option_default_true,
-    option_list_like,
-    PydanticDocumenterOptions,
-    NONE
+from sphinxcontrib.autodoc_pydantic.directives.options.enums import (
+    OptionsJsonErrorStrategy,
+    OptionsFieldDocPolicy,
+    OptionsSummaryListOrder
 )
-from sphinxcontrib.autodoc_pydantic.utility import CustomEnum
-
-
-class OptionsJsonErrorStrategy(CustomEnum):
-    RAISE = "raise"
-    COERCE = "coerce"
-    WARN = "warn"
-
-
-class OptionsFieldDocPolicy(CustomEnum):
-    BOTH = "both"
-    DOCSTRING = "docstring"
-    DESCRIPTION = "description"
-
-
-class OptionsSummaryListOrder(CustomEnum):
-    ALPHABETICAL = "alphabetical"
-    BYSOURCE = "bysource"
-
-
-OPTION_SPEC_FIELD = {
-    "field-show-default": option_default_true,
-    "field-show-required": option_default_true,
-    "field-signature-prefix": unchanged,
-    "field-show-alias": option_default_true,
-    "field-show-constraints": option_default_true,
-    "field-list-validators": option_default_true,
-    "__doc_disable_except__": option_list_like,
-    "field-doc-policy": option_one_of_factory(OptionsFieldDocPolicy.values())}
-
-OPTION_SPEC_VALIDATOR = {"validator-replace-signature": option_default_true,
-                         "validator-list-fields": option_default_true,
-                         "validator-signature-prefix": unchanged,
-                         "__doc_disable_except__": option_list_like}
-
-OPTION_SPEC_CONFIG = {"members": option_members,
-                      "config-signature-prefix": unchanged,
-                      "__doc_disable_except__": option_list_like}
-
-OPTION_SPEC_MERGED = {**OPTION_SPEC_FIELD,
-                      **OPTION_SPEC_VALIDATOR,
-                      **OPTION_SPEC_CONFIG}
-
-OPTION_SPEC_MODEL = {
-    "model-show-json": option_default_true,
-    "model-show-json-error-strategy": option_one_of_factory(
-        OptionsJsonErrorStrategy.values()
-    ),
-    "model-hide-paramlist": option_default_true,
-    "model-show-validator-members": option_default_true,
-    "model-show-validator-summary": option_default_true,
-    "model-show-field-summary": option_default_true,
-    "model-summary-list-order": option_one_of_factory(
-        OptionsSummaryListOrder.values()
-    ),
-    "model-show-config-member": option_default_true,
-    "model-show-config-summary": option_default_true,
-    "model-signature-prefix": unchanged,
-    "undoc-members": option_default_true,
-    "members": option_members,
-    "__doc_disable_except__": option_list_like}
-
-OPTION_SPEC_SETTINGS = {
-    "settings-show-json": option_default_true,
-    "settings-show-json-error-strategy": option_one_of_factory(
-        OptionsJsonErrorStrategy.values()
-    ),
-    "settings-hide-paramlist": option_default_true,
-    "settings-show-validator-members": option_default_true,
-    "settings-show-validator-summary": option_default_true,
-    "settings-show-field-summary": option_default_true,
-    "settings-summary-list-order": option_one_of_factory(
-        OptionsSummaryListOrder.values()
-    ),
-    "settings-show-config-member": option_default_true,
-    "settings-show-config-summary": option_default_true,
-    "settings-signature-prefix": unchanged,
-    "undoc-members": option_default_true,
-    "members": option_members,
-    "__doc_disable_except__": option_list_like}
-
-TPL_COLLAPSE = """
-.. raw:: html
-
-   <p><details  class="autodoc_pydantic_collapsable_json">
-   <summary>Show JSON schema</summary>
-
-.. code-block:: json
-
-{}
-
-.. raw:: html
-
-   </details></p>
-
-"""
+from sphinxcontrib.autodoc_pydantic.directives.options.definition import (
+    OPTIONS_MODEL,
+    OPTIONS_SETTINGS,
+    OPTIONS_FIELD,
+    OPTIONS_VALIDATOR,
+    OPTIONS_CONFIG,
+    OPTIONS_MERGED
+)
+from sphinxcontrib.autodoc_pydantic.directives.templates import TPL_COLLAPSE
+from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector
+from sphinxcontrib.autodoc_pydantic.directives.composites import (
+    PydanticDocumenterOptions
+)
+from sphinxcontrib.autodoc_pydantic.directives.utility import NONE
 
 
 class PydanticDocumenterNamespace:
@@ -174,7 +88,7 @@ class PydanticModelDocumenter(ClassDocumenter):
     directivetype = 'pydantic_model'
     priority = 10 + ClassDocumenter.priority
     option_spec = ClassDocumenter.option_spec.copy()
-    option_spec.update({**OPTION_SPEC_MODEL, **OPTION_SPEC_MERGED})
+    option_spec.update({**OPTIONS_MODEL, **OPTIONS_MERGED})
 
     pyautodoc_pass_to_directive = (
         "model-signature-prefix",
@@ -338,9 +252,9 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         references = self.pydantic.inspect.references.mappings
         valid_members = self.pydantic.options.get_filtered_member_names()
-        filtered_references = {reference.validator: reference
+        filtered_references = {reference.validator_name: reference
                                for reference in references
-                               if reference.validator in valid_members}
+                               if reference.validator_name in valid_members}
 
         # get correct sort order
         validator_names = filtered_references.keys()
@@ -351,9 +265,9 @@ class PydanticModelDocumenter(ClassDocumenter):
         for validator_name in sorted_validator_names:
             ref = filtered_references[validator_name]
             line = (f"   - "
-                    f":py:obj:`{ref.validator} <{ref.validator_ref}>`"
+                    f":py:obj:`{ref.validator_name} <{ref.validator_ref}>`"
                     f" » "
-                    f":py:obj:`{ref.field} <{ref.field_ref}>`")
+                    f":py:obj:`{ref.field_name} <{ref.field_ref}>`")
             self.add_line(line, source_name)
 
         self.add_line("", source_name)
@@ -449,7 +363,7 @@ class PydanticSettingsDocumenter(PydanticModelDocumenter):
 
     priority = 10 + ClassDocumenter.priority
     option_spec = ClassDocumenter.option_spec.copy()
-    option_spec.update({**OPTION_SPEC_SETTINGS, **OPTION_SPEC_MERGED})
+    option_spec.update({**OPTIONS_SETTINGS, **OPTIONS_MERGED})
 
     pyautodoc_pass_to_directive = (
         "settings-signature-prefix",
@@ -491,7 +405,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
     directivetype = 'pydantic_field'
     priority = 10 + AttributeDocumenter.priority
     option_spec = dict(AttributeDocumenter.option_spec)
-    option_spec.update(OPTION_SPEC_FIELD)
+    option_spec.update(OPTIONS_FIELD)
     member_order = 0
 
     pyautodoc_pass_to_directive = (
@@ -601,11 +515,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
         """
 
         field_name = self.pydantic_field_name
-        field = self.pydantic.inspect.fields.get(field_name)
-
-        constraints = get_field_schema_validations(field)
-        constraints = {key: value for key, value in constraints.items()
-                       if key not in {"env_names", "env"}}
+        constraints = self.pydantic.inspect.fields.get_constraints(field_name)
 
         if constraints:
             source_name = self.get_sourcename()
@@ -645,7 +555,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
         source_name = self.get_sourcename()
         self.add_line(":Validated by:", source_name)
         for reference in references:
-            field_name = reference.validator
+            field_name = reference.validator_name
             ref = reference.validator_ref
             line = f"   - :py:obj:`{field_name} <{ref}>`"
             self.add_line(line, source_name)
@@ -663,7 +573,7 @@ class PydanticValidatorDocumenter(MethodDocumenter):
     member_order = 50
     priority = 10 + MethodDocumenter.priority
     option_spec = MethodDocumenter.option_spec.copy()
-    option_spec.update(OPTION_SPEC_VALIDATOR)
+    option_spec.update(OPTIONS_VALIDATOR)
 
     pyautodoc_pass_to_directive = (
         "validator-signature-prefix",
@@ -730,7 +640,9 @@ class PydanticValidatorDocumenter(MethodDocumenter):
         self.add_line(":Validates:", source_name)
 
         for reference in references:
-            line = f"   - :py:obj:`{reference.field} <{reference.field_ref}>`"
+            line = f"   - :py:obj:" \
+                   f"`{reference.field_name} " \
+                   f"<{reference.field_ref}>`"
             self.add_line(line, source_name)
 
         self.add_line("", source_name)
@@ -745,7 +657,7 @@ class PydanticConfigClassDocumenter(ClassDocumenter):
     objtype = 'pydantic_config'
     directivetype = 'pydantic_config'
     option_spec = ClassDocumenter.option_spec.copy()
-    option_spec.update(OPTION_SPEC_CONFIG)
+    option_spec.update(OPTIONS_CONFIG )
     member_order = 100
     priority = 10 + ClassDocumenter.priority
 
