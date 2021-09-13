@@ -11,7 +11,7 @@ from sphinx.addnodes import (
 )
 from sphinx.domains.python import PyMethod, PyAttribute, PyClasslike
 from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector
-from sphinxcontrib.autodoc_pydantic.directives.composites import (
+from sphinxcontrib.autodoc_pydantic.directives.options.composites import (
     PydanticDirectiveOptions
 )
 from sphinxcontrib.autodoc_pydantic.directives.utility import \
