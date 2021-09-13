@@ -1,4 +1,4 @@
-"""This module contains utility functions not directly.
+"""This module contains various utility functions.
 
 """
 
