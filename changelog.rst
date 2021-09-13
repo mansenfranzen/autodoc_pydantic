@@ -1,6 +1,12 @@
 Changelog
 =========
 
+v1.5.0 - 2021-09-XX
+-------------------
+
+This release includes major refactorings, documentation improvements and a new
+feature.
+
 v1.4.0 - 2021-08-20
 -------------------
 
