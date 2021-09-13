@@ -33,7 +33,7 @@ from sphinxcontrib.autodoc_pydantic.directives.options.definition import (
 )
 from sphinxcontrib.autodoc_pydantic.directives.templates import TPL_COLLAPSE
 from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector
-from sphinxcontrib.autodoc_pydantic.directives.composites import (
+from sphinxcontrib.autodoc_pydantic.directives.options.composites import (
     PydanticDocumenterOptions
 )
 from sphinxcontrib.autodoc_pydantic.directives.utility import NONE
@@ -41,42 +41,55 @@ from sphinxcontrib.autodoc_pydantic.directives.utility import NONE
 
 class PydanticDocumenterNamespace:
     """Composite to provide single namespace to access all **autodoc_pydantic**
-    relevant documenter directive functionalities. This includes documenter
-    options `PydanticDocumenterOptions` via `options` and `ModelInspector` via
-    `inspect`. 
+    relevant documenter directive functionalities.
 
     """
 
     def __init__(self, documenter: Documenter, is_child: bool):
         self._documenter = documenter
         self._is_child = is_child
+        self._inspect: Optional[ModelInspector] = None
+        self._options = PydanticDocumenterOptions(self._documenter)
 
-        self.options = PydanticDocumenterOptions(self._documenter)
+    @property
+    def options(self) -> PydanticDocumenterOptions:
+        """Provides access to :obj:`PydanticDocumenterOptions` to handle
+        global and local configuration settings.
+
+        """
+
+        return self._options
 
     @property
     def inspect(self) -> ModelInspector:
-        """You may wonder why this `inspect` is a property instead of a simple
-        attribute being defined in the `__init__` method of this class. The
-        reason is the following: auto-documenters do not have their `object`
-        attribute after instantiation which typically hold pydantic models and
-        objects to be documented. Instead, `object` is `None` after plain
-        instantiation (executing `__init__`). However, this composite class is
-        added during instantiation of the autodocumenter for consistency
-        reasons. Therefore, `ModelInspector` can't be created at instantiation
-        time of this class because the `object` is still `None`. Hence, it is
-        lazily created once the inspection methods are first required. At this
-        point in time, it is guaranteed by the auto-documenter base class that
-        `object` is then already correctly provided and the `ModelInspector`
-        works as expected.
+        """Provides :obj:`ModelInspector` to access all inspection methods.
+        You may wonder why this ``inspect`` is a property instead of a simple
+        attribute being defined in the ``__init__`` method of this class. The
+        reason is the following: auto-documenters do not have their ``object``
+        attribute being correctly set after instantiation which typically holds
+        a reference to the corresponding pydantic model and objects to be
+        documented. Instead, ``object`` is ``None`` after plain instantiation
+        (executing ``__init__``). However, this composite class is added during
+        instantiation of the autodocumenter for consistency reasons. Therefore,
+        ``ModelInspector`` can't be created at instantiation time of this class
+        because the ``object`` is still ``None``. Hence, it is lazily created
+        once the inspection methods are first required. At this point in time,
+        it is guaranteed by the auto-documenter base class that ``object`` is
+        then already correctly provided and the ``ModelInspector`` works as
+        expected.
          
         """
+
+        if self._inspect:
+            return self._inspect
 
         if self._is_child:
             obj = self._documenter.parent
         else:
             obj = self._documenter.object
 
-        return ModelInspector(obj)
+        self._inspect = ModelInspector(obj)
+        return self._inspect
 
 
 class PydanticModelDocumenter(ClassDocumenter):
