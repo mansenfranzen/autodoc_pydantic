@@ -128,7 +128,7 @@ def add_directives_and_autodocumenters(app: Sphinx):
     app.add_directive_to_domain("py", "pydantic_config", PydanticConfigClass)
     app.add_directive_to_domain("py", "pydantic_validator", PydanticValidator)
 
-    app.setup_extension('sphinx.ext.autodoc')  # Require autodoc extension
+    app.setup_extension('sphinx.ext.autodoc')
     app.add_autodocumenter(PydanticFieldDocumenter)
     app.add_autodocumenter(PydanticModelDocumenter)
     app.add_autodocumenter(PydanticSettingsDocumenter)
