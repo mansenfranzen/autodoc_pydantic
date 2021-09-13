@@ -1,6 +1,6 @@
-==========================
-Frequently asked questions
-==========================
+===
+FAQ
+===
 
 Show inherited fields/validators
 ================================

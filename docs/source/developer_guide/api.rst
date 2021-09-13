@@ -39,12 +39,27 @@ This module is located at ``sphinxcontrib/autodoc_pydantic/directives/autodocume
 options
 -------
 
+definition
+==========
+
 This module is located at ``sphinxcontrib/autodoc_pydantic/directives/options/definition.py``.
 
 .. automodule:: sphinxcontrib.autodoc_pydantic.directives.options.definition
    :members:
    :member-order: bysource
    :undoc-members:
+
+composites
+==========
+
+This module is located at ``sphinxcontrib/autodoc_pydantic/directives/options/composites.py``.
+
+.. automodule:: sphinxcontrib.autodoc_pydantic.directives.options.composites
+   :members:
+   :member-order: bysource
+   :show-inheritance:
+
+.. _api_directives:
 
 ----------
 directives

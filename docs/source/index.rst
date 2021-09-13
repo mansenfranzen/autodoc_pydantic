@@ -31,20 +31,21 @@ the appearance of standard sphinx autodoc with **autodoc_pydantic**.
    :maxdepth: 1
    :caption: User guide
 
-   installation
-   usage
-   configuration
-   examples
-   faq
+   user_guide/installation
+   user_guide/usage
+   user_guide/configuration
+   user_guide/examples
+   user_guide/faq
 
 .. toctree::
-   :maxdepth: 0
+   :maxdepth: 1
    :caption: Developer guide
 
-   developer_guide
-   explanation
-   api
-   changelog
+   developer_guide/environment
+   developer_guide/explanation
+   developer_guide/how_to
+   developer_guide/api
+   developer_guide/changelog
 
 
 Acknowledgements
