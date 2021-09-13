@@ -38,10 +38,12 @@ the appearance of standard sphinx autodoc with **autodoc_pydantic**.
    faq
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 0
    :caption: Developer guide
 
    developer_guide
+   explanation
+   api
    changelog
 
 
