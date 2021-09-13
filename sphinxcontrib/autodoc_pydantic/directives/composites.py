@@ -1,124 +1,15 @@
-"""This module contains directive utilities like option validation functions
-and the PyAutoDoc composite class.
+"""This module contains composite helper classes for **autodoc_pydantic**
+autodocumenters and directives. They mainly intend to encapsulate the
+management of directive options.
 
 """
 import functools
-from typing import Any, Union, List, Set, Callable
+from typing import Any, Union, Set
 
-from docutils.nodes import emphasis
 from docutils.parsers.rst import Directive
-from sphinx.addnodes import pending_xref
-from sphinx.environment import BuildEnvironment
 from sphinx.ext.autodoc import ALL, Documenter, Options
 
-
-class NullType:
-    """Helper class to present a Null value which is not the same
-    as python's `None`. This represents a missing value, or no
-    value at all by convention. It should be used as a singleton.
-
-    """
-
-    def __bool__(self):
-        return False
-
-
-NONE = NullType()
-
-
-def create_field_href(name: str,
-                      ref: str,
-                      env: BuildEnvironment) -> pending_xref:
-    """Create `pending_xref` node with link to given `reference`.
-
-    """
-
-    options = {'refdoc': env.docname,
-               'refdomain': "py",
-               'reftype': "obj",
-               'reftarget': ref}
-
-    refnode = pending_xref(name, **options)
-    classes = ['xref', "py", '%s-%s' % ("py", "obj")]
-    refnode += emphasis(name, name, classes=classes)
-    return refnode
-
-
-def remove_node_by_tagname(nodes: List, tagname: str):
-    """Removes node from list of `nodes` with given `tagname` in place.
-
-    """
-
-    for remove in [node for node in nodes if node.tagname == tagname]:
-        nodes.remove(remove)
-
-
-def option_members(arg: Any) -> Union[object, List[str]]:
-    """Used to convert the :members: option to auto directives.
-
-    """
-
-    if isinstance(arg, str):
-        sanitized = arg.lower()
-        if sanitized == "true":
-            return ALL
-        elif sanitized == "false":
-            return None
-
-    if arg in (None, True):
-        return ALL
-    elif arg is False:
-        return None
-    else:
-        return [x.strip() for x in arg.split(',') if x.strip()]
-
-
-def option_one_of_factory(choices: Set[Any]) -> Callable:
-    """Create a option validation function which allows only one value
-    of given set of provided `choices`.
-
-    """
-
-    def option_func(value: Any):
-        if value not in choices:
-            raise ValueError(f"Option value has to be on of {choices}")
-        return value
-
-    return option_func
-
-
-def option_default_true(arg: Any) -> bool:
-    """Used to define boolean options with default to True if no argument
-    is passed.
-
-    """
-
-    if isinstance(arg, bool):
-        return arg
-
-    if arg is None:
-        return True
-
-    sanitized = arg.strip().lower()
-
-    if sanitized == "true":
-        return True
-    elif sanitized == "false":
-        return False
-    else:
-        raise ValueError(f"Directive option argument '{arg}' is not valid. "
-                         f"Valid arguments are 'true' or 'false'.")
-
-
-def option_list_like(arg: Any) -> Set[str]:
-    """Used to define a set of items.
-
-    """
-
-    if not arg:
-        return set()
-    else:
-        return {x.strip() for x in arg.split(",")}
+from sphinxcontrib.autodoc_pydantic.directives.utility import NONE
 
 
 class PydanticDirectiveOptions:
@@ -290,7 +181,7 @@ class PydanticDirectiveOptions:
 
 class PydanticDocumenterOptions(PydanticDirectiveOptions):
     """Composite class providing methods to handle getting and setting
-    autodoc directive option values.
+    autodocumenter directive option values.
 
     """
 
