@@ -2,27 +2,34 @@
 Explanation
 ===========
 
-The following sections are mainly intended for developers who want to contribute
-or extend **autodoc_pydantic**. First, the design of **autodoc_pydantic** is
-outlined guided by its actual goal.
+The following sections are mainly intended for developers or interested users
+who want to contribute or who want to gain a deeper understanding about the
+inner workings of **autodoc_pydantic**.
 
---------------------------
-Design of autodoc_pydantic
---------------------------
+------
+Design
+------
 
-This section aims at developers and contributors who want to understand the
-design of **autodoc_pydantic** and how it integrates with sphinx and pydantic.
-It intends to support a basic understanding of **autodoc_pydantic**'s code base.
+This section aims to clarify the design of **autodoc_pydantic** and how it
+integrates with sphinx and pydantic. Additionally, it intends to provide a
+basic understanding of the code base.
 
 Objective
 =========
 
-The main purpose of **autodoc_pydantic** is to improve auto-documentation for
-pydantic models. The default sphinx autodoc is not very well suited for
-pydantic models because it has no knowledge about pydantic specific concepts
-like validators, fields and their possible constraints. **autodoc_pydantic**
-leverages the additional knowledge about pydantic to provide a more
-sophisticated documentation (e.g. see :ref:`this example <showcase>`).
+Before diving into any implementation details, let's take a high level
+perspective first and focus on the issue that **autodoc_pydantic** solves.
+
+The default sphinx autodoc extension is not very well suited for automatically
+generated documentation of pydantic models because it has no domain knowledge
+about pydantic specific concepts like validators and fields. As a result, the
+default sphinx autodoc provides no information about field constraints, has
+no references between fields and validators, shows overloaded or meaningless
+signatures and does not even show default values for fields.
+
+Hence, the main purpose of **autodoc_pydantic** is to improve auto-documentation
+for pydantic models. It leverages the additional knowledge about pydantic to
+provide a more sophisticated documentation (e.g. see :ref:`this example <showcase>`).
 
 Inspection
 ==========
