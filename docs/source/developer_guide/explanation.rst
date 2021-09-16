@@ -6,13 +6,15 @@ The following sections are mainly intended for developers or interested users
 who want to contribute or who want to gain a deeper understanding about the
 inner workings of **autodoc_pydantic**.
 
+.. _expl_design:
+
 ------
 Design
 ------
 
 This section aims to clarify the design of **autodoc_pydantic** and how it
 integrates with sphinx and pydantic. Additionally, it intends to provide a
-basic understanding of the code base.
+gentle introduction to the code base.
 
 Objective
 =========
@@ -30,12 +32,24 @@ signatures and does not even show default values for fields.
 Hence, the main purpose of **autodoc_pydantic** is to improve auto-documentation
 for pydantic models. It leverages the additional knowledge about pydantic to
 provide a more sophisticated documentation (e.g. see :ref:`this example <showcase>`).
+Moreover, every modification to the default sphinx auto-documentation should be
+configurable to allow complete customization without enforcing any strict changes
+to the existing documentation.
+
+Guided by the objective to improve auto-documentation for pydantic models, three
+mandatory components can be derived.
+
+1. :ref:`Inspection <expl_inspection>` - extract relevant information from pydantic models.
+2. :ref:`Auto-documenters <expl_auto_documenters>` - translate pydantic specific knowledge into documentation pages.
+3. :ref:`Configuration <expl_configuration>` - provide complete configurability of all modifications.
+
+.. _expl_inspection:
 
 Inspection
 ==========
 
 Before extending sphinx with new directives and generating reST, we first need
-collect the relevant information to be documented from pydantic models.
+collect the relevant information to be documented for pydantic models.
 
 While `sphinx.ext.autodoc <https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html>`_
 already provides great tooling to inspect python
@@ -58,7 +72,7 @@ several inspector classes for different aspects of pydantic models:
 - :class:`StaticInspector <sphinxcontrib.autodoc_pydantic.inspection.StaticInspector>`
   -> static methods
 
-All of these are composite classes which are combined under the main
+All of these are composite classes which are combined under the
 :class:`ModelInspector <sphinxcontrib.autodoc_pydantic.inspection.ModelInspector>`
 class which serves as the main entry point to inspect pydantic models:
 
@@ -85,7 +99,7 @@ class which serves as the main entry point to inspect pydantic models:
    print("Show field constraints:", inspector.fields.get_constraints("field_a"))
    # Show field constraints: {'min': 0, 'max': 10}
 
-
+.. _expl_auto_documenters:
 
 Auto-Documenters
 ================
@@ -94,8 +108,8 @@ Once the relevant information about pydantic models is accessible via the
 :class:`ModelInspector <sphinxcontrib.autodoc_pydantic.inspection.ModelInspector>`,
 custom auto-documenters are necessary to translate the additional knowledge into
 concrete reST documentation. For example, constraints could
-be added to pydantic fields or the model `Config` class information could be
-summarized in the model documentation.
+be added to pydantic fields. Furthermore, the model `Config` class information
+could be summarized in the model documentation.
 
 From an implementation perspective, the sphinx documentation provides a great
 `tutorial <https://www.sphinx-doc.org/en/master/development/tutorials/autodoc_ext.html>`_
@@ -104,7 +118,7 @@ also the initial step going forward with the development of **autodoc_pydantic**
 Please refer to this tutorial for a basic understanding on how to create your
 own auto-documenters.
 
-In a nutshell, an auto-documenter gets an python object as input, inspects it
+In a nutshell, an auto-documenter gets a python object as input, inspects it
 and generates reST as output.
 
 .. note::
@@ -121,12 +135,23 @@ The following auto-documenters exist in the :ref:`autodocumenters <api_autodocum
 - :class:`PydanticValidatorDocumenter <sphinxcontrib.autodoc_pydantic.directives.autodocumenters.PydanticValidatorDocumenter>`
 - :class:`PydanticConfigClassDocumenter <sphinxcontrib.autodoc_pydantic.directives.autodocumenters.PydanticConfigClassDocumenter>`
 
-Configuration settings
-----------------------
+All auto-documenters are not written from scratch but inherit from
+the default auto-documenters to borrow most of the main functionality provided
+by `sphinx.ext.autodoc <https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html>`_
+Moreover, new methods with separate logic are added and existing methods are
+overloaded to inject custom content.
 
-An important aspect is how **autodoc_pydantic** handles configuration settings.
+.. _expl_configuration:
+
+Configuration
+=============
+
+Another important aspect is how **autodoc_pydantic** handles configuration settings.
 Since all features are completely configurable (globally via ``conf.py`` and
 locally via directive options), they have to be represented in code.
+
+Global
+------
 
 Global settings are defined in the ``__init__`` module and are directly
 added when **autodoc_pydantic** is registered as an sphinx extension:
@@ -158,6 +183,9 @@ added when **autodoc_pydantic** is registered as an sphinx extension:
 
    def setup(app: Sphinx) -> Dict[str, Any]:
        add_configuration_values(app)
+
+Local
+-----
 
 Local settings are defined in the separate :ref:`options.definitions <api_options>`
 module containing all directive options for auto-documenters, e.g:
@@ -204,14 +232,25 @@ local settings while also handling precedence is abstracted away via
 :class:`PydanticDocumenterOptions <sphinxcontrib.autodoc_pydantic.directives.options.composites.PydanticDocumenterOptions>`
 which provides many convenience methods for interacting with options.
 
+---------
+Internals
+---------
+
+This section is a continuation of the previous :ref:`design <expl_design>`
+section. It is highly recommended to start there first if you haven't read it.
+
+Otherwise, feel free to explore more of the implementation details.
+
 Pydantic Composite
-------------------
+==================
 
 Essentially, auto-documenters need to employ the
 :class:`ModelInspector <sphinxcontrib.autodoc_pydantic.inspection.ModelInspector>`
 for retrieving the relevant information to be documented and
 :class:`PydanticDocumenterOptions <sphinxcontrib.autodoc_pydantic.directives.options.composites.PydanticDocumenterOptions>`
-for accessing configuration settings. Both are combined in the
+for accessing configuration settings.
+
+Both are combined in the
 :class:`PydanticDocumenterNamespace <sphinxcontrib.autodoc_pydantic.directives.autodocumenters.PydanticDocumenterNamespace>`
 composite class via ``inspect`` and ``options`` attributes, respectively. This
 provides a single entry point for all mandatory functionality that is required
@@ -260,7 +299,7 @@ sphinx directives. For example, **autodoc_pydantic** could simply use the
 existing ``py:method`` directive to document pydantic validators. However,
 the default signature of pydantic validators does not convey valuable
 information because it most often just shows a single argument without letting
-us know which pydantic field is validated. Instead, we might want to put
+the user know which pydantic field is validated. Instead, one might want to put
 references to the validated fields directly into the header since this more
 relevant. This is not possible while relying on the default directives.
 
@@ -275,11 +314,17 @@ customization:
 - :class:`PydanticConfigClass <sphinxcontrib.autodoc_pydantic.directives.directives.PydanticConfigClass>`
 
 
-------------------
-Specialized topics
-------------------
+---------
+Externals
+---------
 
-This section describes some specifics about the inner workings of sphinx and pydantic which became of importance while implementing certain features or fixing bugs. It captures knowledge which otherwise might get lost if not written down.
+This section does not solely focus on internal implementations but rather aims
+to provide helpful information about the external architecture that
+**autodoc_pydantic** is embedded in.
+
+The selection of topics is interest driven and currently does not follow a clear
+concept. Most of it became of importance while implementing certain features or
+fixing bugs. It captures knowledge which otherwise might get lost if not written down.
 
 .. _understanding_autodocumenters:
 
