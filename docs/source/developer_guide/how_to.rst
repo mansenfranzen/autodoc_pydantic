@@ -1,10 +1,12 @@
 ======
-How To
+Guides
 ======
 
 -------------------
 Adding new features
 -------------------
+
+This section describes how **autodoc_pydantic** can be extended to support new features. As an example, we will cover the process of implementing an explicit sort order for summary lists. A summary list is an enumeration with references to all available fields or validators which is appended to the doc string  of the model (see examples for ``model_show_validator_summary`` and ``model_show_field_summary``). Prior to version 1.5.0, summary lists for validators and fields were already supported. However, their sort order was not explicitly defined and could not be configured. 
 
 One of **autodoc_pydantic** main strengths is its configurability. Each feature can be globally (affecting all pydantic objects via ``conf.py``) and locally (affecting only single directive via directive options) enabled or disabled. Hence, new features that change the default appearence or content of standard sphinx autodoc should be configurable, too.
 
