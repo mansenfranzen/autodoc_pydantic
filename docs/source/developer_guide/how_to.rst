@@ -2,7 +2,7 @@
 Guides
 ======
 
-The following sections are specific to **autodoc_pydantic**'s implementation details and build upon previous understanding covered in the developers :ref:`explanation`. It is recommended to start there first before continuing here.
+The following sections are specific to **autodoc_pydantic**'s implementation details and build upon previous understanding covered in the developers :ref:`explanation<expl_design>`. It is recommended to start there first before continuing here.
 
 -------------------
 Adding new features
@@ -12,73 +12,390 @@ This section describes how **autodoc_pydantic** can be extended to support new f
 
 Adding a new feature requires several related steps which are divided in the following topics:
 
-1. Provide rationale
-2. Specify the feature
-2. Derive and create tests
-3. Add configuration settings
-4. Implement required behavior
-5. Update documentation
+1. **Provide rationale**: Shortly describe the feature. Reason why this feature
+   should be added and what issue it solves. Compare the complexity and maintenance
+   burden it adds in contrast to the value it provides.
+
+2. **Specify the feature**: Depict the feature in very detail. Describe it's
+   exact behaviour. Provide configuration names.
+
+3. **Derive and create tests**: Translate the feature's specification into
+   test cases to ensure that the implementation works as expected.
+
+4. **Add configuration settings**: Register local and global configuration
+   settings.
+
+5. **Implement required behavior**: Finally add the actual implementation to the
+   existing code base until tests pass.
+
+6. **Update documentation**: Describe the new feature adding it to the
+   :doc:`configuration <../user_guide/configuration>` page.
 
 1. Provide rationale
 ====================
 
-A summary list is an enumeration with references to all available fields or validators. If enabled, it is appended to the doc string of the model (see examples for ``model_show_validator_summary`` and ``model_show_field_summary``). 
+A summary list is an enumeration with references to all available fields or
+validators. If enabled, it is appended to the doc string of the model
+(see examples for :ref:`model-show-validator-summary <autodoc_pydantic_model_show_validator_summary>`
+and :ref:`model-show-field-summary <autodoc_pydantic_model_show_field_summary>`).
 
-Prior to version 1.5.0, summary lists for validators and fields were already supported. However, their sort order was not explicitly defined and could not be configured. Even worse, the sort order was arbitrary and may have varied between python versions (e.g. dicts being ordered vs. unordered). 
+Prior to version 1.5.0, summary lists for validators and fields were already
+supported. However, their sort order was not explicitly defined and could not be
+configured. Even worse, the sort order was arbitrary and may have varied between
+python versions (e.g. dicts being ordered vs. unordered).
 
-Depending on one's requirement, sort order should be either alphabetically or given by source. This is analogous to how ``member_order`` can be configured in sphinx.
+Depending on one's requirement, sort order should be either alphabetically or
+given by source. This is analogous to how ``member_order`` can be configured in
+sphinx.
 
 2. Specify the feature
 ======================
 
-- Summary list order applies to pydantic models and pydantic settings. 
-- It affects the sort order of both field and validator summary lists. 
-- Two sort options are available:
-    1. Alphabetically - use alphabetical order
-    2. By source - use order given in source code
-- Define option names
+- Summary list order applies to pydantic models and pydantic settings
 
-1. Add global configuration option to ``__init__.py``
+- Accordingly, two configurations are added
 
+    - ``model-show-field-summary``
+    - ``settings-show-field-summary``
 
-One of **autodoc_pydantic** main strengths is its configurability. Each feature can be globally (affecting all pydantic objects via ``conf.py``) and locally (affecting only single directive via directive options) enabled or disabled. Hence, new features that change the default appearence or content of standard sphinx autodoc should be configurable, too.
+- Configurations accept two possible values
 
-First, we need to register a new global configuration option which will be configurable from the ``conf.py``. For our case, we are going to add the following to the function ``add_configuration_values``:
+    - ``alphabetical`` - sort items alphabetically
+    - ``bysource`` - use order given in source code
+
+- It affects both the sort order for field and validator summary lists
+
+3. Derive and create tests
+==========================
+
+With the above specification, test cases can be formulated.
+
+Mocked model
+------------
+
+First, a pydantic model needs to be created that contains the relevant
+properties to be tested. The mocked model requires at least two fields and two
+validators which can be tested for correct summary list order:
 
 .. code-block:: python
+   :caption: tests/roots/test-base/target/configuration.py
 
-   add(f'{stem}settings_summary_list_order', summary_list_order, True, str)
-   add(f'{stem}model_summary_list_order', summary_list_order, True, str)
+   class ModelSummaryListOrder(BaseModel):
+       """ModelSummaryListOrder."""
 
-2. Add local configuruation option to ``autodoc.py``
+       field_b: int = 1
+       field_a: int = 1
 
-Second, we want to allow our pydantic auto-documenters to accept directive options to overwrite globally set options. In this example, we need to modify ``OPTION_SPEC_MODEL`` and ``OPTION_SPEC_SETTINGS`` since pydantic models and settings are the configuration target. The ``OPTION_SPEC`` dictionaries contain all available directive options and their corresponding option validator functions:
+       @validator("field_b")
+       def validate_b(cls, v):
+           return v
+
+       @validator("field_a")
+       def validate_a(cls, v):
+           return v
+
+Test implementation
+-------------------
+
+Testing auto-documenters in sphinx comes with some complexity. An auto-documenter
+generates reST. Hence, the generated reST has to be tested. Manually creating the correct
+reST output is far from being easy and requires some practice. As an example, let's
+assume we test for alphabetical order. The correct reST for the above mocked
+model is as follows:
 
 .. code-block:: python
+   :caption: tests/test_configuration_model.py
+
+   def test_autodoc_pydantic_model_summary_list_order_alphabetical(autodocument):
+       result = [
+       '',
+       '.. py:pydantic_model:: ModelSummaryListOrder',
+       '   :module: target.configuration',
+       '',
+       '   ModelSummaryListOrder.',
+       '',
+       '   :Fields:',
+       '      - :py:obj:`field_a (int) <target.configuration.ModelSummaryListOrder.field_a>`',
+       '      - :py:obj:`field_b (int) <target.configuration.ModelSummaryListOrder.field_b>`',
+       '',
+       '   :Validators:',
+       '      - :py:obj:`validate_a <target.configuration.ModelSummaryListOrder.validate_a>` » :py:obj:`field_a <target.configuration.ModelSummaryListOrder.field_a>`',
+       '      - :py:obj:`validate_b <target.configuration.ModelSummaryListOrder.validate_b>` » :py:obj:`field_b <target.configuration.ModelSummaryListOrder.field_b>`',
+       ''
+       ]
+
+       # ...
+
+Next, we need to instantiate and invoke the auto-documenter on the mocked model
+to get the generated reST from the auto-documenter. Unfortunately this requires
+a sophisticated test setup. This includes running a sphinx test application
+while loading an exemplary sphinx source directory containing the
+mocked model. Luckily, sphinx' test suite and its adoption in **autodoc_pydantic**
+provides a pytest fixture named ``autodocument`` to abstract away all of this
+complexity. Consider the following exemplary test invocation:
+
+.. code-block:: python
+   :caption: tests/test_configuration_model.py
+
+   def test_autodoc_pydantic_model_summary_list_order_alphabetical(autodocument):
+
+       # ...
+
+       # explict global
+       actual = autodocument(
+           documenter='pydantic_model',
+           object_path='target.configuration.ModelSummaryListOrder',
+           options_app={
+               "autodoc_pydantic_model_show_validator_summary": True,
+               "autodoc_pydantic_model_show_field_summary": True,
+               "autodoc_pydantic_model_summary_list_order": "alphabetical"},
+           deactivate_all=True)
+       assert result == actual
+
+Essentially, the ``autodocument`` fixture invokes the ``pydantic_model``
+auto-documenter on the mocked model ``target.configuration.ModelSummaryListOrder``
+while injecting global and local configuration settings. Finally, it returns the
+generated reST which is compared to the manually created ``result`` reST from
+above.
+
+Please notice how the ``autodocument`` fixture is used with its various parameters:
+
+- ``documenter``: Identifies the auto-documenter used to generate reST.
+- ``object_path``: Defines the path to the mocked model to be tested.
+- ``options_app``: Injects global configuration settings to ``conf.py``.
+- ``options_doc``: Provides local configuration settings as directive options.
+- ``deactivate_all``: If enabled, it deactivates all of **autodoc_pydantic**'s
+  features to simplify the complexity of the resulting reST and to isolate
+  the tested feature.
+
+Using the fixture allows to test for more scenarios within the same test case.
+For example, explicitly provide local settings only or check for local settings
+to overwrite global settings:
+
+.. code-block:: python
+   :caption: tests/test_configuration_model.py
+
+   def test_autodoc_pydantic_model_summary_list_order_alphabetical(autodocument):
+
+       # ...
+
+       # explict local
+       actual = autodocument(
+           documenter='pydantic_model',
+           object_path='target.configuration.ModelSummaryListOrder',
+           options_app={"autodoc_pydantic_model_show_validator_summary": True,
+                        "autodoc_pydantic_model_show_field_summary": True},
+           options_doc={"model-summary-list-order": "alphabetical"},
+           deactivate_all=True)
+       assert result == actual
+
+       # explicit local overwrite global
+       actual = autodocument(
+           documenter='pydantic_model',
+           object_path='target.configuration.ModelSummaryListOrder',
+           options_app={"autodoc_pydantic_model_show_validator_summary": True,
+                        "autodoc_pydantic_model_show_field_summary": True,
+                        "autodoc_pydantic_model_summary_list_order": "bysource"},
+           options_doc={"model-summary-list-order": "alphabetical"},
+           deactivate_all=True)
+       assert result == actual
+
+Don't worry if several things still remain unclear. It takes some time to get
+your head around. It's best to test around with some dummy class and see how
+``autodocument`` generates reST.
+
+.. note::
+
+   The ``options_app`` parameter of the ``autodocument`` fixture activates the
+   ``autodoc_pydantic_model_show_validator_summary`` and
+   ``autodoc_pydantic_model_show_field_summary`` options. This is required
+   because the summary lists would not show up otherwise which in turn would
+   prevent testing the summary list order in the first place.
+
+4. Add configuration settings
+=============================
+
+One of **autodoc_pydantic** main strengths is its configurability. Each feature
+can be enabled/disabled on two levels:
+
+- **globally**: affecting all pydantic objects via ``conf.py``
+- **locally**: affecting only a single directive via directive options
+
+Hence, new features that change the default appearance of standard sphinx
+autodoc should be configurable, too.
+
+.. hint::
+
+   The developer's explanation section contains more useful information on
+   :ref:`configuration <expl_configuration>`.
+
+1. Global configuration
+-----------------------
+
+First, let's register the new global configuration options which will be
+configurable from sphinx' ``conf.py``. Global settings are added in the
+``__init__`` module via ``add_configuration_values`` function:
+
+.. code-block:: python
+   :caption: sphinxcontrib/autodoc_pydantic/__init__.py
+
+   def add_configuration_values(app: Sphinx):
+       """Adds all configuration values to sphinx application.
+
+       """
+
+       stem = "autodoc_pydantic_"
+       add = app.add_config_value
+
+       summary_list_order = OptionsSummaryListOrder.ALPHABETICAL
+
+       # ...
+
+       add(f'{stem}settings_summary_list_order', summary_list_order, True, str)
+       add(f'{stem}model_summary_list_order', summary_list_order, True, str)
+
+2. Local configuration
+----------------------
+
+Second, we want to allow our pydantic auto-documenters to accept directive
+options to overwrite globally set options. In this example, we need to modify
+``OPTION_SPEC_MODEL`` and ``OPTION_SPEC_SETTINGS``. The ``OPTION_SPEC_X``
+dictionaries contain all available directive options and their corresponding
+option validator functions for all available auto-documenters:
+
+.. code-block:: python
+   :caption: sphinxcontrib/autodoc_pydantic/directives/options/definition.py
 
    OPTION_SPEC_SETTINGS = {
-
       # ...
-
       "settings-summary-list-order": option_one_of_factory(
          OptionsSummaryListOrder.values()
       ),
-
       # ...
-
    }
 
 
    OPTION_SPEC_MODEL = {
-
       # ...
-
       "model-summary-list-order": option_one_of_factory(
          OptionsSummaryListOrder.values()
       ),
-
       # ...
-
    }
 
-3. Add test-cases
+5. Implement required behavior
+==============================
+
+The actual implementation is rather simple in contrast to the previous steps.
+A single method is required that is able to sort both fields and validators in
+alphabetical order or by source:
+
+.. code-block:: python
+   :caption: sphinxcontrib/autodoc_pydantic/directives/autodocumenters.py
+
+   class PydanticModelDocumenter(ClassDocumenter):
+
+       # ...
+
+       def _sort_summary_list(self, names: Iterable[str]) -> List[str]:
+           """Sort member names according to given sort order
+           `OptionsSummaryListOrder`.
+
+           """
+
+           sort_order = self.pydantic.options.get_value(name="summary-list-order",
+                                                        prefix=True,
+                                                        force_availability=True)
+
+           if sort_order == OptionsSummaryListOrder.ALPHABETICAL:
+               def sort_func(name: str):
+                   return name
+           elif sort_order == OptionsSummaryListOrder.BYSOURCE:
+               def sort_func(name: str):
+                   name_with_class = f"{self.object_name}.{name}"
+                   return self.analyzer.tagorder.get(name_with_class)
+           else:
+               raise ValueError(
+                   f"Invalid value `{sort_order}` provided for "
+                   f"`summary_list_order`. Valid options are: "
+                   f"{OptionsSummaryListOrder.values()}")
+
+           return sorted(names, key=sort_func)
+
+This method is called within the ``add_validators_summary`` and
+``add_field_summary`` methods to provide the correct summary list ordering, e.g.:
+
+.. code-block:: python
+   :caption: sphinxcontrib/autodoc_pydantic/directives/autodocumenters.py
+
+   class PydanticModelDocumenter(ClassDocumenter):
+
+       # ...
+
+       def add_validators_summary(self):
+           """Adds summary section describing all validators with corresponding
+           fields.
+
+           """
+           # ...
+
+           # get correct sort order
+           validator_names = filtered_references.keys()
+           sorted_validator_names = self._sort_summary_list(validator_names)
+
+           # ...
+
+6. Update documentation
+=======================
+
+If you have made it thus far, congratulations! Let's reward ourselves by updating
+the documentation to let others know about the new feature.
+
+**autodoc_pydantic** provides a custom directive named ``tabdocconfig`` to
+simplify the process of adding documentation for new features:
+
+.. code-block:: rest
+   :caption: docs/source/user_guide/configuration.rst
+
+   .. tabdocconfig:: autopydantic_model
+      :title: Summary List Order
+      :path: target.configuration.ModelSummaryListOrder
+      :config: autodoc_pydantic_model_summary_list_order
+      :option: model-summary-list-order
+      :option_additional: model-show-validator-summary, model-show-field-summary
+      :values: alphabetical, bysource
+
+      Define the sort order within validator and field summaries (which can be
+      activated via :ref:`model-show-validator-summary <autodoc_pydantic_model_show_validator_summary>`
+      and :ref:`model-show-field-summary <autodoc_pydantic_model_show_field_summary>`,
+      respectively).
+
+You can see how this renders in the corresponding configuration section
+:ref:`here <autodoc_pydantic_model_summary_list_order>`. Importantly, the ``tabdocconfig``
+directive generates rendered output for all provided configuration values which
+greatly helps to understand how the feature changes the resulting documentation.
+
+The ``tabdocconfig`` directive takes a lot of parameters as input as follows:
+
+- **tabdocconfig::** - Define the auto-documenter to be used and documented.
+- **:title:** - Set the title of resulting section.
+- **:path:** - Provide a path to a pydantic object which is used to render
+  exemplary output for provided configuration values.
+- **:config:** - Represents the name of the global configuration setting that
+  can be modified in ``conf.py``.
+- **:option:** - Represents the name of the local configuration setting that
+  is can be used as a directive option.
+- **:option_additional:** - You may need to enable additional configuration
+  settings for the output to render properly. In this case, showing the
+  summary list order requires to show summary lists in the first place. Hence,
+  this is enabled via ``model-show-validator-summary`` and
+  ``model-show-field-summary``.
+- **:values:** - Contains a list of available configuration values for this
+  feature which each will be used to render the output.
+- **directive body** - Provide reST describing the feature.
+
+.. note::
+
+   You have may recognized that ``:path:`` points at the mocked model we have
+   created earlier to test against. Essentially, we are using the same model
+   not just for testing but also for showcasing the new feature.
