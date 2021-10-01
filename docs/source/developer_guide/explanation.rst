@@ -157,7 +157,7 @@ Global settings are defined in the ``__init__`` module and are directly
 added when **autodoc_pydantic** is registered as an sphinx extension:
 
 .. code-block:: python
-   :caption: __init__.py
+   :caption: sphinxcontrib/autodoc_pydantic/__init__.py
 
    # ...
 
@@ -191,7 +191,7 @@ Local settings are defined in the separate :ref:`options.definitions <api_option
 module containing all directive options for auto-documenters, e.g:
 
 .. code-block:: python
-   :caption: directives/options/definition.py
+   :caption: sphinxcontrib/autodoc_pydantic/directives/options/definition.py
 
    # ...
 
@@ -255,6 +255,46 @@ Both are combined in the
 composite class via ``inspect`` and ``options`` attributes, respectively. This
 provides a single entry point for all mandatory functionality that is required
 to populate auto-documenter's content.
+
+.. mermaid::
+
+   classDiagram
+       direction LR
+       class ClassDocumenter {
+           generate()
+       }
+
+       class PydanticModelDocumenter {
+           +objtype
+           +option_spec
+           +pydantic
+           +can_document_member()
+           +add_content()
+       }
+
+       PydanticModelDocumenter --|> ClassDocumenter: inherits
+
+       class PydanticDocumenterNamespace {
+           +inspect
+           +options
+       }
+
+       PydanticDocumenterNamespace --* PydanticModelDocumenter: *pydantic*\nattribute
+
+       class ModelInspector {
+           +fields
+           +validators
+           +config
+       }
+
+       class PydanticAutoDoc {
+           +add_default_options()
+           +is_true()
+           +is_false()
+       }
+
+       ModelInspector --* PydanticDocumenterNamespace: *inspect*\nattribute
+       PydanticAutoDoc --* PydanticDocumenterNamespace: *options*\nattribute
 
 The :class:`PydanticDocumenterNamespace <sphinxcontrib.autodoc_pydantic.directives.autodocumenters.PydanticDocumenterNamespace>`
 is added to every auto-documenter during it's initialization as the `pydantic`
@@ -335,6 +375,35 @@ Auto-documenters typically inspect a python object and generate corresponding
 reStructuredText (reST). The reST contains calls to sphinx directives, roles
 and so on and is in turn converted docutils nodes. The docutil nodes are then
 consumed by different builders to create the corresponding output (e.g. PDF, HTML).
+
+.. mermaid::
+
+   stateDiagram-v2
+       direction LR
+
+       state "Source\n&nbspCode" as po
+
+       po --> AutoDocumenter: &nbspSphinx\nAutoDoc
+
+       state AutoDocumenter {
+           inspect --> generate
+       }
+
+       AutoDocumenter --> AutoDirective: restructured\n&nbsp&nbsp&nbsp&nbsp&nbsp&nbspText
+
+       state AutoDirective {
+           wrap --> parse
+       }
+
+       AutoDirective --> Builder: DocUtil\n&nbspNodes
+
+       state Builder {
+           fetch --> build
+       }
+
+       Builder --> HTML
+       Builder --> LaTex
+       Builder --> ...
 
 An auto-documenter is not a sphinx directive in the first place because it does
 not generate docutil nodes. Instead as mentioned above, it creates reST
