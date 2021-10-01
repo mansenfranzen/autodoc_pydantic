@@ -1,6 +1,6 @@
-=========================
-Environment, Tests & Docs
-=========================
+=====
+Setup
+=====
 
 --------------------------------
 Setting up developer environment
