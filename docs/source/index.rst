@@ -1,9 +1,10 @@
 ============================================
 Welcome to autodoc_pydantic's documentation!
 ============================================
-|PyPIBadge|_ |PythonBadge|_ |CIBadge|_ |QualityBadge|_ |CoverageBadge|_
 
 **Seamlessly integrate pydantic models in your Sphinx documentation.**
+
+|PyPIBadge|_ |PythonBadge|_ |CIBadge|_ |CoverageBadge|_ |ContributersBadge|_ |DownloadsBadge|_
 
 You love `pydantic <https://pydantic-docs.helpmanual.io/>`_ 💖 and you want to
 document your models and configuration settings with `sphinx`_?
@@ -29,53 +30,61 @@ the appearance of standard sphinx autodoc with **autodoc_pydantic**.
 
 .. toctree::
    :maxdepth: 1
-   :caption: User guide
+   :caption: Users
 
-   user_guide/installation
-   user_guide/usage
-   user_guide/configuration
-   user_guide/examples
-   user_guide/faq
+   users/installation
+   users/usage
+   users/configuration
+   users/examples
+   users/faq
 
 .. toctree::
    :maxdepth: 1
-   :caption: Developer guide
+   :caption: Developers
 
-   developer_guide/environment
-   developer_guide/explanation
-   developer_guide/how_to
-   developer_guide/api
-   developer_guide/changelog
+   developers/setup
+   developers/design
+   developers/guides
+
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Reference
+
+   reference/api
+   reference/changelog
 
 
 Acknowledgements
 ================
 
-Thanks to great open source projects `sphinx`_,
-`pydantic <https://pydantic-docs.helpmanual.io/>`_ and
-`poetry <https://python-poetry.org/>`_ (and many more) ❤!
+Thanks to great open source projects
 
+- `sphinx`_
+- `pydantic <https://pydantic-docs.helpmanual.io/>`_
+- `poetry <https://python-poetry.org/>`_
+- `mermaid.js <https://mermaid-js.github.io/mermaid/#/>`_
+- and many more involved
 
-Indices and tables
-==================
+and all `contributors <https://github.com/mansenfranzen/autodoc_pydantic/tree/refactor_inspection#acknowledgements>`_ to **autodoc_pydantic** ❤!
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
 
 .. _sphinx: https://www.sphinx-doc.org/en/master
 
-.. |PyPIBadge| image:: https://badge.fury.io/py/autodoc-pydantic.svg
+.. |PyPIBadge| image:: https://img.shields.io/pypi/v/autodoc_pydantic?style=flat
 .. _PyPIBadge: https://pypi.org/project/autodoc-pydantic/
 
-.. |CIBadge| image:: https://github.com/mansenfranzen/autodoc_pydantic/actions/workflows/tests.yml/badge.svg
+.. |CIBadge| image:: https://img.shields.io/github/workflow/status/mansenfranzen/autodoc_pydantic/ci?style=flat
 .. _CIBadge: https://github.com/mansenfranzen/autodoc_pydantic/actions/workflows/tests.yml
 
-.. |QualityBadge| image:: https://app.codacy.com/project/badge/Grade/30a083d784f245a98a0d5e6857708cc8
-.. _QualityBadge: https://www.codacy.com/gh/mansenfranzen/autodoc_pydantic/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=mansenfranzen/autodoc_pydantic&amp;utm_campaign=Badge_Grade
+.. |DownloadsBadge| image:: https://img.shields.io/pypi/dm/autodoc_pydantic?color=fe7d37&style=flat
+.. _DownloadsBadge: https://pypi.org/project/autodoc-pydantic/
 
-.. |CoverageBadge| image:: https://app.codacy.com/project/badge/Coverage/30a083d784f245a98a0d5e6857708cc8
+.. |ContributersBadge| image:: https://img.shields.io/badge/all_contributors-11-orange.svg?style=flat
+.. _ContributersBadge: https://github.com/mansenfranzen/autodoc_pydantic/tree/refactor_inspection#acknowledgements
+
+.. |CoverageBadge| image:: https://img.shields.io/codacy/coverage/30a083d784f245a98a0d5e6857708cc8?style=flat
 .. _CoverageBadge: https://www.codacy.com/gh/mansenfranzen/autodoc_pydantic/dashboard?utm_source=github.com&utm_medium=referral&utm_content=mansenfranzen/autodoc_pydantic&utm_campaign=Badge_Coverage
 
-.. |PythonBadge| image:: https://img.shields.io/badge/python-3.6+-blue.svg
+.. |PythonBadge| image:: https://img.shields.io/badge/python-3.6+-blue.svg?style=flat
 .. _PythonBadge: http://www.python.org/
