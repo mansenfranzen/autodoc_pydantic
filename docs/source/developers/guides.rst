@@ -2,7 +2,12 @@
 Guides
 ======
 
-The following sections are specific to **autodoc_pydantic**'s implementation details and build upon previous understanding covered in the developers :ref:`explanation<expl_design>`. It is recommended to start there first before continuing here.
+This page provides guides for developers including hands on walkthroughs and
+understanding oriented sections.
+
+It contains lots of implementation details and build upon previous knowledge
+covered in the developers :ref:`design <expl_design>` explanation. It is
+recommended to start there first before continuing here.
 
 -------------------
 Adding new features
@@ -29,7 +34,7 @@ Adding a new feature requires several related steps which are divided in the fol
    existing code base until tests pass.
 
 6. **Update documentation**: Describe the new feature adding it to the
-   :doc:`configuration <../user_guide/configuration>` page.
+   :ref:`configuration <configuration>` page.
 
 1. Provide rationale
 ====================
@@ -70,12 +75,13 @@ sphinx.
 
 With the above specification, test cases can be formulated.
 
-Mocked model
-------------
+Example model
+-------------
 
-First, a pydantic model needs to be created that contains the relevant
-properties to be tested. The mocked model requires at least two fields and two
-validators which can be tested for correct summary list order:
+In order to test the feature, there needs to be a pydantic model to generate
+testable reST from in the first place. Therefore, let's create an exemplary model
+which allows to check for the correct implementation of summary list orders.
+This requires at least two pydantic fields and validators to be sortable.
 
 .. code-block:: python
    :caption: tests/roots/test-base/target/configuration.py
@@ -399,3 +405,66 @@ The ``tabdocconfig`` directive takes a lot of parameters as input as follows:
    You have may recognized that ``:path:`` points at the mocked model we have
    created earlier to test against. Essentially, we are using the same model
    not just for testing but also for showcasing the new feature.
+
+
+.. _understanding_autodocumenters:
+
+------------------------------
+Understanding auto-documenters
+------------------------------
+
+Auto-documenters typically inspect a python object and generate corresponding
+reStructuredText (reST). The reST contains calls to sphinx directives, roles
+and so on and is in turn converted docutils nodes. The docutil nodes are then
+consumed by different builders to create the corresponding output (e.g. PDF, HTML).
+
+.. mermaid::
+
+   stateDiagram-v2
+       direction LR
+
+       state "Source\n&nbspCode" as po
+
+       po --> AutoDocumenter: &nbspSphinx\nAutoDoc
+
+       state AutoDocumenter {
+           inspect --> generate
+       }
+
+       AutoDocumenter --> AutoDirective: restructured\n&nbsp&nbsp&nbsp&nbsp&nbsp&nbspText
+
+       state AutoDirective {
+           wrap --> parse
+       }
+
+       AutoDirective --> Builder: DocUtil\n&nbspNodes
+
+       state Builder {
+           fetch --> build
+       }
+
+       Builder --> HTML
+       Builder --> LaTex
+       Builder --> ...
+
+An auto-documenter is not a sphinx directive in the first place because it does
+not generate docutil nodes. Instead as mentioned above, it creates reST
+(see `Documenter` base class for autodocumenters and its `generate` method).
+But how is the reST finally converted into docutil nodes?
+
+When registering a auto-documenter via `app.add_autodocumenter(PydanticFieldDocumenter)`,
+it is wrapped with the generic `AutodocDirective`. This directive executes
+the auto-documenter, retrieves its reST and then converts the reST into docutils.
+
+The interesting part is how a given reST is converted into docutils nodes
+because this turns out to be very useful for different use cases when writing
+custom directives.
+
+Writing your own directives outputting docutil nodes is rather low level and
+harder to learn in comparison to directives which can create arbitrary high
+level reST that then will be converted to docutil nodes generically.
+
+For example, part of `autodoc_pydantic`'s documentation is using this
+functionality to handle repetitive and error prone tasks (see `TabDocDirective`).
+More specifically, the actual conversion from reST to docutil nodes is done in
+`parse_generated_content`.

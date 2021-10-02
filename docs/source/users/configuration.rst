@@ -2,6 +2,8 @@
 Configuration
 =============
 
+.. _configuration:
+
 One major strength of **autodoc_pydantic** is that every feature is completely
 configurable to allow maximum customization. There are two ways to configure
 how pydantic objects are displayed:

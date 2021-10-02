@@ -1,23 +1,20 @@
-===========
-Explanation
-===========
+.. _expl_design:
+
+======
+Design
+======
 
 The following sections are mainly intended for developers or interested users
 who want to contribute or who want to gain a deeper understanding about the
 inner workings of **autodoc_pydantic**.
 
-.. _expl_design:
-
-------
-Design
-------
-
-This section aims to clarify the design of **autodoc_pydantic** and how it
+It aims to clarify the design of **autodoc_pydantic** and how it
 integrates with sphinx and pydantic. Additionally, it intends to provide a
 gentle introduction to the code base.
 
+---------
 Objective
-=========
+---------
 
 Before diving into any implementation details, let's take a high level
 perspective first and focus on the issue that **autodoc_pydantic** solves.
@@ -36,8 +33,12 @@ Moreover, every modification to the default sphinx auto-documentation should be
 configurable to allow complete customization without enforcing any strict changes
 to the existing documentation.
 
+---------------
+Core components
+---------------
+
 Guided by the objective to improve auto-documentation for pydantic models, three
-mandatory components can be derived.
+mandatory core components can be derived.
 
 1. :ref:`Inspection <expl_inspection>` - extract relevant information from pydantic models.
 2. :ref:`Auto-documenters <expl_auto_documenters>` - translate pydantic specific knowledge into documentation pages.
@@ -232,9 +233,9 @@ local settings while also handling precedence is abstracted away via
 :class:`PydanticDocumenterOptions <sphinxcontrib.autodoc_pydantic.directives.options.composites.PydanticDocumenterOptions>`
 which provides many convenience methods for interacting with options.
 
----------
-Internals
----------
+----------------------
+Implementation details
+----------------------
 
 This section is a continuation of the previous :ref:`design <expl_design>`
 section. It is highly recommended to start there first if you haven't read it.
@@ -352,77 +353,3 @@ customization:
 - :class:`PydanticField <sphinxcontrib.autodoc_pydantic.directives.directives.PydanticField>`
 - :class:`PydanticValidator <sphinxcontrib.autodoc_pydantic.directives.directives.PydanticValidator>`
 - :class:`PydanticConfigClass <sphinxcontrib.autodoc_pydantic.directives.directives.PydanticConfigClass>`
-
-
----------
-Externals
----------
-
-This section does not solely focus on internal implementations but rather aims
-to provide helpful information about the external architecture that
-**autodoc_pydantic** is embedded in.
-
-The selection of topics is interest driven and currently does not follow a clear
-concept. Most of it became of importance while implementing certain features or
-fixing bugs. It captures knowledge which otherwise might get lost if not written down.
-
-.. _understanding_autodocumenters:
-
-Understanding auto-documenters
-==============================
-
-Auto-documenters typically inspect a python object and generate corresponding
-reStructuredText (reST). The reST contains calls to sphinx directives, roles
-and so on and is in turn converted docutils nodes. The docutil nodes are then
-consumed by different builders to create the corresponding output (e.g. PDF, HTML).
-
-.. mermaid::
-
-   stateDiagram-v2
-       direction LR
-
-       state "Source\n&nbspCode" as po
-
-       po --> AutoDocumenter: &nbspSphinx\nAutoDoc
-
-       state AutoDocumenter {
-           inspect --> generate
-       }
-
-       AutoDocumenter --> AutoDirective: restructured\n&nbsp&nbsp&nbsp&nbsp&nbsp&nbspText
-
-       state AutoDirective {
-           wrap --> parse
-       }
-
-       AutoDirective --> Builder: DocUtil\n&nbspNodes
-
-       state Builder {
-           fetch --> build
-       }
-
-       Builder --> HTML
-       Builder --> LaTex
-       Builder --> ...
-
-An auto-documenter is not a sphinx directive in the first place because it does
-not generate docutil nodes. Instead as mentioned above, it creates reST
-(see `Documenter` base class for autodocumenters and its `generate` method).
-But how is the reST finally converted into docutil nodes?
-
-When registering a auto-documenter via `app.add_autodocumenter(PydanticFieldDocumenter)`,
-it is wrapped with the generic `AutodocDirective`. This directive executes
-the auto-documenter, retrieves its reST and then converts the reST into docutils.
-
-The interesting part is how a given reST is converted into docutils nodes
-because this turns out to be very useful for different use cases when writing
-custom directives.
-
-Writing your own directives outputting docutil nodes is rather low level and
-harder to learn in comparison to directives which can create arbitrary high
-level reST that then will be converted to docutil nodes generically.
-
-For example, part of `autodoc_pydantic`'s documentation is using this
-functionality to handle repetitive and error prone tasks (see `TabDocDirective`).
-More specifically, the actual conversion from reST to docutil nodes is done in
-`parse_generated_content`.
