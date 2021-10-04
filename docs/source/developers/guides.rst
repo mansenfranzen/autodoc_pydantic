@@ -2,18 +2,90 @@
 Guides
 ======
 
-This page provides guides for developers including hands on walkthroughs and
-understanding oriented sections.
+This page provides guides for developers including understanding oriented
+explanations hands on walkthroughs.
 
-It contains lots of implementation details and build upon previous knowledge
+It contains lots of implementation details and builds upon previous knowledge
 covered in the developers :ref:`design <expl_design>` explanation. It is
 recommended to start there first before continuing here.
+
+.. _understanding_autodocumenters:
+
+------------------------------
+Understanding auto-documenters
+------------------------------
+
+Auto-documenters typically inspect a python object and generate corresponding
+reStructuredText (reST). The reST contains calls to sphinx directives, roles
+and so on and is in turn converted docutils nodes. The docutil nodes are then
+consumed by different builders to create the corresponding output (e.g. PDF, HTML).
+
+An auto-documenter is not a sphinx directive in the first place because it does
+not generate docutil nodes. Instead as mentioned above, it creates reST
+(see auto-documenters |Documenter|_ base class and its |generate|_ method).
+But how is the reST finally converted into docutil nodes?
+
+When registering an auto-documenter to the sphinx application via
+|app.add_autodocumenter|_, it is wrapped with the generic |AutodocDirective|_.
+This directive executes the auto-documenter, retrieves its reST and then
+converts the reST into docutils via the magic |parse_generated_content|_.
+
+.. mermaid::
+
+   stateDiagram-v2
+       direction LR
+
+
+       [*] --> AutoDocumenter: Python\n&nbspobject
+
+       state AutodocDirective {
+            state "parse_generated_content" as pgc
+            state AutoDocumenter {
+               inspect --> generate
+            }
+       AutoDocumenter --> pgc: restructured\n&nbsp&nbsp&nbsp&nbsp&nbsp&nbspText
+       }
+
+       pgc --> Builder: DocUtil\n&nbspNodes
+
+       Builder --> HTML
+       Builder --> LaTex
+       Builder --> ...
+
+The interesting part is how a given reST is converted into docutils nodes
+because this turns out to be very useful for different use cases when writing
+custom directives.
+
+Writing your own directives outputting docutil nodes is rather low level and
+harder to learn in comparison to directives which can create arbitrary high
+level reST that then will be converted to docutil nodes generically.
+
+For example, part of **autodoc_pydantic**'s documentation is using this
+functionality to handle repetitive and error prone tasks (see ``TabDocDirective``).
+
+
+.. |Documenter| replace:: ``Documenter``
+.. _Documenter: https://github.com/sphinx-doc/sphinx/blob/37730d0f8ed250b019f78701056308b25535e3c9/sphinx/ext/autodoc/__init__.py#L299
+
+.. |generate| replace:: ``generate``
+.. _generate: https://github.com/sphinx-doc/sphinx/blob/37730d0f8ed250b019f78701056308b25535e3c9/sphinx/ext/autodoc/__init__.py#L893
+
+.. |app.add_autodocumenter| replace:: ``app.add_autodocumenter``
+.. _app.add_autodocumenter: https://github.com/sphinx-doc/sphinx/blob/37730d0f8ed250b019f78701056308b25535e3c9/sphinx/application.py#L1085
+
+.. |AutodocDirective| replace:: ``AutodocDirective``
+.. _AutodocDirective: https://github.com/sphinx-doc/sphinx/blob/37730d0f8ed250b019f78701056308b25535e3c9/sphinx/ext/autodoc/directive.py#L125
+
+.. |parse_generated_content| replace:: ``parse_generated_content``
+.. _parse_generated_content: https://github.com/sphinx-doc/sphinx/blob/37730d0f8ed250b019f78701056308b25535e3c9/sphinx/ext/autodoc/directive.py#L108
 
 -------------------
 Adding new features
 -------------------
 
-This section describes how **autodoc_pydantic** can be extended to support new features. As an example, we will cover the process of implementing an explicit sort order for summary lists which was added in version 1.5.0.
+This section describes how **autodoc_pydantic** can be extended to support new
+features. As an example, we will cover the process of implementing an explicit
+sort order for summary lists which was added in version 1.5.0.
 
 Adding a new feature requires several related steps which are divided in the following topics:
 
@@ -56,19 +128,19 @@ sphinx.
 2. Specify the feature
 ======================
 
-- Summary list order applies to pydantic models and pydantic settings
+- Summary list order applies to pydantic models and pydantic settings.
 
-- Accordingly, two configurations are added
+- Two configurations are added accordingly:
 
     - ``model-show-field-summary``
     - ``settings-show-field-summary``
 
-- Configurations accept two possible values
+- Configurations accept two possible values:
 
     - ``alphabetical`` - sort items alphabetically
     - ``bysource`` - use order given in source code
 
-- It affects both the sort order for field and validator summary lists
+- It affects both the sort order for field and validator summary lists.
 
 3. Derive and create tests
 ==========================
@@ -106,46 +178,47 @@ Test implementation
 Testing auto-documenters in sphinx comes with some complexity. An auto-documenter
 generates reST. Hence, the generated reST has to be tested. Manually creating the correct
 reST output is far from being easy and requires some practice. As an example, let's
-assume we test for alphabetical order. The correct reST for the above mocked
+assume we test for alphabetical order. The correct reST for the above exemplary
 model is as follows:
 
 .. code-block:: python
    :caption: tests/test_configuration_model.py
 
-   def test_autodoc_pydantic_model_summary_list_order_alphabetical(autodocument):
-       result = [
-       '',
-       '.. py:pydantic_model:: ModelSummaryListOrder',
-       '   :module: target.configuration',
-       '',
-       '   ModelSummaryListOrder.',
-       '',
-       '   :Fields:',
-       '      - :py:obj:`field_a (int) <target.configuration.ModelSummaryListOrder.field_a>`',
-       '      - :py:obj:`field_b (int) <target.configuration.ModelSummaryListOrder.field_b>`',
-       '',
-       '   :Validators:',
-       '      - :py:obj:`validate_a <target.configuration.ModelSummaryListOrder.validate_a>` » :py:obj:`field_a <target.configuration.ModelSummaryListOrder.field_a>`',
-       '      - :py:obj:`validate_b <target.configuration.ModelSummaryListOrder.validate_b>` » :py:obj:`field_b <target.configuration.ModelSummaryListOrder.field_b>`',
-       ''
-       ]
+   result = [
+   '',
+   '.. py:pydantic_model:: ModelSummaryListOrder',
+   '   :module: target.configuration',
+   '',
+   '   ModelSummaryListOrder.',
+   '',
+   '   :Fields:',
+   '      - :py:obj:`field_a (int) <target.configuration.ModelSummaryListOrder.field_a>`',
+   '      - :py:obj:`field_b (int) <target.configuration.ModelSummaryListOrder.field_b>`',
+   '',
+   '   :Validators:',
+   '      - :py:obj:`validate_a <target.configuration.ModelSummaryListOrder.validate_a>` » :py:obj:`field_a <target.configuration.ModelSummaryListOrder.field_a>`',
+   '      - :py:obj:`validate_b <target.configuration.ModelSummaryListOrder.validate_b>` » :py:obj:`field_b <target.configuration.ModelSummaryListOrder.field_b>`',
+   ''
+   ]
 
-       # ...
+.. tip::
 
-Next, we need to instantiate and invoke the auto-documenter on the mocked model
-to get the generated reST from the auto-documenter. Unfortunately this requires
+   In most cases it's a reasonable approach to generate the reST with the
+   ``autodocument`` fixture (as described below) in the first place and then
+   confirm it's validity manually afterwards.
+
+Next, we need to instantiate and invoke the auto-documenter on the exemplary model
+to retrieve the generated reST from the auto-documenter. Unfortunately, this requires
 a sophisticated test setup. This includes running a sphinx test application
 while loading an exemplary sphinx source directory containing the
-mocked model. Luckily, sphinx' test suite and its adoption in **autodoc_pydantic**
+examplary model. Luckily, sphinx' test suite and its adoption in **autodoc_pydantic**
 provides a pytest fixture named ``autodocument`` to abstract away all of this
-complexity. Consider the following exemplary test invocation:
+complexity. Consider the following test invocation:
 
 .. code-block:: python
    :caption: tests/test_configuration_model.py
 
    def test_autodoc_pydantic_model_summary_list_order_alphabetical(autodocument):
-
-       # ...
 
        # explict global
        actual = autodocument(
@@ -159,31 +232,29 @@ complexity. Consider the following exemplary test invocation:
        assert result == actual
 
 Essentially, the ``autodocument`` fixture invokes the ``pydantic_model``
-auto-documenter on the mocked model ``target.configuration.ModelSummaryListOrder``
+auto-documenter on the example model ``target.configuration.ModelSummaryListOrder``
 while injecting global and local configuration settings. Finally, it returns the
-generated reST which is compared to the manually created ``result`` reST from
+generated reST ``actual`` which is compared to the manually created ``result`` reST from
 above.
 
 Please notice how the ``autodocument`` fixture is used with its various parameters:
 
-- ``documenter``: Identifies the auto-documenter used to generate reST.
-- ``object_path``: Defines the path to the mocked model to be tested.
-- ``options_app``: Injects global configuration settings to ``conf.py``.
-- ``options_doc``: Provides local configuration settings as directive options.
-- ``deactivate_all``: If enabled, it deactivates all of **autodoc_pydantic**'s
+:documenter: Identifies the auto-documenter used to generate reST.
+:object_path: Defines the path to the mocked model to be tested.
+:options_app: Injects global configuration settings to ``conf.py``.
+:options_doc: Provides local configuration settings as directive options.
+:deactivate_all: If enabled, it deactivates all of **autodoc_pydantic**'s
   features to simplify the complexity of the resulting reST and to isolate
   the tested feature.
 
 Using the fixture allows to test for more scenarios within the same test case.
-For example, explicitly provide local settings only or check for local settings
-to overwrite global settings:
+For example, we want to check for providing local settings only or check for
+local settings to overwrite global settings:
 
 .. code-block:: python
    :caption: tests/test_configuration_model.py
 
    def test_autodoc_pydantic_model_summary_list_order_alphabetical(autodocument):
-
-       # ...
 
        # explict local
        actual = autodocument(
@@ -265,29 +336,28 @@ configurable from sphinx' ``conf.py``. Global settings are added in the
 
 Second, we want to allow our pydantic auto-documenters to accept directive
 options to overwrite globally set options. In this example, we need to modify
-``OPTION_SPEC_MODEL`` and ``OPTION_SPEC_SETTINGS``. The ``OPTION_SPEC_X``
-dictionaries contain all available directive options and their corresponding
-option validator functions for all available auto-documenters:
+``OPTION_SPEC_MODEL`` and ``OPTION_SPEC_SETTINGS``:
 
 .. code-block:: python
    :caption: sphinxcontrib/autodoc_pydantic/directives/options/definition.py
 
    OPTION_SPEC_SETTINGS = {
-      # ...
       "settings-summary-list-order": option_one_of_factory(
          OptionsSummaryListOrder.values()
       ),
-      # ...
    }
 
-
    OPTION_SPEC_MODEL = {
-      # ...
       "model-summary-list-order": option_one_of_factory(
          OptionsSummaryListOrder.values()
       ),
-      # ...
    }
+
+.. hint::
+
+   The ``OPTION_SPEC_X`` dictionaries contain all available directive options and
+   their corresponding option validator functions for all available auto-documenters
+
 
 5. Implement required behavior
 ==============================
@@ -300,8 +370,6 @@ alphabetical order or by source:
    :caption: sphinxcontrib/autodoc_pydantic/directives/autodocumenters.py
 
    class PydanticModelDocumenter(ClassDocumenter):
-
-       # ...
 
        def _sort_summary_list(self, names: Iterable[str]) -> List[str]:
            """Sort member names according to given sort order
@@ -336,8 +404,6 @@ This method is called within the ``add_validators_summary`` and
 
    class PydanticModelDocumenter(ClassDocumenter):
 
-       # ...
-
        def add_validators_summary(self):
            """Adds summary section describing all validators with corresponding
            fields.
@@ -350,6 +416,9 @@ This method is called within the ``add_validators_summary`` and
            sorted_validator_names = self._sort_summary_list(validator_names)
 
            # ...
+
+The previously created tests determine the correctness of the newly added
+implementation while the existing tests ensure that no regressions occur.
 
 6. Update documentation
 =======================
@@ -381,90 +450,29 @@ You can see how this renders in the corresponding configuration section
 directive generates rendered output for all provided configuration values which
 greatly helps to understand how the feature changes the resulting documentation.
 
-The ``tabdocconfig`` directive takes a lot of parameters as input as follows:
+The ``tabdocconfig`` directive takes the following parameters:
 
-- **tabdocconfig::** - Define the auto-documenter to be used and documented.
-- **:title:** - Set the title of resulting section.
-- **:path:** - Provide a path to a pydantic object which is used to render
+:tabdocconfig: Represents the header argument of the directive. Define the
+  auto-documenter to be used and documented.
+:title: Set the title of resulting section.
+:path: Provide a path to a pydantic object which is used to render
   exemplary output for provided configuration values.
-- **:config:** - Represents the name of the global configuration setting that
+:confpy: Represents the name of the global configuration setting that
   can be modified in ``conf.py``.
-- **:option:** - Represents the name of the local configuration setting that
+:option: Represents the name of the local configuration setting that
   is can be used as a directive option.
-- **:option_additional:** - You may need to enable additional configuration
+:option_enabled: You may need to enable additional configuration
   settings for the output to render properly. In this case, showing the
   summary list order requires to show summary lists in the first place. Hence,
   this is enabled via ``model-show-validator-summary`` and
   ``model-show-field-summary``.
-- **:values:** - Contains a list of available configuration values for this
+:values: Contains a list of available configuration values for this
   feature which each will be used to render the output.
-- **directive body** - Provide reST describing the feature.
+:directive body: Represents the body argument of the directive. Provide reST
+  describing the feature.
 
 .. note::
 
    You have may recognized that ``:path:`` points at the mocked model we have
    created earlier to test against. Essentially, we are using the same model
    not just for testing but also for showcasing the new feature.
-
-
-.. _understanding_autodocumenters:
-
-------------------------------
-Understanding auto-documenters
-------------------------------
-
-Auto-documenters typically inspect a python object and generate corresponding
-reStructuredText (reST). The reST contains calls to sphinx directives, roles
-and so on and is in turn converted docutils nodes. The docutil nodes are then
-consumed by different builders to create the corresponding output (e.g. PDF, HTML).
-
-.. mermaid::
-
-   stateDiagram-v2
-       direction LR
-
-       state "Source\n&nbspCode" as po
-
-       po --> AutoDocumenter: &nbspSphinx\nAutoDoc
-
-       state AutoDocumenter {
-           inspect --> generate
-       }
-
-       AutoDocumenter --> AutoDirective: restructured\n&nbsp&nbsp&nbsp&nbsp&nbsp&nbspText
-
-       state AutoDirective {
-           wrap --> parse
-       }
-
-       AutoDirective --> Builder: DocUtil\n&nbspNodes
-
-       state Builder {
-           fetch --> build
-       }
-
-       Builder --> HTML
-       Builder --> LaTex
-       Builder --> ...
-
-An auto-documenter is not a sphinx directive in the first place because it does
-not generate docutil nodes. Instead as mentioned above, it creates reST
-(see `Documenter` base class for autodocumenters and its `generate` method).
-But how is the reST finally converted into docutil nodes?
-
-When registering a auto-documenter via `app.add_autodocumenter(PydanticFieldDocumenter)`,
-it is wrapped with the generic `AutodocDirective`. This directive executes
-the auto-documenter, retrieves its reST and then converts the reST into docutils.
-
-The interesting part is how a given reST is converted into docutils nodes
-because this turns out to be very useful for different use cases when writing
-custom directives.
-
-Writing your own directives outputting docutil nodes is rather low level and
-harder to learn in comparison to directives which can create arbitrary high
-level reST that then will be converted to docutil nodes generically.
-
-For example, part of `autodoc_pydantic`'s documentation is using this
-functionality to handle repetitive and error prone tasks (see `TabDocDirective`).
-More specifically, the actual conversion from reST to docutil nodes is done in
-`parse_generated_content`.
