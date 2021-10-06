@@ -16,7 +16,7 @@ how pydantic objects are displayed:
       autodoc_pydantic_model_show_json = True
       autodoc_pydantic_model_show_config = False
 
-- **option**: Locally define specific configurations via directive options.
+- **directive**: Locally define specific configurations via directive options.
   This overrides global configuration settings:
 
    .. code-block::
@@ -42,8 +42,8 @@ Contains all modifications for pydantic `BaseModel`.
 .. tabdocconfig:: autopydantic_model
    :title: Show Config Summary
    :path: target.configuration.ModelShowConfigSummary
-   :config: autodoc_pydantic_model_show_config_summary
-   :option: model-show-config-summary
+   :confpy: autodoc_pydantic_model_show_config_summary
+   :directive_option: model-show-config-summary
    :values: True, False
 
    Show model config summary within the class doc string. It may be meaningful
@@ -55,9 +55,9 @@ Contains all modifications for pydantic `BaseModel`.
 .. tabdocconfig:: autopydantic_model
    :title: Show Config Member
    :path: target.configuration.ModelShowConfigMember
-   :config: autodoc_pydantic_model_show_config_member
-   :option: model-show-config-member
-   :option_additional: members
+   :confpy: autodoc_pydantic_model_show_config_member
+   :directive_option: model-show-config-member
+   :enable: members
    :values: True, False*
 
    Show pydantic config class. It can be hidden if it is irrelevant or if
@@ -67,8 +67,8 @@ Contains all modifications for pydantic `BaseModel`.
 .. tabdocconfig:: autopydantic_model
    :title: Show Validator Summary
    :path: target.configuration.ModelShowValidatorsSummary
-   :config: autodoc_pydantic_model_show_validator_summary
-   :option: model-show-validator-summary
+   :confpy: autodoc_pydantic_model_show_validator_summary
+   :directive_option: model-show-validator-summary
    :values: True, False
 
    Show all validators along with corresponding fields within the class doc
@@ -81,9 +81,9 @@ Contains all modifications for pydantic `BaseModel`.
 .. tabdocconfig:: autopydantic_model
    :title: Show Validator Members
    :path: target.configuration.ModelShowValidatorMembers
-   :config: autodoc_pydantic_model_show_validator_members
-   :option: model-show-validator-members
-   :option_additional: members
+   :confpy: autodoc_pydantic_model_show_validator_members
+   :directive_option: model-show-validator-members
+   :enable: members
    :values: True, False
 
    Show pydantic validator methods. They can be hidden if they are irrelevant.
@@ -92,8 +92,8 @@ Contains all modifications for pydantic `BaseModel`.
 .. tabdocconfig:: autopydantic_model
    :title: Show Field Summary
    :path: target.configuration.ModelShowFieldSummary
-   :config: autodoc_pydantic_model_show_field_summary
-   :option: model-show-field-summary
+   :confpy: autodoc_pydantic_model_show_field_summary
+   :directive_option: model-show-field-summary
    :values: True, False
 
    Show all fields within the class doc string. Hyperlinks are automatically
@@ -105,9 +105,9 @@ Contains all modifications for pydantic `BaseModel`.
 .. tabdocconfig:: autopydantic_model
    :title: Summary List Order
    :path: target.configuration.ModelSummaryListOrder
-   :config: autodoc_pydantic_model_summary_list_order
-   :option: model-summary-list-order
-   :option_additional: model-show-validator-summary, model-show-field-summary
+   :confpy: autodoc_pydantic_model_summary_list_order
+   :directive_option: model-summary-list-order
+   :enable: model-show-validator-summary, model-show-field-summary
    :values: alphabetical, bysource
 
    Define the sort order within validator and field summaries (which can be
@@ -119,9 +119,9 @@ Contains all modifications for pydantic `BaseModel`.
 .. tabdocconfig:: autopydantic_model
    :title: Show Undoc Members
    :path: target.configuration.ModelUndocMembers
-   :config: autodoc_pydantic_model_undoc_members
-   :option: undoc-members
-   :option_additional: members
+   :confpy: autodoc_pydantic_model_undoc_members
+   :directive_option: undoc-members
+   :enable: members
    :values: True, False
 
    Show undocumented members. By default, undocumented members are hidden for
@@ -138,8 +138,8 @@ Contains all modifications for pydantic `BaseModel`.
 .. tabdocconfig:: autopydantic_model
    :title: Show Members
    :path: target.configuration.ModelMembers
-   :config: autodoc_pydantic_model_members
-   :option: members
+   :confpy: autodoc_pydantic_model_members
+   :directive_option: members
    :values: True, False
 
    Show members. By default, members are hidden for standard :code:`auto`
@@ -148,9 +148,9 @@ Contains all modifications for pydantic `BaseModel`.
 .. tabdocconfig:: autopydantic_model
    :title: Member Order
    :path: target.configuration.ModelMemberOrder
-   :config: autodoc_pydantic_model_member_order
-   :option: member-order
-   :option_additional: members, model-show-config-member, model-show-validator-members
+   :confpy: autodoc_pydantic_model_member_order
+   :directive_option: member-order
+   :enable: members, model-show-config-member, model-show-validator-members
    :values: groupwise, bysource, alphabetical
 
    Order members groupwise by default in the following order: fields,
@@ -160,8 +160,8 @@ Contains all modifications for pydantic `BaseModel`.
 .. tabdocconfig:: autopydantic_model
    :title: Hide ParamList
    :path: target.configuration.ModelHideParamList
-   :config: autodoc_pydantic_model_hide_paramlist
-   :option: model-hide-paramlist
+   :confpy: autodoc_pydantic_model_hide_paramlist
+   :directive_option: model-hide-paramlist
    :values: True, False
 
    Hide parameter list within class signature which usually becomes rather
@@ -172,8 +172,8 @@ Contains all modifications for pydantic `BaseModel`.
 .. tabdocconfig:: autopydantic_model
    :title: Signature Prefix
    :path: target.configuration.ModelSignaturePrefix
-   :config: autodoc_pydantic_model_signature_prefix
-   :option: model-signature-prefix
+   :confpy: autodoc_pydantic_model_signature_prefix
+   :directive_option: model-signature-prefix
    :values: pydantic model, class, foobar
 
    Define the signature prefix for pydantic models.
@@ -182,8 +182,8 @@ Contains all modifications for pydantic `BaseModel`.
 .. tabdocconfig:: autopydantic_model
    :title: Show Schema JSON
    :path: target.configuration.ModelShowJson
-   :config: autodoc_pydantic_model_show_json
-   :option: model-show-json
+   :confpy: autodoc_pydantic_model_show_json
+   :directive_option: model-show-json
    :values: True, False
 
    Show the schema json representation of a pydantic model within in the class
@@ -205,7 +205,7 @@ generation. This occurs if a pydantic field is not JSON serializable.
 
 :conf.py: *autodoc_pydantic_model_show_json_error_strategy*
 
-:option: *model-show-json-error-strategy*
+:directive_option: *model-show-json-error-strategy*
 
 **Available values:**
 
@@ -225,8 +225,8 @@ Contains all modifications for pydantic `BaseSettings`.
 .. tabdocconfig:: autopydantic_settings
    :title: Show Config Summary
    :path: target.configuration.SettingsShowConfigSummary
-   :config: autodoc_pydantic_settings_show_config_summary
-   :option: settings-show-config-summary
+   :confpy: autodoc_pydantic_settings_show_config_summary
+   :directive_option: settings-show-config-summary
    :values: True, False
 
    Show model config summary within the class doc string. It may be meaningful
@@ -238,9 +238,9 @@ Contains all modifications for pydantic `BaseSettings`.
 .. tabdocconfig:: autopydantic_settings
    :title: Show Config Member
    :path: target.configuration.SettingsShowConfigMember
-   :config: autodoc_pydantic_settings_show_config_member
-   :option: settings-show-config-member
-   :option_additional: members
+   :confpy: autodoc_pydantic_settings_show_config_member
+   :directive_option: settings-show-config-member
+   :enable: members
    :values: True, False*
 
    Show pydantic config class. It can be hidden if it is irrelevant or if
@@ -250,8 +250,8 @@ Contains all modifications for pydantic `BaseSettings`.
 .. tabdocconfig:: autopydantic_settings
    :title: Show Validator Summary
    :path: target.configuration.SettingsShowValidatorsSummary
-   :config: autodoc_pydantic_settings_show_validator_summary
-   :option: settings-show-validator-summary
+   :confpy: autodoc_pydantic_settings_show_validator_summary
+   :directive_option: settings-show-validator-summary
    :values: True, False
 
    Show all validators along with corresponding fields within the class doc
@@ -264,9 +264,9 @@ Contains all modifications for pydantic `BaseSettings`.
 .. tabdocconfig:: autopydantic_settings
    :title: Show Validator Members
    :path: target.configuration.SettingsShowValidatorMembers
-   :config: autodoc_pydantic_settings_show_validator_members
-   :option: settings-show-validator-members
-   :option_additional: members
+   :confpy: autodoc_pydantic_settings_show_validator_members
+   :directive_option: settings-show-validator-members
+   :enable: members
    :values: True, False
 
    Show pydantic validator methods. They can be hidden if they are irrelevant.
@@ -275,8 +275,8 @@ Contains all modifications for pydantic `BaseSettings`.
 .. tabdocconfig:: autopydantic_settings
    :title: Show Field Summary
    :path: target.configuration.SettingsShowFieldSummary
-   :config: autodoc_pydantic_settings_show_field_summary
-   :option: settings-show-field-summary
+   :confpy: autodoc_pydantic_settings_show_field_summary
+   :directive_option: settings-show-field-summary
    :values: True, False
 
    Show all fields within the class doc string. Hyperlinks are automatically
@@ -288,9 +288,9 @@ Contains all modifications for pydantic `BaseSettings`.
 .. tabdocconfig:: autopydantic_settings
    :title: Summary List Order
    :path: target.configuration.SettingsSummaryListOrder
-   :config: autodoc_pydantic_settings_summary_list_order
-   :option: settings-summary-list-order
-   :option_additional: settings-show-validator-summary, settings-show-field-summary
+   :confpy: autodoc_pydantic_settings_summary_list_order
+   :directive_option: settings-summary-list-order
+   :enable: settings-show-validator-summary, settings-show-field-summary
    :values: alphabetical, bysource
 
    Define the sort order within validator and field summaries (which can be
@@ -302,9 +302,9 @@ Contains all modifications for pydantic `BaseSettings`.
 .. tabdocconfig:: autopydantic_settings
    :title: Show Undoc Members
    :path: target.configuration.SettingsUndocMembers
-   :config: autodoc_pydantic_settings_undoc_members
-   :option: undoc-members
-   :option_additional: members
+   :confpy: autodoc_pydantic_settings_undoc_members
+   :directive_option: undoc-members
+   :enable: members
    :values: True, False
 
    Show undocumented members. By default, undocumented members are hidden for
@@ -321,8 +321,8 @@ Contains all modifications for pydantic `BaseSettings`.
 .. tabdocconfig:: autopydantic_settings
    :title: Show Members
    :path: target.configuration.SettingsMembers
-   :config: autodoc_pydantic_settings_members
-   :option: members
+   :confpy: autodoc_pydantic_settings_members
+   :directive_option: members
    :values: True, False
 
    Show members. By default, members are hidden for standard :code:`auto`
@@ -331,9 +331,9 @@ Contains all modifications for pydantic `BaseSettings`.
 .. tabdocconfig:: autopydantic_settings
    :title: Member Order
    :path: target.configuration.SettingsMemberOrder
-   :config: autodoc_pydantic_settings_member_order
-   :option: member-order
-   :option_additional: members, settings-show-config-member, settings-show-validator-members
+   :confpy: autodoc_pydantic_settings_member_order
+   :directive_option: member-order
+   :enable: members, settings-show-config-member, settings-show-validator-members
    :values: groupwise, bysource, alphabetical
 
    Order members groupwise by default in the following order: fields,
@@ -343,8 +343,8 @@ Contains all modifications for pydantic `BaseSettings`.
 .. tabdocconfig:: autopydantic_settings
    :title: Hide ParamList
    :path: target.configuration.SettingsHideParamList
-   :config: autodoc_pydantic_settings_hide_paramlist
-   :option: settings-hide-paramlist
+   :confpy: autodoc_pydantic_settings_hide_paramlist
+   :directive_option: settings-hide-paramlist
    :values: True, False
 
    Hide parameter list within class signature which usually becomes rather
@@ -355,8 +355,8 @@ Contains all modifications for pydantic `BaseSettings`.
 .. tabdocconfig:: autopydantic_settings
    :title: Signature Prefix
    :path: target.configuration.SettingsSignaturePrefix
-   :config: autodoc_pydantic_settings_signature_prefix
-   :option: settings-signature-prefix
+   :confpy: autodoc_pydantic_settings_signature_prefix
+   :directive_option: settings-signature-prefix
    :values: pydantic settings, class, foobar
 
    Define the signature prefix for pydantic settings.
@@ -365,8 +365,8 @@ Contains all modifications for pydantic `BaseSettings`.
 .. tabdocconfig:: autopydantic_settings
    :title: Show Schema JSON
    :path: target.configuration.SettingsShowJson
-   :config: autodoc_pydantic_settings_show_json
-   :option: settings-show-json
+   :confpy: autodoc_pydantic_settings_show_json
+   :directive_option: settings-show-json
    :values: True, False
 
    Show the schema json representation of pydantic settings within in the class
@@ -387,7 +387,7 @@ generation. This occurs if a pydantic field is not JSON serializable.
 
 :conf.py: *autodoc_pydantic_settings_show_json_error_strategy*
 
-:option: *settings-show-json-error-strategy*
+:directive_option: *settings-show-json-error-strategy*
 
 **Available values:**
 
@@ -405,9 +405,9 @@ Fields
 .. tabdocconfig:: autopydantic_model
    :title: List Validators
    :path: target.configuration.FieldListValidators
-   :config: autodoc_pydantic_field_list_validators
-   :option: field-list-validators
-   :option_additional: members, field-doc-policy=docstring
+   :confpy: autodoc_pydantic_field_list_validators
+   :directive_option: field-list-validators
+   :enable: members, field-doc-policy=docstring
    :values: True, False
 
    List all linked validators within doc string that process the current field.
@@ -417,9 +417,9 @@ Fields
 .. tabdocconfig:: autopydantic_model
    :title: Docstring Policy
    :path: target.configuration.FieldDocPolicy
-   :config: autodoc_pydantic_field_doc_policy
-   :option: field-doc-policy
-   :option_additional: members
+   :confpy: autodoc_pydantic_field_doc_policy
+   :directive_option: field-doc-policy
+   :enable: members
    :values: docstring, description, both*
 
    Define what content is displayed in the main field docstring. The following
@@ -433,9 +433,9 @@ Fields
 .. tabdocconfig:: autopydantic_model
    :title: Show Constraints
    :path: target.configuration.FieldShowConstraints
-   :config: autodoc_pydantic_field_show_constraints
-   :option: field-show-constraints
-   :option_additional: members, field-doc-policy=docstring
+   :confpy: autodoc_pydantic_field_show_constraints
+   :directive_option: field-show-constraints
+   :enable: members, field-doc-policy=docstring
    :values: True, False
 
    Displays all constraints that are associated with the given pydantic field.
@@ -444,9 +444,9 @@ Fields
 .. tabdocconfig:: autopydantic_model
    :title: Show Alias
    :path: target.configuration.FieldShowAlias
-   :config: autodoc_pydantic_field_show_alias
-   :option: field-show-alias
-   :option_additional: members, field-doc-policy=docstring
+   :confpy: autodoc_pydantic_field_show_alias
+   :directive_option: field-show-alias
+   :enable: members, field-doc-policy=docstring
    :values: True, False
 
    Provides the pydantic field's alias in the signature.
@@ -455,9 +455,9 @@ Fields
 .. tabdocconfig:: autopydantic_model
    :title: Show Default Value
    :path: target.configuration.FieldShowDefault
-   :config: autodoc_pydantic_field_show_default
-   :option: field-show-default
-   :option_additional: members, field-doc-policy=docstring
+   :confpy: autodoc_pydantic_field_show_default
+   :directive_option: field-show-default
+   :enable: members, field-doc-policy=docstring
    :values: True, False
 
    Provides the pydantic field's default value in the signature. Unfortunately
@@ -467,9 +467,9 @@ Fields
 .. tabdocconfig:: autopydantic_model
    :title: Show Required
    :path: target.configuration.FieldShowRequired
-   :config: autodoc_pydantic_field_show_required
-   :option: field-show-required
-   :option_additional: members, field-show-default
+   :confpy: autodoc_pydantic_field_show_required
+   :directive_option: field-show-required
+   :enable: members, field-show-default
    :values: True, False
 
    Add *[Required]* marker for all pydantic fields that do not have a default
@@ -481,9 +481,9 @@ Fields
 .. tabdocconfig:: autopydantic_model
    :title: Signature Prefix
    :path: target.configuration.FieldSignaturePrefix
-   :config: autodoc_pydantic_field_signature_prefix
-   :option: field-signature-prefix
-   :option_additional: members, field-doc-policy=docstring
+   :confpy: autodoc_pydantic_field_signature_prefix
+   :directive_option: field-signature-prefix
+   :enable: members, field-doc-policy=docstring
    :values: field, attribute, foobar
 
    Define the signature prefix for pydantic field.
@@ -496,9 +496,9 @@ Validators
 .. tabdocconfig:: autopydantic_model
    :title: Replace Signature
    :path: target.configuration.ValidatorReplaceSignature
-   :config: autodoc_pydantic_validator_replace_signature
-   :option: validator-replace-signature
-   :option_additional: members, model-show-validator-members, undoc-members
+   :confpy: autodoc_pydantic_validator_replace_signature
+   :directive_option: validator-replace-signature
+   :enable: members, model-show-validator-members, undoc-members
    :values: True, False
 
    Replaces the validator signature with custom links to corresponding fields.
@@ -512,9 +512,9 @@ Validators
 .. tabdocconfig:: autopydantic_model
    :title: List Fields
    :path: target.configuration.ValidatorListFields
-   :config: autodoc_pydantic_validator_list_fields
-   :option: validator-list-fields
-   :option_additional: members, model-show-validator-members, undoc-members
+   :confpy: autodoc_pydantic_validator_list_fields
+   :directive_option: validator-list-fields
+   :enable: members, model-show-validator-members, undoc-members
    :values: True, False*
 
    List all fields that are processed by current validator.
@@ -527,9 +527,9 @@ Validators
 .. tabdocconfig:: autopydantic_model
    :title: Signature Prefix
    :path: target.configuration.ValidatorSignaturePrefix
-   :config: autodoc_pydantic_validator_signature_prefix
-   :option: validator-signature-prefix
-   :option_additional: members, model-show-validator-members, undoc-members
+   :confpy: autodoc_pydantic_validator_signature_prefix
+   :directive_option: validator-signature-prefix
+   :enable: members, model-show-validator-members, undoc-members
    :values: validator, classmethod, foobar
 
    Define the signature prefix for pydantic validator.
@@ -541,9 +541,9 @@ Config Class
 .. tabdocconfig:: autopydantic_model
    :title: Show Members
    :path: target.configuration.ConfigMembers
-   :config: autodoc_pydantic_config_members
-   :option: members
-   :option_additional: model-show-config-member, undoc-members
+   :confpy: autodoc_pydantic_config_members
+   :directive_option: members
+   :enable: model-show-config-member, undoc-members
    :values: True, False
 
    Show members. By default, members are hidden for standard :code:`auto`
@@ -558,8 +558,8 @@ Config Class
 .. tabdocconfig:: autopydantic_config
    :title: Signature Prefix
    :path: target.configuration.ConfigSignaturePrefix.Config
-   :config: autodoc_pydantic_config_signature_prefix
-   :option: config-signature-prefix
+   :confpy: autodoc_pydantic_config_signature_prefix
+   :directive_option: config-signature-prefix
    :values: model, class, foobar
 
    Define the signature prefix for config class.

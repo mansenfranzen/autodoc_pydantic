@@ -22,17 +22,19 @@ from sphinx.util import nested_parse_with_titles
 from sphinx.util.docutils import switch_source_input, SphinxDirective
 
 TAB_TEMPLATE = """
-.. _{config}:
+.. _{confpy}:
 
 {title}
 
 {description}
 
-:conf.py: *{config}*
+**Configuration** *(new in version {version})*
 
-:option: *{option}*
+:conf.py: *{confpy}*
 
-**Available values with rendered examples:**
+:directive: *{directive_option}*
+
+**Available values with rendered examples**
 
 .. tabs::
 
@@ -48,8 +50,8 @@ TAB_TEMPLATE_SUB = """
    .. tab:: {value_label}
 
       .. {directive}:: {path}
-         :__doc_disable_except__: {option}
-         :{option}: {value}{option_additional}
+         :__doc_disable_except__: {directive_option}
+         :{directive_option}: {value}{enable}
          :noindex:
 """
 
@@ -167,23 +169,24 @@ class TabDocDirective(SphinxDirective):
         return [(x.replace("*", ""), x.replace("*", " (default)"))
                 for x in stripped]
 
-    def process_options_additional(self) -> str:
-        """Parse the list of additional options.
+    def process_enable(self) -> str:
+        """Parse the list of additional options which need to be enabled to
+        properly render output.
 
         """
 
-        option_addition = self.options.get("option_additional", "")
-        if option_addition:
-            option_addition = parse_options(option_addition)
+        enable = self.options.get("enable", "")
+        if enable:
+            enable = parse_options(enable)
 
-        return option_addition
+        return enable
 
     def process_tabs(self):
         """Create the tab content.
 
         """
 
-        option_additional = self.process_options_additional()
+        enable = self.process_enable()
 
         tabs = []
         for value, label in self.process_values():
@@ -191,9 +194,8 @@ class TabDocDirective(SphinxDirective):
                 value=value,
                 value_label=label,
                 path=self.options["path"],
-                config=self.options["config"],
-                option=self.options["option"],
-                option_additional=option_additional,
+                directive_option=self.options["directive_option"],
+                enable=enable,
                 directive=self.arguments[0]
             )
             tabs.append(tab_rst)
@@ -220,10 +222,10 @@ class TabDocDirective(SphinxDirective):
             title=title,
             description="\n".join(self.content),
             tabs=tabs,
-            directive=self.arguments[0],
             path=self.options["path"],
-            config=self.options["config"],
-            option=self.options["option"]
+            confpy=self.options["confpy"],
+            directive_option=self.options["directive_option"],
+            version="1.0.0"
         )
 
         content = StringList(content.split("\n"))
