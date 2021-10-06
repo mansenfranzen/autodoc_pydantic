@@ -188,7 +188,7 @@ added when **autodoc_pydantic** is registered as an sphinx extension:
 Local
 -----
 
-Local settings are defined in the separate :ref:`options.definitions <api_options>`
+Local settings are defined in the separate :ref:`definition <api_definition>`
 module containing all directive options for auto-documenters, e.g:
 
 .. code-block:: python

@@ -81,6 +81,5 @@ add_module_names = False
 
 mermaid_version = ""
 html_static_path = ["_static"]
-html_js_files = [
-   'mermaid.min.js',
-]
+html_js_files = ['mermaid.min.js']
+html_css_files = ['custom.css']
