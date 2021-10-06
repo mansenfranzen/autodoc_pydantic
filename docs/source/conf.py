@@ -47,6 +47,7 @@ extensions = [
     "sphinx_copybutton",
     "sphinxcontrib.autodoc_pydantic",
     "sphinxcontrib.mermaid",
+    "sphinx.ext.viewcode",
     "extensions"
 ]
 
