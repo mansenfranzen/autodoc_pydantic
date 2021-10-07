@@ -435,10 +435,11 @@ simplify the process of adding documentation for new features:
    .. tabdocconfig:: autopydantic_model
       :title: Summary List Order
       :path: target.configuration.ModelSummaryListOrder
-      :config: autodoc_pydantic_model_summary_list_order
-      :option: model-summary-list-order
-      :option_additional: model-show-validator-summary, model-show-field-summary
+      :confpy: autodoc_pydantic_model_summary_list_order
+      :directive_option: model-summary-list-order
+      :enable: model-show-validator-summary, model-show-field-summary
       :values: alphabetical, bysource
+      :version: 1.5.0
 
       Define the sort order within validator and field summaries (which can be
       activated via :ref:`model-show-validator-summary <autodoc_pydantic_model_show_validator_summary>`
@@ -452,23 +453,23 @@ greatly helps to understand how the feature changes the resulting documentation.
 
 The ``tabdocconfig`` directive takes the following parameters:
 
-:tabdocconfig: Represents the header argument of the directive. Define the
+:tabdocconfig: Represents the argument of the directive. Define the
   auto-documenter to be used and documented.
 :title: Set the title of resulting section.
 :path: Provide a path to a pydantic object which is used to render
   exemplary output for provided configuration values.
 :confpy: Represents the name of the global configuration setting that
   can be modified in ``conf.py``.
-:option: Represents the name of the local configuration setting that
+:directive_option: Represents the name of the local configuration setting that
   is can be used as a directive option.
-:option_enabled: You may need to enable additional configuration
+:enable: You may need to enable additional configuration
   settings for the output to render properly. In this case, showing the
   summary list order requires to show summary lists in the first place. Hence,
   this is enabled via ``model-show-validator-summary`` and
   ``model-show-field-summary``.
 :values: Contains a list of available configuration values for this
   feature which each will be used to render the output.
-:directive body: Represents the body argument of the directive. Provide reST
+:directive content: Represents the content of the directive. Provide reST
   describing the feature.
 
 .. note::

@@ -28,7 +28,7 @@ TAB_TEMPLATE = """
 
 {description}
 
-**Configuration** *(new in version {version})*
+**Configuration** *(added in version {version})*
 
 :conf.py: *{confpy}*
 
@@ -217,6 +217,7 @@ class TabDocDirective(SphinxDirective):
 
         tabs = self.process_tabs()
         title = self.process_title()
+        version = self.options.get("version") or "0.1.0"
 
         content = TAB_TEMPLATE.format(
             title=title,
@@ -225,7 +226,7 @@ class TabDocDirective(SphinxDirective):
             path=self.options["path"],
             confpy=self.options["confpy"],
             directive_option=self.options["directive_option"],
-            version="1.0.0"
+            version=version
         )
 
         content = StringList(content.split("\n"))

@@ -95,6 +95,7 @@ Contains all modifications for pydantic `BaseModel`.
    :confpy: autodoc_pydantic_model_show_field_summary
    :directive_option: model-show-field-summary
    :values: True, False
+   :version: 1.2.0
 
    Show all fields within the class doc string. Hyperlinks are automatically
    created. This is especially useful when dealing with large models having a
@@ -109,6 +110,7 @@ Contains all modifications for pydantic `BaseModel`.
    :directive_option: model-summary-list-order
    :enable: model-show-validator-summary, model-show-field-summary
    :values: alphabetical, bysource
+   :version: 1.5.0
 
    Define the sort order within validator and field summaries (which can be
    activated via :ref:`model-show-validator-summary <autodoc_pydantic_model_show_validator_summary>`
@@ -203,6 +205,8 @@ Show Schema JSON Error Strategy
 Define error handling in case a pydantic field breaks pydantic model schema
 generation. This occurs if a pydantic field is not JSON serializable.
 
+**Configuration** *(added in version 1.4.0)*
+
 :conf.py: *autodoc_pydantic_model_show_json_error_strategy*
 
 :directive_option: *model-show-json-error-strategy*
@@ -278,6 +282,7 @@ Contains all modifications for pydantic `BaseSettings`.
    :confpy: autodoc_pydantic_settings_show_field_summary
    :directive_option: settings-show-field-summary
    :values: True, False
+   :version: 1.2.0
 
    Show all fields within the class doc string. Hyperlinks are automatically
    created. This is especially useful when dealing with large models having a
@@ -292,6 +297,7 @@ Contains all modifications for pydantic `BaseSettings`.
    :directive_option: settings-summary-list-order
    :enable: settings-show-validator-summary, settings-show-field-summary
    :values: alphabetical, bysource
+   :version: 1.5.0
 
    Define the sort order within validator and field summaries (which can be
    activated via :ref:`settings-show-validator-summary <autodoc_pydantic_settings_show_validator_summary>`
@@ -385,6 +391,8 @@ Show Schema JSON Error Strategy
 Define error handling in case a pydantic field breaks pydantic settings schema
 generation. This occurs if a pydantic field is not JSON serializable.
 
+**Configuration** *(added in version 1.4.0)*
+
 :conf.py: *autodoc_pydantic_settings_show_json_error_strategy*
 
 :directive_option: *settings-show-json-error-strategy*
@@ -459,6 +467,7 @@ Fields
    :directive_option: field-show-default
    :enable: members, field-doc-policy=docstring
    :values: True, False
+   :version: 1.4.0
 
    Provides the pydantic field's default value in the signature. Unfortunately
    this is not provided by standard sphinx autodoc (as of version 4.1.2).

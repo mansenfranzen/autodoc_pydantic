@@ -160,8 +160,6 @@ added when **autodoc_pydantic** is registered as an sphinx extension:
 .. code-block:: python
    :caption: sphinxcontrib/autodoc_pydantic/__init__.py
 
-   # ...
-
    def add_configuration_values(app: Sphinx):
        """Adds all configuration values to sphinx application.
 
@@ -170,8 +168,6 @@ added when **autodoc_pydantic** is registered as an sphinx extension:
        stem = "autodoc_pydantic_"
        add = app.add_config_value
 
-       # ...
-
        add(f'{stem}field_list_validators', True, True, bool)
        add(f'{stem}field_doc_policy', OptionsFieldDocPolicy.BOTH, True, str)
        add(f'{stem}field_show_constraints', True, True, bool)
@@ -179,8 +175,6 @@ added when **autodoc_pydantic** is registered as an sphinx extension:
        add(f'{stem}field_show_default', True, True, bool)
        add(f'{stem}field_show_required', True, True, bool)
        add(f'{stem}field_signature_prefix', "field", True, str)
-
-   # ...
 
    def setup(app: Sphinx) -> Dict[str, Any]:
        add_configuration_values(app)
@@ -194,8 +188,6 @@ module containing all directive options for auto-documenters, e.g:
 .. code-block:: python
    :caption: sphinxcontrib/autodoc_pydantic/directives/options/definition.py
 
-   # ...
-
    OPTIONS_FIELD = {
        "field-show-default": option_default_true,
        "field-show-required": option_default_true,
@@ -205,8 +197,6 @@ module containing all directive options for auto-documenters, e.g:
        "field-list-validators": option_default_true,
        "field-doc-policy": option_one_of_factory(OptionsFieldDocPolicy.values()),
        "__doc_disable_except__": option_list_like}
-
-   # ...
 
 These directive options are then registered by the corresponding
 auto-documenters:
@@ -221,12 +211,8 @@ auto-documenters:
 
        """
 
-       # ...
-
        option_spec = dict(AttributeDocumenter.option_spec)
        option_spec.update(OPTIONS_FIELD)
-
-       # ...
 
 Local directive options overwrite global settings. Checking for both global and
 local settings while also handling precedence is abstracted away via
@@ -304,20 +290,15 @@ attribute and is then used within methods as follows:
 .. code-block::
    :caption: directives/autodocumenters.py
 
-   # ...
-
    class PydanticFieldDocumenter(AttributeDocumenter):
        """Represents specialized Documenter subclass for pydantic fields.
 
        """
 
-       # ...
-
        def __init__(self, *args):
            super().__init__(*args)
            self.pydantic = PydanticDocumenterNamespace(self, is_child=True)
 
-       # ...
 
        def add_default_value_or_required(self):
            """Adds default value or required marker.

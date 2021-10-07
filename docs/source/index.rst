@@ -56,7 +56,7 @@ the appearance of standard sphinx autodoc with **autodoc_pydantic**.
 
 
 Acknowledgements
-================
+----------------
 
 Thanks to great open source projects
 
