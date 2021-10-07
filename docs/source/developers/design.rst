@@ -247,9 +247,6 @@ to populate auto-documenter's content.
 
    classDiagram
        direction LR
-       class ClassDocumenter {
-           generate()
-       }
 
        class PydanticModelDocumenter {
            +objtype
@@ -258,8 +255,6 @@ to populate auto-documenter's content.
            +can_document_member()
            +add_content()
        }
-
-       PydanticModelDocumenter --|> ClassDocumenter: inherits
 
        class PydanticDocumenterNamespace {
            +inspect

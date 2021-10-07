@@ -2,8 +2,8 @@
 Guides
 ======
 
-This page provides guides for developers including understanding oriented
-explanations hands on walkthroughs.
+This page provides guides for developers regarding explanations and hands on
+walkthroughs.
 
 It contains lots of implementation details and builds upon previous knowledge
 covered in the developers :ref:`design <expl_design>` explanation. It is
