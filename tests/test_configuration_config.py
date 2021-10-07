@@ -5,10 +5,17 @@
 from sphinx.addnodes import desc_annotation
 from sphinx.testing.util import assert_node
 import sphinx
-import pytest
+
+from sphinxcontrib.autodoc_pydantic import PydanticConfigClassDocumenter
+
+KWARGS = dict(documenter=PydanticConfigClassDocumenter.directivetype,
+              deactivate_all=True)
 
 
 def test_autodoc_pydantic_config_members_true(autodocument):
+    kwargs = dict(object_path='target.configuration.ConfigMembers.Config',
+                  **KWARGS)
+
     result = [
         '',
         ".. py:pydantic_config:: Config()",
@@ -34,31 +41,25 @@ def test_autodoc_pydantic_config_members_true(autodocument):
 
     # explict global
     actual = autodocument(
-        documenter='pydantic_config',
-        object_path='target.configuration.ConfigMembers.Config',
-        options_app={"autodoc_pydantic_config_members": True},
-        deactivate_all=True)
+        options_app={"autodoc_pydantic_config_members": True}, **kwargs)
     assert result == actual
 
     # explict local
-    actual = autodocument(
-        documenter='pydantic_config',
-        object_path='target.configuration.ConfigMembers.Config',
-        options_doc={"members": None},
-        deactivate_all=True)
+    actual = autodocument(options_doc={"members": None}, **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        documenter='pydantic_config',
-        object_path='target.configuration.ConfigMembers.Config',
         options_app={"autodoc_pydantic_config_members": False},
         options_doc={"members": None},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
 
 def test_autodoc_pydantic_config_members_false(autodocument):
+    kwargs = dict(object_path='target.configuration.ConfigMembers.Config',
+                  **KWARGS)
+
     result = [
         '',
         ".. py:pydantic_config:: Config()",
@@ -68,31 +69,26 @@ def test_autodoc_pydantic_config_members_false(autodocument):
 
     # explict global
     actual = autodocument(
-        documenter='pydantic_config',
-        object_path='target.configuration.ConfigMembers.Config',
         options_app={"autodoc_pydantic_config_members": False},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explict local
-    actual = autodocument(
-        documenter='pydantic_config',
-        object_path='target.configuration.ConfigMembers.Config',
-        options_doc={"members": "False"},
-        deactivate_all=True)
+    actual = autodocument(options_doc={"members": "False"}, **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        documenter='pydantic_config',
-        object_path='target.configuration.ConfigMembers.Config',
         options_app={"autodoc_pydantic_config_members": True},
         options_doc={"members": "False"},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
 
 def test_autodoc_pydantic_config_signature_prefix(autodocument):
+    kwargs = dict(
+        object_path='target.configuration.ConfigSignaturePrefix.Config',
+        **KWARGS)
 
     # default
     result = [
@@ -104,10 +100,7 @@ def test_autodoc_pydantic_config_signature_prefix(autodocument):
         ''
     ]
 
-    actual = autodocument(
-        documenter='pydantic_config',
-        object_path='target.configuration.ConfigSignaturePrefix.Config',
-        deactivate_all=True)
+    actual = autodocument(**kwargs)
     assert result == actual
 
     # explicit value
@@ -121,11 +114,8 @@ def test_autodoc_pydantic_config_signature_prefix(autodocument):
         ''
     ]
 
-    actual = autodocument(
-        documenter='pydantic_config',
-        object_path='target.configuration.ConfigSignaturePrefix.Config',
-        options_doc={"config-signature-prefix": "foobar"},
-        deactivate_all=True)
+    actual = autodocument(options_doc={"config-signature-prefix": "foobar"},
+                          **kwargs)
     assert result == actual
 
     # explict empty
@@ -139,16 +129,12 @@ def test_autodoc_pydantic_config_signature_prefix(autodocument):
         ''
     ]
 
-    actual = autodocument(
-        documenter='pydantic_config',
-        object_path='target.configuration.ConfigSignaturePrefix.Config',
-        options_doc={"config-signature-prefix": ""},
-        deactivate_all=True)
+    actual = autodocument(options_doc={"config-signature-prefix": ""},
+                          **kwargs)
     assert result == actual
 
 
 def test_autodoc_pydantic_config_signature_prefix_directive(parse_rst):
-
     # default
     input_rst = [
         '',
