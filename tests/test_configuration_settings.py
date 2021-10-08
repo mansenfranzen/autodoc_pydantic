@@ -1,9 +1,14 @@
-"""This module contains tests for pydantic settings configurations.
+"""This module contains tests for pydantic model configurations.
 
 """
 import pydantic
 from sphinx.addnodes import desc_annotation
 from sphinx.testing.util import assert_node
+
+from sphinxcontrib.autodoc_pydantic import PydanticSettingsDocumenter
+
+KWARGS = dict(documenter=PydanticSettingsDocumenter.objtype,
+              deactivate_all=True)
 
 SETTING_MEMBER_ORDER = {
     "autodoc_pydantic_settings_members": True,
@@ -12,6 +17,9 @@ SETTING_MEMBER_ORDER = {
 
 
 def test_autodoc_pydantic_settings_show_json_true(autodocument):
+    kwargs = dict(object_path='target.configuration.SettingsShowJson',
+                  **KWARGS)
+
     result = [
         '',
         '.. py:pydantic_settings:: SettingsShowJson',
@@ -43,27 +51,28 @@ def test_autodoc_pydantic_settings_show_json_true(autodocument):
 
     # explicit global
     actual = autodocument(
-        documenter='pydantic_settings',
         options_app={"autodoc_pydantic_settings_show_json": True},
-        object_path='target.configuration.SettingsShowJson')
+        **kwargs)
     assert actual == result
 
     # explicit local
-    actual = autodocument(documenter='pydantic_settings',
-                          options_doc={"settings-show-json": True},
-                          object_path='target.configuration.SettingsShowJson')
+    actual = autodocument(
+        options_doc={"settings-show-json": True},
+        **kwargs)
     assert actual == result
 
     # explicit local overwrite global
-    actual = autodocument(documenter='pydantic_settings',
-                          options_app={
-                              "autodoc_pydantic_settings_show_json": False},
-                          options_doc={"settings-show-json": True},
-                          object_path='target.configuration.SettingsShowJson')
+    actual = autodocument(
+        options_app={"autodoc_pydantic_settings_show_json": False},
+        options_doc={"settings-show-json": True},
+        **kwargs)
     assert actual == result
 
 
 def test_autodoc_pydantic_settings_show_json_false(autodocument):
+    kwargs = dict(object_path='target.configuration.SettingsShowJson',
+                  **KWARGS)
+
     result = [
         '',
         '.. py:pydantic_settings:: SettingsShowJson',
@@ -75,28 +84,28 @@ def test_autodoc_pydantic_settings_show_json_false(autodocument):
 
     # explicit global
     actual = autodocument(
-        documenter='pydantic_settings',
         options_app={"autodoc_pydantic_settings_show_json": False},
-        object_path='target.configuration.SettingsShowJson')
+        **kwargs)
     assert actual == result
 
     # explicit local
     actual = autodocument(
-        documenter='pydantic_settings',
         options_doc={"settings-show-json": False},
-        object_path='target.configuration.SettingsShowJson')
+        **kwargs)
     assert actual == result
 
     # explicit local overwrite global
     actual = autodocument(
-        documenter='pydantic_settings',
         options_app={"autodoc_pydantic_settings_show_json": True},
         options_doc={"settings-show-json": False},
-        object_path='target.configuration.SettingsShowJson')
+        **kwargs)
     assert actual == result
 
 
 def test_autodoc_pydantic_settings_show_config_summary_summary_true(autodocument):
+    kwargs = dict(object_path='target.configuration.SettingsShowConfigSummary',
+                  **KWARGS)
+
     result = [
         '',
         '.. py:pydantic_settings:: SettingsShowConfigSummary',
@@ -111,30 +120,28 @@ def test_autodoc_pydantic_settings_show_config_summary_summary_true(autodocument
 
     # explict global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsShowConfigSummary',
         options_app={"autodoc_pydantic_settings_show_config_summary": True},
-        deactivate_all=True)
+        **kwargs)
     assert actual == result
 
     # explict local
-    actual = autodocument(documenter='pydantic_settings',
-                          object_path='target.configuration.SettingsShowConfigSummary',
-                          options_doc={"settings-show-config-summary": True},
-                          deactivate_all=True)
+    actual = autodocument(
+        options_doc={"settings-show-config-summary": True},
+        **kwargs)
     assert actual == result
 
     # explicit local overwrite global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsShowConfigSummary',
         options_app={"autodoc_pydantic_settings_show_config_summary": False},
         options_doc={"settings-show-config-summary": True},
-        deactivate_all=True)
+        **kwargs)
     assert actual == result
 
 
 def test_autodoc_pydantic_settings_show_config_summary_false(autodocument):
+    kwargs = dict(object_path='target.configuration.SettingsShowConfigSummary',
+                  **KWARGS)
+
     result = [
         '',
         '.. py:pydantic_settings:: SettingsShowConfigSummary',
@@ -146,31 +153,29 @@ def test_autodoc_pydantic_settings_show_config_summary_false(autodocument):
 
     # explict global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsShowConfigSummary',
         options_app={"autodoc_pydantic_settings_show_config_summary": False},
-        deactivate_all=True)
+        **kwargs)
     assert actual == result
 
     # explict local
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsShowConfigSummary',
         options_doc={"settings-show-config-summary": False},
-        deactivate_all=True)
+        **kwargs)
     assert actual == result
 
     # explicit local overwrite global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsShowConfigSummary',
         options_app={"autodoc_pydantic_settings_show_config_summary": True},
         options_doc={"settings-show-config-summary": False},
-        deactivate_all=True)
+        **kwargs)
     assert actual == result
 
 
 def test_autodoc_pydantic_settings_show_validator_summary_true(autodocument):
+    kwargs = dict(
+        object_path='target.configuration.SettingsShowValidatorsSummary',
+        **KWARGS)
+
     result = [
         '',
         '.. py:pydantic_settings:: SettingsShowValidatorsSummary',
@@ -185,31 +190,29 @@ def test_autodoc_pydantic_settings_show_validator_summary_true(autodocument):
 
     # explict global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsShowValidatorsSummary',
         options_app={"autodoc_pydantic_settings_show_validator_summary": True},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explict local
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsShowValidatorsSummary',
         options_doc={"settings-show-validator-summary": True},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsShowValidatorsSummary',
         options_app={"autodoc_pydantic_settings_show_validators_summary": False},
         options_doc={"settings-show-validator-summary": True},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
 
 def test_autodoc_pydantic_settings_show_validator_summary_false(autodocument):
+    kwargs = dict(
+        object_path='target.configuration.SettingsShowValidatorsSummary',
+        **KWARGS)
+
     result = [
         '',
         '.. py:pydantic_settings:: SettingsShowValidatorsSummary',
@@ -221,31 +224,28 @@ def test_autodoc_pydantic_settings_show_validator_summary_false(autodocument):
 
     # explict global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsShowValidatorsSummary',
         options_app={"autodoc_pydantic_settings_show_validator_summary": False},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explict local
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsShowValidatorsSummary',
         options_doc={"settings-show-validator-summary": False},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsShowValidatorsSummary',
         options_app={"autodoc_pydantic_settings_show_validators_summary": True},
         options_doc={"settings-show-validator-summary": False},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
 
 def test_autodoc_pydantic_settings_show_field_summary_true(autodocument):
+    kwargs = dict(object_path='target.configuration.SettingsShowFieldSummary',
+                  **KWARGS)
+
     result = [
         '',
         '.. py:pydantic_settings:: SettingsShowFieldSummary',
@@ -261,31 +261,28 @@ def test_autodoc_pydantic_settings_show_field_summary_true(autodocument):
 
     # explict global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsShowFieldSummary',
         options_app={"autodoc_pydantic_settings_show_field_summary": True},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explict local
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsShowFieldSummary',
         options_doc={"settings-show-field-summary": True},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsShowFieldSummary',
         options_app={"autodoc_pydantic_settings_show_field_summary": False},
         options_doc={"settings-show-field-summary": True},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
 
 def test_autodoc_pydantic_settings_show_field_summary_false(autodocument):
+    kwargs = dict(object_path='target.configuration.SettingsShowFieldSummary',
+                  **KWARGS)
+
     result = [
         '',
         '.. py:pydantic_settings:: SettingsShowFieldSummary',
@@ -297,31 +294,31 @@ def test_autodoc_pydantic_settings_show_field_summary_false(autodocument):
 
     # explict global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsShowFieldSummary',
         options_app={"autodoc_pydantic_settings_show_field_summary": False},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explict local
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsShowFieldSummary',
         options_doc={"settings-show-field-summary": False},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsShowFieldSummary',
         options_app={"autodoc_pydantic_settings_show_field_summary": True},
         options_doc={"settings-show-field-summary": False},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
 
-def test_autodoc_pydantic_settings_summary_list_order_alphabetical(autodocument):
+def test_autodoc_pydantic_settings_summary_list_order_alphabetical(
+        autodocument):
+    kwargs = dict(object_path='target.configuration.SettingsSummaryListOrder',
+                  **KWARGS)
+    enable = {"autodoc_pydantic_settings_show_validator_summary": True,
+              "autodoc_pydantic_settings_show_field_summary": True}
+
     result = [
         '',
         '.. py:pydantic_settings:: SettingsSummaryListOrder',
@@ -341,38 +338,34 @@ def test_autodoc_pydantic_settings_summary_list_order_alphabetical(autodocument)
 
     # explict global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsSummaryListOrder',
         options_app={
-            "autodoc_pydantic_settings_show_validator_summary": True,
-            "autodoc_pydantic_settings_show_field_summary": True,
-            "autodoc_pydantic_settings_summary_list_order": "alphabetical"},
-        deactivate_all=True)
+            "autodoc_pydantic_settings_summary_list_order": "alphabetical",
+            **enable},
+        **kwargs)
     assert result == actual
 
     # explict local
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsSummaryListOrder',
-        options_app={"autodoc_pydantic_settings_show_validator_summary": True,
-                     "autodoc_pydantic_settings_show_field_summary": True},
+        options_app=enable,
         options_doc={"settings-summary-list-order": "alphabetical"},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsSummaryListOrder',
-        options_app={"autodoc_pydantic_settings_show_validator_summary": True,
-                     "autodoc_pydantic_settings_show_field_summary": True,
-                     "autodoc_pydantic_settings_summary_list_order": "bysource"},
+        options_app={"autodoc_pydantic_settings_summary_list_order": "bysource",
+                     **enable},
         options_doc={"settings-summary-list-order": "alphabetical"},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
 
 def test_autodoc_pydantic_settings_summary_list_order_bysource(autodocument):
+    kwargs = dict(object_path='target.configuration.SettingsSummaryListOrder',
+                  **KWARGS)
+    enable = {"autodoc_pydantic_settings_show_validator_summary": True,
+              "autodoc_pydantic_settings_show_field_summary": True}
+
     result = [
         '',
         '.. py:pydantic_settings:: SettingsSummaryListOrder',
@@ -393,38 +386,31 @@ def test_autodoc_pydantic_settings_summary_list_order_bysource(autodocument):
 
     # explict global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsSummaryListOrder',
-        options_app={"autodoc_pydantic_settings_show_validator_summary": True,
-                     "autodoc_pydantic_settings_show_field_summary": True,
-                     "autodoc_pydantic_settings_summary_list_order": "bysource"},
-        deactivate_all=True)
+        options_app={"autodoc_pydantic_settings_summary_list_order": "bysource",
+                     **enable},
+        **kwargs)
     assert result == actual
 
     # explict local
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsSummaryListOrder',
-        options_app={"autodoc_pydantic_settings_show_validator_summary": True,
-                     "autodoc_pydantic_settings_show_field_summary": True},
+        options_app=enable,
         options_doc={"settings-summary-list-order": "bysource"},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsSummaryListOrder',
         options_app={
-            "autodoc_pydantic_settings_show_validator_summary": True,
-            "autodoc_pydantic_settings_show_field_summary": True,
-            "autodoc_pydantic_settings_summary_list_order": "alphabetical"},
+            "autodoc_pydantic_settings_summary_list_order": "alphabetical",
+            **enable},
         options_doc={"settings-summary-list-order": "bysource"},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
 
 def test_autodoc_pydantic_settings_hide_paramlist_false(autodocument):
+    kwargs = dict(object_path='target.configuration.SettingsHideParamList',
+                  **KWARGS)
 
     params = [
         "_env_file: Optional[Union[pathlib.Path, str]] = '<object object>', ",
@@ -451,31 +437,28 @@ def test_autodoc_pydantic_settings_hide_paramlist_false(autodocument):
 
     # explict global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsHideParamList',
         options_app={"autodoc_pydantic_settings_hide_paramlist": False},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explict local
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsHideParamList',
         options_doc={"settings-hide-paramlist": False},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsHideParamList',
         options_app={"autodoc_pydantic_settings_hide_paramlist": True},
         options_doc={"settings-hide-paramlist": False},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
 
 def test_autodoc_pydantic_settings_hide_paramlist_true(autodocument):
+    kwargs = dict(object_path='target.configuration.SettingsHideParamList',
+                  **KWARGS)
+
     result = [
         '',
         '.. py:pydantic_settings:: SettingsHideParamList',
@@ -487,31 +470,29 @@ def test_autodoc_pydantic_settings_hide_paramlist_true(autodocument):
 
     # explict global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsHideParamList',
         options_app={"autodoc_pydantic_settings_hide_paramlist": True},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explict local
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsHideParamList',
         options_doc={"settings-hide-paramlist": True},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsHideParamList',
         options_app={"autodoc_pydantic_settings_hide_paramlist": False},
         options_doc={"settings-hide-paramlist": True},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
 
 def test_autodoc_pydantic_settings_undoc_members_true(autodocument):
+    kwargs = dict(object_path='target.configuration.SettingsUndocMembers',
+                  **KWARGS)
+    enable = {"autodoc_pydantic_settings_members": True}
+
     result = [
         '',
         ".. py:pydantic_settings:: SettingsUndocMembers",
@@ -533,34 +514,30 @@ def test_autodoc_pydantic_settings_undoc_members_true(autodocument):
 
     # explict global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsUndocMembers',
-        options_app={"autodoc_pydantic_settings_undoc_members": True,
-                     "autodoc_pydantic_settings_members": True},
-        deactivate_all=True)
+        options_app={"autodoc_pydantic_settings_undoc_members": True, **enable},
+        **kwargs)
     assert result == actual
 
     # explict local
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsUndocMembers',
-        options_app={"autodoc_pydantic_settings_members": True},
+        options_app=enable,
         options_doc={"undoc-members": None},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsUndocMembers',
-        options_app={"autodoc_pydantic_settings_undoc_members": False,
-                     "autodoc_pydantic_settings_members": True},
+        options_app={"autodoc_pydantic_settings_undoc_members": False, **enable},
         options_doc={"undoc-members": None},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
 
 def test_autodoc_pydantic_settings_undoc_members_false(autodocument):
+    kwargs = dict(object_path='target.configuration.SettingsUndocMembers',
+                  **KWARGS)
+    enable = {"autodoc_pydantic_settings_members": True}
+
     result = [
         '',
         ".. py:pydantic_settings:: SettingsUndocMembers",
@@ -572,15 +549,15 @@ def test_autodoc_pydantic_settings_undoc_members_false(autodocument):
 
     # explict global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsUndocMembers',
-        options_app={"autodoc_pydantic_settings_undoc_members": False,
-                     "autodoc_pydantic_settings_members": True},
-        deactivate_all=True)
+        options_app={"autodoc_pydantic_settings_undoc_members": False, **enable},
+        **kwargs)
     assert result == actual
 
 
 def test_autodoc_pydantic_settings_members_true(autodocument):
+    kwargs = dict(object_path='target.configuration.SettingsMembers',
+                  **KWARGS)
+
     result = [
         '',
         ".. py:pydantic_settings:: SettingsMembers",
@@ -606,31 +583,28 @@ def test_autodoc_pydantic_settings_members_true(autodocument):
 
     # explict global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsMembers',
         options_app={"autodoc_pydantic_settings_members": True},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explict local
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsMembers',
         options_doc={"members": None},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsMembers',
         options_app={"autodoc_pydantic_settings_members": False},
         options_doc={"members": None},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
 
 def test_autodoc_pydantic_settings_members_false(autodocument):
+    kwargs = dict(object_path='target.configuration.SettingsMembers',
+                  **KWARGS)
+
     result = [
         '',
         ".. py:pydantic_settings:: SettingsMembers",
@@ -642,31 +616,28 @@ def test_autodoc_pydantic_settings_members_false(autodocument):
 
     # explict global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsMembers',
         options_app={"autodoc_pydantic_settings_members": False},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explict local
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsMembers',
         options_doc={"members": "False"},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsMembers',
         options_app={"autodoc_pydantic_settings_members": True},
         options_doc={"members": "False"},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
 
 def test_autodoc_pydantic_settings_member_order_groupwise(autodocument):
+    kwargs = dict(object_path='target.configuration.SettingsMemberOrder',
+                  **KWARGS)
+
     result = [
         '',
         ".. py:pydantic_settings:: SettingsMemberOrder",
@@ -698,34 +669,31 @@ def test_autodoc_pydantic_settings_member_order_groupwise(autodocument):
 
     # explict global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsMemberOrder',
         options_app={"autodoc_pydantic_settings_member_order": "groupwise",
                      **SETTING_MEMBER_ORDER},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explict local
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsMemberOrder',
         options_app=SETTING_MEMBER_ORDER,
         options_doc={"member-order": "groupwise"},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsMemberOrder',
         options_app={"autodoc_pydantic_settings_member_order": "bysource",
                      **SETTING_MEMBER_ORDER},
         options_doc={"member-order": "groupwise"},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
 
 def test_autodoc_pydantic_settings_member_order_bysource(autodocument):
+    kwargs = dict(object_path='target.configuration.SettingsMemberOrder',
+                  **KWARGS)
+
     result = [
         '',
         ".. py:pydantic_settings:: SettingsMemberOrder",
@@ -757,34 +725,31 @@ def test_autodoc_pydantic_settings_member_order_bysource(autodocument):
 
     # explict global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsMemberOrder',
         options_app={"autodoc_pydantic_settings_member_order": "bysource",
                      **SETTING_MEMBER_ORDER},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explict local
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsMemberOrder',
         options_app=SETTING_MEMBER_ORDER,
         options_doc={"member-order": "bysource"},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsMemberOrder',
         options_app={"autodoc_pydantic_settings_member_order": "groupwise",
                      **SETTING_MEMBER_ORDER},
         options_doc={"member-order": "bysource"},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
 
 def test_autodoc_pydantic_settings_member_order_alphabetical(autodocument):
+    kwargs = dict(object_path='target.configuration.SettingsMemberOrder',
+                  **KWARGS)
+
     result = [
         '',
         ".. py:pydantic_settings:: SettingsMemberOrder",
@@ -816,34 +781,31 @@ def test_autodoc_pydantic_settings_member_order_alphabetical(autodocument):
 
     # explict global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsMemberOrder',
         options_app={"autodoc_pydantic_settings_member_order": "alphabetical",
                      **SETTING_MEMBER_ORDER},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explict local
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsMemberOrder',
         options_app=SETTING_MEMBER_ORDER,
         options_doc={"member-order": "alphabetical"},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsMemberOrder',
         options_app={"autodoc_pydantic_settings_member_order": "groupwise",
                      **SETTING_MEMBER_ORDER},
         options_doc={"member-order": "alphabetical"},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
 
 def test_autodoc_pydantic_settings_show_validator_members_true(autodocument):
+    kwargs = dict(object_path='target.configuration.SettingsShowValidatorMembers',
+                  **KWARGS)
+
     result = [
         '',
         ".. py:pydantic_settings:: SettingsShowValidatorMembers",
@@ -869,34 +831,31 @@ def test_autodoc_pydantic_settings_show_validator_members_true(autodocument):
 
     # explict global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsShowValidatorMembers',
         options_app={"autodoc_pydantic_settings_members": True,
                      "autodoc_pydantic_settings_show_validator_members": True},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explict local
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsShowValidatorMembers',
         options_app={"autodoc_pydantic_settings_members": True},
         options_doc={"settings-show-validator-members": True},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsShowValidatorMembers',
         options_app={"autodoc_pydantic_settings_members": True,
                      "autodoc_pydantic_settings_show_validator_members": False},
         options_doc={"settings-show-validator-members": True},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
 
 def test_autodoc_pydantic_settings_show_validator_members_false(autodocument):
+    kwargs = dict(object_path='target.configuration.SettingsShowValidatorMembers',
+                  **KWARGS)
+
     result = [
         '',
         ".. py:pydantic_settings:: SettingsShowValidatorMembers",
@@ -915,34 +874,33 @@ def test_autodoc_pydantic_settings_show_validator_members_false(autodocument):
 
     # explict global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsShowValidatorMembers',
         options_app={"autodoc_pydantic_settings_members": True,
                      "autodoc_pydantic_settings_show_validator_members": False},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explict local
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsShowValidatorMembers',
         options_app={"autodoc_pydantic_settings_members": True},
         options_doc={"settings-show-validator-members": False},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsShowValidatorMembers',
         options_app={"autodoc_pydantic_settings_members": True,
                      "autodoc_pydantic_settings_show_validator_members": True},
         options_doc={"settings-show-validator-members": False},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
 
 def test_autodoc_pydantic_settings_show_config_members_true(autodocument):
+    kwargs = dict(object_path='target.configuration.SettingsShowConfigMember',
+                  **KWARGS)
+    enable = {"autodoc_pydantic_settings_members": True,
+              "autodoc_pydantic_config_members": True}
+
     result = [
         '',
         ".. py:pydantic_settings:: SettingsShowConfigMember",
@@ -971,37 +929,33 @@ def test_autodoc_pydantic_settings_show_config_members_true(autodocument):
 
     # explict global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsShowConfigMember',
-        options_app={"autodoc_pydantic_settings_members": True,
-                     "autodoc_pydantic_settings_show_config_member": True,
-                     "autodoc_pydantic_config_members": True},
-        deactivate_all=True)
+        options_app={"autodoc_pydantic_settings_show_config_member": True,
+                     **enable},
+        **kwargs)
     assert result == actual
 
     # explict local
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsShowConfigMember',
-        options_app={"autodoc_pydantic_settings_members": True,
-                     "autodoc_pydantic_config_members": True},
+        options_app=enable,
         options_doc={"settings-show-config-member": True},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsShowConfigMember',
-        options_app={"autodoc_pydantic_settings_members": True,
-                     "autodoc_pydantic_settings_show_config_member": False,
-                     "autodoc_pydantic_config_members": True},
+        options_app={"autodoc_pydantic_settings_show_config_member": False,
+                     **enable},
         options_doc={"settings-show-config-member": True},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
 
 def test_autodoc_pydantic_settings_show_config_members_false(autodocument):
+    kwargs = dict(object_path='target.configuration.SettingsShowConfigMember',
+                  **KWARGS)
+    enable = {"autodoc_pydantic_settings_members": True,
+              "autodoc_pydantic_config_members": True}
+
     result = [
         '',
         ".. py:pydantic_settings:: SettingsShowConfigMember",
@@ -1020,30 +974,24 @@ def test_autodoc_pydantic_settings_show_config_members_false(autodocument):
 
     # explict global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsShowConfigMember',
-        options_app={"autodoc_pydantic_settings_members": True,
-                     "autodoc_pydantic_settings_show_config_member": False},
-        deactivate_all=True)
+        options_app={"autodoc_pydantic_settings_show_config_member": False,
+                     **enable},
+        **kwargs)
     assert result == actual
 
     # explict local
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsShowConfigMember',
-        options_app={"autodoc_pydantic_settings_members": True},
+        options_app=enable,
         options_doc={"settings-show-config-member": False},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsShowConfigMember',
-        options_app={"autodoc_pydantic_settings_members": True,
-                     "autodoc_pydantic_settings_show_config_member": True},
+        options_app={"autodoc_pydantic_settings_show_config_member": True,
+                     **enable},
         options_doc={"settings-show-config-member": False},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
 
@@ -1051,6 +999,8 @@ def test_autodoc_pydantic_settings_signature_prefix(autodocument, parse_rst):
     """Tests pydantic_settings directive.
 
     """
+    kwargs = dict(object_path='target.configuration.SettingsSignaturePrefix',
+                  **KWARGS)
 
     # default
     result = [
@@ -1062,10 +1012,7 @@ def test_autodoc_pydantic_settings_signature_prefix(autodocument, parse_rst):
         ''
     ]
 
-    actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsSignaturePrefix',
-        deactivate_all=True)
+    actual = autodocument(**kwargs)
     assert result == actual
 
     # explicit value
@@ -1080,10 +1027,8 @@ def test_autodoc_pydantic_settings_signature_prefix(autodocument, parse_rst):
     ]
 
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsSignaturePrefix',
         options_doc={"settings-signature-prefix": "foobar "},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explict empty
@@ -1098,10 +1043,8 @@ def test_autodoc_pydantic_settings_signature_prefix(autodocument, parse_rst):
     ]
 
     actual = autodocument(
-        documenter='pydantic_settings',
-        object_path='target.configuration.SettingsSignaturePrefix',
         options_doc={"settings-signature-prefix": ""},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
 
