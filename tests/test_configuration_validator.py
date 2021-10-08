@@ -395,3 +395,36 @@ def test_autodoc_pydantic_validator_root(parse_rst):
     ]
     doctree = parse_rst(input_rst)
     assert_node(doctree, output_nodes)
+
+
+def test_autodoc_pydantic_validator_root_pre(parse_rst):
+    """Tests correct modification for root validator with `pre=True` adding
+    " » all fields".
+
+    This relates to issue #55.
+
+    """
+
+    output_nodes = (
+        index,
+        [desc, ([desc_signature, ([desc_annotation, "validator "],
+                                  [desc_addname,
+                                   "ValidatorAsteriskRootValidator."],
+                                  [desc_name, "check_root_pre"],
+                                  [desc_annotation, "  »  "],
+                                  [pending_xref, ([emphasis, "all fields"])])],
+                [desc_content])
+         ]
+    )
+
+    # explicit local
+    input_rst = [
+        '',
+        '.. py:pydantic_validator:: ValidatorAsteriskRootValidator.check_root_pre',
+        '   :module: target.configuration',
+        '   :classmethod:',
+        '   :validator-replace-signature: True',
+        ''
+    ]
+    doctree = parse_rst(input_rst)
+    assert_node(doctree, output_nodes)

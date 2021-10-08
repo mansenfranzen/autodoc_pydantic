@@ -237,11 +237,14 @@ class ValidatorInspector(BaseInspectionComposite):
 
         """
 
-        def get_name_from_root(validators):
+        def get_name_pre_root(validators):
+            return {validator.__name__ for validator in validators}
+
+        def get_name_post_root(validators):
             return {validator[1].__name__ for validator in validators}
 
-        pre_root = get_name_from_root(self.model.__pre_root_validators__)
-        post_root = get_name_from_root(self.model.__post_root_validators__)
+        pre_root = get_name_pre_root(self.model.__pre_root_validators__)
+        post_root = get_name_post_root(self.model.__post_root_validators__)
 
         return pre_root.union(post_root)
 

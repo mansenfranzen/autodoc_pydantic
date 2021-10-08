@@ -303,6 +303,11 @@ class ValidatorAsteriskRootValidator(BaseModel):
         """Check root."""
         return values
 
+    @root_validator(pre=True)
+    def check_root_pre(cls, values):
+        """Check root pre."""
+        return values
+
 class FieldListValidators(BaseModel):
     """FieldListValidators."""
 
