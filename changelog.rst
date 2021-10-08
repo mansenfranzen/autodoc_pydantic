@@ -5,7 +5,7 @@ v1.5.0 - 2021-09-XX
 -------------------
 
 This release includes major internal refactorings, new documentation sections,
-a new feature, a bug fix and tests for new sphinx versions.
+a new feature, a bug fix and tests for new sphinx and python versions.
 
 Added
 ~~~~~
@@ -65,7 +65,7 @@ Contributors
 ~~~~~~~~~~~~
 
 - Thanks to `goroderickgo <https://github.com/goroderickgo>`__ for reporting a bug
-  related to pre root validators breaking the sphinx build process``
+  related to pre root validators breaking the sphinx build process
   `#55 <https://github.com/mansenfranzen/autodoc_pydantic/issues/55>`__.
 
 v1.4.0 - 2021-08-20
