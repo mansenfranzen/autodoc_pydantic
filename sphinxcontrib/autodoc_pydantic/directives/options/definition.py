@@ -25,7 +25,8 @@ OPTIONS_VALIDATOR = {"validator-replace-signature": option_default_true,
                      "validator-list-fields": option_default_true,
                      "validator-signature-prefix": unchanged,
                      "__doc_disable_except__": option_list_like}
-"""Represents added directive options for :class:`PydanticValidatorDocumenter`."""
+"""Represents added directive options for :class:`PydanticValidatorDocumenter`.
+"""
 
 OPTIONS_CONFIG = {"members": option_members,
                   "config-signature-prefix": unchanged,
@@ -74,4 +75,5 @@ OPTIONS_SETTINGS = {
     "undoc-members": option_default_true,
     "members": option_members,
     "__doc_disable_except__": option_list_like}
-"""Represents added directive options for :class:`PydanticSettingsDocumenter`."""
+"""Represents added directive options for :class:`PydanticSettingsDocumenter`.
+"""

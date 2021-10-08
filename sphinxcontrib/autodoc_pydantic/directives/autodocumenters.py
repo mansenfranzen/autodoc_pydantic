@@ -77,7 +77,7 @@ class PydanticAutoDoc:
         it is guaranteed by the auto-documenter base class that ``object`` is
         then already correctly provided and the ``ModelInspector`` works as
         expected.
-         
+
         """
 
         if self._inspect:
@@ -670,7 +670,7 @@ class PydanticConfigClassDocumenter(ClassDocumenter):
     objtype = 'pydantic_config'
     directivetype = 'pydantic_config'
     option_spec = ClassDocumenter.option_spec.copy()
-    option_spec.update(OPTIONS_CONFIG )
+    option_spec.update(OPTIONS_CONFIG)
     member_order = 100
     priority = 10 + ClassDocumenter.priority
 
