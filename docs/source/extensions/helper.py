@@ -104,8 +104,7 @@ class ConfigurationToc(SphinxDirective):
 
     def run(self) -> List[Node]:
         name = self.arguments[0]
-        prefix = "autodoc_pydantic_"
-        startswith = f"{prefix}{name}_"
+        startswith = f'autodoc_pydantic_{name}_'
         configs = [x for x in self.env.config.values.keys()
                    if x.startswith(startswith)]
 
