@@ -12,7 +12,7 @@ from sphinx.addnodes import (
 from sphinx.domains.python import PyMethod, PyAttribute, PyClasslike
 from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector
 from sphinxcontrib.autodoc_pydantic.directives.options.composites import (
-    PydanticDirectiveOptions
+    DirectiveOptions
 )
 from sphinxcontrib.autodoc_pydantic.directives.utility import \
     create_field_href, remove_node_by_tagname
@@ -32,7 +32,7 @@ class PydanticDirectiveBase:
 
     def __init__(self, *args):
         super().__init__(*args)
-        self.pyautodoc = PydanticDirectiveOptions(self)
+        self.pyautodoc = DirectiveOptions(self)
 
     def get_signature_prefix(self, sig: str) -> str:
         """Overwrite original signature prefix with custom pydantic ones.

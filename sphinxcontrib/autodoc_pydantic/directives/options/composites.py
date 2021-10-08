@@ -12,7 +12,7 @@ from sphinx.ext.autodoc import ALL, Documenter, Options
 from sphinxcontrib.autodoc_pydantic.directives.utility import NONE
 
 
-class PydanticDirectiveOptions:
+class DirectiveOptions:
     """Composite class providing methods to manage getting and setting
     configuration values from global app configuration and local directive
     options.
@@ -179,7 +179,7 @@ class PydanticDirectiveOptions:
             self.parent.options["members"] = ALL
 
 
-class PydanticDocumenterOptions(PydanticDirectiveOptions):
+class AutoDocOptions(DirectiveOptions):
     """Composite class providing methods to handle getting and setting
     autodocumenter directive option values.
 

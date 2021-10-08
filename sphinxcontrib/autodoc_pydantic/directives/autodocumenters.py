@@ -34,12 +34,12 @@ from sphinxcontrib.autodoc_pydantic.directives.options.definition import (
 from sphinxcontrib.autodoc_pydantic.directives.templates import TPL_COLLAPSE
 from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector
 from sphinxcontrib.autodoc_pydantic.directives.options.composites import (
-    PydanticDocumenterOptions
+    AutoDocOptions
 )
 from sphinxcontrib.autodoc_pydantic.directives.utility import NONE
 
 
-class PydanticDocumenterNamespace:
+class PydanticAutoDoc:
     """Composite to provide single namespace to access all **autodoc_pydantic**
     relevant documenter directive functionalities.
 
@@ -49,10 +49,10 @@ class PydanticDocumenterNamespace:
         self._documenter = documenter
         self._is_child = is_child
         self._inspect: Optional[ModelInspector] = None
-        self._options = PydanticDocumenterOptions(self._documenter)
+        self._options = AutoDocOptions(self._documenter)
 
     @property
-    def options(self) -> PydanticDocumenterOptions:
+    def options(self) -> AutoDocOptions:
         """Provides access to :obj:`PydanticDocumenterOptions` to handle
         global and local configuration settings.
 
@@ -131,7 +131,7 @@ class PydanticModelDocumenter(ClassDocumenter):
 
     def __init__(self, *args: Any) -> None:
         super().__init__(*args)
-        self.pydantic = PydanticDocumenterNamespace(self, is_child=False)
+        self.pydantic = PydanticAutoDoc(self, is_child=False)
 
     def document_members(self, *args, **kwargs):
         """Modify member options before starting to document members.
@@ -427,7 +427,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
 
     def __init__(self, *args):
         super().__init__(*args)
-        self.pydantic = PydanticDocumenterNamespace(self, is_child=True)
+        self.pydantic = PydanticAutoDoc(self, is_child=True)
 
     @classmethod
     def can_document_member(cls,
@@ -595,7 +595,7 @@ class PydanticValidatorDocumenter(MethodDocumenter):
 
     def __init__(self, *args: Any) -> None:
         super().__init__(*args)
-        self.pydantic = PydanticDocumenterNamespace(self, is_child=True)
+        self.pydantic = PydanticAutoDoc(self, is_child=True)
 
     @classmethod
     def can_document_member(cls,
@@ -680,7 +680,7 @@ class PydanticConfigClassDocumenter(ClassDocumenter):
 
     def __init__(self, *args: Any) -> None:
         super().__init__(*args)
-        self.pydantic = PydanticDocumenterNamespace(self, is_child=True)
+        self.pydantic = PydanticAutoDoc(self, is_child=True)
 
     @classmethod
     def can_document_member(cls,
