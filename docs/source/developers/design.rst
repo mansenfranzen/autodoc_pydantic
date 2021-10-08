@@ -77,6 +77,11 @@ All of these are composite classes which are combined under the
 :class:`ModelInspector <sphinxcontrib.autodoc_pydantic.inspection.ModelInspector>`
 class which serves as the main entry point to inspect pydantic models:
 
+.. mermaid:: mermaid/model_inspector.mmd
+
+You may use the :class:`ModelInspector <sphinxcontrib.autodoc_pydantic.inspection.ModelInspector>`
+programmatically to inspect pydantic models:
+
 .. code-block:: python
 
    from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector
@@ -234,51 +239,18 @@ Pydantic Composite
 Essentially, auto-documenters need to employ the
 :class:`ModelInspector <sphinxcontrib.autodoc_pydantic.inspection.ModelInspector>`
 for retrieving the relevant information to be documented and
-:class:`PydanticDocumenterOptions <sphinxcontrib.autodoc_pydantic.directives.options.composites.PydanticDocumenterOptions>`
+:class:`AutoDocOptions <sphinxcontrib.autodoc_pydantic.directives.options.composites.AutoDocOptions>`
 for accessing configuration settings.
 
 Both are combined in the
-:class:`PydanticDocumenterNamespace <sphinxcontrib.autodoc_pydantic.directives.autodocumenters.PydanticDocumenterNamespace>`
+:class:`PydanticAutoDoc <sphinxcontrib.autodoc_pydantic.directives.autodocumenters.PydanticAutoDoc>`
 composite class via ``inspect`` and ``options`` attributes, respectively. This
 provides a single entry point for all mandatory functionality that is required
 to populate auto-documenter's content.
 
-.. mermaid::
+.. mermaid:: mermaid/pydantic_composite.mmd
 
-   classDiagram
-       direction LR
-
-       class PydanticModelDocumenter {
-           +objtype
-           +option_spec
-           +pydantic
-           +can_document_member()
-           +add_content()
-       }
-
-       class PydanticDocumenterNamespace {
-           +inspect
-           +options
-       }
-
-       PydanticDocumenterNamespace --* PydanticModelDocumenter: *pydantic*\nattribute
-
-       class ModelInspector {
-           +fields
-           +validators
-           +config
-       }
-
-       class PydanticAutoDoc {
-           +add_default_options()
-           +is_true()
-           +is_false()
-       }
-
-       ModelInspector --* PydanticDocumenterNamespace: *inspect*\nattribute
-       PydanticAutoDoc --* PydanticDocumenterNamespace: *options*\nattribute
-
-The :class:`PydanticDocumenterNamespace <sphinxcontrib.autodoc_pydantic.directives.autodocumenters.PydanticDocumenterNamespace>`
+The :class:`PydanticAutoDoc <sphinxcontrib.autodoc_pydantic.directives.autodocumenters.PydanticAutoDoc>`
 is added to every auto-documenter during it's initialization as the `pydantic`
 attribute and is then used within methods as follows:
 
@@ -292,7 +264,7 @@ attribute and is then used within methods as follows:
 
        def __init__(self, *args):
            super().__init__(*args)
-           self.pydantic = PydanticDocumenterNamespace(self, is_child=True)
+           self.pydantic = PydanticAutoDoc(self, is_child=True)
 
 
        def add_default_value_or_required(self):

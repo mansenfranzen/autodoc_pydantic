@@ -30,27 +30,7 @@ When registering an auto-documenter to the sphinx application via
 This directive executes the auto-documenter, retrieves its reST and then
 converts the reST into docutils via the magic |parse_generated_content|_.
 
-.. mermaid::
-
-   stateDiagram-v2
-       direction LR
-
-
-       [*] --> AutoDocumenter: Python\n&nbspobject
-
-       state AutodocDirective {
-            state "parse_generated_content" as pgc
-            state AutoDocumenter {
-               inspect --> generate
-            }
-       AutoDocumenter --> pgc: restructured\n&nbsp&nbsp&nbsp&nbsp&nbsp&nbspText
-       }
-
-       pgc --> Builder: DocUtil\n&nbspNodes
-
-       Builder --> HTML
-       Builder --> LaTex
-       Builder --> ...
+.. mermaid:: mermaid/autodocumenter.mmd
 
 The interesting part is how a given reST is converted into docutils nodes
 because this turns out to be very useful for different use cases when writing
@@ -96,7 +76,7 @@ Adding a new feature requires several related steps which are divided in the fol
 2. **Specify the feature**: Depict the feature in very detail. Describe it's
    exact behaviour. Provide configuration names.
 
-3. **Derive and create tests**: Translate the feature's specification into
+3. **Derive tests**: Translate the feature's specification into
    test cases to ensure that the implementation works as expected.
 
 4. **Add configuration settings**: Register local and global configuration
@@ -142,8 +122,8 @@ sphinx.
 
 - It affects both the sort order for field and validator summary lists.
 
-3. Derive and create tests
-==========================
+3. Derive tests
+===============
 
 With the above specification, test cases can be formulated.
 
@@ -469,6 +449,7 @@ The ``tabdocconfig`` directive takes the following parameters:
   ``model-show-field-summary``.
 :values: Contains a list of available configuration values for this
   feature which each will be used to render the output.
+:version: Set the version when this configuration was added.
 :directive content: Represents the content of the directive. Provide reST
   describing the feature.
 
