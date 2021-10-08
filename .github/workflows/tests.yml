@@ -29,7 +29,7 @@ jobs:
           - python_version: 3.9
             pydantic_version: "18"
             sphinx_version: "42"
-          - python_version: 3.10
+          - python_version: "3.10"
             pydantic_version: "18"
             sphinx_version: "42"
     runs-on: ubuntu-18.04
