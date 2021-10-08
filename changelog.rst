@@ -4,8 +4,69 @@ Changelog
 v1.5.0 - 2021-09-XX
 -------------------
 
-This release includes major refactorings, documentation improvements and a new
-feature.
+This release includes major internal refactorings, new documentation sections,
+a new feature, a bug fix and tests for new sphinx versions.
+
+Added
+~~~~~
+
+- Provide ``summary-list-order`` configuration property which allows to sort
+  summary list items in alphabetical order or by source.
+
+Bugfix
+~~~~~~
+
+- Using ``@root_validator(pre=True)`` caused the sphinx build process to fail
+  due to an incorrect implementation. This has been fixed.
+  `#55 <https://github.com/mansenfranzen/autodoc_pydantic/issues/55>`__.
+
+Testing
+~~~~~~~
+
+- Refactor all configuration test modules removing repeated function arguments
+  to increase readability and maintainability.
+- Add specific test to ensure that using ``@root_validator(pre=True)`` does not
+  break the sphinx build process.
+- Add sphinx versions ``4.1.0`` and ``4.2.0`` to CI matrix.
+- Add python version ``3.10`` to CI matrix.
+
+Documentation
+~~~~~~~~~~~~~
+
+- Add section in configuration page describing ``summary-list-order``.
+- Add developer design section providing gentle introduction to code base.
+- Add developer guides focusing on concrete implementation details.
+- Add class diagrams via mermaid.js.
+- Streamline naming convention for ``TabDocDirective`` for better clarity.
+- Add ``version`` parameter to ``TabDocDirective`` to show the version in which
+  a configuration property was added.
+- Add API documentation for selected modules including directory tree with
+  references.
+- Activate ``sphinxcontrib.mermaid`` and ``sphinx.ext.viewcode`` extensions.
+
+Internal
+~~~~~~~~
+
+- Completely remove the ``ModelWrapper`` with the ``ModelInspector`` with all
+  its composite classes.
+- Moving inspection logic from auto-documenters to ``ModelInspector``.
+- Streamline naming conventions for composite classes.
+- Create separate sub directory for directive options including individual
+  modules for composites, definitions, enums and validators.
+- Move reST templates to separate module.
+
+Packaging
+~~~~~~~~~
+
+- Update to newest versions of ``sphinx-rtd-theme`` and ``sphinx-tabs``.
+- Add ``sphinxcontrib-mermaid`` under dev and doc dependencies.
+
+Contributors
+~~~~~~~~~~~~
+
+- Thanks to `goroderickgo <https://github.com/goroderickgo>`__ for reporting a bug
+  related to pre root validators breaking the sphinx build process``
+  `#55 <https://github.com/mansenfranzen/autodoc_pydantic/issues/55>`__.
 
 v1.4.0 - 2021-08-20
 -------------------
