@@ -54,18 +54,6 @@ jobs:
       - run: tox -e latest
       - run: export CODACY_PROJECT_TOKEN=${{ secrets.CODACY_PROJECT_TOKEN }} && bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r coverage.xml
 
-  test-development-versions-deps:
-    if: "!contains(github.event.head_commit.message, 'skip ci')"
-    environment: ci
-    runs-on: ubuntu-18.04
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-      - run: pip install tox
-      - run: tox -e development
-
   test-linter:
     if: "!contains(github.event.head_commit.message, 'skip ci')"
     environment: ci
