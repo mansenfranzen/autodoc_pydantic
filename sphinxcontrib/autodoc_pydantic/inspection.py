@@ -153,7 +153,7 @@ class FieldInspector(BaseInspectionComposite):
         field = self.get(field_name)
         constraints = get_field_schema_validations(field)
         return {key: value for key, value in constraints.items()
-                    if key not in {"env_names", "env"}}
+                if key not in {"env_names", "env"}}
 
     def is_required(self, field_name: str) -> bool:
         """Check if a given pydantic field is required/mandatory. Returns True,
