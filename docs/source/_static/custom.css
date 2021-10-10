@@ -1,0 +1,12 @@
+pre.literal-block a {
+    font-weight: bold;
+}
+
+.statediagram .edgeLabel rect {
+    opacity: 0.0 !important;
+}
+
+.statediagram .edgeLabel {
+    color: #4e4a4a !important;
+    background-color: transparent !important;
+}

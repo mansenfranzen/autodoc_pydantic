@@ -8,15 +8,17 @@ from typing import Dict, Any
 from sphinx.domains import ObjType
 from sphinx.application import Sphinx
 
-from sphinxcontrib.autodoc_pydantic.autodoc import (
+from sphinxcontrib.autodoc_pydantic.directives.autodocumenters import (
     PydanticValidatorDocumenter,
     PydanticModelDocumenter,
     PydanticConfigClassDocumenter,
     PydanticFieldDocumenter,
-    PydanticSettingsDocumenter, OptionsFieldDocPolicy, OptionsJsonErrorStrategy
+    PydanticSettingsDocumenter
 )
+from sphinxcontrib.autodoc_pydantic.directives.options.enums import \
+    OptionsJsonErrorStrategy, OptionsFieldDocPolicy, OptionsSummaryListOrder
 
-from sphinxcontrib.autodoc_pydantic.directives import (
+from sphinxcontrib.autodoc_pydantic.directives.directives import (
     PydanticField,
     PydanticConfigClass,
     PydanticValidator,
@@ -24,7 +26,7 @@ from sphinxcontrib.autodoc_pydantic.directives import (
     PydanticSettings
 )
 
-__version__ = "1.4.0"
+__version__ = "1.5.0"
 
 
 def add_css_file(app: Sphinx, exception: Exception):
@@ -68,17 +70,19 @@ def add_configuration_values(app: Sphinx):
     stem = "autodoc_pydantic_"
     add = app.add_config_value
     json_strategy = OptionsJsonErrorStrategy.WARN
+    summary_list_order = OptionsSummaryListOrder.ALPHABETICAL
 
     add(f'{stem}config_signature_prefix', "model", True, str)
     add(f'{stem}config_members', True, True, bool)
 
     add(f'{stem}settings_show_json', True, True, bool)
-    add(f'{stem}settings_show_json_error_strategy', json_strategy, True, bool)
+    add(f'{stem}settings_show_json_error_strategy', json_strategy, True, str)
     add(f'{stem}settings_show_config_member', False, True, bool)
     add(f'{stem}settings_show_config_summary', True, True, bool)
     add(f'{stem}settings_show_validator_members', True, True, bool)
     add(f'{stem}settings_show_validator_summary', True, True, bool)
     add(f'{stem}settings_show_field_summary', True, True, bool)
+    add(f'{stem}settings_summary_list_order', summary_list_order, True, str)
     add(f'{stem}settings_hide_paramlist', True, True, bool)
     add(f'{stem}settings_undoc_members', True, True, bool)
     add(f'{stem}settings_members', True, True, bool)
@@ -86,12 +90,13 @@ def add_configuration_values(app: Sphinx):
     add(f'{stem}settings_signature_prefix', "pydantic settings", True, str)
 
     add(f'{stem}model_show_json', True, True, bool)
-    add(f'{stem}model_show_json_error_strategy', json_strategy, True, bool)
+    add(f'{stem}model_show_json_error_strategy', json_strategy, True, str)
     add(f'{stem}model_show_config_member', False, True, bool)
     add(f'{stem}model_show_config_summary', True, True, bool)
     add(f'{stem}model_show_validator_members', True, True, bool)
     add(f'{stem}model_show_validator_summary', True, True, bool)
     add(f'{stem}model_show_field_summary', True, True, bool)
+    add(f'{stem}model_summary_list_order', summary_list_order, True, str)
     add(f'{stem}model_hide_paramlist', True, True, bool)
     add(f'{stem}model_undoc_members', True, True, bool)
     add(f'{stem}model_members', True, True, bool)
@@ -123,7 +128,7 @@ def add_directives_and_autodocumenters(app: Sphinx):
     app.add_directive_to_domain("py", "pydantic_config", PydanticConfigClass)
     app.add_directive_to_domain("py", "pydantic_validator", PydanticValidator)
 
-    app.setup_extension('sphinx.ext.autodoc')  # Require autodoc extension
+    app.setup_extension('sphinx.ext.autodoc')
     app.add_autodocumenter(PydanticFieldDocumenter)
     app.add_autodocumenter(PydanticModelDocumenter)
     app.add_autodocumenter(PydanticSettingsDocumenter)

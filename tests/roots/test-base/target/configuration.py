@@ -44,6 +44,21 @@ class ModelShowFieldSummaryInherited(ModelShowFieldSummary):
     field3: int = 5
 
 
+class ModelSummaryListOrder(BaseModel):
+    """ModelSummaryListOrder."""
+
+    field_b: int = 1
+    field_a: int = 1
+
+    @validator("field_b")
+    def validate_b(cls, v):
+        return v
+
+    @validator("field_a")
+    def validate_a(cls, v):
+        return v
+
+
 class ModelHideParamList(BaseModel):
     """ModelHideParamList."""
 
@@ -140,6 +155,21 @@ class SettingsShowFieldSummary(BaseSettings):
     """Field1."""
     field2: str = "FooBar"
     """Field2."""
+
+
+class SettingsSummaryListOrder(BaseSettings):
+    """SettingsSummaryListOrder."""
+
+    field_b: int = 1
+    field_a: int = 1
+
+    @validator("field_b")
+    def validate_b(cls, v):
+        return v
+
+    @validator("field_a")
+    def validate_a(cls, v):
+        return v
 
 
 class SettingsHideParamList(BaseSettings):
@@ -272,6 +302,12 @@ class ValidatorAsteriskRootValidator(BaseModel):
     def check_root(cls, values):
         """Check root."""
         return values
+
+    @root_validator(pre=True)
+    def check_root_pre(cls, values):
+        """Check root pre."""
+        return values
+
 
 class FieldListValidators(BaseModel):
     """FieldListValidators."""

@@ -31,7 +31,7 @@ copyright = '2021, Franz Wöllert'
 author = 'Franz Wöllert'
 
 # The full version, including alpha/beta/rc tags
-release = '1.4.0'
+release = '1.5.0'
 
 # -- General configuration ---------------------------------------------------
 
@@ -46,6 +46,8 @@ extensions = [
     "sphinx_tabs.tabs",
     "sphinx_copybutton",
     "sphinxcontrib.autodoc_pydantic",
+    "sphinxcontrib.mermaid",
+    "sphinx.ext.viewcode",
     "extensions"
 ]
 
@@ -74,4 +76,11 @@ html_theme_options = {
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-# html_static_path = ['_static']
+# html_static_path = ['js']
+
+add_module_names = False
+
+mermaid_version = ""
+html_static_path = ["_static"]
+html_js_files = ['mermaid.min.js']
+html_css_files = ['custom.css']

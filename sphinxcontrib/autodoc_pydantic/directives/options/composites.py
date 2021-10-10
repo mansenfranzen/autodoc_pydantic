@@ -1,129 +1,18 @@
-"""This module contains directive utilities like option validation functions
-and the PyAutoDoc composite class.
+"""This module contains composite helper classes for **autodoc_pydantic**
+autodocumenters and directives. They mainly intend to encapsulate the
+management of directive options.
 
 """
 import functools
-from typing import Any, Union, List, Set, Callable
+from typing import Any, Union, Set
 
-from docutils.nodes import emphasis
 from docutils.parsers.rst import Directive
-from sphinx.addnodes import pending_xref
-from sphinx.environment import BuildEnvironment
 from sphinx.ext.autodoc import ALL, Documenter, Options
 
-from sphinxcontrib.autodoc_pydantic.inspection import NamedRef
+from sphinxcontrib.autodoc_pydantic.directives.utility import NONE
 
 
-class NullType:
-    """Helper class to present a Null value which is not the same
-    as python's `None`. This represents a missing value, or no
-    value at all by convention. It should be used as a singleton.
-
-    """
-
-    def __bool__(self):
-        return False
-
-
-NONE = NullType()
-
-
-def create_field_href(reference: NamedRef,
-                      env: BuildEnvironment) -> pending_xref:
-    """Create `pending_xref` node with link to given `reference`.
-
-    """
-
-    text = reference.name
-    options = {'refdoc': env.docname,
-               'refdomain': "py",
-               'reftype': "obj",
-               'reftarget': reference.ref}
-
-    refnode = pending_xref(reference.name, **options)
-    classes = ['xref', "py", '%s-%s' % ("py", "obj")]
-    refnode += emphasis(text, text, classes=classes)
-    return refnode
-
-
-def remove_node_by_tagname(nodes: List, tagname: str):
-    """Removes node from list of `nodes` with given `tagname` in place.
-
-    """
-
-    for remove in [node for node in nodes if node.tagname == tagname]:
-        nodes.remove(remove)
-
-
-def option_members(arg: Any) -> Union[object, List[str]]:
-    """Used to convert the :members: option to auto directives.
-
-    """
-
-    if isinstance(arg, str):
-        sanitized = arg.lower()
-        if sanitized == "true":
-            return ALL
-        elif sanitized == "false":
-            return None
-
-    if arg in (None, True):
-        return ALL
-    elif arg is False:
-        return None
-    else:
-        return [x.strip() for x in arg.split(',') if x.strip()]
-
-
-def option_one_of_factory(choices: Set[Any]) -> Callable:
-    """Create a option validation function which allows only one value
-    of given set of provided `choices`.
-
-    """
-
-    def option_func(value: Any):
-        if value not in choices:
-            raise ValueError(f"Option value has to be on of {choices}")
-        return value
-
-    return option_func
-
-
-def option_default_true(arg: Any) -> bool:
-    """Used to define boolean options with default to True if no argument
-    is passed.
-
-    """
-
-    if isinstance(arg, bool):
-        return arg
-
-    if arg is None:
-        return True
-
-    sanitized = arg.strip().lower()
-
-    if sanitized == "true":
-        return True
-    elif sanitized == "false":
-        return False
-    else:
-        raise ValueError(f"Directive option argument '{arg}' is not valid. "
-                         f"Valid arguments are 'true' or 'false'.")
-
-
-def option_list_like(arg: Any) -> Set[str]:
-    """Used to define a set of items.
-
-    """
-
-    if not arg:
-        return set()
-    else:
-        return {x.strip() for x in arg.split(",")}
-
-
-class PydanticAutoDirective:
+class DirectiveOptions:
     """Composite class providing methods to manage getting and setting
     configuration values from global app configuration and local directive
     options.
@@ -175,7 +64,9 @@ class PydanticAutoDirective:
         return f"autodoc_pydantic_{sanitized}"
 
     def is_available(self, name: str) -> bool:
-        """Check if option is usable.
+        """Configurations may be disabled for documentation purposes. If the
+        directive option `__doc_disable_except__` exists, it contains the
+        only available configurations.
 
         """
 
@@ -194,7 +85,9 @@ class PydanticAutoDirective:
         config_name = self.sanitize_configuration_option_name(name)
         return getattr(self.parent.env.config, config_name, NONE)
 
-    def get_option_value(self, name: str, prefix: bool = False) -> Any:
+    def get_value(self, name: str,
+                  prefix: bool = False,
+                  force_availability: bool = False) -> Any:
         """Get option value for given `name`. First, looks for explicit
         directive option values (e.g. :member-order:) which have highest
         priority. Second, if no directive option is given, get the default
@@ -206,6 +99,9 @@ class PydanticAutoDirective:
             Name of the option.
         prefix: bool
             If True, add `pyautodoc_prefix` to name.
+        force_availability: bool
+            It is disabled by default however some default configurations like
+            `model-summary-list-order` need to be activated all the time.
 
         """
 
@@ -214,10 +110,10 @@ class PydanticAutoDirective:
 
         if name in self.parent.options:
             return self.parent.options[name]
-        elif self.is_available(name):
+        elif force_availability or self.is_available(name):
             return self.get_app_cfg_by_name(name)
 
-    def option_is_false(self, name: str, prefix: bool = False) -> bool:
+    def is_false(self, name: str, prefix: bool = False) -> bool:
         """Get option value for given `name`. First, looks for explicit
         directive option values (e.g. :member-order:) which have highest
         priority. Second, if no directive option is given, get the default
@@ -234,9 +130,9 @@ class PydanticAutoDirective:
 
         """
 
-        return self.get_option_value(name=name, prefix=prefix) is False
+        return self.get_value(name=name, prefix=prefix) is False
 
-    def option_is_true(self, name: str, prefix: bool = False) -> bool:
+    def is_true(self, name: str, prefix: bool = False) -> bool:
         """Get option value for given `name`. First, looks for explicit
         directive option values (e.g. :member-order:) which have highest
         priority. Second, if no directive option is given, get the default
@@ -253,7 +149,7 @@ class PydanticAutoDirective:
 
         """
 
-        return self.get_option_value(name=name, prefix=prefix) is True
+        return self.get_value(name=name, prefix=prefix) is True
 
     def set_default_option(self, name: str):
         """Set default option value for given `name` from app environment
@@ -283,9 +179,9 @@ class PydanticAutoDirective:
             self.parent.options["members"] = ALL
 
 
-class PydanticAutoDoc(PydanticAutoDirective):
+class AutoDocOptions(DirectiveOptions):
     """Composite class providing methods to handle getting and setting
-    autodoc directive option values.
+    autodocumenter directive option values.
 
     """
 

@@ -1,0 +1,20 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'tertiaryColor': '#DDDDDD', 'primaryColor': '#2980b9', 'primaryTextColor': '#FFFFFF'}}}%%
+stateDiagram-v2
+   direction LR
+
+
+   [*] --> AutoDocumenter: Python\n&nbspobject
+
+   state AutodocDirective {
+        state "parse_generated_content" as pgc
+        state AutoDocumenter {
+           inspect --> generate
+        }
+   AutoDocumenter --> pgc: restructured\n&nbsp&nbsp&nbsp&nbsp&nbsp&nbspText
+   }
+
+   pgc --> Builder: DocUtil\n&nbspNodes
+
+   Builder --> HTML
+   Builder --> LaTex
+   Builder --> ...

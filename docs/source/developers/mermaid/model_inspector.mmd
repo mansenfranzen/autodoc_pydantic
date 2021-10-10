@@ -1,0 +1,42 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryBorderColor': '#4e4a4a', 'primaryColor': '#FFFFFF', 'primaryTextColor': '#4e4a4a'}}}%%
+   classDiagram
+       direction BT
+
+    class FieldInspector {
+        + names
+        + is_required()
+    }
+
+    class ValidatorInspector {
+        + names
+        + is_asterisk()
+    }
+
+    class ConfigInspector {
+        + is_configured
+        + items
+    }
+
+    class ReferenceInspector {
+        + filter_by_validator_name()
+        + filter_by_field_name()
+    }
+
+    class SchemaInspector {
+        + sanitized
+        + create_sanitized_model()
+    }
+
+    class ModelInspector {
+        +fields
+        +validators
+        +config
+        +references
+        +schema
+    }
+
+    FieldInspector --* ModelInspector
+    ValidatorInspector --* ModelInspector
+    ConfigInspector --* ModelInspector
+    ReferenceInspector --* ModelInspector
+    SchemaInspector --* ModelInspector

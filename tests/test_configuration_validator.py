@@ -17,9 +17,17 @@ from sphinx.addnodes import (
     index
 )
 from sphinx.testing.util import assert_node
+from sphinxcontrib.autodoc_pydantic import PydanticValidatorDocumenter
+
+KWARGS = dict(documenter=PydanticValidatorDocumenter.objtype,
+              deactivate_all=True)
 
 
 def test_autodoc_pydantic_validator_replace_signature_true(autodocument):
+    kwargs = dict(
+        object_path='target.configuration.ValidatorReplaceSignature.check',
+        **KWARGS)
+    
     result = [
         '',
         '.. py:pydantic_validator:: ValidatorReplaceSignature.check',
@@ -32,10 +40,8 @@ def test_autodoc_pydantic_validator_replace_signature_true(autodocument):
 
     # explict global
     actual = autodocument(
-        documenter='pydantic_validator',
-        object_path='target.configuration.ValidatorReplaceSignature.check',
         options_app={"autodoc_pydantic_validator_replace_signature": True},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explict local
@@ -51,10 +57,8 @@ def test_autodoc_pydantic_validator_replace_signature_true(autodocument):
     ]
 
     actual = autodocument(
-        documenter='pydantic_validator',
-        object_path='target.configuration.ValidatorReplaceSignature.check',
         options_doc={"validator-replace-signature": True},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explicit local overwrite global
@@ -70,15 +74,17 @@ def test_autodoc_pydantic_validator_replace_signature_true(autodocument):
     ]
 
     actual = autodocument(
-        documenter='pydantic_validator',
-        object_path='target.configuration.ValidatorReplaceSignature.check',
         options_app={"autodoc_pydantic_validator_replace_signature": False},
         options_doc={"validator-replace-signature": True},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
 
 def test_autodoc_pydantic_validator_replace_signature_false(autodocument):
+    kwargs = dict(
+        object_path='target.configuration.ValidatorReplaceSignature.check',
+        **KWARGS)
+
     # explict global
     result = [
         '',
@@ -91,10 +97,8 @@ def test_autodoc_pydantic_validator_replace_signature_false(autodocument):
     ]
 
     actual = autodocument(
-        documenter='pydantic_validator',
-        object_path='target.configuration.ValidatorReplaceSignature.check',
         options_app={"autodoc_pydantic_validator_replace_signature": False},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explict local
@@ -110,23 +114,20 @@ def test_autodoc_pydantic_validator_replace_signature_false(autodocument):
     ]
 
     actual = autodocument(
-        documenter='pydantic_validator',
-        object_path='target.configuration.ValidatorReplaceSignature.check',
         options_doc={"validator-replace-signature": False},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        documenter='pydantic_validator',
-        object_path='target.configuration.ValidatorReplaceSignature.check',
         options_app={"autodoc_pydantic_validator_replace_signature": True},
         options_doc={"validator-replace-signature": False},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
 
-def test_autodoc_pydantic_validator_replace_signature_true_directive(parse_rst):
+def test_autodoc_pydantic_validator_replace_signature_true_directive(
+        parse_rst):
     """Tests pydantic_validator directive.
 
     """
@@ -141,7 +142,6 @@ def test_autodoc_pydantic_validator_replace_signature_true_directive(parse_rst):
                 [desc_content, ([paragraph, "Check."])])
          ]
     )
-
 
     # explicit local
     input_rst = [
@@ -168,11 +168,16 @@ def test_autodoc_pydantic_validator_replace_signature_true_directive(parse_rst):
         ''
     ]
     doctree = parse_rst(input_rst,
-                        conf={"autodoc_pydantic_validator_replace_signature": True})
+                        conf={
+                            "autodoc_pydantic_validator_replace_signature": True})
     assert_node(doctree, output_nodes)
 
 
 def test_autodoc_pydantic_validator_list_fields_true(autodocument):
+    kwargs = dict(
+        object_path='target.configuration.ValidatorListFields.check',
+        **KWARGS)
+
     result = [
         '',
         '.. py:pydantic_validator:: ValidatorListFields.check',
@@ -188,31 +193,29 @@ def test_autodoc_pydantic_validator_list_fields_true(autodocument):
 
     # explict global
     actual = autodocument(
-        documenter='pydantic_validator',
-        object_path='target.configuration.ValidatorListFields.check',
         options_app={"autodoc_pydantic_validator_list_fields": True},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explict local
     actual = autodocument(
-        documenter='pydantic_validator',
-        object_path='target.configuration.ValidatorListFields.check',
         options_doc={"validator-list-fields": True},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explict global
     actual = autodocument(
-        documenter='pydantic_validator',
-        object_path='target.configuration.ValidatorListFields.check',
         options_app={"autodoc_pydantic_validator_list_fields": False},
         options_doc={"validator-list-fields": True},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
 
 def test_autodoc_pydantic_validator_list_fields_false(autodocument):
+    kwargs = dict(
+        object_path='target.configuration.ValidatorListFields.check',
+        **KWARGS)
+
     result = [
         '',
         '.. py:pydantic_validator:: ValidatorListFields.check',
@@ -225,31 +228,28 @@ def test_autodoc_pydantic_validator_list_fields_false(autodocument):
 
     # explict global
     actual = autodocument(
-        documenter='pydantic_validator',
-        object_path='target.configuration.ValidatorListFields.check',
         options_app={"autodoc_pydantic_validator_list_fields": False},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explict local
     actual = autodocument(
-        documenter='pydantic_validator',
-        object_path='target.configuration.ValidatorListFields.check',
         options_doc={"validator-list-fields": False},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explict global
     actual = autodocument(
-        documenter='pydantic_validator',
-        object_path='target.configuration.ValidatorListFields.check',
         options_app={"autodoc_pydantic_validator_list_fields": True},
         options_doc={"validator-list-fields": False},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
 
 def test_autodoc_pydantic_validator_signature_prefix(autodocument):
+    kwargs = dict(
+        object_path='target.configuration.ValidatorSignaturePrefix.check',
+        **KWARGS)
 
     # default
     result = [
@@ -262,10 +262,7 @@ def test_autodoc_pydantic_validator_signature_prefix(autodocument):
         ''
     ]
 
-    actual = autodocument(
-        documenter='pydantic_validator',
-        object_path='target.configuration.ValidatorSignaturePrefix.check',
-        deactivate_all=True)
+    actual = autodocument(**kwargs)
     assert result == actual
 
     # explicit value
@@ -281,10 +278,8 @@ def test_autodoc_pydantic_validator_signature_prefix(autodocument):
     ]
 
     actual = autodocument(
-        documenter='pydantic_validator',
-        object_path='target.configuration.ValidatorSignaturePrefix.check',
         options_doc={"validator-signature-prefix": "foobar"},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
     # explict empty
@@ -300,15 +295,12 @@ def test_autodoc_pydantic_validator_signature_prefix(autodocument):
     ]
 
     actual = autodocument(
-        documenter='pydantic_validator',
-        object_path='target.configuration.ValidatorSignaturePrefix.check',
         options_doc={"validator-signature-prefix": ""},
-        deactivate_all=True)
+        **kwargs)
     assert result == actual
 
 
 def test_autodoc_pydantic_validator_signature_prefix_directive(parse_rst):
-
     # default
     input_rst = [
         '',
@@ -325,7 +317,8 @@ def test_autodoc_pydantic_validator_signature_prefix_directive(parse_rst):
 
     # empty
     doctree = parse_rst(input_rst,
-                        conf={"autodoc_pydantic_validator_signature_prefix": ""})
+                        conf={
+                            "autodoc_pydantic_validator_signature_prefix": ""})
     assert_node(doctree[1][0][0], [desc_annotation, "classmethod "])
 
     # custom
@@ -352,7 +345,8 @@ def test_autodoc_pydantic_validator_asterisk(parse_rst):
     output_nodes = (
         index,
         [desc, ([desc_signature, ([desc_annotation, "validator "],
-                                  [desc_addname, "ValidatorAsteriskRootValidator."],
+                                  [desc_addname,
+                                   "ValidatorAsteriskRootValidator."],
                                   [desc_name, "check"],
                                   [desc_annotation, "  »  "],
                                   [pending_xref, ([emphasis, "all fields"])])],
@@ -381,7 +375,8 @@ def test_autodoc_pydantic_validator_root(parse_rst):
     output_nodes = (
         index,
         [desc, ([desc_signature, ([desc_annotation, "validator "],
-                                  [desc_addname, "ValidatorAsteriskRootValidator."],
+                                  [desc_addname,
+                                   "ValidatorAsteriskRootValidator."],
                                   [desc_name, "check_root"],
                                   [desc_annotation, "  »  "],
                                   [pending_xref, ([emphasis, "all fields"])])],
@@ -393,6 +388,39 @@ def test_autodoc_pydantic_validator_root(parse_rst):
     input_rst = [
         '',
         '.. py:pydantic_validator:: ValidatorAsteriskRootValidator.check_root',
+        '   :module: target.configuration',
+        '   :classmethod:',
+        '   :validator-replace-signature: True',
+        ''
+    ]
+    doctree = parse_rst(input_rst)
+    assert_node(doctree, output_nodes)
+
+
+def test_autodoc_pydantic_validator_root_pre(parse_rst):
+    """Tests correct modification for root validator with `pre=True` adding
+    " » all fields".
+
+    This relates to issue #55.
+
+    """
+
+    output_nodes = (
+        index,
+        [desc, ([desc_signature, ([desc_annotation, "validator "],
+                                  [desc_addname,
+                                   "ValidatorAsteriskRootValidator."],
+                                  [desc_name, "check_root_pre"],
+                                  [desc_annotation, "  »  "],
+                                  [pending_xref, ([emphasis, "all fields"])])],
+                [desc_content])
+         ]
+    )
+
+    # explicit local
+    input_rst = [
+        '',
+        '.. py:pydantic_validator:: ValidatorAsteriskRootValidator.check_root_pre',
         '   :module: target.configuration',
         '   :classmethod:',
         '   :validator-replace-signature: True',

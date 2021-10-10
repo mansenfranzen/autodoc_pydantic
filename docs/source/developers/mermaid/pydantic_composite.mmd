@@ -1,0 +1,37 @@
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryBorderColor': '#4e4a4a', 'primaryColor': '#FFFFFF', 'primaryTextColor': '#4e4a4a'}}}%%
+classDiagram
+   direction LR
+
+   class PydanticModelDocumenter {
+       +pydantic
+   }
+
+   class PydanticFieldDocumenter {
+       +pydantic
+   }
+
+   class PydanticValidatorDocumenter {
+       +pydantic
+   }
+
+   class PydanticAutoDoc {
+       +inspect
+       +options
+   }
+
+   PydanticAutoDoc --* PydanticModelDocumenter
+   PydanticAutoDoc --* PydanticFieldDocumenter
+   PydanticAutoDoc --* PydanticValidatorDocumenter
+
+   class ModelInspector {
+       +fields
+       +validators
+   }
+
+   class AutoDocOptions {
+       +is_true()
+       +is_false()
+   }
+
+   ModelInspector --* PydanticAutoDoc
+   AutoDocOptions --* PydanticAutoDoc

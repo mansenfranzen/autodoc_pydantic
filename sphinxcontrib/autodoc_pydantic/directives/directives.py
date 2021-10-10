@@ -1,6 +1,7 @@
-"""This module contains pydantic specific directives.
+"""This module contains **autodoc_pydantic**'s directives.
 
 """
+
 from typing import Tuple
 
 from docutils.parsers.rst.directives import unchanged
@@ -9,13 +10,14 @@ from sphinx.addnodes import (
     desc_annotation
 )
 from sphinx.domains.python import PyMethod, PyAttribute, PyClasslike
-from sphinxcontrib.autodoc_pydantic.inspection import ModelWrapper
-from sphinxcontrib.autodoc_pydantic.composites import (
-    PydanticAutoDirective,
-    option_default_true,
-    option_list_like,
-    create_field_href, remove_node_by_tagname
+from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector
+from sphinxcontrib.autodoc_pydantic.directives.options.composites import (
+    DirectiveOptions
 )
+from sphinxcontrib.autodoc_pydantic.directives.utility import \
+    create_field_href, remove_node_by_tagname
+from sphinxcontrib.autodoc_pydantic.directives.options.validators import \
+    option_default_true, option_list_like
 
 TUPLE_STR = Tuple[str, str]
 
@@ -30,7 +32,7 @@ class PydanticDirectiveBase:
 
     def __init__(self, *args):
         super().__init__(*args)
-        self.pyautodoc = PydanticAutoDirective(self)
+        self.pyautodoc = DirectiveOptions(self)
 
     def get_signature_prefix(self, sig: str) -> str:
         """Overwrite original signature prefix with custom pydantic ones.
@@ -38,7 +40,7 @@ class PydanticDirectiveBase:
         """
 
         config_name = f"{self.config_name}-signature-prefix"
-        prefix = self.pyautodoc.get_option_value(config_name)
+        prefix = self.pyautodoc.get_value(config_name)
         value = prefix or self.default_prefix
         return f"{value} "
 
@@ -137,16 +139,20 @@ class PydanticValidator(PydanticDirectiveBase, PyMethod):
         signode += desc_annotation("", "  »  ", classes=[class_name])
 
         # get imports, names and fields of validator
-        validator_name = signode["fullname"].split(".")[-1]
-        wrapper = ModelWrapper.from_signode(signode)
-        fields = wrapper.get_fields_for_validator(validator_name)
+        name = signode["fullname"].split(".")[-1]
+        inspector = ModelInspector.from_signode(signode)
+        mappings = inspector.references.filter_by_validator_name(name)
 
         # add field reference nodes
-        first_field = fields[0]
-        signode += create_field_href(first_field, env=self.env)
-        for field in fields[1:]:
+        mapping_first = mappings[0]
+        signode += create_field_href(name=mapping_first.field_name,
+                                     ref=mapping_first.field_ref,
+                                     env=self.env)
+        for mapping in mappings[1:]:
             signode += desc_annotation("", ", ")
-            signode += create_field_href(field, self.env)
+            signode += create_field_href(name=mapping.field_name,
+                                         ref=mapping.field_ref,
+                                         env=self.env)
 
     def handle_signature(self, sig: str, signode: desc_signature) -> TUPLE_STR:
         """Optionally call replace return node method.
@@ -155,7 +161,7 @@ class PydanticValidator(PydanticDirectiveBase, PyMethod):
 
         fullname, prefix = super().handle_signature(sig, signode)
 
-        if self.pyautodoc.get_option_value("validator-replace-signature"):
+        if self.pyautodoc.get_value("validator-replace-signature"):
             self.replace_return_node(signode)
 
         return fullname, prefix
