@@ -39,12 +39,12 @@ the appearance of standard sphinx autodoc with *autodoc_pydantic*.
 
 ## Documentation
 
-For more details, please visit the official [documentation](https://autodoc-pydantic.readthedocs.io/en/latest/):
+For more details, please visit the official [documentation](https://autodoc-pydantic.readthedocs.io/en/stable/):
 
-- [Installation](https://autodoc-pydantic.readthedocs.io/en/latest/installation.html)
-- [Configuration](https://autodoc-pydantic.readthedocs.io/en/latest/configuration.html)
-- [Usage](https://autodoc-pydantic.readthedocs.io/en/latest/usage.html)
-- [Examples](https://autodoc-pydantic.readthedocs.io/en/latest/examples.html)
+- [Installation](https://autodoc-pydantic.readthedocs.io/en/stable/users/installation.html)
+- [Configuration](https://autodoc-pydantic.readthedocs.io/en/stable/users/configuration.html)
+- [Usage](https://autodoc-pydantic.readthedocs.io/en/stable/users/usage.html)
+- [Examples](https://autodoc-pydantic.readthedocs.io/en/stable/users/examples.html)
 
 ## Acknowledgements
 
