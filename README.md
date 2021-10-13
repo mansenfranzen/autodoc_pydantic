@@ -34,7 +34,7 @@ Don't worry - just `pip install autodoc_pydantic` ☺.
 
 [![Comparison](https://raw.githubusercontent.com/mansenfranzen/autodoc_pydantic/main/docs/source/material/example_comparison_v1.0.0.gif)](https://autodoc-pydantic.readthedocs.io/en/latest/examples.html#default-configuration)
 
-To see those features in action, jump over to the [example documentation](https://autodoc-pydantic.readthedocs.io/en/latest/examples.html#default-configuration) to compare
+To see those features in action, jump over to the [example documentation](https://autodoc-pydantic.readthedocs.io/en/stable/users/examples.html#default-configuration) to compare
 the appearance of standard sphinx autodoc with *autodoc_pydantic*.
 
 ## Documentation
