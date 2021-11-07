@@ -6,7 +6,7 @@ from typing import TypeVar
 import pytest
 from pydantic import BaseModel
 
-from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector
+from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector, StaticInspector
 
 
 @pytest.fixture(scope="session")
@@ -71,3 +71,27 @@ def test_get_safe_schema_json_non_serializable(non_serializable):
 
     for invalid_field in invalid_fields:
         assert "type" not in json_result["properties"][invalid_field]
+
+
+def test_is_pydantic_model():
+    
+    class IsAModel(BaseModel):
+        ...
+    class IsNotAModel:
+        ...
+    
+    try:
+        # tests bugfix for issue #57, which seems to be related
+        # to https://bugs.python.org/issue45326
+        EdgeCase = dict[str,str]
+    except TypeError:
+        # older version of python, doesn't support generic 
+        # aliases (not really an edge case)
+        EdgeCase = dict
+    
+    assert StaticInspector.is_pydantic_model(IsAModel)
+    assert not StaticInspector.is_pydantic_model(IsNotAModel)
+    assert not StaticInspector.is_pydantic_model(EdgeCase)
+    assert not StaticInspector.is_pydantic_model("NotEvenAClass")
+    
+

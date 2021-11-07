@@ -462,8 +462,11 @@ class StaticInspector:
 
         """
 
-        if isinstance(obj, type):
+        try:
             return issubclass(obj, BaseModel)
+        except TypeError:
+            pass
+
         return False
 
     @classmethod

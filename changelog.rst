@@ -1,6 +1,10 @@
 Changelog
 =========
 
+- Fix a corner-case where a module that imported 
+  numpy.typing.NDArray caused autodoc_pydantic to experience
+  an uncaught exception. (Issue #57)
+
 v1.5.0 - 2021-10-10
 -------------------
 
