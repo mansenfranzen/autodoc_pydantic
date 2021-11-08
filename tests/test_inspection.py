@@ -39,24 +39,30 @@ def non_serializable():
     return ModelInspector(NonSerializable)
 
 
-@pytest.mark.parametrize("field_test", [("field_1", True),
-                                        ("field_2", False),
-                                        ("field_3", False),
-                                        ("field_4", False),
-                                        ("field_5", True),
-                                        ("field_6", True)])
+@pytest.mark.parametrize(
+    "field_test",
+    [
+        ("field_1", True),
+        ("field_2", False),
+        ("field_3", False),
+        ("field_4", False),
+        ("field_5", True),
+        ("field_6", True),
+    ],
+)
 def test_is_serializable(non_serializable, field_test):
     field_name, test_result = field_test
     result = non_serializable.fields.is_json_serializable(field_name)
     assert result is test_result
 
 
-def test_find_non_json_serializable_fields(serializable,
-                                           non_serializable):
+def test_find_non_json_serializable_fields(serializable, non_serializable):
     assert serializable.fields.non_json_serializable == []
-    assert non_serializable.fields.non_json_serializable == ["field_2",
-                                                             "field_3",
-                                                             "field_4"]
+    assert non_serializable.fields.non_json_serializable == [
+        "field_2",
+        "field_3",
+        "field_4",
+    ]
 
 
 def test_get_safe_schema_json_serializable(serializable):
@@ -73,25 +79,36 @@ def test_get_safe_schema_json_non_serializable(non_serializable):
         assert "type" not in json_result["properties"][invalid_field]
 
 
-def test_is_pydantic_model():
-    
+def test_is_pydantic_model_true():
+    """Test is_pydantic_model with a simple subclass of BaseModel"""
+
     class IsAModel(BaseModel):
         ...
+
+    assert StaticInspector.is_pydantic_model(IsAModel)
+
+
+def test_is_pydantic_model_false():
+    """Test is_pydantic_model with items that are not
+    a subclass of BaseModel"""
+
     class IsNotAModel:
         ...
-    
+
+    assert not StaticInspector.is_pydantic_model(IsNotAModel)
+    assert not StaticInspector.is_pydantic_model("NotEvenAClass")
+
+
+def test_is_pydantic_model_edge_case():
+    """Tests bugfix for issue #57, which seems to be related
+    to https://bugs.python.org/issue45326"""
+
     try:
-        # tests bugfix for issue #57, which seems to be related
-        # to https://bugs.python.org/issue45326
         EdgeCase = dict[str, str]
     except TypeError:
         # older version of python, use typing module instead
         from typing import Dict
-        EdgeCase = Dict[str, str]
-    
-    assert StaticInspector.is_pydantic_model(IsAModel)
-    assert not StaticInspector.is_pydantic_model(IsNotAModel)
-    assert not StaticInspector.is_pydantic_model(EdgeCase)
-    assert not StaticInspector.is_pydantic_model("NotEvenAClass")
-    
 
+        EdgeCase = Dict[str, str]
+
+    assert not StaticInspector.is_pydantic_model(EdgeCase)
