@@ -83,11 +83,11 @@ def test_is_pydantic_model():
     try:
         # tests bugfix for issue #57, which seems to be related
         # to https://bugs.python.org/issue45326
-        EdgeCase = dict[str,str]
+        EdgeCase = dict[str, str]
     except TypeError:
-        # older version of python, doesn't support generic 
-        # aliases (not really an edge case)
-        EdgeCase = dict
+        # older version of python, use typing module instead
+        from typing import Dict
+        EdgeCase = Dict[str, str]
     
     assert StaticInspector.is_pydantic_model(IsAModel)
     assert not StaticInspector.is_pydantic_model(IsNotAModel)
