@@ -121,6 +121,15 @@
       "contributions": [
         "test"
       ]
+    },
+    {
+      "login": "lilyminium",
+      "name": "Lily Wang",
+      "avatar_url": "https://avatars.githubusercontent.com/u/31115101?v=4",
+      "profile": "https://github.com/lilyminium",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
