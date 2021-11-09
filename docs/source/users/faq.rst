@@ -37,22 +37,23 @@ irrelevant members are ignored:
          :inherited-members: BaseModel
 
 
-Exclude `__init__` docstring
-============================
+Exclude ``__init__`` docstring
+==============================
 
-If the docstrings rendered by ``autodoc_pydantic`` seem to include
-extra information, such as the docstring from the Pydantic base class
-or from the `__init__` method,
-it may be due to the ``autodoc`` settings in ``conf.py``. The
-configuration below tells Sphinx to include both the class docstring
-*and* that of ``__init__``::
+If a pydantic model's documentation rendered by **autodoc_pydantic** 
+includes the docstring from the pydantic base class or from the model's 
+``__init__`` method, it may be due to autodoc's ``autoclass_content`` 
+setting in sphinx' ``conf.py``. 
+
+The configuration below tells Sphinx to include both the class docstring
+*and* that of ``__init__`` for auto-documented classes::
 
    autoclass_content = "both"
 
-
-If you have not overwritten the base docstring of ``__init__``,
-this will look exactly like it has inherited the Pydantic base
-class docstring. In order to only show the class docstring,
-change this setting back to "class"::
+This behavior does also apply to **autodoc_pydantic**'s
+auto-documenters. If you haven't overwritten the ``__init__`` 
+method in your model, this will look exactly like it has 
+inherited the Pydantic base class docstring. In order to only 
+show the class docstring, change this setting back to "class"::
 
    autoclass_content = "class"
