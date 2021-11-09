@@ -43,7 +43,7 @@ Exclude ``__init__`` docstring
 If a pydantic model's documentation rendered by **autodoc_pydantic** 
 includes the docstring from the pydantic base class or from the model's 
 ``__init__`` method, it may be due to autodoc's ``autoclass_content`` 
-setting in sphinx' ``conf.py``. 
+setting in sphinx's ``conf.py``. 
 
 The configuration below tells Sphinx to include both the class docstring
 *and* that of ``__init__`` for auto-documented classes::
