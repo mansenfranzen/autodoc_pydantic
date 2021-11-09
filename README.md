@@ -72,7 +72,7 @@ Thanks to great open source projects [sphinx](https://www.sphinx-doc.org/en/mast
     <td align="center"><a href="https://github.com/davidchall"><img src="https://avatars.githubusercontent.com/u/1804856?v=4?s=100" width="100px;" alt=""/><br /><sub><b>David C Hall</b></sub></a><br /><a href="#ideas-davidchall" title="Ideas, Planning, & Feedback">🤔</a> <a href="#userTesting-davidchall" title="User Testing">📓</a></td>
     <td align="center"><a href="https://yoshanuikabundi.me"><img src="https://avatars.githubusercontent.com/u/28590748?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Josh A. Mitchell</b></sub></a><br /><a href="#ideas-Yoshanuikabundi" title="Ideas, Planning, & Feedback">🤔</a></td>
     <td align="center"><a href="https://github.com/goroderickgo"><img src="https://avatars.githubusercontent.com/u/17296713?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Roderick Go</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/commits?author=goroderickgo" title="Tests">⚠️</a></td>
-    <td align="center"><a href="https://github.com/lilyminium"><img src="https://avatars.githubusercontent.com/u/31115101?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Lily Wang</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/commits?author=lilyminium" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/lilyminium"><img src="https://avatars.githubusercontent.com/u/31115101?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Lily Wang</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/commits?author=lilyminium" title="Documentation">📖</a> <a href="#content-lilyminium" title="Content">🖋</a></td>
   </tr>
 </table>
 
