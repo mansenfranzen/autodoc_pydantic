@@ -16,6 +16,7 @@ from sphinx.addnodes import (
 )
 from sphinx.testing.util import assert_node
 from sphinxcontrib.autodoc_pydantic import PydanticFieldDocumenter
+from .compatability import desc_annotation_default_value
 
 KWARGS = dict(documenter=PydanticFieldDocumenter.directivetype,
               deactivate_all=True)
@@ -346,12 +347,14 @@ def test_autodoc_pydantic_field_show_alias_true_directive(parse_rst):
 
     """
 
+    default_value = desc_annotation_default_value("1")
+
     output_nodes = (
         index,
         [desc, ([desc_signature, ([desc_annotation, "field "],
                                   [desc_addname, "FieldShowAlias."],
                                   [desc_name, "field"],
-                                  [desc_annotation, " = 1"],
+                                  default_value,
                                   [desc_annotation, " (alias 'field2')"])],
                 [desc_content, ()])
          ]
@@ -385,12 +388,14 @@ def test_autodoc_pydantic_field_show_alias_false_directive(parse_rst):
 
     """
 
+    default_value = desc_annotation_default_value("1")
+
     output_nodes = (
         index,
         [desc, ([desc_signature, ([desc_annotation, "field "],
                                   [desc_addname, "FieldShowAlias."],
                                   [desc_name, "field"],
-                                  [desc_annotation, " = 1"])],
+                                  default_value)],
                 [desc_content, ()])
          ]
     )

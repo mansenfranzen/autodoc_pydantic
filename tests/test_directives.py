@@ -27,6 +27,9 @@ from sphinx.addnodes import (
 )
 from sphinx.testing.util import assert_node
 
+from .compatability import desc_annotation_type_annotation, \
+    desc_annotation_default_value
+
 
 def test_example_model_with_field(parse_rst):
     """Tests plain minimal pydantic model with doc string. Ensure that
@@ -48,12 +51,14 @@ def test_example_model_with_field(parse_rst):
                  '      Doc field',
                  '']
 
+    type_annotation = desc_annotation_type_annotation("int")
+    default_value = desc_annotation_default_value("1")
     field_node = [
         desc, (
             [desc_signature, ([desc_annotation, "field "],
                               [desc_name, "field"],
-                              [desc_annotation, (": ", [pending_xref, "int"])],
-                              [desc_annotation, " = 1"])],
+                              [desc_annotation, type_annotation],
+                              default_value)],
             [desc_content, ([paragraph, "Doc field"])])
     ]
 
@@ -70,6 +75,7 @@ def test_example_model_with_field(parse_rst):
     )
 
     doctree = parse_rst(input_rst)
+    node = doctree[1][1][2][0][2]
     assert_node(doctree, output_nodes)
 
 
@@ -125,12 +131,14 @@ def test_example_model_with_field_and_validator(parse_rst):
         )
     ]
 
+    type_annotation = desc_annotation_type_annotation("int")
+    default_value = desc_annotation_default_value("1")
     field_node = [
         desc, (
             [desc_signature, ([desc_annotation, "field "],
                               [desc_name, "field"],
-                              [desc_annotation, (": ", [pending_xref, "int"])],
-                              [desc_annotation, " = 1"])],
+                              [desc_annotation, type_annotation],
+                              default_value)],
             [desc_content, ([paragraph, "Doc field"],
                             field_validated_node)])
     ]
@@ -225,6 +233,7 @@ def test_example_model_with_config(parse_rst):
         '         FooBar.',
         '']
 
+    default_value = desc_annotation_default_value("True")
     config_class_node = [
         desc, (
             [desc_signature, ([desc_annotation, "model "],
@@ -233,8 +242,7 @@ def test_example_model_with_config(parse_rst):
                             index,
                             [desc, (
                                 [desc_signature, ([desc_name, "allow_mutation"],
-                                                  [desc_annotation,
-                                                   " = True"])],
+                                                  default_value)],
                                 [desc_content, ([paragraph, "FooBar."])])
                              ]
                             )])
@@ -269,6 +277,7 @@ def test_example_model_with_config(parse_rst):
     )
 
     doctree = parse_rst(input_rst)
+    node = doctree[1][1][3][1][2][0][1]
     assert_node(doctree, output_nodes)
 
 
@@ -386,14 +395,16 @@ def test_pydantic_field_with_default_value(parse_rst):
         '   Alias Plain.',
         '']
 
+    type_annotation = desc_annotation_type_annotation("int")
+    default_value = desc_annotation_default_value("5")
     output_nodes = (
         index,
         [desc, ([desc_signature,
                  ([desc_annotation, "field "],
                   [desc_addname, "ModelWithAlias."],
                   [desc_name, "field"],
-                  [desc_annotation, (": ", [pending_xref, "int"])],
-                  [desc_annotation, " = 5"],
+                  [desc_annotation, type_annotation],
+                  default_value,
                   [desc_annotation, " (alias 'aliased')"])],
                 [desc_content, ([paragraph, "Alias Plain."])])
          ]
@@ -418,13 +429,14 @@ def test_pydantic_field_with_required(parse_rst):
         '   Required.',
         '']
 
+    type_annotation = desc_annotation_type_annotation("int")
     output_nodes = (
         index,
         [desc, ([desc_signature,
                  ([desc_annotation, "field "],
                   [desc_addname, "ModelWithAlias."],
                   [desc_name, "field"],
-                  [desc_annotation, (": ", [pending_xref, "int"])],
+                  [desc_annotation, type_annotation],
                   [desc_annotation, " [Required]"],
                   [desc_annotation, " (alias 'Alias')"])],
                 [desc_content, ([paragraph, "Required."])])
