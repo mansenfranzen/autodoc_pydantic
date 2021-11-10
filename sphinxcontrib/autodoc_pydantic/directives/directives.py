@@ -2,8 +2,10 @@
 
 """
 
-from typing import Tuple
+from typing import Tuple, Union, List
 
+import sphinx
+from docutils.nodes import Text
 from docutils.parsers.rst.directives import unchanged
 from sphinx.addnodes import (
     desc_signature,
@@ -34,7 +36,7 @@ class PydanticDirectiveBase:
         super().__init__(*args)
         self.pyautodoc = DirectiveOptions(self)
 
-    def get_signature_prefix(self, sig: str) -> str:
+    def get_signature_prefix(self, sig: str) -> Union[str, List[Text]]:
         """Overwrite original signature prefix with custom pydantic ones.
 
         """
@@ -42,7 +44,13 @@ class PydanticDirectiveBase:
         config_name = f"{self.config_name}-signature-prefix"
         prefix = self.pyautodoc.get_value(config_name)
         value = prefix or self.default_prefix
-        return f"{value} "
+
+        # account for changed signature in sphinx 4.3, see #62
+        if sphinx.version_info >= (4, 3):
+            from sphinx.addnodes import desc_sig_space
+            return [Text(value), desc_sig_space]
+        else:
+            return f"{value} "
 
 
 class PydanticModel(PydanticDirectiveBase, PyClasslike):
