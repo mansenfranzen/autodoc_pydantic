@@ -15,14 +15,13 @@ def desc_annotation_default_value(value: str):
 
     """
 
-    if sphinx.version_info >= (4, 3):
-        from sphinx.addnodes import desc_sig_space
-        return (desc_sig_space,
-                [desc_sig_punctuation, "="],
-                desc_sig_space,
-                value)
-    else:
+    if sphinx.version_info < (4, 3):
         return [desc_annotation, f" = {value}"]
+    from sphinx.addnodes import desc_sig_space
+    return (desc_sig_space,
+            [desc_sig_punctuation, "="],
+            desc_sig_space,
+            value)
 
 
 def desc_annotation_type_annotation(type_str: str) -> Tuple:
@@ -31,13 +30,12 @@ def desc_annotation_type_annotation(type_str: str) -> Tuple:
 
     """
 
-    if sphinx.version_info >= (4, 3):
-        from sphinx.addnodes import desc_sig_space
-        return ([desc_sig_punctuation, ":"],
-                desc_sig_space,
-                [pending_xref, type_str])
-    else:
+    if sphinx.version_info < (4, 3):
         return (": ", [pending_xref, type_str])
+    from sphinx.addnodes import desc_sig_space
+    return ([desc_sig_punctuation, ":"],
+            desc_sig_space,
+            [pending_xref, type_str])
 
 
 def desc_annotation_directive_prefix(prefix: str):

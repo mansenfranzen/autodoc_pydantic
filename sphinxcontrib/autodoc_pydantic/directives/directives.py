@@ -45,12 +45,10 @@ class PydanticDirectiveBase:
         prefix = self.pyautodoc.get_value(config_name)
         value = prefix or self.default_prefix
 
-        # account for changed signature in sphinx 4.3, see #62
-        if sphinx.version_info >= (4, 3):
-            from sphinx.addnodes import desc_sig_space
-            return [Text(value), desc_sig_space()]
-        else:
+        if sphinx.version_info < (4, 3):
             return f"{value} "
+        from sphinx.addnodes import desc_sig_space
+        return [Text(value), desc_sig_space()]
 
 
 class PydanticModel(PydanticDirectiveBase, PyClasslike):
