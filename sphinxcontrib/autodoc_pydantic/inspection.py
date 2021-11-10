@@ -465,9 +465,7 @@ class StaticInspector:
         try:
             return issubclass(obj, BaseModel)
         except TypeError:
-            pass
-
-        return False
+            return False
 
     @classmethod
     def is_validator_by_name(cls, name: str, obj: Any) -> bool:
