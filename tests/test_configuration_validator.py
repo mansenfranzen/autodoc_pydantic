@@ -18,6 +18,7 @@ from sphinx.addnodes import (
 )
 from sphinx.testing.util import assert_node
 from sphinxcontrib.autodoc_pydantic import PydanticValidatorDocumenter
+from .compatability import desc_annotation_directive_prefix
 
 KWARGS = dict(documenter=PydanticValidatorDocumenter.objtype,
               deactivate_all=True)
@@ -132,9 +133,10 @@ def test_autodoc_pydantic_validator_replace_signature_true_directive(
 
     """
 
+    prefix = desc_annotation_directive_prefix("validator")
     output_nodes = (
         index,
-        [desc, ([desc_signature, ([desc_annotation, "validator "],
+        [desc, ([desc_signature, ([desc_annotation, prefix],
                                   [desc_addname, "ValidatorReplaceSignature."],
                                   [desc_name, "check"],
                                   [desc_annotation, "  »  "],
@@ -313,13 +315,15 @@ def test_autodoc_pydantic_validator_signature_prefix_directive(parse_rst):
     ]
 
     doctree = parse_rst(input_rst)
-    assert_node(doctree[1][0][0], [desc_annotation, "validator "])
+    prefix = desc_annotation_directive_prefix("validator")
+    assert_node(doctree[1][0][0], [desc_annotation, prefix])
 
     # empty
     doctree = parse_rst(input_rst,
                         conf={
                             "autodoc_pydantic_validator_signature_prefix": ""})
-    assert_node(doctree[1][0][0], [desc_annotation, "classmethod "])
+    prefix = desc_annotation_directive_prefix("classmethod")
+    assert_node(doctree[1][0][0], [desc_annotation, prefix])
 
     # custom
     input_rst = [
@@ -334,7 +338,8 @@ def test_autodoc_pydantic_validator_signature_prefix_directive(parse_rst):
     ]
 
     doctree = parse_rst(input_rst)
-    assert_node(doctree[1][0][0], [desc_annotation, "foobar "])
+    prefix = desc_annotation_directive_prefix("foobar")
+    assert_node(doctree[1][0][0], [desc_annotation, prefix])
 
 
 def test_autodoc_pydantic_validator_asterisk(parse_rst):
@@ -342,9 +347,10 @@ def test_autodoc_pydantic_validator_asterisk(parse_rst):
 
     """
 
+    prefix = desc_annotation_directive_prefix("validator")
     output_nodes = (
         index,
-        [desc, ([desc_signature, ([desc_annotation, "validator "],
+        [desc, ([desc_signature, ([desc_annotation, prefix],
                                   [desc_addname,
                                    "ValidatorAsteriskRootValidator."],
                                   [desc_name, "check"],
@@ -372,9 +378,10 @@ def test_autodoc_pydantic_validator_root(parse_rst):
 
     """
 
+    prefix = desc_annotation_directive_prefix("validator")
     output_nodes = (
         index,
-        [desc, ([desc_signature, ([desc_annotation, "validator "],
+        [desc, ([desc_signature, ([desc_annotation, prefix],
                                   [desc_addname,
                                    "ValidatorAsteriskRootValidator."],
                                   [desc_name, "check_root"],
@@ -405,9 +412,10 @@ def test_autodoc_pydantic_validator_root_pre(parse_rst):
 
     """
 
+    prefix = desc_annotation_directive_prefix("validator")
     output_nodes = (
         index,
-        [desc, ([desc_signature, ([desc_annotation, "validator "],
+        [desc, ([desc_signature, ([desc_annotation, prefix],
                                   [desc_addname,
                                    "ValidatorAsteriskRootValidator."],
                                   [desc_name, "check_root_pre"],

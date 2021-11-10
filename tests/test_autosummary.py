@@ -1,4 +1,5 @@
 import pytest
+import sphinx
 from sphinx.ext.autosummary import FakeDirective
 
 from sphinxcontrib.autodoc_pydantic import (
@@ -41,6 +42,10 @@ def test_autosummary_imported_objects(parse_rst):
     ]
 
     nodes = parse_rst(input_rst)
-    ref = nodes[1][0][0][2][0][0][0][0][0]
+    node = nodes[1][0][0][2][0][0][0][0]
 
-    assert ref == ':obj:`target.AutoSummaryModel <target.AutoSummaryModel>`'
+    if sphinx.version_info >= (4, 3):
+        assert node["reftarget"] == "target.AutoSummaryModel"
+        assert node.astext() == "target.AutoSummaryModel"
+    else:
+        assert node[0] == ':obj:`target.AutoSummaryModel <target.AutoSummaryModel>`'

@@ -18,14 +18,16 @@ from sphinx.addnodes import (
     desc, 
     desc_signature, 
     desc_name, 
-    desc_parameterlist,
-    desc_content, 
+    desc_content,
     desc_annotation, 
     desc_addname, 
     pending_xref, 
     index
 )
 from sphinx.testing.util import assert_node
+
+from .compatability import desc_annotation_type_annotation, \
+    desc_annotation_default_value, desc_annotation_directive_prefix
 
 
 def test_example_model_with_field(parse_rst):
@@ -48,18 +50,22 @@ def test_example_model_with_field(parse_rst):
                  '      Doc field',
                  '']
 
+    type_annotation = desc_annotation_type_annotation("int")
+    default_value = desc_annotation_default_value("1")
+    prefix_field = desc_annotation_directive_prefix("field")
     field_node = [
         desc, (
-            [desc_signature, ([desc_annotation, "field "],
+            [desc_signature, ([desc_annotation, prefix_field],
                               [desc_name, "field"],
-                              [desc_annotation, (": ", [pending_xref, "int"])],
-                              [desc_annotation, " = 1"])],
+                              [desc_annotation, type_annotation],
+                              default_value)],
             [desc_content, ([paragraph, "Doc field"])])
     ]
 
+    prefix_model = desc_annotation_directive_prefix("pydantic model")
     output_nodes = (
         index,
-        [desc, ([desc_signature, ([desc_annotation, "pydantic model "],
+        [desc, ([desc_signature, ([desc_annotation, prefix_model],
                                   [desc_addname, "target.model."],
                                   [desc_name, "ModelWithField"])],
                 [desc_content, ([paragraph, "Model With Field."],
@@ -125,12 +131,15 @@ def test_example_model_with_field_and_validator(parse_rst):
         )
     ]
 
+    type_annotation = desc_annotation_type_annotation("int")
+    default_value = desc_annotation_default_value("1")
+    prefix_field = desc_annotation_directive_prefix("field")
     field_node = [
         desc, (
-            [desc_signature, ([desc_annotation, "field "],
+            [desc_signature, ([desc_annotation, prefix_field],
                               [desc_name, "field"],
-                              [desc_annotation, (": ", [pending_xref, "int"])],
-                              [desc_annotation, " = 1"])],
+                              [desc_annotation, type_annotation],
+                              default_value)],
             [desc_content, ([paragraph, "Doc field"],
                             field_validated_node)])
     ]
@@ -149,9 +158,10 @@ def test_example_model_with_field_and_validator(parse_rst):
         ])
     ]
 
+    prefix_validator = desc_annotation_directive_prefix("validator")
     validator_node = [desc, (
         [desc_signature,
-         ([desc_annotation, "validator "],
+         ([desc_annotation, prefix_validator],
           [desc_name, "is_integer"],
           [desc_annotation, "  »  "],
           [pending_xref, ([emphasis, "field"])])],
@@ -177,9 +187,10 @@ def test_example_model_with_field_and_validator(parse_rst):
         ])
     ]
 
+    prefix_model = desc_annotation_directive_prefix("pydantic model")
     output_nodes = (
         index,
-        [desc, ([desc_signature, ([desc_annotation, "pydantic model "],
+        [desc, ([desc_signature, ([desc_annotation, prefix_model],
                                   [desc_addname, "target.model."],
                                   [desc_name, "ModelWithFieldValidator"])],
                 [desc_content, ([paragraph, "Model With Field Validator."],
@@ -225,16 +236,17 @@ def test_example_model_with_config(parse_rst):
         '         FooBar.',
         '']
 
+    default_value = desc_annotation_default_value("True")
+    prefix_model = desc_annotation_directive_prefix("model")
     config_class_node = [
         desc, (
-            [desc_signature, ([desc_annotation, "model "],
+            [desc_signature, ([desc_annotation, prefix_model],
                               [desc_name, "Config"])],
             [desc_content, ([paragraph, "With Doc String."],
                             index,
                             [desc, (
                                 [desc_signature, ([desc_name, "allow_mutation"],
-                                                  [desc_annotation,
-                                                   " = True"])],
+                                                  default_value)],
                                 [desc_content, ([paragraph, "FooBar."])])
                              ]
                             )])
@@ -255,9 +267,10 @@ def test_example_model_with_config(parse_rst):
         ])
     ]
 
+    prefix_model = desc_annotation_directive_prefix("pydantic model")
     output_nodes = (
         index,
-        [desc, ([desc_signature, ([desc_annotation, "pydantic model "],
+        [desc, ([desc_signature, ([desc_annotation, prefix_model],
                                   [desc_addname, "target.model."],
                                   [desc_name, "ModelWithConfig"])],
                 [desc_content, ([paragraph, "Model with Config."],
@@ -283,9 +296,10 @@ def test_pydantic_model(parse_rst):
                  '   Model Plain.',
                  '']
 
+    prefix_model = desc_annotation_directive_prefix("pydantic model")
     output_nodes = (
         index,
-        [desc, ([desc_signature, ([desc_annotation, "pydantic model "],
+        [desc, ([desc_signature, ([desc_annotation, prefix_model],
                                   [desc_addname, "target.model."],
                                   [desc_name, "PlainModel"])],
                 [desc_content, ([paragraph, "Model Plain."])])
@@ -307,9 +321,10 @@ def test_pydantic_settings(parse_rst):
                  '   Settings Plain.',
                  '']
 
+    prefix_settings = desc_annotation_directive_prefix("pydantic settings")
     output_nodes = (
         index,
-        [desc, ([desc_signature, ([desc_annotation, "pydantic settings "],
+        [desc, ([desc_signature, ([desc_annotation, prefix_settings],
                                   [desc_addname, "target.model."],
                                   [desc_name, "PlainSettings"])],
                 [desc_content, ([paragraph, "Settings Plain."])])
@@ -331,9 +346,10 @@ def test_pydantic_config(parse_rst):
                  '   Config Plain.',
                  '']
 
+    prefix_model = desc_annotation_directive_prefix("model")
     output_nodes = (
         index,
-        [desc, ([desc_signature, ([desc_annotation, "model "],
+        [desc, ([desc_signature, ([desc_annotation, prefix_model],
                                   [desc_addname, "Model."],
                                   [desc_name, "Config"])],
                 [desc_content, ([paragraph, "Config Plain."])])
@@ -356,9 +372,10 @@ def test_pydantic_validator(parse_rst):
         '   Validator Plain.',
         '']
 
+    prefix_validator = desc_annotation_directive_prefix("validator")
     output_nodes = (
         index,
-        [desc, ([desc_signature, ([desc_annotation, "validator "],
+        [desc, ([desc_signature, ([desc_annotation, prefix_validator],
                                   [desc_addname, "ModelWithFieldValidator."],
                                   [desc_name, "is_integer"],
                                   [desc_annotation, "  »  "],
@@ -386,14 +403,17 @@ def test_pydantic_field_with_default_value(parse_rst):
         '   Alias Plain.',
         '']
 
+    type_annotation = desc_annotation_type_annotation("int")
+    default_value = desc_annotation_default_value("5")
+    prefix_field = desc_annotation_directive_prefix("field")
     output_nodes = (
         index,
         [desc, ([desc_signature,
-                 ([desc_annotation, "field "],
+                 ([desc_annotation, prefix_field],
                   [desc_addname, "ModelWithAlias."],
                   [desc_name, "field"],
-                  [desc_annotation, (": ", [pending_xref, "int"])],
-                  [desc_annotation, " = 5"],
+                  [desc_annotation, type_annotation],
+                  default_value,
                   [desc_annotation, " (alias 'aliased')"])],
                 [desc_content, ([paragraph, "Alias Plain."])])
          ]
@@ -418,13 +438,15 @@ def test_pydantic_field_with_required(parse_rst):
         '   Required.',
         '']
 
+    type_annotation = desc_annotation_type_annotation("int")
+    prefix_field = desc_annotation_directive_prefix("field")
     output_nodes = (
         index,
         [desc, ([desc_signature,
-                 ([desc_annotation, "field "],
+                 ([desc_annotation, prefix_field],
                   [desc_addname, "ModelWithAlias."],
                   [desc_name, "field"],
-                  [desc_annotation, (": ", [pending_xref, "int"])],
+                  [desc_annotation, type_annotation],
                   [desc_annotation, " [Required]"],
                   [desc_annotation, " (alias 'Alias')"])],
                 [desc_content, ([paragraph, "Required."])])
