@@ -48,7 +48,7 @@ class PydanticDirectiveBase:
         # account for changed signature in sphinx 4.3, see #62
         if sphinx.version_info >= (4, 3):
             from sphinx.addnodes import desc_sig_space
-            return [Text(value), desc_sig_space]
+            return [Text(value), desc_sig_space()]
         else:
             return f"{value} "
 
