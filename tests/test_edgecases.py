@@ -237,11 +237,13 @@ def test_json_error_strategy_warn(test_app, log_capturer):
         app = test_app("json-error-strategy", conf=conf)
         app.build()
 
-    assert logs[0].msg == (
+    message = (
         "JSON schema can't be generated for 'example.NonSerializable' "
         "because the following pydantic fields can't be serialized properly: "
         "['field']."
     )
+
+    assert [log for log in logs if log.msg == message]
 
 
 def test_json_error_strategy_coerce(test_app, log_capturer):
@@ -258,7 +260,13 @@ def test_json_error_strategy_coerce(test_app, log_capturer):
         app = test_app("json-error-strategy", conf=conf)
         app.build()
 
-    assert len(logs) == 0
+    message = (
+        "JSON schema can't be generated for 'example.NonSerializable' "
+        "because the following pydantic fields can't be serialized properly: "
+        "['field']."
+    )
+
+    assert not [log for log in logs if log.msg == message]
 
 
 def test_autodoc_pydantic_model_show_field_summary_not_inherited(autodocument):

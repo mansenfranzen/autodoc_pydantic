@@ -13,12 +13,21 @@ Bugfix
   ``numpy.typing.NDArray`` caused autodoc_pydantic to experience
   an uncaught exception. (Issue #57)
 
+Testing
+~~~~~~~
+
+- Fix broken CI for sphinx 3.4 due to unpinned versions of ``docutils``. This
+  generates new sphinx loggings which have not been present before that in turn
+  cause tests to fail which are dependent on inspecting sphinx loggings
+  `#68 <https://github.com/mansenfranzen/autodoc_pydantic/issues/68>`__.
+
 Contributors
 ~~~~~~~~~~~~
 
 - Thanks to `j-carson <https://github.com/j-carson>`__ for reporting a bug
   related autodoc_pydantic's inspection module
   `#57 <https://github.com/mansenfranzen/autodoc_pydantic/issues/57>`__.
+
 v1.5.0 - 2021-10-10
 -------------------
 
