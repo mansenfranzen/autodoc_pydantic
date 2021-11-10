@@ -37,4 +37,4 @@ def desc_annotation_type_annotation(type_str: str) -> Tuple:
                 desc_sig_space,
                 [pending_xref, type_str])
     else:
-        return (":", [pending_xref, type_str])
+        return (": ", [pending_xref, type_str])
