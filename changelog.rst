@@ -1,10 +1,24 @@
 Changelog
 =========
 
+v1.5.1 - 2021-11-14
+-------------------
+
+This is a minor bug fix release.
+
+Bugfix
+~~~~~~
+
 - Fix a corner-case where a module that imported 
-  numpy.typing.NDArray caused autodoc_pydantic to experience
+  ``numpy.typing.NDArray`` caused autodoc_pydantic to experience
   an uncaught exception. (Issue #57)
 
+Contributors
+~~~~~~~~~~~~
+
+- Thanks to `j-carson <https://github.com/j-carson>`__ for reporting a bug
+  related autodoc_pydantic's inspection module
+  `#57 <https://github.com/mansenfranzen/autodoc_pydantic/issues/57>`__.
 v1.5.0 - 2021-10-10
 -------------------
 
