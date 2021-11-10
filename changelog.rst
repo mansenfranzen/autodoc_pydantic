@@ -13,6 +13,12 @@ Bugfix
   ``numpy.typing.NDArray`` caused autodoc_pydantic to experience
   an uncaught exception. (Issue #57)
 
+Internal
+~~~~~~~~
+
+- Account for modified method signature in ``get_signature_prefix`` in sphinx
+  4.3 `#62 <https://github.com/mansenfranzen/autodoc_pydantic/issues/62>`__.
+
 Testing
 ~~~~~~~
 
@@ -20,6 +26,9 @@ Testing
   generates new sphinx loggings which have not been present before that in turn
   cause tests to fail which are dependent on inspecting sphinx loggings
   `#68 <https://github.com/mansenfranzen/autodoc_pydantic/issues/68>`__.
+- Add sphinx 4.3 to CI matrix.
+- Add compatibility module to abstract away minor implementation differences
+  between sphinx versions 4.3 and prior.
 
 Contributors
 ~~~~~~~~~~~~
@@ -27,6 +36,10 @@ Contributors
 - Thanks to `j-carson <https://github.com/j-carson>`__ for reporting a bug
   related autodoc_pydantic's inspection module
   `#57 <https://github.com/mansenfranzen/autodoc_pydantic/issues/57>`__.
+- Thanks to `Yoshanuikabundi <https://github.com/Yoshanuikabundi>`__  and
+  `jakobandersen <https://github.com/jakobandersen>`__ for reporting and
+  mitigating a compatibility issue with sphinx 4.3
+  `#62 <https://github.com/mansenfranzen/autodoc_pydantic/issues/62>`__.
 
 v1.5.0 - 2021-10-10
 -------------------
