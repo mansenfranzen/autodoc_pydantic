@@ -38,3 +38,15 @@ def desc_annotation_type_annotation(type_str: str) -> Tuple:
                 [pending_xref, type_str])
     else:
         return (": ", [pending_xref, type_str])
+
+
+def desc_annotation_directive_prefix(prefix: str):
+    """Provides compatibility abstraction for `desc_annotation` for directive
+    prefix for sphinx version smaller and greater equal sphinx 4.3.
+
+    """
+
+    if sphinx.version_info >= (4, 3):
+        from sphinx.addnodes import desc_sig_space
+        return (prefix, desc_sig_space)
+    return prefix + " "

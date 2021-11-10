@@ -42,7 +42,6 @@ def test_autosummary_imported_objects(parse_rst):
     ]
 
     nodes = parse_rst(input_rst)
-    node = nodes[1][0][0][2][0][0][0][0]
 
     if sphinx.version_info >= (4, 3):
         assert node["reftarget"] == "target.AutoSummaryModel"
