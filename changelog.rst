@@ -17,8 +17,9 @@ Testing
 ~~~~~~~
 
 - Fix broken CI for sphinx 3.4 due to unpinned versions of ``docutils``. This
-generates new sphinx loggings which have not been present before that in turn
-cause tests to fail which are dependent on inspecting sphinx loggings.
+  generates new sphinx loggings which have not been present before that in turn
+  cause tests to fail which are dependent on inspecting sphinx loggings
+  `#68 <https://github.com/mansenfranzen/autodoc_pydantic/issues/68>`__.
 
 Contributors
 ~~~~~~~~~~~~
