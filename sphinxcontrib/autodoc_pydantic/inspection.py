@@ -462,9 +462,10 @@ class StaticInspector:
 
         """
 
-        if isinstance(obj, type):
+        try:
             return issubclass(obj, BaseModel)
-        return False
+        except TypeError:
+            return False
 
     @classmethod
     def is_validator_by_name(cls, name: str, obj: Any) -> bool:
