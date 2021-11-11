@@ -153,6 +153,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "astrojuanlu",
+      "name": "Juan Luis Cano Rodríguez",
+      "avatar_url": "https://avatars.githubusercontent.com/u/316517?v=4",
+      "profile": "https://github.com/astrojuanlu",
+      "contributions": [
+        "content"
+      ]
     }
   ],
   "contributorsPerLine": 7,
