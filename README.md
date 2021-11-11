@@ -7,7 +7,8 @@
 [![Codacy Badge](https://img.shields.io/codacy/coverage/30a083d784f245a98a0d5e6857708cc8?style=for-the-badge)](https://www.codacy.com/gh/mansenfranzen/autodoc_pydantic/dashboard?utm_source=github.com&utm_medium=referral&utm_content=mansenfranzen/autodoc_pydantic&utm_campaign=Badge_Coverage)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-15-orange.svg?style=for-the-badge)](#contributors)<!-- ALL-CONTRIBUTORS-BADGE:END -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-16-orange.svg?style=for-the-badge)](#contributors)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 ![Downloads](https://img.shields.io/pypi/dm/autodoc_pydantic?color=fe7d37&style=for-the-badge)
 
 You love [pydantic](https://pydantic-docs.helpmanual.io/) ❤ and you want to
@@ -76,6 +77,7 @@ Thanks to great open source projects [sphinx](https://www.sphinx-doc.org/en/mast
   </tr>
   <tr>
     <td align="center"><a href="http://imada.sdu.dk/~jlandersen/"><img src="https://avatars.githubusercontent.com/u/6465735?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jakob Lykke Andersen</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/commits?author=jakobandersen" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/astrojuanlu"><img src="https://avatars.githubusercontent.com/u/316517?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Juan Luis Cano Rodríguez</b></sub></a><br /><a href="#content-astrojuanlu" title="Content">🖋</a></td>
   </tr>
 </table>
 
