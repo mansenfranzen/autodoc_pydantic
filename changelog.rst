@@ -5,6 +5,7 @@ v1.5.1 - 2021-11-12
 -------------------
 
 This is a minor bug fix release with testing and documentation improvements.
+Additionally, it adds support for sphinx 4.3.
 
 Bugfix
 ~~~~~~
@@ -40,6 +41,7 @@ Documentation
 
 - Add ``Exclude __init__ docstring`` section to FAQ of the user guide
   `#58 <https://github.com/mansenfranzen/autodoc_pydantic/issues/58>`__.
+- Add github issue links to topics of FAQ of the user guide.
 
 Contributors
 ~~~~~~~~~~~~
