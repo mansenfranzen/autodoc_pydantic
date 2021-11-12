@@ -4,7 +4,7 @@
 ![Python](https://img.shields.io/badge/python-3.6+-blue.svg?style=for-the-badge)
 
 [![Master](https://img.shields.io/github/workflow/status/mansenfranzen/autodoc_pydantic/ci?style=for-the-badge)](https://github.com/mansenfranzen/autodoc_pydantic/actions/workflows/tests.yml)
-[![Codacy Badge](https://img.shields.io/codacy/coverage/30a083d784f245a98a0d5e6857708cc8?style=for-the-badge)](https://www.codacy.com/gh/mansenfranzen/autodoc_pydantic/dashboard?utm_source=github.com&utm_medium=referral&utm_content=mansenfranzen/autodoc_pydantic&utm_campaign=Badge_Coverage)
+[![Coverage](https://img.shields.io/codecov/c/gh/mansenfranzen/autodoc_pydantic?style=for-the-badge)](https://app.codecov.io/gh/mansenfranzen/autodoc_pydantic)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-16-orange.svg?style=for-the-badge)](#contributors)<!-- ALL-CONTRIBUTORS-BADGE:END -->
