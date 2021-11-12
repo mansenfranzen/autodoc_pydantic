@@ -39,7 +39,7 @@ irrelevant members are ignored:
 .. note::
 
    For more, please see the corresponding
-   `github issue <https://github.com/mansenfranzen/autodoc_pydantic/issues/32>`_.
+   `github issue #32 <https://github.com/mansenfranzen/autodoc_pydantic/issues/32>`_.
 
 
 Exclude ``__init__`` docstring
@@ -66,4 +66,4 @@ show the class docstring, change this setting back to "class"::
 .. note::
 
    For more, please see the corresponding
-   `github issue <https://github.com/mansenfranzen/autodoc_pydantic/issues/58>`_.
+   `github issue #58 <https://github.com/mansenfranzen/autodoc_pydantic/issues/58>`_.
