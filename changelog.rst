@@ -4,7 +4,7 @@ Changelog
 v1.5.1 - 2021-11-14
 -------------------
 
-This is a minor bug fix release.
+This is a minor bug fix release with testing and documentation improvements.
 
 Bugfix
 ~~~~~~
@@ -29,6 +29,9 @@ Testing
 - Add sphinx 4.3 to CI matrix.
 - Add compatibility module to abstract away minor implementation differences
   between sphinx versions 4.3 and prior.
+- Add tests for development versions while continuing on error.
+- Replace codacy with codecov for code coverage reports.
+- Add code coverage for all stable and latest version.
 
 Contributors
 ~~~~~~~~~~~~

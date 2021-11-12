@@ -43,8 +43,12 @@ jobs:
           python-version: ${{ matrix.python_version }}
       - run: pip install tox
       - run: tox -e pydantic${{ matrix.pydantic_version }}-sphinx${{ matrix.sphinx_version }}
+      - name: Codecov
+        uses: codecov/codecov-action@v2.1.0
+        with:
+          fail_ci_if_error: true
 
-  test-latest-version-with-coverage:
+  test-latest-version:
     if: "!contains(github.event.head_commit.message, 'skip ci')"
     environment: ci
     runs-on: ubuntu-18.04
@@ -55,7 +59,24 @@ jobs:
           python-version: '3.x'
       - run: pip install tox
       - run: tox -e latest
-      - run: export CODACY_PROJECT_TOKEN=${{ secrets.CODACY_PROJECT_TOKEN }} && bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r coverage.xml
+      - name: Codecov
+        uses: codecov/codecov-action@v2.1.0
+        with:
+          fail_ci_if_error: true
+
+  test-development-versions-deps:
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+    environment: ci
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - run: pip install tox
+      - run: tox -e development
+        continue-on-error: true
+      - run: echo "Done"
 
   test-linter:
     if: "!contains(github.event.head_commit.message, 'skip ci')"
