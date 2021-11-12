@@ -36,6 +36,11 @@ irrelevant members are ignored:
       .. automodule:: target.faq.inherited_members
          :inherited-members: BaseModel
 
+.. note::
+
+   For more, please see the corresponding
+   `github issue #32 <https://github.com/mansenfranzen/autodoc_pydantic/issues/32>`_.
+
 
 Exclude ``__init__`` docstring
 ==============================
@@ -57,3 +62,8 @@ inherited the Pydantic base class docstring. In order to only
 show the class docstring, change this setting back to "class"::
 
    autoclass_content = "class"
+
+.. note::
+
+   For more, please see the corresponding
+   `github issue #58 <https://github.com/mansenfranzen/autodoc_pydantic/issues/58>`_.

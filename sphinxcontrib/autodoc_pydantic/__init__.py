@@ -26,7 +26,7 @@ from sphinxcontrib.autodoc_pydantic.directives.directives import (
     PydanticSettings
 )
 
-__version__ = "1.5.0"
+__version__ = "1.5.1"
 
 
 def add_css_file(app: Sphinx, exception: Exception):
