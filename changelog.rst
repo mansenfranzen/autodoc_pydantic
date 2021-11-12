@@ -1,7 +1,7 @@
 Changelog
 =========
 
-v1.5.1 - 2021-11-14
+v1.5.1 - 2021-11-12
 -------------------
 
 This is a minor bug fix release with testing and documentation improvements.
@@ -11,7 +11,8 @@ Bugfix
 
 - Fix a corner-case where a module that imported 
   ``numpy.typing.NDArray`` caused autodoc_pydantic to experience
-  an uncaught exception. (Issue #57)
+  an uncaught exception
+  `#57 <https://github.com/mansenfranzen/autodoc_pydantic/issues/57>`__.
 
 Internal
 ~~~~~~~~
@@ -32,17 +33,27 @@ Testing
 - Add tests for development versions while continuing on error.
 - Replace codacy with codecov for code coverage reports.
 - Add code coverage for all stable and latest version.
+- Allow CI to be executed on pull requests from forks of new contributors.
+
+Documentation
+~~~~~~~~~~~~~
+
+- Add ``Exclude __init__ docstring`` section to FAQ of the user guide
+  `#58 <https://github.com/mansenfranzen/autodoc_pydantic/issues/58>`__.
 
 Contributors
 ~~~~~~~~~~~~
 
 - Thanks to `j-carson <https://github.com/j-carson>`__ for reporting a bug
-  related autodoc_pydantic's inspection module
+  and providing a PR related to autodoc_pydantic's inspection module
   `#57 <https://github.com/mansenfranzen/autodoc_pydantic/issues/57>`__.
 - Thanks to `Yoshanuikabundi <https://github.com/Yoshanuikabundi>`__  and
   `jakobandersen <https://github.com/jakobandersen>`__ for reporting and
   mitigating a compatibility issue with sphinx 4.3
   `#62 <https://github.com/mansenfranzen/autodoc_pydantic/issues/62>`__.
+- Thanks to `lilyminium <https://github.com/lilyminium>`__ for adding the
+  ``Exclude __init__ docstring`` section to FAQ of the user guide
+  `#58 <https://github.com/mansenfranzen/autodoc_pydantic/issues/58>`__.
 
 v1.5.0 - 2021-10-10
 -------------------
