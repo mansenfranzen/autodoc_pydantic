@@ -55,7 +55,10 @@ jobs:
           python-version: '3.x'
       - run: pip install tox
       - run: tox -e latest
-      - run: export CODACY_PROJECT_TOKEN=${{ secrets.CODACY_PROJECT_TOKEN }} && bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r coverage.xml
+      - name: Codecov
+        uses: codecov/codecov-action@v2.1.0
+        with:
+          fail_ci_if_error: true
 
   test-linter:
     if: "!contains(github.event.head_commit.message, 'skip ci')"
