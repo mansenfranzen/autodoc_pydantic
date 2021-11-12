@@ -80,11 +80,11 @@ and all `contributors <https://github.com/mansenfranzen/autodoc_pydantic/tree/re
 .. |DownloadsBadge| image:: https://img.shields.io/pypi/dm/autodoc_pydantic?color=fe7d37&style=flat
 .. _DownloadsBadge: https://pypi.org/project/autodoc-pydantic/
 
-.. |ContributersBadge| image:: https://img.shields.io/badge/all_contributors-11-orange.svg?style=flat
+.. |ContributersBadge| image:: https://img.shields.io/badge/all_contributors-16-orange.svg?style=flat
 .. _ContributersBadge: https://github.com/mansenfranzen/autodoc_pydantic/tree/refactor_inspection#acknowledgements
 
-.. |CoverageBadge| image:: https://img.shields.io/codacy/coverage/30a083d784f245a98a0d5e6857708cc8?style=flat
-.. _CoverageBadge: https://www.codacy.com/gh/mansenfranzen/autodoc_pydantic/dashboard?utm_source=github.com&utm_medium=referral&utm_content=mansenfranzen/autodoc_pydantic&utm_campaign=Badge_Coverage
+.. |CoverageBadge| image:: https://img.shields.io/codecov/c/gh/mansenfranzen/autodoc_pydantic?style=flat
+.. _CoverageBadge: https://app.codecov.io/gh/mansenfranzen/autodoc_pydantic
 
 .. |PythonBadge| image:: https://img.shields.io/badge/python-3.6+-blue.svg?style=flat
 .. _PythonBadge: http://www.python.org/
