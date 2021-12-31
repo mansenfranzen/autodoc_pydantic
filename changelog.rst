@@ -30,7 +30,7 @@ Testing
 Contributors
 ~~~~~~~~~~~~
 
-- Thanks to `nchaly https://github.com/nchaly`__ for reporting a bug and
+- Thanks to `nchaly <https://github.com/nchaly>`__ for reporting a bug and
   raising the topic of how to document models/settings as an attribute
   `#78 <https://github.com/mansenfranzen/autodoc_pydantic/issues/78>`__.
 
