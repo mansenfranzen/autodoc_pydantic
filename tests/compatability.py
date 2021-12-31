@@ -50,3 +50,14 @@ def desc_annotation_directive_prefix(prefix: str):
         from sphinx.addnodes import desc_sig_space
         return (prefix, desc_sig_space)
     return prefix + " "
+
+
+def rst_alias_class_directive():
+    """Provides compatibility abstraction for `class` directive when used with
+    sphinx 4.3 or newer.
+
+    """
+
+    if sphinx.version_info >= (4, 3):
+        return ":py:class:"
+    return ":class:"

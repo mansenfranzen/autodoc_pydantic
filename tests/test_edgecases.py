@@ -7,6 +7,8 @@ import pytest
 import sphinx.errors
 from sphinx.transforms.post_transforms import ReferencesResolver
 
+from tests.compatability import rst_alias_class_directive
+
 
 def test_not_json_compliant(autodocument):
     actual = autodocument(
@@ -392,6 +394,7 @@ def test_model_as_attr(autodocument):
         options_doc={"members": "TEST_MODEL"},
         deactivate_all=False)
 
+    rst_class = rst_alias_class_directive()
     assert actual == [
         '',
         '.. py:class:: Container()',
@@ -403,7 +406,7 @@ def test_model_as_attr(autodocument):
         '   .. py:attribute:: Container.TEST_MODEL',
         '      :module: target.edgecase_model_as_attr',
         '',
-        '      alias of :class:`target.edgecase_model_as_attr.Model`'
+        f'      alias of {rst_class}`target.edgecase_model_as_attr.Model`'
     ]
 
 
