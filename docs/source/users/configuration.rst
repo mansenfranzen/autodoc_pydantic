@@ -32,9 +32,9 @@ how pydantic objects are displayed:
    Each configuration is activated in isolation while the remaining are disabled
    to highlight actual difference.
 
----------
-BaseModel
----------
+-----
+Model
+-----
 
 Contains all modifications for pydantic `BaseModel`.
 
@@ -220,9 +220,9 @@ generation. This occurs if a pydantic field is not JSON serializable.
 - ``raise``: Raises an ``sphinx.errors.ExtensionError`` during building process.
 
 
-------------
-BaseSettings
-------------
+--------
+Settings
+--------
 
 Contains all modifications for pydantic `BaseSettings`.
 

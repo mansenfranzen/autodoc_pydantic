@@ -5,13 +5,13 @@
 def test_model_plain(autodocument):
     options_app = dict(autodoc_pydantic_model_show_json=False)
     actual = autodocument(documenter='pydantic_model',
-                          object_path='target.model.PlainModel',
+                          object_path='target.examples.PlainModel',
                           options_app=options_app)
 
     assert actual == [
         '',
         '.. py:pydantic_model:: PlainModel',
-        '   :module: target.model',
+        '   :module: target.examples',
         '',
         '   Model Plain.',
         ''
@@ -21,23 +21,23 @@ def test_model_with_field(autodocument):
     options_app = dict(autodoc_pydantic_model_show_json=False)
     options_doc = dict(members=None)
     actual = autodocument(documenter='pydantic_model',
-                          object_path='target.model.ModelWithField',
+                          object_path='target.examples.ModelWithField',
                           options_doc=options_doc,
                           options_app=options_app)
 
     assert actual == [
         '',
         '.. py:pydantic_model:: ModelWithField',
-        '   :module: target.model',
+        '   :module: target.examples',
         '',
         '   Model With Field.',
         '',
         '   :Fields:',
-        '      - :py:obj:`field (int) <target.model.ModelWithField.field>`',
+        '      - :py:obj:`field (int) <target.examples.ModelWithField.field>`',
         '',
         '',
         '   .. py:pydantic_field:: ModelWithField.field',
-        '      :module: target.model',
+        '      :module: target.examples',
         '      :type: int',
         '      :value: 1',
         '',
@@ -51,43 +51,43 @@ def test_model_with_field_validator(autodocument):
                        autodoc_pydantic_validator_list_fields=True)
     options_doc = dict(members=None)
     actual = autodocument(documenter='pydantic_model',
-                          object_path='target.model.ModelWithFieldValidator',
+                          object_path='target.examples.ModelWithFieldValidator',
                           options_doc=options_doc,
                           options_app=options_app)
 
     assert actual == [
         '',
         '.. py:pydantic_model:: ModelWithFieldValidator',
-        '   :module: target.model',
+        '   :module: target.examples',
         '',
         '   Model With Field Validator.',
         '',
         '   :Fields:',
-        '      - :py:obj:`field (int) <target.model.ModelWithFieldValidator.field>`',
+        '      - :py:obj:`field (int) <target.examples.ModelWithFieldValidator.field>`',
         '',
         '   :Validators:',
-        '      - :py:obj:`is_integer <target.model.ModelWithFieldValidator.is_integer>` » :py:obj:`field <target.model.ModelWithFieldValidator.field>`',
+        '      - :py:obj:`is_integer <target.examples.ModelWithFieldValidator.is_integer>` » :py:obj:`field <target.examples.ModelWithFieldValidator.field>`',
         '',
         '',
         '   .. py:pydantic_field:: ModelWithFieldValidator.field',
-        '      :module: target.model',
+        '      :module: target.examples',
         '      :type: int',
         '      :value: 1',
         '',
         '      Doc field',
         '',
         '      :Validated by:',
-        '         - :py:obj:`is_integer <target.model.ModelWithFieldValidator.is_integer>`',
+        '         - :py:obj:`is_integer <target.examples.ModelWithFieldValidator.is_integer>`',
         '',
         '',
         '   .. py:pydantic_validator:: ModelWithFieldValidator.is_integer',
-        '      :module: target.model',
+        '      :module: target.examples',
         '      :classmethod:',
         '',
         '      Doc validator.',
         '',
         '      :Validates:',
-        '         - :py:obj:`field <target.model.ModelWithFieldValidator.field>`',
+        '         - :py:obj:`field <target.examples.ModelWithFieldValidator.field>`',
         ''
     ]
 
@@ -97,14 +97,14 @@ def test_model_with_config(autodocument):
                        autodoc_pydantic_model_show_config_member=True)
     options_doc = dict(members=None)
     actual = autodocument(documenter='pydantic_model',
-                          object_path='target.model.ModelWithConfig',
+                          object_path='target.examples.ModelWithConfig',
                           options_doc=options_doc,
                           options_app=options_app)
 
     assert actual == [
         '',
         '.. py:pydantic_model:: ModelWithConfig',
-        '   :module: target.model',
+        '   :module: target.examples',
         '',
         '   Model with Config.',
         '',
@@ -113,13 +113,13 @@ def test_model_with_config(autodocument):
         '',
         '',
         '   .. py:pydantic_config:: ModelWithConfig.Config()',
-        '      :module: target.model',
+        '      :module: target.examples',
         '',
         '      With Doc String.',
         '',
         '',
         '      .. py:attribute:: ModelWithConfig.Config.allow_mutation',
-        '         :module: target.model',
+        '         :module: target.examples',
         '         :value: True',
         '',
         '         FooBar.',
@@ -128,12 +128,12 @@ def test_model_with_config(autodocument):
 
 def test_model_plain_show_json(autodocument):
     actual = autodocument(documenter='pydantic_model',
-                          object_path='target.model.PlainModel')
+                          object_path='target.examples.PlainModel')
 
     assert actual == [
         '',
         '.. py:pydantic_model:: PlainModel',
-        '   :module: target.model',
+        '   :module: target.examples',
         '',
         '   Model Plain.',
         '',

@@ -7,18 +7,20 @@ import pytest
 import sphinx.errors
 from sphinx.transforms.post_transforms import ReferencesResolver
 
+from tests.compatability import rst_alias_class_directive
+
 
 def test_not_json_compliant(autodocument):
     actual = autodocument(
         documenter='pydantic_model',
-        object_path='target.edgecases.NotJsonCompliant',
+        object_path='target.edgecase_json_compliant.NotJsonCompliant',
         options_doc={"model-show-json": True},
         deactivate_all=True)
 
     assert actual == [
         '',
         '.. py:pydantic_model:: NotJsonCompliant',
-        '   :module: target.edgecases',
+        '   :module: target.edgecase_json_compliant',
         '',
         '',
         '   .. raw:: html',
@@ -354,7 +356,8 @@ def test_autodoc_pydantic_model_show_validator_summary_inherited(autodocument):
     assert result == actual
 
 
-def test_autodoc_pydantic_model_show_validator_summary_not_inherited(autodocument):
+def test_autodoc_pydantic_model_show_validator_summary_not_inherited(
+        autodocument):
     result = [
         '',
         '.. py:pydantic_model:: ModelShowValidatorsSummaryInherited',
@@ -374,3 +377,51 @@ def test_autodoc_pydantic_model_show_validator_summary_not_inherited(autodocumen
                      "autodoc_pydantic_model_members": True},
         deactivate_all=True)
     assert result == actual
+
+
+def test_model_as_attr(autodocument):
+    """Ensure that additional information provided by autodoc_pydantic like
+    field/validator summary are hidden when model/settings are documented as
+    an attribute.
+
+    This relates to #78.
+
+    """
+
+    actual = autodocument(
+        documenter='class',
+        object_path='target.edgecase_model_as_attr.Container',
+        options_doc={"members": "TEST_MODEL"},
+        deactivate_all=False)
+
+    rst_class = rst_alias_class_directive()
+    assert actual == [
+        '',
+        '.. py:class:: Container()',
+        '   :module: target.edgecase_model_as_attr',
+        '',
+        '   Container Doc String',
+        '',
+        '',
+        '   .. py:attribute:: Container.TEST_MODEL',
+        '      :module: target.edgecase_model_as_attr',
+        '',
+        f'      alias of {rst_class}`target.edgecase_model_as_attr.Model`'
+    ]
+
+
+def test_model_as_attr_sort_order_bysource_exception(autodocument):
+    """Resembles a bug that occurred while documenting models as attributes
+    and having model summary list order set to `bysource`. Test that no
+    exception is raised.
+
+    This relates to #78.
+
+    """
+
+    autodocument(
+        documenter='class',
+        object_path='target.edgecase_model_as_attr.Container',
+        options_doc={"members": "TEST_MODEL"},
+        options_app={"autodoc_pydantic_model_summary_list_order": "bysource"},
+        deactivate_all=False)

@@ -191,6 +191,10 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         super().add_content(more_content, no_docstring)
 
+        # do not provide any additional info if documented as attribute
+        if self.doc_as_attr:
+            return
+
         if self.pydantic.options.is_true("show-json", True):
             self.add_collapsable_schema()
 

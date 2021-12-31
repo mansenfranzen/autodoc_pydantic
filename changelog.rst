@@ -1,6 +1,47 @@
 Changelog
 =========
 
+v1.6.0 - 2022-01-XX
+-------------------
+
+This is a feature and bug fix release.
+
+Bugfix
+~~~~~~
+
+- Fix a bug which occurred while documenting a pydantic model as an attribute
+  and using `bysource` for model summary list order
+  `#78 <https://github.com/mansenfranzen/autodoc_pydantic/issues/78>`__.
+
+Feature
+~~~~~~~
+
+- Remove any additional content provided by **autodoc_pydantic** for
+  pydantic models/settings when documented as an attribute
+  `#78 <https://github.com/mansenfranzen/autodoc_pydantic/issues/78>`__.
+
+Testing
+~~~~~~~
+
+- Add tests to ensure no additional content is provided if model/settings
+  are documented as an attribute.
+- Streamline naming convention for edge cases.
+
+Documentation
+~~~~~~~~~~~~~
+
+- Add FAQ section to describe changed behaviour of models/settings when used
+  as class attributes.
+- Rename ``BaseModel`` to ``Model`` and ``BaseSettings`` to ``Settings`` in
+  configuration section.
+
+Contributors
+~~~~~~~~~~~~
+
+- Thanks to `nchaly <https://github.com/nchaly>`__ for reporting a bug and
+  raising the topic of how to document models/settings as an attribute
+  `#78 <https://github.com/mansenfranzen/autodoc_pydantic/issues/78>`__.
+
 v1.5.1 - 2021-11-12
 -------------------
 
