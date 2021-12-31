@@ -83,11 +83,7 @@ class PydanticAutoDoc:
         if self._inspect:
             return self._inspect
 
-        if self._is_child:
-            obj = self._documenter.parent
-        else:
-            obj = self._documenter.object
-
+        obj = self._documenter.parent if self._is_child else self._documenter.object
         self._inspect = ModelInspector(obj)
         return self._inspect
 
