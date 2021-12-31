@@ -67,3 +67,52 @@ show the class docstring, change this setting back to "class"::
 
    For more, please see the corresponding
    `github issue #58 <https://github.com/mansenfranzen/autodoc_pydantic/issues/58>`_.
+
+
+Document models as an attribute
+===============================
+
+Pydantic models/settings can be also used and documented as class attributes,
+as in the following example:
+
+.. code-block:: python
+
+   from pydantic import BaseModel, validator
+
+
+   class Model(BaseModel):
+       """Model Doc String."""
+
+       field: int
+       """Field Doc String"""
+
+       field2: str
+       """Field2 Doc String"""
+
+       @validator("field")
+       def validate(cls, v):
+           """Dummy validator"""
+           return v
+
+
+   class Container:
+       """Container Doc String"""
+
+       TEST_MODEL = Model
+
+If you auto-document this code via ``automodule`` for example, then the pydantic model
+``Model`` gets both documented as a standalone class and as an class attribute
+of ``Container``. In the ladder case, plain sphinx autodoc adds an alias note
+with reference to the main documentation section of ``Model`` by default. It
+does not provide more documentation related to ``Model`` to prevent duplication
+with the main class documentation.
+
+However until version ``1.5.1``, **autodoc_pydantic** added content like json
+schema, field and validator summaries when models/settings were documented
+as class attributes. This was removed in version ``1.6.0`` to be in line with
+the default sphinx autodoc behaviour.
+
+.. note::
+
+   For more, please see the corresponding
+   `github issue #78 <https://github.com/mansenfranzen/autodoc_pydantic/issues/78>`_.
