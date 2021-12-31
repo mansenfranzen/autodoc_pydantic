@@ -88,31 +88,31 @@ def test_example_model_with_field_and_validator(parse_rst):
     input_rst = [
         '',
         '.. py:pydantic_model:: ModelWithFieldValidator',
-        '   :module: target.model',
+        '   :module: target.examples',
         '',
         '   Model With Field Validator.',
         '',
         '   :Validators:',
-        '      - :py:obj:`is_integer <target.model.ModelWithFieldValidator.is_integer>` » :py:obj:`field <target.model.ModelWithFieldValidator.field>`',
+        '      - :py:obj:`is_integer <target.examples.ModelWithFieldValidator.is_integer>` » :py:obj:`field <target.examples.ModelWithFieldValidator.field>`',
         '',
         '   .. py:pydantic_field:: ModelWithFieldValidator.field',
-        '      :module: target.model',
+        '      :module: target.examples',
         '      :type: int',
         '      :value: 1',
         '',
         '      Doc field',
         '',
         '      :Validated by:',
-        '         - :py:obj:`is_integer <target.model.ModelWithFieldValidator.is_integer>`',
+        '         - :py:obj:`is_integer <target.examples.ModelWithFieldValidator.is_integer>`',
         '',
         '   .. py:pydantic_validator:: ModelWithFieldValidator.is_integer',
-        '      :module: target.model',
+        '      :module: target.examples',
         '      :classmethod:',
         '',
         '      Doc validator.',
         '',
         '      :Validates:',
-        '         - :py:obj:`field <target.model.ModelWithFieldValidator.field>`',
+        '         - :py:obj:`field <target.examples.ModelWithFieldValidator.field>`',
         ''
     ]
 
@@ -191,7 +191,7 @@ def test_example_model_with_field_and_validator(parse_rst):
     output_nodes = (
         index,
         [desc, ([desc_signature, ([desc_annotation, prefix_model],
-                                  [desc_addname, "target.model."],
+                                  [desc_addname, "target.examples."],
                                   [desc_name, "ModelWithFieldValidator"])],
                 [desc_content, ([paragraph, "Model With Field Validator."],
                                 model_validator_node,
@@ -216,7 +216,7 @@ def test_example_model_with_config(parse_rst):
     input_rst = [
         '',
         '.. py:pydantic_model:: ModelWithConfig',
-        '   :module: target.model',
+        '   :module: target.examples',
         '',
         '   Model with Config.',
         '',
@@ -224,13 +224,13 @@ def test_example_model_with_config(parse_rst):
         '      - **allow_mutation**: *bool = True*',
         '',
         '   .. py:pydantic_config:: ModelWithConfig.Config()',
-        '      :module: target.model',
+        '      :module: target.examples',
         '',
         '      With Doc String.',
         '',
         '',
         '      .. py:attribute:: ModelWithConfig.Config.allow_mutation',
-        '         :module: target.model',
+        '         :module: target.examples',
         '         :value: True',
         '',
         '         FooBar.',
@@ -271,7 +271,7 @@ def test_example_model_with_config(parse_rst):
     output_nodes = (
         index,
         [desc, ([desc_signature, ([desc_annotation, prefix_model],
-                                  [desc_addname, "target.model."],
+                                  [desc_addname, "target.examples."],
                                   [desc_name, "ModelWithConfig"])],
                 [desc_content, ([paragraph, "Model with Config."],
                                 config_node,
@@ -291,7 +291,7 @@ def test_pydantic_model(parse_rst):
     """
 
     input_rst = ['.. py:pydantic_model:: PlainModel',
-                 '   :module: target.model',
+                 '   :module: target.examples',
                  '',
                  '   Model Plain.',
                  '']
@@ -300,7 +300,7 @@ def test_pydantic_model(parse_rst):
     output_nodes = (
         index,
         [desc, ([desc_signature, ([desc_annotation, prefix_model],
-                                  [desc_addname, "target.model."],
+                                  [desc_addname, "target.examples."],
                                   [desc_name, "PlainModel"])],
                 [desc_content, ([paragraph, "Model Plain."])])
          ]
@@ -316,7 +316,7 @@ def test_pydantic_settings(parse_rst):
     """
 
     input_rst = ['.. py:pydantic_settings:: PlainSettings',
-                 '   :module: target.model',
+                 '   :module: target.examples',
                  '',
                  '   Settings Plain.',
                  '']
@@ -325,7 +325,7 @@ def test_pydantic_settings(parse_rst):
     output_nodes = (
         index,
         [desc, ([desc_signature, ([desc_annotation, prefix_settings],
-                                  [desc_addname, "target.model."],
+                                  [desc_addname, "target.examples."],
                                   [desc_name, "PlainSettings"])],
                 [desc_content, ([paragraph, "Settings Plain."])])
          ]
@@ -341,7 +341,7 @@ def test_pydantic_config(parse_rst):
     """
 
     input_rst = ['.. py:pydantic_config:: Model.Config',
-                 '   :module: target.model',
+                 '   :module: target.examples',
                  '',
                  '   Config Plain.',
                  '']
@@ -367,7 +367,7 @@ def test_pydantic_validator(parse_rst):
 
     input_rst = [
         '.. py:pydantic_validator:: ModelWithFieldValidator.is_integer',
-        '   :module: target.model',
+        '   :module: target.examples',
         '',
         '   Validator Plain.',
         '']
@@ -395,7 +395,7 @@ def test_pydantic_field_with_default_value(parse_rst):
 
     input_rst = [
         '.. py:pydantic_field:: ModelWithAlias.field',
-        '   :module: target.model',
+        '   :module: target.examples',
         '   :value: 5',
         '   :type: int',
         '   :alias: aliased',
@@ -430,7 +430,7 @@ def test_pydantic_field_with_required(parse_rst):
 
     input_rst = [
         '.. py:pydantic_field:: ModelWithAlias.field',
-        '   :module: target.model',
+        '   :module: target.examples',
         '   :type: int',
         '   :required:',
         '   :alias: Alias',

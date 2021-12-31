@@ -11,14 +11,14 @@ from sphinx.transforms.post_transforms import ReferencesResolver
 def test_not_json_compliant(autodocument):
     actual = autodocument(
         documenter='pydantic_model',
-        object_path='target.edgecases.NotJsonCompliant',
+        object_path='target.edgecase_json_compliant.NotJsonCompliant',
         options_doc={"model-show-json": True},
         deactivate_all=True)
 
     assert actual == [
         '',
         '.. py:pydantic_model:: NotJsonCompliant',
-        '   :module: target.edgecases',
+        '   :module: target.edgecase_json_compliant',
         '',
         '',
         '   .. raw:: html',
