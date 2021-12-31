@@ -27,6 +27,14 @@ Testing
   are documented as an attribute.
 - Streamline naming convention for edge cases.
 
+Documentation
+~~~~~~~~~~~~~
+
+- Add FAQ section to describe changed behaviour of models/settings when used
+  as class attributes.
+- Rename ``BaseModel`` to ``Model`` and ``BaseSettings`` to ``Settings`` in
+  configuration section.
+
 Contributors
 ~~~~~~~~~~~~
 
