@@ -10,6 +10,11 @@ documentation section for config parameters.
 import inspect
 from typing import List, Tuple
 
+import pydantic
+import sphinx
+import sphinx_copybutton
+import sphinx_rtd_theme
+import sphinx_tabs
 from docutils import nodes
 from docutils.nodes import Node
 from docutils.parsers.rst import directives
@@ -20,6 +25,21 @@ import pydoc
 from sphinx.ext.autodoc.directive import DummyOptionSpec
 from sphinx.util import nested_parse_with_titles
 from sphinx.util.docutils import switch_source_input, SphinxDirective
+
+VERSION_TEMPLATE = """
+This documentation was built with the following environment:
+
+:sphinx: {sphinx}
+
+:pydantic: {pydantic}
+
+:sphinx-rtd-theme: {sphinx_rtd_theme}
+
+:sphinx-tabs: {sphinx_tabs}
+
+:sphinx-copybutton: {sphinx_copybutton}
+
+:sphinxcontrib-mermaid: {sphinxcontrib_mermaid}"""
 
 TAB_TEMPLATE = """
 .. _{confpy}:
@@ -266,3 +286,32 @@ class AutoCodeBlock(CodeBlock):
         obj = pydoc.locate(objpath)
         lines = inspect.getsourcelines(obj)[0]
         return [line.replace("\n", "") for line in lines]
+
+
+class ShowVersions(SphinxDirective):
+    """Generates documentation section describing configuration parameters.
+
+    """
+
+    has_content = False
+    required_arguments = 0
+    optional_arguments = 0
+
+    def run(self) -> List[Node]:
+        """Generate reST.
+
+        """
+
+        mermaid = self.env.app.extensions["sphinxcontrib.mermaid"].version
+
+        content = VERSION_TEMPLATE.format(
+            sphinx=sphinx.__version__,
+            pydantic=pydantic.version.VERSION,
+            sphinx_rtd_theme=sphinx_rtd_theme.__version__,
+            sphinx_tabs=sphinx_tabs.__version__,
+            sphinx_copybutton=sphinx_copybutton.__version__,
+            sphinxcontrib_mermaid=mermaid
+        )
+
+        content = StringList(content.split("\n"))
+        return generate_nodes(self.state, content)

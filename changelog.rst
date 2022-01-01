@@ -36,6 +36,8 @@ Documentation
   as class attributes.
 - Rename ``BaseModel`` to ``Model`` and ``BaseSettings`` to ``Settings`` in
   configuration section.
+- Add ``ShowVersions`` directive to show relevant package versions of current
+  documentation build environment in setup page of developer documentation.
 
 Contributors
 ~~~~~~~~~~~~
