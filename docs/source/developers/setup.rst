@@ -73,3 +73,5 @@ To generate the HTML documentation, please use the following:
    make clean && make html
 
 The generated documentation can be found under ``docs/build/html/index.html``.
+
+.. show_versions::
