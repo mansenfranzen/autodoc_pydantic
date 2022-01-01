@@ -5,6 +5,7 @@ differences between different sphinx versions.
 
 from typing import Tuple
 
+import pydantic
 import sphinx
 from sphinx.addnodes import desc_sig_punctuation, desc_annotation, pending_xref
 
@@ -52,7 +53,7 @@ def desc_annotation_directive_prefix(prefix: str):
     return prefix + " "
 
 
-def rst_alias_class_directive():
+def rst_alias_class_directive() -> str:
     """Provides compatibility abstraction for `class` directive when used with
     sphinx 4.3 or newer.
 
@@ -61,3 +62,12 @@ def rst_alias_class_directive():
     if sphinx.version_info >= (4, 3):
         return ":py:class:"
     return ":class:"
+
+
+def object_is_serializable() -> bool:
+    """Provides compatibility abstraction to define whether type object is
+    serializable or not.
+
+    """
+
+    return pydantic.version.VERSION[:3] >= "1.9"

@@ -4,7 +4,7 @@ Changelog
 v1.6.0 - 2022-01-XX
 -------------------
 
-This is a feature and bug fix release.
+This is a feature and bug fix release including support for pydantic 1.9.
 
 Bugfix
 ~~~~~~
@@ -26,6 +26,8 @@ Testing
 - Add tests to ensure no additional content is provided if model/settings
   are documented as an attribute.
 - Streamline naming convention for edge cases.
+- Adjust tests to comply with pydantic 1.9.
+- Add pydantic 1.9 to CI.
 
 Documentation
 ~~~~~~~~~~~~~

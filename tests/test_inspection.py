@@ -3,10 +3,13 @@
 """
 from typing import TypeVar
 
+import pydantic
 import pytest
 from pydantic import BaseModel
 
-from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector, StaticInspector
+from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector, \
+    StaticInspector
+from tests.compatability import object_is_serializable
 
 
 @pytest.fixture(scope="session")
@@ -43,7 +46,7 @@ def non_serializable():
     "field_test",
     [
         ("field_1", True),
-        ("field_2", False),
+        ("field_2", object_is_serializable()),
         ("field_3", False),
         ("field_4", False),
         ("field_5", True),
@@ -58,11 +61,12 @@ def test_is_serializable(non_serializable, field_test):
 
 def test_find_non_json_serializable_fields(serializable, non_serializable):
     assert serializable.fields.non_json_serializable == []
-    assert non_serializable.fields.non_json_serializable == [
-        "field_2",
-        "field_3",
-        "field_4",
-    ]
+
+    non_serial_fields = ["field_2", "field_3", "field_4"]
+    if pydantic.version.VERSION[:3] >= "1.9":
+        non_serial_fields.remove("field_2")
+
+    assert non_serializable.fields.non_json_serializable == non_serial_fields
 
 
 def test_get_safe_schema_json_serializable(serializable):

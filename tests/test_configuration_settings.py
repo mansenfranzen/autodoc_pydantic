@@ -413,17 +413,31 @@ def test_autodoc_pydantic_settings_hide_paramlist_false(autodocument):
     kwargs = dict(object_path='target.configuration.SettingsHideParamList',
                   **KWARGS)
 
-    params = [
-        "_env_file: Optional[Union[pathlib.Path, str]] = '<object object>', ",
-        "_env_file_encoding: Optional[str] = None, ",
-        "_secrets_dir: Optional[Union[pathlib.Path, str]] = None, ",
-        "*, field1: int = 5, field2: str = 'FooBar'"]
+    if pydantic.version.VERSION[:3] >= "1.9":
+        path_type = "Union[str, os.PathLike]"
+    else:
+        path_type = "Union[pathlib.Path, str]"
+
+    env_file = f"_env_file: Optional[{path_type}] = '<object object>', "
+    env_file_encoding = "_env_file_encoding: Optional[str] = None, "
+    env_nested_delimiter = "_env_nested_delimiter: Optional[str] = None, "
+    secret_dir = f"_secrets_dir: Optional[{path_type}] = None, "
+    remaining = "*, field1: int = 5, field2: str = 'FooBar'"
+
+    params = [env_file,
+              env_file_encoding,
+              env_nested_delimiter,
+              secret_dir,
+              remaining]
+
+    if pydantic.version.VERSION[:3] <= "1.8":
+        params.remove(env_nested_delimiter)
 
     if pydantic.version.VERSION[:3] <= "1.6":
-        params.remove("_secrets_dir: Optional[Union[pathlib.Path, str]] = None, ")
+        params.remove(secret_dir)
 
     if pydantic.version.VERSION[:3] <= "1.5":
-        params.remove("_env_file_encoding: Optional[str] = None, ")
+        params.remove(env_file_encoding)
 
     params = "".join(params)
 
