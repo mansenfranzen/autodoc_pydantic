@@ -607,3 +607,10 @@ section.
 
 - ``True`` (default): Add fallback CSS classes.
 - ``False``: Do not add fallback CSS classes.
+
+.. note::
+
+   Sphinx versions prior ``4.0.0`` did not include the ``objtype`` as a default
+   css class for the corresponding docutil nodes. If the current fallback
+   functionality is activated, it will add both the actual ``objtype`` and its
+   fallback as css classes to older sphinx versions, too.
