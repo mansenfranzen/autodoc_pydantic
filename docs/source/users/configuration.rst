@@ -611,6 +611,6 @@ section.
 .. note::
 
    Sphinx versions prior ``4.0.0`` did not include the ``objtype`` as a default
-   css class for the corresponding docutil nodes. If the current fallback
-   functionality is activated, it will add both the actual ``objtype`` and its
-   fallback as css classes to older sphinx versions, too.
+   css class for the corresponding docutil nodes. **autodoc_pydantic** will
+   add the ``objtype`` as a css class for its generated output for older sphinx
+   versions, too.
