@@ -26,7 +26,7 @@ class AutoSummaryModel(BaseModel):
 
         """
 
-        if not len(v) < 10:
+        if len(v) >= 10:
             raise ValueError("No more than 10 characters allowed")
 
     class Config:
