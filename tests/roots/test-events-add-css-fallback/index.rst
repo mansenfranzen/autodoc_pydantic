@@ -1,2 +1,3 @@
-.. automodule:: example
-   :members:
+.. toctree::
+
+   add_css_fallback

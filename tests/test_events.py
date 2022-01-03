@@ -16,7 +16,7 @@ APP_OVERWRITE_FALLBACK_CSS_CLASS = dict(
 )
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def path_fallback_css_class():
     current = Path(__file__).parent
     return current.joinpath("roots", "test-events-add-css-fallback")
@@ -26,24 +26,24 @@ def path_fallback_css_class():
 def doctree_css_fallback_false(prod_app, path_fallback_css_class) -> document:
     result = prod_app(
         source_dir=path_fallback_css_class,
-        docnames=["index"],
+        docnames=["add_css_fallback"],
         confoverrides={"autodoc_pydantic_add_fallback_css_class": False,
                        **APP_OVERWRITE_FALLBACK_CSS_CLASS}
     )
 
-    return result.doctree["index"]
+    return result.doctree["add_css_fallback"]
 
 
 @pytest.fixture(scope="function")
 def doctree_css_fallback_true(prod_app, path_fallback_css_class) -> document:
     result = prod_app(
         source_dir=path_fallback_css_class,
-        docnames=["index"],
+        docnames=["add_css_fallback"],
         confoverrides={"autodoc_pydantic_add_fallback_css_class": True,
                        **APP_OVERWRITE_FALLBACK_CSS_CLASS}
     )
 
-    return result.doctree["index"]
+    return result.doctree["add_css_fallback"]
 
 
 def filter_doctree_by_objtype(node: document,
@@ -73,6 +73,8 @@ def test_add_fallback_css_class_false(doctree_css_fallback_false,
     """Ensure that fallback css class is not added to autodoc_pydantic
     generated nodes per objtype.
 
+    This relates to #77.
+
     """
     nodes = filter_doctree_by_objtype(doctree_css_fallback_false,
                                       objtype)
@@ -91,6 +93,8 @@ def test_add_fallback_css_class_true(doctree_css_fallback_true,
                                      fallback_css_class):
     """Ensure that fallback css class is added to autodoc_pydantic generated
     nodes per objtype.
+
+    This relates to #77.
 
     """
     nodes = filter_doctree_by_objtype(doctree_css_fallback_true,
