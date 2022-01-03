@@ -7,7 +7,7 @@ import pytest
 import sphinx.errors
 from sphinx.transforms.post_transforms import ReferencesResolver
 
-from tests.compatability import rst_alias_class_directive
+from tests.compatibility import rst_alias_class_directive
 
 
 def test_not_json_compliant(autodocument):

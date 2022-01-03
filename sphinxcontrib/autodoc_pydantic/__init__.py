@@ -26,7 +26,9 @@ from sphinxcontrib.autodoc_pydantic.directives.directives import (
     PydanticSettings
 )
 
-__version__ = "1.5.1"
+__version__ = "1.6.0"
+
+from sphinxcontrib.autodoc_pydantic.events import add_fallback_css_class
 
 
 def add_css_file(app: Sphinx, exception: Exception):
@@ -115,6 +117,8 @@ def add_configuration_values(app: Sphinx):
     add(f'{stem}field_show_required', True, True, bool)
     add(f'{stem}field_signature_prefix', "field", True, str)
 
+    add(f'{stem}add_fallback_css_class', True, True, bool)
+
 
 def add_directives_and_autodocumenters(app: Sphinx):
     """Adds custom pydantic directives and autodocumenters to sphinx
@@ -134,6 +138,8 @@ def add_directives_and_autodocumenters(app: Sphinx):
     app.add_autodocumenter(PydanticSettingsDocumenter)
     app.add_autodocumenter(PydanticValidatorDocumenter)
     app.add_autodocumenter(PydanticConfigClassDocumenter)
+
+    app.connect('object-description-transform', add_fallback_css_class)
 
 
 def setup(app: Sphinx) -> Dict[str, Any]:

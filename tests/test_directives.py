@@ -26,7 +26,7 @@ from sphinx.addnodes import (
 )
 from sphinx.testing.util import assert_node
 
-from .compatability import desc_annotation_type_annotation, \
+from .compatibility import desc_annotation_type_annotation, \
     desc_annotation_default_value, desc_annotation_directive_prefix
 
 

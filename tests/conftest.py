@@ -2,14 +2,19 @@
 
 """
 import copy
+import inspect
 import logging
 from logging.handlers import MemoryHandler
-from typing import Optional, Dict, List
+from pathlib import Path
+from typing import Optional, Dict, List, Callable, Union, Any
 from unittest.mock import Mock
 
 import pytest
 import sphinx
+from pydantic import BaseModel
+from sphinx import application
 from sphinx.application import Sphinx
+from sphinx.cmd import build
 from sphinx.testing.path import path
 from sphinx.testing.restructuredtext import parse
 from sphinx.util.docutils import LoggingReporter
@@ -60,13 +65,21 @@ CONF_DEACTIVATE = {
 def rootdir():
     return path(__file__).parent.abspath() / 'roots'
 
+@pytest.fixture(scope='session')
+def docdir():
+    """Provides path to actual sphinx documentation of autodoc_pydantic.
+
+    """
+
+    return Path(__file__).parents[1].joinpath("docs", "source")
 
 def do_autodoc(app: Sphinx,
                documenter: str,
                object_path: str,
                options_doc: Optional[Dict] = None) -> List[str]:
-    """Run auto `documenter` for given object referenced by `object_path` within
-    provided sphinx `app`. Optionally override app and documenter settings.
+    """Run auto `documenter` for given object referenced by `object_path`
+    within provided sphinx `app`. Optionally override app and documenter
+    settings.
 
     Parameters
     ----------
@@ -93,7 +106,6 @@ def do_autodoc(app: Sphinx,
     options_doc = options_doc or {}
     doc_cls = app.registry.documenters[documenter]
     doc_opts = process_documenter_options(doc_cls, app.config, options_doc)
-    print(doc_opts)
 
     # get documenter bridge which is going to contain the result
     state = Mock()
@@ -109,7 +121,15 @@ def do_autodoc(app: Sphinx,
 
 @pytest.fixture(scope="function")
 def test_app(make_app, sphinx_test_tempdir, rootdir):
-    """Create callable returning a fresh test app.
+    """Create callable which returns a fresh sphinx test application. The test
+    application is faster than using a production application (like `prod_app`
+    fixture).
+
+    This fixture is mainly used to test generated rst (via `autodocument`
+    fixture) and generated docutils (via `parse_rst` fixture).
+
+    When testing the production behaviour including all functionality, please
+    use `prod_app`.
 
     """
 
@@ -138,7 +158,28 @@ def test_app(make_app, sphinx_test_tempdir, rootdir):
 
 @pytest.fixture(scope='function')
 def autodocument(test_app):
-    """Create callable to apply auto documenter to given object path.
+    """Main fixture to test generated reStructuredText from given object path
+    with provided auto-documenter while optionally allowing to overwriting
+    sphinx app settings `options_app` and auto-documenter directive settings
+    `options_doc`.
+
+    Parameters
+    ----------
+    documenter: str
+        Name of the auto-documenter to be used to generate rst.
+    object_path: str
+        Fully qualified path to the relevant python object to be documented.
+    options_doc: dict, optional
+        Overwrite auto-documenter directive settings.
+    options_app: dict, optional
+        Overwrite sphinx app settings.
+    testroot: str, optional
+        Name of the sphinx test source directory which are located under
+        `autodoc_pydantic/tests/roots/`. By default, it uses the `base`
+        directory.
+    deactivate_all: bool, optional
+        If True, completely deactivates all autodoc_pydantic modifications.
+        This is useful when testing individual modifications in isolation.
 
     """
 
@@ -162,7 +203,11 @@ def autodocument(test_app):
 
 @pytest.fixture(scope="function")
 def parse_rst(test_app):
-    """Create callable to parse restructured text and return doc tree.
+    """Main fixture to test generated doctree/docutil nodes from given
+    reStructuredText.
+
+    Essentially it is a wrapper around `sphinx.testing.restructuredtext.parse`
+    with a custom test application.
 
     """
 
@@ -170,7 +215,6 @@ def parse_rst(test_app):
                testroot: str = "base",
                conf: Optional[Dict] = None,
                deactivate_all: bool = False):
-
         text = "\n".join(text)
         app = test_app(testroot,
                        conf=conf,
@@ -213,7 +257,6 @@ def log_capturer(monkeypatch):
             self.handler.setLevel(level)
 
         def __enter__(self):
-
             def mock_logging(*args, **kwargs):
                 result = setup(*args, **kwargs)
                 logger = logging.getLogger("sphinx")
@@ -228,3 +271,102 @@ def log_capturer(monkeypatch):
                 raise
 
     return LogCapturer
+
+
+class SphinxResult(BaseModel):
+    """Container for the result of a sphinx run.
+
+    """
+
+    app: Optional[application.Sphinx]
+    doctree: Optional[Dict[str, Any]]
+    return_code: Optional[int]
+
+    class Config:
+        arbitrary_types_allowed = True
+
+
+def combine_sphinx_init_arguments(args: List, kwargs: Dict) -> Dict:
+    """Merges positional and keyword arguments into a dictionary passed to
+    `sphinx.application.Sphinx.__init__`. This is required for mocking and
+    modifying the sphinx application because sphinx build cmd uses only
+    positional arguments and modifying them via position is rather error prone.
+    Hence, all positional arguments are converted into keyword arguments which
+    then can be modified safely.
+
+    """
+
+    signature = inspect.signature(application.Sphinx.__init__)
+    arg_names = list(signature.parameters.keys())[1:]
+    named_args = dict(zip(arg_names, args))
+
+    result = copy.deepcopy(kwargs)
+    result.update(named_args)
+    return result
+
+
+def create_sphinx_app_mockup(sphinx_result: SphinxResult,
+                             confoverrides: Optional[Dict]) -> Callable:
+    """Generates a mockup for `sphinx.application.Sphinx` while capturing it
+    via changing `sphinx_result` in place and modifying `confoverrides`.
+
+    """
+
+    def capture_sphinx_app(*args, **kwargs):
+        safe_kwargs = combine_sphinx_init_arguments(args, kwargs)
+
+        if confoverrides:
+            if "confoverrides" in safe_kwargs:
+                safe_kwargs["confoverrides"].update(confoverrides)
+            else:
+                safe_kwargs["confoverrides"] = confoverrides
+
+        app = application.Sphinx(**safe_kwargs)
+        sphinx_result.app = app
+        return app
+
+    return capture_sphinx_app
+
+
+@pytest.fixture(scope="function")
+def prod_app(tmpdir, monkeypatch) -> Callable:
+    """Execute production sphinx app via main cmd entry point for given source
+    directory. It returns a `SphinxResult` which allows inspection of the
+    generated sphinx app and also the created doctrees.
+
+    Use this fixture with care because it runs a complete sphinx build and may
+    slow down tests. If you do not need the inspection of sphinx app please
+    consider using `test_app`.
+
+    Parameters
+    ----------
+    docnames: list, optional
+        Provide document names for which the doctree will be loaded for
+        inspection. The doctrees are available under `SphinxResult.doctrees`.
+    confoverrides: dict, optional
+        Force overwrite of `conf.py` settings.
+
+    """
+
+    def run(source_dir: Union[Path, str],
+            docnames: Optional[List[str]] = None,
+            confoverrides: Optional[Dict] = None) -> SphinxResult:
+        sphinx_result = SphinxResult()
+        capture_sphinx_app = create_sphinx_app_mockup(
+            sphinx_result=sphinx_result,
+            confoverrides=confoverrides
+        )
+
+        with monkeypatch.context() as m:
+            m.setattr(build, "Sphinx", capture_sphinx_app)
+            sphinx_result.return_code = build.build_main([str(source_dir),
+                                                          str(tmpdir)])
+
+        if docnames:
+            doctree = {docname: sphinx_result.app.env.get_doctree(docname)
+                       for docname in docnames}
+            sphinx_result.doctree = doctree
+
+        return sphinx_result
+
+    return run
