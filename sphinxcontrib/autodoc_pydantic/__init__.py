@@ -142,7 +142,6 @@ def add_directives_and_autodocumenters(app: Sphinx):
     app.connect('object-description-transform', add_fallback_css_class)
 
 
-
 def setup(app: Sphinx) -> Dict[str, Any]:
     add_configuration_values(app)
     add_directives_and_autodocumenters(app)
