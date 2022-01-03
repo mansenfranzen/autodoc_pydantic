@@ -172,6 +172,16 @@
         "bug",
         "test"
       ]
+    },
+    {
+      "login": "StigKorsnes",
+      "name": "Stig Korsnes",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10085536?v=4",
+      "profile": "https://github.com/StigKorsnes",
+      "contributions": [
+        "bug",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
