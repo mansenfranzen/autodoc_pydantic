@@ -7,9 +7,8 @@
 [![Coverage](https://img.shields.io/codecov/c/gh/mansenfranzen/autodoc_pydantic?style=for-the-badge)](https://app.codecov.io/gh/mansenfranzen/autodoc_pydantic)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-18-orange.svg?style=for-the-badge)](#contributors)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
-[![Downloads](https://img.shields.io/pypi/dm/autodoc_pydantic?color=fe7d37&style=for-the-badge)](https://pypi.org/project/autodoc-pydantic)
+[![All Contributors](https://img.shields.io/badge/all_contributors-18-orange.svg?style=for-the-badge)](#contributors)<!-- ALL-CONTRIBUTORS-BADGE:END -->
+[![Downloads](https://img.shields.io/pypi/dm/autodoc_pydantic?color=fe7d37&style=for-the-badge)](https://pypistats.org/packages/autodoc-pydantic)
 
 You love [pydantic](https://pydantic-docs.helpmanual.io/) ❤ and you want to
 document your models and configuration settings with [sphinx](https://www.sphinx-doc.org/en/master/)?
