@@ -162,6 +162,16 @@
       "contributions": [
         "content"
       ]
+    },
+    {
+      "login": "nchaly",
+      "name": "Mikalai Chaly",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2665273?v=4",
+      "profile": "https://github.com/nchaly",
+      "contributions": [
+        "bug",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
