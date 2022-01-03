@@ -1,3 +1,4 @@
+import sphinx
 from sphinx.addnodes import desc_content
 from sphinx.application import Sphinx
 
@@ -17,11 +18,18 @@ def add_fallback_css_class(app: Sphinx,
 
     """
 
+    if objtype not in OBJTYPES_CSS_FALLBACKS:
+        return
+
+    classes = contentnode.parent.attributes["classes"]
+
+    # for older sphinx versions, add objtype explicitly
+    if sphinx.version_info < (3, 6):
+        classes.append(objtype)
+
     if not app.env.config["autodoc_pydantic_add_fallback_css_class"]:
         return
 
-    if objtype in OBJTYPES_CSS_FALLBACKS:
-        classes = contentnode.parent.attributes["classes"]
-        idx = classes.index(objtype)
-        fallback = OBJTYPES_CSS_FALLBACKS[objtype]
-        classes.insert(idx, fallback)
+    idx = classes.index(objtype)
+    fallback = OBJTYPES_CSS_FALLBACKS[objtype]
+    classes.insert(idx, fallback)
