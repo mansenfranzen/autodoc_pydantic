@@ -9,7 +9,7 @@ from pydantic import BaseModel
 
 from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector, \
     StaticInspector
-from tests.compatability import object_is_serializable
+from tests.compatibility import object_is_serializable
 
 
 @pytest.fixture(scope="session")

@@ -7,7 +7,7 @@ from sphinx.testing.util import assert_node
 import sphinx
 
 from sphinxcontrib.autodoc_pydantic import PydanticConfigClassDocumenter
-from tests.compatability import desc_annotation_directive_prefix
+from tests.compatibility import desc_annotation_directive_prefix
 
 KWARGS = dict(documenter=PydanticConfigClassDocumenter.directivetype,
               deactivate_all=True)

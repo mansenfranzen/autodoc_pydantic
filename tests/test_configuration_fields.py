@@ -16,7 +16,7 @@ from sphinx.addnodes import (
 )
 from sphinx.testing.util import assert_node
 from sphinxcontrib.autodoc_pydantic import PydanticFieldDocumenter
-from .compatability import desc_annotation_default_value, \
+from .compatibility import desc_annotation_default_value, \
     desc_annotation_directive_prefix
 
 KWARGS = dict(documenter=PydanticFieldDocumenter.directivetype,
