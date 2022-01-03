@@ -7,7 +7,7 @@
 [![Coverage](https://img.shields.io/codecov/c/gh/mansenfranzen/autodoc_pydantic?style=for-the-badge)](https://app.codecov.io/gh/mansenfranzen/autodoc_pydantic)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-17-orange.svg?style=for-the-badge)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-18-orange.svg?style=for-the-badge)](#contributors)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 [![Downloads](https://img.shields.io/pypi/dm/autodoc_pydantic?color=fe7d37&style=for-the-badge)](https://pypi.org/project/autodoc-pydantic)
 
@@ -79,6 +79,7 @@ Thanks to great open source projects [sphinx](https://www.sphinx-doc.org/en/mast
     <td align="center"><a href="http://imada.sdu.dk/~jlandersen/"><img src="https://avatars.githubusercontent.com/u/6465735?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jakob Lykke Andersen</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/commits?author=jakobandersen" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/astrojuanlu"><img src="https://avatars.githubusercontent.com/u/316517?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Juan Luis Cano Rodríguez</b></sub></a><br /><a href="#content-astrojuanlu" title="Content">🖋</a></td>
     <td align="center"><a href="https://github.com/nchaly"><img src="https://avatars.githubusercontent.com/u/2665273?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Mikalai Chaly</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/issues?q=author%3Anchaly" title="Bug reports">🐛</a> <a href="https://github.com/mansenfranzen/autodoc_pydantic/commits?author=nchaly" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/StigKorsnes"><img src="https://avatars.githubusercontent.com/u/10085536?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Stig Korsnes</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/issues?q=author%3AStigKorsnes" title="Bug reports">🐛</a> <a href="#ideas-StigKorsnes" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
 </table>
 
