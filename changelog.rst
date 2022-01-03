@@ -1,10 +1,19 @@
 Changelog
 =========
 
-v1.6.0 - 2022-01-XX
+v1.6.0 - 2022-01-03
 -------------------
 
 This is a feature and bug fix release including support for pydantic 1.9.
+
+Changing behavior
+~~~~~~~~~~~~~~~~~
+
+- Documented pydantic models/settings as class attributes will no longer show
+  additional content
+  `#78 <https://github.com/mansenfranzen/autodoc_pydantic/issues/78>`__.
+- Generated docutils will now have additional fallback css classes
+  `#77 <https://github.com/mansenfranzen/autodoc_pydantic/issues/77>`__.
 
 Bugfix
 ~~~~~~
