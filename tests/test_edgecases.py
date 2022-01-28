@@ -2,6 +2,7 @@
 
 """
 import copy
+from pathlib import Path
 
 import pytest
 import sphinx.errors
@@ -425,3 +426,46 @@ def test_model_as_attr_sort_order_bysource_exception(autodocument):
         options_doc={"members": "TEST_MODEL"},
         options_app={"autodoc_pydantic_model_summary_list_order": "bysource"},
         deactivate_all=False)
+
+
+def test_field_description_correct_rst_rendering(autodocument):
+    """Ensure that pydantic `Field`s description attribute's content is
+    correctly rendered as reST in the same way as common class/function
+    docstrings are rendered.
+
+    This relates to #91
+
+    """
+
+    result = [
+        '',
+        '.. py:pydantic_model:: FieldDocRender',
+        '   :module: target.edgecase_field_doc_render_rst',
+        '',
+        '   Doc String.',
+        '',
+        '   :any:`FieldDocRender` *italic*',
+        '',
+        '   :fieldlist: item',
+        '',
+        '',
+        '   .. py:pydantic_field:: FieldDocRender.field',
+        '      :module: target.edgecase_field_doc_render_rst',
+        '      :type: int',
+        '',
+        '      Doc String.',
+        '',
+        '      :any:`FieldDocRender` *italic*',
+        '',
+        '      :fieldlist: item',
+        '',
+        ''
+    ]
+
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.edgecase_field_doc_render_rst.FieldDocRender',
+        options_app={"autodoc_pydantic_model_members": True,
+                     "autodoc_pydantic_model_undoc_members": True},
+        deactivate_all=True)
+    assert result == actual
