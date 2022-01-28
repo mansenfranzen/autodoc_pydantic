@@ -139,6 +139,7 @@ def test_autodoc_pydantic_field_doc_policy_description(autodocument):
         '   :type: int',
         '',
         '   Custom Desc.',
+        '',
         ''
     ]
 
@@ -175,6 +176,7 @@ def test_autodoc_pydantic_field_doc_policy_both(autodocument):
         '   Field.',
         '',
         '   Custom Desc.',
+        '',
         ''
     ]
 
