@@ -555,7 +555,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
 
         if not description:
             return
-        
+
         tabsize = self.directive.state.document.settings.tab_width
         lines = prepare_docstring(description, tabsize=tabsize)
         source_name = self.get_sourcename()
