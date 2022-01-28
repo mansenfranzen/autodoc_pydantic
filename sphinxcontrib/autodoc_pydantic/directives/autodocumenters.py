@@ -14,6 +14,7 @@ from sphinx.ext.autodoc import (
     AttributeDocumenter,
     Documenter
 )
+from sphinx.util.docstrings import prepare_docstring
 
 from sphinx.util.inspect import object_description
 from sphinx.util.typing import get_type_hints, stringify
@@ -552,10 +553,15 @@ class PydanticFieldDocumenter(AttributeDocumenter):
         func = self.pydantic.inspect.fields.get_property_from_field_info
         description = func(field_name, "description")
 
-        if description is not None:
-            source_name = self.get_sourcename()
-            self.add_line(description, source_name)
-            self.add_line("", source_name)
+        if not description:
+            return
+        
+        tabsize = self.directive.state.document.settings.tab_width
+        lines = prepare_docstring(description, tabsize=tabsize)
+        source_name = self.get_sourcename()
+        for line in lines:
+            self.add_line(line, source_name)
+        self.add_line("", source_name)
 
     def add_validators(self):
         """Add section with all validators that process this field.
