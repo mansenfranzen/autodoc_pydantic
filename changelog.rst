@@ -1,6 +1,34 @@
 Changelog
 =========
 
+v1.6.1 - 2022-01-28
+-------------------
+
+This is a minor bug release including support for sphinx 4.4.
+
+Bugfix
+~~~~~~
+
+- Fix incorrect rendering of pydantic field's ``description`` attribute which
+  was not in line with default reST rendering of docstrings of classes or
+  functions.
+  `#91 <https://github.com/mansenfranzen/autodoc_pydantic/issues/91>`__.
+
+Testing
+~~~~~~~
+
+- Add test to ensure that pydantic field's ``description`` attribute is
+  correctly rendered.
+- Add sphinx 4.4 to CI.
+- Simplify ``test_autodoc_pydantic_settings_hide_paramlist_false`` replacing
+  version specifics with generic assert function.
+
+Contributors
+~~~~~~~~~~~~
+
+- Thanks to `iliakur <https://github.com/iliakur>`__ for reporting the
+  incorrect reST rendering of pydantic field's ``description`` attribute.
+
 v1.6.0 - 2022-01-03
 -------------------
 
