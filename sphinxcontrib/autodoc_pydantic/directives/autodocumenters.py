@@ -84,11 +84,7 @@ class PydanticAutoDoc:
         if self._inspect:
             return self._inspect
 
-        if self._is_child:
-            obj = self._documenter.parent
-        else:
-            obj = self._documenter.object
-
+        obj = self._documenter.parent if self._is_child else self._documenter.object
         self._inspect = ModelInspector(obj)
         return self._inspect
 
@@ -404,11 +400,9 @@ class PydanticSettingsDocumenter(PydanticModelDocumenter):
 
         """
 
-        is_val = super().can_document_member(member,
-                                             membername,
-                                             isattr,
-                                             parent)
-        if is_val:
+        if is_val := super().can_document_member(
+            member, membername, isattr, parent
+        ):
             return issubclass(member, BaseSettings)
         else:
             return False
@@ -533,9 +527,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
         """
 
         field_name = self.pydantic_field_name
-        constraints = self.pydantic.inspect.fields.get_constraints(field_name)
-
-        if constraints:
+        if constraints := self.pydantic.inspect.fields.get_constraints(field_name):
             source_name = self.get_sourcename()
             self.add_line(":Constraints:", source_name)
             for key, value in constraints.items():
