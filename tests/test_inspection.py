@@ -1,7 +1,7 @@
 """This module contains tests regarding the `inspection` module.
 
 """
-from typing import TypeVar
+from typing import TypeVar, ForwardRef, Union
 
 import pydantic
 import pytest
@@ -21,7 +21,7 @@ def serializable():
 
 
 @pytest.fixture(scope="session")
-def non_serializable():
+def serializable_mix():
     class Custom:
         def __init__(self):
             self.field = "foobar"
@@ -42,6 +42,30 @@ def non_serializable():
     return ModelInspector(NonSerializable)
 
 
+@pytest.fixture(scope="session")
+def serializable_forward_ref():
+    Foo = ForwardRef('Foo')
+
+    class Foo(BaseModel):
+        a: int = 123
+        b: Foo = None
+        c: "Foo" = None
+
+    return ModelInspector(Foo)
+
+
+@pytest.fixture(scope="session")
+def serializable_forward_ref_union():
+    Foo = ForwardRef('Foo')
+
+    class Foo(BaseModel):
+        a: int = 123
+        b: Union[Foo, int] = 2
+        c: Union["Foo", str] = "foobar"
+
+    return ModelInspector(Foo)
+
+
 @pytest.mark.parametrize(
     "field_test",
     [
@@ -53,20 +77,43 @@ def non_serializable():
         ("field_6", True),
     ],
 )
-def test_is_serializable(non_serializable, field_test):
+def test_is_serializable(serializable_mix, field_test):
+    """Test different scenarios of serializable and non-serializable fields.
+
+    """
+
     field_name, test_result = field_test
-    result = non_serializable.fields.is_json_serializable(field_name)
+    result = serializable_mix.fields.is_json_serializable(field_name)
     assert result is test_result
 
 
-def test_find_non_json_serializable_fields(serializable, non_serializable):
+def test_is_serializable_forward_ref(serializable_forward_ref):
+    """Ensure that pydantic models containing forward refs are properly
+    JSON serializable.
+
+    """
+
+    assert serializable_forward_ref.fields.non_json_serializable == []
+
+
+def test_is_serializable_forward_ref_union(serializable_forward_ref_union):
+    """Ensure that pydantic models containing forward refs with unions are
+    properly JSON serializable.
+
+    This relates to #98.
+
+    """
+    assert serializable_forward_ref_union.fields.non_json_serializable == []
+
+
+def test_find_non_json_serializable_fields(serializable, serializable_mix):
     assert serializable.fields.non_json_serializable == []
 
     non_serial_fields = ["field_2", "field_3", "field_4"]
     if pydantic.version.VERSION[:3] >= "1.9":
         non_serial_fields.remove("field_2")
 
-    assert non_serializable.fields.non_json_serializable == non_serial_fields
+    assert serializable_mix.fields.non_json_serializable == non_serial_fields
 
 
 def test_get_safe_schema_json_serializable(serializable):
@@ -75,9 +122,9 @@ def test_get_safe_schema_json_serializable(serializable):
     assert "field_one" in json_result["properties"]
 
 
-def test_get_safe_schema_json_non_serializable(non_serializable):
-    json_result = non_serializable.schema.sanitized
-    invalid_fields = non_serializable.fields.non_json_serializable
+def test_get_safe_schema_json_non_serializable(serializable_mix):
+    json_result = serializable_mix.schema.sanitized
+    invalid_fields = serializable_mix.fields.non_json_serializable
 
     for invalid_field in invalid_fields:
         assert "type" not in json_result["properties"][invalid_field]
