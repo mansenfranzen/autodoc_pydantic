@@ -51,6 +51,8 @@ def serializable_forward_ref():
         b: Foo = None
         c: "Foo" = None
 
+    Foo.update_forward_refs()
+
     return ModelInspector(Foo)
 
 
