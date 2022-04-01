@@ -1,3 +1,13 @@
+"""This module is relates to `test_inspection` with future annotations enabled.
+
+"""
+
+import sys
+import pytest
+
+if sys.version_info < (3, 7):
+    pytest.skip("future annotations not available", allow_module_level=True)
+
 from __future__ import annotations
 
 import pytest
@@ -11,7 +21,6 @@ def serializable_self_reference():
     class Foo(BaseModel):
         a: int = 123
         b: Foo = None
-        c: "Foo" = None
 
     if requires_forward_ref():
         Foo.update_forward_refs()
