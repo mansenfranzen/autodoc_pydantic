@@ -1,7 +1,6 @@
 """This module contains tests regarding the `inspection` module.
 
 """
-from __future__ import annotations
 from typing import TypeVar, Union
 
 try:
@@ -64,19 +63,6 @@ def serializable_forward_ref():
 
 
 @pytest.fixture(scope="session")
-def serializable_self_reference():
-    class Foo(BaseModel):
-        a: int = 123
-        b: Foo = None
-        c: "Foo" = None
-
-    if requires_forward_ref():
-        Foo.update_forward_refs()
-
-    return ModelInspector(Foo)
-
-
-@pytest.fixture(scope="session")
 def serializable_forward_ref_union():
     Foo = ForwardRef('Foo')
 
@@ -119,15 +105,6 @@ def test_is_serializable_forward_ref(serializable_forward_ref):
     """
 
     assert serializable_forward_ref.fields.non_json_serializable == []
-
-
-def test_is_serializable_self_reference(serializable_self_reference):
-    """Ensure that pydantic models containing self references without forward
-    references are properly JSON serializable.
-
-    """
-
-    assert serializable_self_reference.fields.non_json_serializable == []
 
 
 def test_is_serializable_forward_ref_union(serializable_forward_ref_union):
