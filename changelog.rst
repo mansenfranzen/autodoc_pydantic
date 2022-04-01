@@ -1,10 +1,35 @@
 Changelog
 =========
 
+v1.6.2 - 2022-04-XX
+-------------------
+
+This is a bugfix release.
+
+Bugfix
+~~~~~~
+
+- Fix incorrect warning of JSON non-serializable field in case of composite
+  types like ``Union``.
+  `#98 <https://github.com/mansenfranzen/autodoc_pydantic/issues/98>`__.
+
+Testing
+~~~~~~~
+
+- Add test to ensure that pydantic field with composite type like ``Union`` is
+  correctly identified as JSON serializable.
+
+Contributors
+~~~~~~~~~~~~
+
+- Thanks to `Czaki <https://github.com/Czaki>`__ for reporting a bug regarding
+  incorrect warning of JSON non-serializable field in case of composite types
+  like ``Union``.
+
 v1.6.1 - 2022-01-28
 -------------------
 
-This is a minor bug release including support for sphinx 4.4.
+This is a minor bugfix release including support for sphinx 4.4.
 
 Bugfix
 ~~~~~~

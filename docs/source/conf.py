@@ -31,7 +31,7 @@ copyright = '2022, Franz Wöllert'
 author = 'Franz Wöllert'
 
 # The full version, including alpha/beta/rc tags
-release = '1.6.1'
+release = '1.6.2'
 
 # -- General configuration ---------------------------------------------------
 
