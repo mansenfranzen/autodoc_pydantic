@@ -71,3 +71,12 @@ def object_is_serializable() -> bool:
     """
 
     return pydantic.version.VERSION[:3] >= "1.9"
+
+
+def requires_forward_ref() -> bool:
+    """Provides compatibility abstraction to define whether forward references
+    require `model.update_forward_refs()` in pydantic.
+
+    """
+
+    return pydantic.version.VERSION[:3] < "1.9"
