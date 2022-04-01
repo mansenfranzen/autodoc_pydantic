@@ -1,6 +1,7 @@
 """This module contains tests regarding the `inspection` module.
 
 """
+from __future__ import annotations
 from typing import TypeVar, Union
 
 try:
