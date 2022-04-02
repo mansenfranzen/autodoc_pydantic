@@ -191,7 +191,6 @@ class FieldInspector(BaseInspectionComposite):
                 for sub_field in field.sub_fields
             )
 
-
         class Cfg:
             arbitrary_types_allowed = True
 
