@@ -188,7 +188,7 @@ class FieldInspector(BaseInspectionComposite):
         if field.sub_fields:
             return all([cls._is_json_serializable(sub_field)
                         for sub_field in field.sub_fields])
-        
+
         class Cfg:
             arbitrary_types_allowed = True
 
@@ -208,7 +208,7 @@ class FieldInspector(BaseInspectionComposite):
 
         return [name for name in self.names
                 if not self.is_json_serializable(name)]
-    
+
     def __bool__(self):
         """Equals to False if no fields are present.
 
