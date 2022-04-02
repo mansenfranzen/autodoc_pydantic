@@ -186,8 +186,11 @@ class FieldInspector(BaseInspectionComposite):
 
         # check for sub fields in case of `Union` or alike, see #98
         if field.sub_fields:
-            return all([cls._is_json_serializable(sub_field)
-                        for sub_field in field.sub_fields])
+            return all(
+                cls._is_json_serializable(sub_field)
+                for sub_field in field.sub_fields
+            )
+
 
         class Cfg:
             arbitrary_types_allowed = True
