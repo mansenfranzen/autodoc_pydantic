@@ -9,6 +9,8 @@ This is a bugfix release.
 Bugfix
 ~~~~~~
 
+- Fix incorrect ``[Required]`` mark for optional fields like ``Optional[int]``
+  `#97 <https://github.com/mansenfranzen/autodoc_pydantic/issues/97>`__.
 - Fix incorrect warning of JSON non-serializable field in case of composite
   types like ``Union``.
   `#98 <https://github.com/mansenfranzen/autodoc_pydantic/issues/98>`__.
@@ -16,6 +18,7 @@ Bugfix
 Testing
 ~~~~~~~
 
+- Add test to ensure that optional fields do not have the ``[Required]`` mark.
 - Add test to ensure that pydantic field with composite type like ``Union`` is
   correctly identified as JSON serializable.
 - Pin ``jinja2<3.1.0`` for ``sphinx<4`` to fix broken CI.
@@ -26,6 +29,9 @@ Contributors
 - Thanks to `Czaki <https://github.com/Czaki>`__ for reporting a bug regarding
   incorrect warning of JSON non-serializable field in case of composite types
   like ``Union``.
+- Thanks to `StigKorsnes <https://github.com/StigKorsnes>`__ for reporting a
+  bug regarding incorrect ``[Required]`` mark for optional fields like
+  ``Optional[int]``
 
 v1.6.1 - 2022-01-28
 -------------------
