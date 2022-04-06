@@ -11,7 +11,7 @@ from typing import NamedTuple, List, Dict, Any, Set, TypeVar, Iterator, Type
 import pydantic
 from pydantic import BaseModel, create_model
 from pydantic.class_validators import Validator
-from pydantic.fields import ModelField, UndefinedType
+from pydantic.fields import ModelField
 from pydantic.schema import get_field_schema_validations
 from sphinx.addnodes import desc_signature
 
