@@ -191,6 +191,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "Czaki",
+      "name": "Grzegorz Bokota",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3826210?v=4",
+      "profile": "https://orcid.org/my-orcid?orcid=0000-0002-5470-1676",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
