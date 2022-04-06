@@ -200,6 +200,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "jgunstone",
+      "name": "jgunstone",
+      "avatar_url": "https://avatars.githubusercontent.com/u/21370980?v=4",
+      "profile": "https://github.com/jgunstone",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
