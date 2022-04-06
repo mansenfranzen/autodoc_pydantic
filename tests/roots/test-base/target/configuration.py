@@ -301,12 +301,12 @@ class ValidatorAsteriskRootValidator(BaseModel):
         return v
 
     @root_validator
-    def check_root(cls, values):
+    def check_root(self, values):
         """Check root."""
         return values
 
     @root_validator(pre=True)
-    def check_root_pre(cls, values):
+    def check_root_pre(self, values):
         """Check root pre."""
         return values
 
