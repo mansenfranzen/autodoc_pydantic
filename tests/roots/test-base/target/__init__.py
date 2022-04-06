@@ -1,1 +1,1 @@
-from target.example_autosummary import AutoSummaryModel
+from target.usage_autosummary import AutoSummaryModel

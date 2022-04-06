@@ -45,6 +45,9 @@ jobs:
           - python_version: "3.10"
             pydantic_version: "19"
             sphinx_version: "44"
+          - python_version: "3.10"
+            pydantic_version: "19"
+            sphinx_version: "45"
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2

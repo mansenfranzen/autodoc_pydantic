@@ -4,20 +4,29 @@ Changelog
 v1.6.2 - 2022-04-XX
 -------------------
 
-This is a bugfix release.
+This is a bugfix release supporting sphinx 4.5.
 
 Bugfix
 ~~~~~~
 
+- Fix incorrect source-to-doc hyperlink in users example section
+  `#96 <https://github.com/mansenfranzen/autodoc_pydantic/issues/96>`__.
 - Fix incorrect ``[Required]`` mark for optional fields like ``Optional[int]``
   `#97 <https://github.com/mansenfranzen/autodoc_pydantic/issues/97>`__.
 - Fix incorrect warning of JSON non-serializable field in case of composite
   types like ``Union``.
   `#98 <https://github.com/mansenfranzen/autodoc_pydantic/issues/98>`__.
 
+Documentation
+~~~~~~~~~~~~~
+
+- Use separate python modules for user's usage and example sections to prevent
+  ambiguous source-to-doc hyperlinks.
+
 Testing
 ~~~~~~~
 
+- Add sphinx 4.5 to CI.
 - Add test to ensure that optional fields do not have the ``[Required]`` mark.
 - Add test to ensure that pydantic field with composite type like ``Union`` is
   correctly identified as JSON serializable.
@@ -26,6 +35,8 @@ Testing
 Contributors
 ~~~~~~~~~~~~
 
+- Thanks to `jgunstone <https://github.com/jgunstone>`__ for reporting a bug
+  regarding incorrect source-to-doc hyperlink in users example section.
 - Thanks to `Czaki <https://github.com/Czaki>`__ for reporting a bug regarding
   incorrect warning of JSON non-serializable field in case of composite types
   like ``Union``.
