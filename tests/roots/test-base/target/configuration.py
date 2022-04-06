@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel, validator, Field, BaseSettings, root_validator
 
 
@@ -365,3 +367,19 @@ class FieldShowRequired(BaseModel):
     """field2"""
     field3: int = Field(default=...)
     """field3"""
+
+
+class FieldShowRequiredNot(BaseModel):
+    """FieldShowRequiredNot"""
+
+    field1: Optional[int]
+    """field1"""
+
+    field2: Optional[int] = 0
+    """field2"""
+
+    field3: int = 0
+    """field3"""
+
+    field4: int = Field(default=0)
+    """field4"""
