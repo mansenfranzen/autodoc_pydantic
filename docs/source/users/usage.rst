@@ -24,18 +24,18 @@ auto-documenters:
 
       .. code-block:: rest
 
-         .. automodule:: target.example_setting
+         .. automodule:: target.usage_automodule
             :members:
 
    .. tab:: *rendered output*
 
-      .. automodule:: target.example_setting
+      .. automodule:: target.usage_automodule
          :members:
          :noindex:
 
    .. tab:: python
 
-      .. autocodeblock:: target.example_setting
+      .. autocodeblock:: target.usage_automodule
 
 autosummary
 ===========
@@ -52,7 +52,7 @@ sufficiently document several python objects at once:
 
       .. code-block:: rest
 
-         .. currentmodule:: target.example_autosummary
+         .. currentmodule:: target.usage_autosummary
 
          .. autosummary::
             :toctree: _autosummary
@@ -62,7 +62,7 @@ sufficiently document several python objects at once:
 
    .. tab:: *rendered output*
 
-      .. currentmodule:: target.example_autosummary
+      .. currentmodule:: target.usage_autosummary
 
       .. autosummary::
          :toctree: _autosummary
@@ -72,7 +72,7 @@ sufficiently document several python objects at once:
 
    .. tab:: python
 
-      .. autocodeblock:: target.example_autosummary
+      .. autocodeblock:: target.usage_autosummary
 
 Please note, this example generates the autosummary table with hyperlinks to
 the corresponding stub pages.
@@ -126,16 +126,16 @@ sensible default settings.
 
       .. code-block:: rest
 
-         .. autopydantic_model:: target.example_model.ExampleModel
+         .. autopydantic_model:: target.usage_model.ExampleModel
 
    .. tab:: *rendered output*
 
-      .. autopydantic_model:: target.example_model.ExampleModel
+      .. autopydantic_model:: target.usage_model.ExampleModel
          :noindex:
 
    .. tab:: python
 
-      .. autocodeblock:: target.example_model
+      .. autocodeblock:: target.usage_model
 
 To overwrite global defaults, the following directive options can be supplied:
 
@@ -154,16 +154,16 @@ Documenting pydantic models behaves exactly like :code:`autopydantic_model`.
 
       .. code-block:: rest
 
-         .. autopydantic_settings:: target.example_setting.ExampleSettings
+         .. autopydantic_settings:: target.usage_setting.ExampleSettings
 
    .. tab:: *rendered output*
 
-      .. autopydantic_settings:: target.example_setting.ExampleSettings
+      .. autopydantic_settings:: target.usage_setting.ExampleSettings
          :noindex:
 
    .. tab:: python
 
-      .. autocodeblock:: target.example_setting
+      .. autocodeblock:: target.usage_setting
 
 To overwrite global defaults, the following directive options can be supplied:
 
@@ -183,16 +183,16 @@ pydantic fields are documented along with its corresponding pydantic model/setti
 
       .. code-block:: rest
 
-         .. autopydantic_field:: target.example_setting.ExampleSettings.field_with_constraints_and_description
+         .. autopydantic_field:: target.usage_setting.ExampleSettings.field_with_constraints_and_description
 
    .. tab:: *rendered output*
 
-      .. autopydantic_field:: target.example_setting.ExampleSettings.field_with_constraints_and_description
+      .. autopydantic_field:: target.usage_setting.ExampleSettings.field_with_constraints_and_description
          :noindex:
 
    .. tab:: python
 
-      .. autocodeblock:: target.example_setting
+      .. autocodeblock:: target.usage_setting
 
 To overwrite global defaults, the following directive options can be supplied:
 
@@ -213,16 +213,16 @@ from its corresponding pydantic model/settings but it is still possible.
 
       .. code-block:: rest
 
-         .. autopydantic_validator:: target.example_setting.ExampleSettings.check_max_length_ten
+         .. autopydantic_validator:: target.usage_setting.ExampleSettings.check_max_length_ten
 
    .. tab:: *rendered output*
 
-      .. autopydantic_validator:: target.example_setting.ExampleSettings.check_max_length_ten
+      .. autopydantic_validator:: target.usage_setting.ExampleSettings.check_max_length_ten
          :noindex:
 
    .. tab:: python
 
-      .. autocodeblock:: target.example_setting
+      .. autocodeblock:: target.usage_setting
 
 To overwrite global defaults, the following directive options can be supplied:
 
@@ -243,16 +243,16 @@ directive is used by the :code:`autopydantic_model` and :code:`autopydantic_sett
 
       .. code-block:: rest
 
-         .. autopydantic_config:: target.example_setting.ExampleSettings.Config
+         .. autopydantic_config:: target.usage_setting.ExampleSettings.Config
 
    .. tab:: *rendered output*
 
-      .. autopydantic_config:: target.example_setting.ExampleSettings.Config
+      .. autopydantic_config:: target.usage_setting.ExampleSettings.Config
          :noindex:
 
    .. tab:: python
 
-      .. autocodeblock:: target.example_setting
+      .. autocodeblock:: target.usage_setting
 
 To overwrite global defaults, the following directive options can be supplied:
 
