@@ -170,12 +170,26 @@ class FieldInspector(BaseInspectionComposite):
 
     def is_json_serializable(self, field_name: str) -> bool:
         """Check if given pydantic field is JSON serializable by calling
-        pydantic's `model.json()` method. Custom objects might not be
+        pydantic's `model.schema()` method. Custom objects might not be
         serializable and hence would break JSON schema generation.
 
         """
 
         field = self.get(field_name)
+        return self._is_json_serializable(field)
+
+    @classmethod
+    def _is_json_serializable(cls, field: ModelField):
+        """Ensure JSON serializability for given pydantic `ModelField`.
+
+        """
+
+        # check for sub fields in case of `Union` or alike, see #98
+        if field.sub_fields:
+            return all(
+                cls._is_json_serializable(sub_field)
+                for sub_field in field.sub_fields
+            )
 
         class Cfg:
             arbitrary_types_allowed = True

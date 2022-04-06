@@ -16,14 +16,13 @@ def desc_annotation_default_value(value: str):
 
     """
 
-    if sphinx.version_info >= (4, 3):
-        from sphinx.addnodes import desc_sig_space
-        return (desc_sig_space,
-                [desc_sig_punctuation, "="],
-                desc_sig_space,
-                value)
-    else:
+    if sphinx.version_info < (4, 3):
         return [desc_annotation, f" = {value}"]
+    from sphinx.addnodes import desc_sig_space
+    return (desc_sig_space,
+            [desc_sig_punctuation, "="],
+            desc_sig_space,
+            value)
 
 
 def desc_annotation_type_annotation(type_str: str) -> Tuple:
@@ -32,13 +31,12 @@ def desc_annotation_type_annotation(type_str: str) -> Tuple:
 
     """
 
-    if sphinx.version_info >= (4, 3):
-        from sphinx.addnodes import desc_sig_space
-        return ([desc_sig_punctuation, ":"],
-                desc_sig_space,
-                [pending_xref, type_str])
-    else:
+    if sphinx.version_info < (4, 3):
         return (": ", [pending_xref, type_str])
+    from sphinx.addnodes import desc_sig_space
+    return ([desc_sig_punctuation, ":"],
+            desc_sig_space,
+            [pending_xref, type_str])
 
 
 def desc_annotation_directive_prefix(prefix: str):
@@ -50,7 +48,7 @@ def desc_annotation_directive_prefix(prefix: str):
     if sphinx.version_info >= (4, 3):
         from sphinx.addnodes import desc_sig_space
         return (prefix, desc_sig_space)
-    return prefix + " "
+    return f'{prefix} '
 
 
 def rst_alias_class_directive() -> str:
@@ -59,9 +57,7 @@ def rst_alias_class_directive() -> str:
 
     """
 
-    if sphinx.version_info >= (4, 3):
-        return ":py:class:"
-    return ":class:"
+    return ":py:class:" if sphinx.version_info >= (4, 3) else ":class:"
 
 
 def object_is_serializable() -> bool:
@@ -71,3 +67,12 @@ def object_is_serializable() -> bool:
     """
 
     return pydantic.version.VERSION[:3] >= "1.9"
+
+
+def requires_forward_ref() -> bool:
+    """Provides compatibility abstraction to define whether forward references
+    require `model.update_forward_refs()` in pydantic.
+
+    """
+
+    return pydantic.version.VERSION[:3] < "1.9"
