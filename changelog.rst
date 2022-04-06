@@ -18,6 +18,7 @@ Testing
 
 - Add test to ensure that pydantic field with composite type like ``Union`` is
   correctly identified as JSON serializable.
+- Pin ``jinja2<3.1.0`` for ``sphinx<4`` to fix broken CI.
 
 Contributors
 ~~~~~~~~~~~~

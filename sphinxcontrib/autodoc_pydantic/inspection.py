@@ -180,7 +180,7 @@ class FieldInspector(BaseInspectionComposite):
 
     @classmethod
     def _is_json_serializable(cls, field: ModelField):
-        """Ensure JSON serializabiltiy for given pydantic `ModelField`.
+        """Ensure JSON serializability for given pydantic `ModelField`.
 
         """
 
