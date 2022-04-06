@@ -11,7 +11,7 @@ from typing import NamedTuple, List, Dict, Any, Set, TypeVar, Iterator, Type
 import pydantic
 from pydantic import BaseModel, create_model
 from pydantic.class_validators import Validator
-from pydantic.fields import ModelField, UndefinedType
+from pydantic.fields import ModelField
 from pydantic.schema import get_field_schema_validations
 from sphinx.addnodes import desc_signature
 
@@ -161,12 +161,7 @@ class FieldInspector(BaseInspectionComposite):
 
         """
 
-        types_to_check = (UndefinedType, type(...))
-        default_value = self.get_property_from_field_info(
-            field_name=field_name,
-            property_name="default")
-
-        return isinstance(default_value, types_to_check)
+        return self.get(field_name).required
 
     def is_json_serializable(self, field_name: str) -> bool:
         """Check if given pydantic field is JSON serializable by calling

@@ -633,6 +633,52 @@ def test_autodoc_pydantic_field_show_required_true(field, autodocument):
     assert result == actual
 
 
+@pytest.mark.parametrize("expected", [("field1", "Optional[int]"),
+                                      ("field2", "Optional[int]"),
+                                      ("field3", "int"),
+                                      ("field4", "int")])
+def test_autodoc_pydantic_field_show_required_true_not(expected, autodocument):
+    """Ensure that fields are not incorrectly tagged as required.
+
+    This relates to #97.
+
+    """
+
+    field, field_type = expected
+
+    result = [
+        f'',
+        f'.. py:pydantic_field:: FieldShowRequiredNot.{field}',
+        '   :module: target.configuration',
+        f'   :type: {field_type}',
+        f'',
+        f'   {field}',
+        f'',
+    ]
+
+    kwargs = dict(
+        object_path=f'target.configuration.FieldShowRequiredNot.{field}',
+        **KWARGS
+    )
+
+    # explict global
+    actual = autodocument(
+        options_app={"autodoc_pydantic_field_show_required": True},
+        **kwargs)
+    assert result == actual
+
+    # explicit local
+    actual = autodocument(options_doc={"field-show-required": True}, **kwargs)
+    assert result == actual
+
+    # explicit local overwrite global
+    actual = autodocument(
+        options_app={"autodoc_pydantic_field_show_required": False},
+        options_doc={"field-show-required": True},
+        **kwargs)
+    assert result == actual
+
+
 @pytest.mark.parametrize("field", ["field1", "field2", "field3"])
 def test_autodoc_pydantic_field_show_required_false(field, autodocument):
     result = [
