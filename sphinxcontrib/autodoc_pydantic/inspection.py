@@ -161,12 +161,7 @@ class FieldInspector(BaseInspectionComposite):
 
         """
 
-        types_to_check = (UndefinedType, type(...))
-        default_value = self.get_property_from_field_info(
-            field_name=field_name,
-            property_name="default")
-
-        return isinstance(default_value, types_to_check)
+        return self.get(field_name).required
 
     def is_json_serializable(self, field_name: str) -> bool:
         """Check if given pydantic field is JSON serializable by calling
