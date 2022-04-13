@@ -239,6 +239,38 @@ def test_autodoc_pydantic_field_show_constraints_true(autodocument):
     assert result == actual
 
 
+def test_autodoc_pydantic_field_show_constraints_ignore_extra_kwargs(autodocument):
+    """Ensure that additional keyword arguments passed to pydantic `Field` are
+    not listed under the field's constraint documentation section.
+
+    This relates to #110.
+
+    """
+
+    kwargs = dict(
+        object_path='target.configuration.FieldShowConstraintsIgnoreExtraKwargs.field',
+        **KWARGS)
+
+    result = [
+        '',
+        '.. py:pydantic_field:: FieldShowConstraintsIgnoreExtraKwargs.field',
+        '   :module: target.configuration',
+        '   :type: int',
+        '',
+        '   Field.',
+        '',
+        '   :Constraints:',
+        '      - **minimum** = 0',
+        '      - **maximum** = 100',
+        ''
+    ]
+
+    actual = autodocument(
+        options_app={"autodoc_pydantic_field_show_constraints": True},
+        **kwargs)
+    assert result == actual
+
+
 def test_autodoc_pydantic_field_show_constraints_false(autodocument):
     kwargs = dict(
         object_path='target.configuration.FieldShowConstraints.field',
