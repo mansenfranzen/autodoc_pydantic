@@ -218,6 +218,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "spacemanspiff2007",
+      "name": "spacemanspiff2007",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10754716?v=4",
+      "profile": "https://github.com/spacemanspiff2007",
+      "contributions": [
+        "bug",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
