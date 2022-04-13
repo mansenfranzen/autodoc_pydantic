@@ -337,6 +337,13 @@ class FieldShowConstraints(BaseModel):
     """Field."""
 
 
+class FieldShowConstraintsIgnoreExtraKwargs(BaseModel):
+    """FieldShowConstraints."""
+
+    field: int = Field(1, ge=0, le=100, non_existing_kwarg=1)
+    """Field."""
+
+
 class FieldShowAlias(BaseModel):
     """FieldShowConstraints."""
 
