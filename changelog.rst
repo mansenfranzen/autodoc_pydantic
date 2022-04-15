@@ -1,7 +1,7 @@
 Changelog
 =========
 
-v1.6.2 - 2022-04-XX
+v1.6.2 - 2022-04-15
 -------------------
 
 This is a documentation and bugfix release supporting sphinx 4.5.
