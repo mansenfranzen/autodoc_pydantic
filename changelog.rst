@@ -4,7 +4,7 @@ Changelog
 v1.6.2 - 2022-04-XX
 -------------------
 
-This is a bugfix release supporting sphinx 4.5.
+This is a documentation and bugfix release supporting sphinx 4.5.
 
 Bugfix
 ~~~~~~
@@ -23,6 +23,9 @@ Bugfix
 Documentation
 ~~~~~~~~~~~~~
 
+- Separate example page into configuration and specifics.
+- Add examples for required and optional values.
+- Add examples for generic models.
 - Use separate python modules for user's usage and example sections to prevent
   ambiguous source-to-doc hyperlinks.
 
