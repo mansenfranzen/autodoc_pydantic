@@ -390,3 +390,16 @@ class FieldShowRequiredNot(BaseModel):
 
     field4: int = Field(default=0)
     """field4"""
+
+
+class FieldShowOptional(BaseModel):
+    """FieldShowOptional"""
+
+    field1: Optional[int]
+    """field1"""
+
+    field2: Optional[int] = Field(default_factory=lambda x: 1)
+    """field2"""
+
+    field3: Optional[int] = ...
+    """field3"""
