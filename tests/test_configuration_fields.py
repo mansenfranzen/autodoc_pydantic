@@ -862,3 +862,108 @@ def test_autodoc_pydantic_field_show_required_false_directive(parse_rst):
     doctree = parse_rst(input_rst,
                         conf={"autodoc_pydantic_field_show_required": True})
     assert_node(doctree, output_nodes)
+
+
+@pytest.mark.parametrize("field", ["field1", "field2"])
+def test_autodoc_pydantic_field_show_optional_true(field, autodocument):
+    kwargs = dict(
+        object_path=f'target.configuration.FieldShowOptional.{field}',
+        **KWARGS)
+
+    result = [
+        '',
+        f'.. py:pydantic_field:: FieldShowOptional.{field}',
+        '   :module: target.configuration',
+        '   :type: Optional[int]',
+        '   :optional:',
+        '',
+        f'   {field}',
+        '',
+    ]
+
+    # explict global
+    actual = autodocument(
+        options_app={"autodoc_pydantic_field_show_optional": True},
+        **kwargs)
+    assert result == actual
+
+    # explicit local
+    actual = autodocument(
+        options_doc={"field-show-optional": True},
+        **kwargs)
+    assert result == actual
+
+    # explicit local overwrite global
+    actual = autodocument(
+        options_app={"autodoc_pydantic_field_show_optional": False},
+        options_doc={"field-show-optional": True},
+        **kwargs)
+    assert result == actual
+
+
+@pytest.mark.parametrize("field", ["field1", "field2"])
+def test_autodoc_pydantic_field_show_optional_false(field, autodocument):
+    kwargs = dict(
+        object_path=f'target.configuration.FieldShowOptional.{field}',
+        **KWARGS)
+
+    result = [
+        '',
+        f'.. py:pydantic_field:: FieldShowOptional.{field}',
+        '   :module: target.configuration',
+        '   :type: Optional[int]',
+        '',
+        f'   {field}',
+        '',
+    ]
+
+    # explict global
+    actual = autodocument(
+        options_app={"autodoc_pydantic_field_show_optional": False},
+        **kwargs)
+    assert result == actual
+
+    # explicit local
+    actual = autodocument(
+        options_doc={"field-show-optional": False},
+        **kwargs)
+    assert result == actual
+
+    # explicit local overwrite global
+    actual = autodocument(
+        options_app={"autodoc_pydantic_field_show_optional": True},
+        options_doc={"field-show-optional": False},
+        **kwargs)
+    assert result == actual
+
+
+@pytest.mark.parametrize("field", ["field1", "field2"])
+def test_autodoc_pydantic_field_show_optional_true_directive(field, parse_rst):
+
+    prefix = desc_annotation_directive_prefix("field")
+    output_nodes = (
+        index,
+        [desc, ([desc_signature, ([desc_annotation, prefix],
+                                  [desc_addname, "FieldShowOptional."],
+                                  [desc_name, field],
+                                  [desc_annotation, " [Optional]"])],
+                [desc_content, ()])
+         ]
+    )
+
+    # explicit local
+    input_rst = [
+        '',
+        f'.. py:pydantic_field:: FieldShowOptional.{field}',
+        '   :module: target.configuration',
+        '   :optional:',
+        ''
+    ]
+
+    doctree = parse_rst(input_rst)
+    assert_node(doctree, output_nodes)
+
+    # explicit local overwrite explict global
+    doctree = parse_rst(input_rst,
+                        conf={"autodoc_pydantic_field_show_optional": False})
+    assert_node(doctree, output_nodes)
