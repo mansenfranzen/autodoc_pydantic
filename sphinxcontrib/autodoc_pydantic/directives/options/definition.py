@@ -13,6 +13,7 @@ from sphinxcontrib.autodoc_pydantic.directives.options.validators import \
 OPTIONS_FIELD = {
     "field-show-default": option_default_true,
     "field-show-required": option_default_true,
+    "field-show-optional": option_default_true,
     "field-signature-prefix": unchanged,
     "field-show-alias": option_default_true,
     "field-show-constraints": option_default_true,
