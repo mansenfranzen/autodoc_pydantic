@@ -488,6 +488,23 @@ Fields
 
 
 .. tabdocconfig:: autopydantic_model
+   :title: Show Optional
+   :path: target.configuration.FieldShowOptional
+   :confpy: autodoc_pydantic_field_show_optional
+   :directive_option: field-show-optional
+   :enable: members, field-show-default
+   :values: True, False
+   :version: 1.7.0
+
+   Add *[Optional]* marker for all pydantic fields that have an undefined
+   default value and which are not required. For instance,
+   ``field: Optional[int]`` is optional while ``field: Optional[int] = ...`` is
+   not. Otherwise, misleading default values like ``PydanticUndefined``
+   are displayed when :ref:`field-show-default <autodoc_pydantic_field_show_default>`
+   is enabled.
+
+
+.. tabdocconfig:: autopydantic_model
    :title: Signature Prefix
    :path: target.configuration.FieldSignaturePrefix
    :confpy: autodoc_pydantic_field_signature_prefix

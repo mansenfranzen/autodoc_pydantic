@@ -11,7 +11,7 @@ from typing import NamedTuple, List, Dict, Any, Set, TypeVar, Iterator, Type
 import pydantic
 from pydantic import BaseModel, create_model
 from pydantic.class_validators import Validator
-from pydantic.fields import ModelField
+from pydantic.fields import ModelField, UndefinedType
 from pydantic.schema import get_field_schema_validations
 from sphinx.addnodes import desc_signature
 
@@ -170,6 +170,18 @@ class FieldInspector(BaseInspectionComposite):
         """
 
         return self.get(field_name).required
+
+    def is_undefined(self, field_name: str) -> bool:
+        """Check if default value of given field is undefined aka
+        `PydanticUndefined`. This information is used to determine if a
+        pydantic field is optional or not.
+
+        """
+
+        default = self.get_property_from_field_info(field_name=field_name,
+                                                    property_name="default")
+
+        return isinstance(default, UndefinedType)
 
     def is_json_serializable(self, field_name: str) -> bool:
         """Check if given pydantic field is JSON serializable by calling
