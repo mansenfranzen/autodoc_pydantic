@@ -56,6 +56,7 @@ CONF_DEACTIVATE = {
     "autodoc_pydantic_field_show_constraints": False,
     "autodoc_pydantic_field_show_alias": False,
     "autodoc_pydantic_field_show_required": False,
+    "autodoc_pydantic_field_show_optional": False,
     "autodoc_pydantic_field_show_default": False,
 
 }
@@ -65,6 +66,7 @@ CONF_DEACTIVATE = {
 def rootdir():
     return path(__file__).parent.abspath() / 'roots'
 
+
 @pytest.fixture(scope='session')
 def docdir():
     """Provides path to actual sphinx documentation of autodoc_pydantic.
@@ -72,6 +74,7 @@ def docdir():
     """
 
     return Path(__file__).parents[1].joinpath("docs", "source")
+
 
 def do_autodoc(app: Sphinx,
                documenter: str,
