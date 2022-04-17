@@ -9,19 +9,36 @@ class RequiredOptionalField(BaseModel):
     """
 
     required_standard: int
-    """No default value given."""
+    """No default value given:
+    
+    :code:`required_standard: int`
+    """
 
-    required_with_none: Optional[int] = ...
-    """Requires either integer or None."""
+    required_optional_with_ellipsis: Optional[int] = ...
+    """Requires either integer or None:
+    
+    :code:`required_optional_with_ellipsis: Optional[int] = ...`
+    """
 
-    required_with_none_field: Optional[int] = Field(...)
-    """Requires either integer or None."""
+    required_optional_with_field: Optional[int] = Field(...)
+    """Requires either integer or None:
+    
+    :code:`required_optional_with_field: Optional[int] = Field(...)`
+    """
 
     optional_standard: int = 1
-    """Optional value. If not given, equals ``1``."""
+    """Optional value with default value *1*:
+    
+    :code:`optional_standard: int = 1`
+    """
 
-    optional_none: Optional[int]
-    """Optional value. If not given, equals ``None``."""
+    optional_with_optional: Optional[int]
+    """Optional value with default value *None*:
+    
+    :code:`optional_with_optional: Optional[int]`"""
 
-    optional_factory: Optional[int] = Field(default_factory=lambda x: 1)
-    """Optional value. If not given, uses ``default_factory``."""
+    optional_with_default_factory: int = Field(default_factory=lambda x: 1)
+    """Optional value with default factory:
+    
+    :code:`optional_with_default_factory: int = Field(default_factory=lambda x: 1)`
+    """
