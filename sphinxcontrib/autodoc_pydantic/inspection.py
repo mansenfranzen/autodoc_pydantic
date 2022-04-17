@@ -171,17 +171,13 @@ class FieldInspector(BaseInspectionComposite):
 
         return self.get(field_name).required
 
-    def is_undefined(self, field_name: str) -> bool:
-        """Check if default value of given field is undefined aka
-        `PydanticUndefined`. This information is used to determine if a
-        pydantic field is optional or not.
+    def has_default_factory(self, field_name: str) -> bool:
+        """Check if field has a `default_factory` being set. This information
+        is used to determine if a pydantic field is optional or not.
 
         """
 
-        default = self.get_property_from_field_info(field_name=field_name,
-                                                    property_name="default")
-
-        return isinstance(default, UndefinedType)
+        return self.get(field_name).default_factory is not None
 
     def is_json_serializable(self, field_name: str) -> bool:
         """Check if given pydantic field is JSON serializable by calling
