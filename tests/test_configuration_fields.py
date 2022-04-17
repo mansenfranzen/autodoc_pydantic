@@ -750,12 +750,18 @@ def test_autodoc_pydantic_field_show_required_false(field, autodocument):
 @pytest.mark.parametrize("field", ["field1", "field2", "field3"])
 def test_autodoc_pydantic_field_show_required_false_show_default_true(
         field, autodocument):
+
+    if pydantic.VERSION < "1.8":
+        value = "Ellipsis"
+    else:
+        value = "None"
+
     result = [
         '',
         f'.. py:pydantic_field:: FieldShowRequired.{field}',
         '   :module: target.configuration',
         '   :type: int',
-        f'   :value: None',
+        f'   :value: {value}',
         '',
         f'   {field}',
         '',
