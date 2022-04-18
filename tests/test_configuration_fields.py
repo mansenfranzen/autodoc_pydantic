@@ -772,13 +772,13 @@ def test_autodoc_pydantic_field_show_required_false_show_default_true(
         options_app={"autodoc_pydantic_field_show_required": False,
                      "autodoc_pydantic_field_show_default": True},
         **kwargs)
-    assert convert_ellipsis_to_none(result) == actual
+    assert result == convert_ellipsis_to_none(actual)
 
     # explicit local
     actual = autodocument(options_doc={"field-show-required": False,
                                        "field-show-default": True},
                           **kwargs)
-    assert convert_ellipsis_to_none(result) == actual
+    assert result == convert_ellipsis_to_none(actual)
 
     # explicit local overwrite global
     actual = autodocument(
@@ -787,7 +787,7 @@ def test_autodoc_pydantic_field_show_required_false_show_default_true(
         options_doc={"field-show-required": False,
                      "field-show-default": True},
         **kwargs)
-    assert convert_ellipsis_to_none(result) == actual
+    assert result == convert_ellipsis_to_none(actual)
 
 
 def test_autodoc_pydantic_field_show_required_true_directive(parse_rst):
