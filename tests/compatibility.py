@@ -3,7 +3,7 @@ differences between different sphinx versions.
 
 """
 
-from typing import Tuple
+from typing import Tuple, List
 
 import pydantic
 import sphinx
@@ -76,3 +76,12 @@ def requires_forward_ref() -> bool:
     """
 
     return pydantic.version.VERSION[:3] < "1.9"
+
+
+def convert_ellipsis_to_none(result: List[str]) -> List[str]:
+    """Eliminate subtle differences in default values of required pydantic
+    fields between various pydantic versions.
+
+    """
+
+    return [x.replace("Ellipsis", "None") for x in result]
