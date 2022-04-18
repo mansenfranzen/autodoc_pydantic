@@ -11,9 +11,6 @@ Changing behavior
 
 - Default values of pydantic fields such as ``UndefinedPydantic`` and
   ``Ellipsis`` will now be shown as ``None``.
-- Default values of pydantic fields no longer use ``Field.field_info.default``
-  but ``Field.default``. As a consequence, default values such as
-  ``UndefinedPydantic`` and ``Ellipsis`` will now be shown as ``None``.
 
 Feature
 ~~~~~~~
