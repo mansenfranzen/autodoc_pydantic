@@ -37,8 +37,8 @@ class RequiredOptionalField(BaseModel):
     
     :code:`optional_with_optional: Optional[int]`"""
 
-    optional_with_default_factory: int = Field(default_factory=lambda x: 1)
+    optional_with_default_factory: int = Field(default_factory=lambda: 1)
     """Optional value with default factory:
     
-    :code:`optional_with_default_factory: int = Field(default_factory=lambda x: 1)`
+    :code:`optional_with_default_factory: int = Field(default_factory=lambda: 1)`
     """
