@@ -474,7 +474,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
     @property
     def needs_required_marker(self) -> bool:
         """Indicate if field should be marked as required.
-        
+
         """
 
         field_name = self.pydantic_field_name
@@ -486,7 +486,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
     @property
     def needs_optional_marker(self) -> bool:
         """Indicate if field should be marked as optional.
-        
+
         """
 
         field_name = self.pydantic_field_name
@@ -498,7 +498,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
 
     def get_default_value(self) -> str:
         """Gets the default value of pydantic field as reST.
-        
+
         """
 
         field_name = self.pydantic_field_name
