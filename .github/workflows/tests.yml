@@ -15,6 +15,9 @@ jobs:
           - python_version: 3.6
             pydantic_version: "15"
             sphinx_version: "34"
+          - python_version: 3.6
+            pydantic_version: "18"
+            sphinx_version: "35"
           - python_version: 3.7
             pydantic_version: "16"
             sphinx_version: "34"
