@@ -756,11 +756,12 @@ def test_autodoc_pydantic_field_show_required_false_show_default_true(
         f'.. py:pydantic_field:: FieldShowRequired.{field}',
         '   :module: target.configuration',
         '   :type: int',
-        f'   :value: None',
+        '   :value: None',
         '',
         f'   {field}',
         '',
     ]
+
 
     kwargs = dict(
         object_path=f'target.configuration.FieldShowRequired.{field}',

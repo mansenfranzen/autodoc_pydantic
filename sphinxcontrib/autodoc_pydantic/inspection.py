@@ -154,10 +154,9 @@ class FieldInspector(BaseInspectionComposite):
         constraints = get_field_schema_validations(field)
         ignore = {"env_names", "env"}
 
-        # ignore additional kwargs from pydantic `Field`, see #110
-        extra_kwargs = self.get_property_from_field_info(field_name=field_name,
-                                                         property_name="extra")
-        if extra_kwargs:
+        if extra_kwargs := self.get_property_from_field_info(
+            field_name=field_name, property_name="extra"
+        ):
             ignore = ignore.union(extra_kwargs.keys())
 
         return {key: value for key, value in constraints.items()

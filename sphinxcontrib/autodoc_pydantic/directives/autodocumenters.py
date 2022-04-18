@@ -84,11 +84,7 @@ class PydanticAutoDoc:
         if self._inspect:
             return self._inspect
 
-        if self._is_child:
-            obj = self._documenter.parent
-        else:
-            obj = self._documenter.object
-
+        obj = self._documenter.parent if self._is_child else self._documenter.object
         self._inspect = ModelInspector(obj)
         return self._inspect
 
@@ -404,11 +400,9 @@ class PydanticSettingsDocumenter(PydanticModelDocumenter):
 
         """
 
-        is_val = super().can_document_member(member,
-                                             membername,
-                                             isattr,
-                                             parent)
-        if is_val:
+        if is_val := super().can_document_member(
+            member, membername, isattr, parent
+        ):
             return issubclass(member, BaseSettings)
         else:
             return False
@@ -534,7 +528,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
 
         if field.alias != field_name:
             sourcename = self.get_sourcename()
-            self.add_line('   :alias: ' + field.alias, sourcename)
+            self.add_line(f'   :alias: {field.alias}', sourcename)
 
     def add_content(self,
                     more_content: Optional[StringList],
@@ -565,9 +559,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
         """
 
         field_name = self.pydantic_field_name
-        constraints = self.pydantic.inspect.fields.get_constraints(field_name)
-
-        if constraints:
+        if constraints := self.pydantic.inspect.fields.get_constraints(field_name):
             source_name = self.get_sourcename()
             self.add_line(":Constraints:", source_name)
             for key, value in constraints.items():
@@ -756,7 +748,7 @@ class PydanticConfigClassDocumenter(ClassDocumenter):
         # overruled by `autodoc_pydantic_config_members` app cfg
         app_cfg = self.pydantic.options.get_app_cfg_by_name("members")
         hide_members = app_cfg is False
-        no_members = bool(self.options.get("members")) is False
+        no_members = not bool(self.options.get("members"))
 
         if hide_members and no_members:
             super().document_members(all_members=False, **kwargs)
