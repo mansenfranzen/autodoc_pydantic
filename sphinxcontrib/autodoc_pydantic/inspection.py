@@ -171,6 +171,14 @@ class FieldInspector(BaseInspectionComposite):
 
         return self.get(field_name).required
 
+    def has_default_factory(self, field_name: str) -> bool:
+        """Check if field has a `default_factory` being set. This information
+        is used to determine if a pydantic field is optional or not.
+
+        """
+
+        return self.get(field_name).default_factory is not None
+
     def is_json_serializable(self, field_name: str) -> bool:
         """Check if given pydantic field is JSON serializable by calling
         pydantic's `model.schema()` method. Custom objects might not be

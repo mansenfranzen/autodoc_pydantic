@@ -1,6 +1,41 @@
 Changelog
 =========
 
+v1.7.0 - 2022-05-XX
+-------------------
+
+This is a feature release.
+
+Changing behavior
+~~~~~~~~~~~~~~~~~
+
+- Default values of pydantic fields such as ``UndefinedPydantic`` and
+  ``Ellipsis`` will now be shown as ``None``.
+
+Feature
+~~~~~~~
+
+- Add ``autodoc_pydantic_field_show_optional`` configuration which provides
+  ``[Optional]`` marker for pydantic fields with ``default_factory``. This
+  configuration is activated by default. If deactivated, default values might
+  be displayed incorrectly. For more, see
+  `#114 <https://github.com/mansenfranzen/autodoc_pydantic/issues/114>`__
+
+Internals
+~~~~~~~~~
+
+- Determining default values of pydantic fields no longer use
+  ``Field.field_info.default`` but ``Field.default``. As a consequence,
+  default values such as ``UndefinedPydantic`` and ``Ellipsis`` will now be
+  shown as ``None``.
+
+Contributors
+~~~~~~~~~~~~
+
+- Thanks to `spacemanspiff2007 <https://github.com/spacemanspiff2007>`__ for
+  providing and supporting a feature request to show ``[Optional]`` marker
+  `#114 <https://github.com/mansenfranzen/autodoc_pydantic/issues/114>`__ .
+
 v1.6.2 - 2022-04-15
 -------------------
 

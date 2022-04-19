@@ -26,7 +26,7 @@ from sphinxcontrib.autodoc_pydantic.directives.directives import (
     PydanticSettings
 )
 
-__version__ = "1.6.2"
+__version__ = "1.7.0"
 
 from sphinxcontrib.autodoc_pydantic.events import add_fallback_css_class
 
@@ -115,6 +115,7 @@ def add_configuration_values(app: Sphinx):
     add(f'{stem}field_show_alias', True, True, bool)
     add(f'{stem}field_show_default', True, True, bool)
     add(f'{stem}field_show_required', True, True, bool)
+    add(f'{stem}field_show_optional', True, True, bool)
     add(f'{stem}field_signature_prefix', "field", True, str)
 
     add(f'{stem}add_fallback_css_class', True, True, bool)

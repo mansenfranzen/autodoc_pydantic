@@ -470,7 +470,7 @@ Fields
    :version: 1.4.0
 
    Provides the pydantic field's default value in the signature. Unfortunately
-   this is not provided by standard sphinx autodoc (as of version 4.1.2).
+   this is not provided by standard sphinx autodoc (as of version 4.5.0).
 
 
 .. tabdocconfig:: autopydantic_model
@@ -481,10 +481,23 @@ Fields
    :enable: members, field-show-default
    :values: True, False
 
-   Add *[Required]* marker for all pydantic fields that do not have a default
-   value. Otherwise, misleading default values like ``PydanticUndefined`` or
-   ``Ellipsis`` are displayed when :ref:`field-show-default <autodoc_pydantic_field_show_default>`
-   is enabled.
+   Add ``[Required]`` marker for all pydantic fields that do not have a default
+   value. Otherwise, misleading ``None`` is displayed when
+   :ref:`field-show-default <autodoc_pydantic_field_show_default>` is enabled.
+
+
+.. tabdocconfig:: autopydantic_model
+   :title: Show Optional
+   :path: target.configuration.FieldShowOptional
+   :confpy: autodoc_pydantic_field_show_optional
+   :directive_option: field-show-optional
+   :enable: members, field-show-default
+   :values: True, False
+   :version: 1.7.0
+
+   Add ``[Optional]`` marker for all pydantic fields that have a
+   ``default_factory``. Otherwise, misleading ``None`` is  displayed when
+   :ref:`field-show-default <autodoc_pydantic_field_show_default>` is enabled.
 
 
 .. tabdocconfig:: autopydantic_model

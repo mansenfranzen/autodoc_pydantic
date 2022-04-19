@@ -159,21 +159,24 @@ Required/Optional fields
 
 Pydantic has different ways to represent required or optional fields as
 described in the `official documentation <https://pydantic-docs.helpmanual.io/usage/models/#required-optional-fields>`_ .
-The following example outlines all available combinations:
+The following example outlines all available combinations with the default
+**autodoc_pydantic** settings:
 
 .. tabs::
 
    .. tab:: *rendered output*
 
-      .. automodule:: target.example_required_optional_fields
-         :members:
+      .. autopydantic_model:: target.example_required_optional_fields.RequiredOptionalField
+         :member-order: bysource
+         :model-summary-list-order: bysource
 
    .. tab:: reST
 
       .. code-block::
 
-         .. automodule:: target.example_required_optional_fields
-            :members:
+         .. autopydantic_model:: target.example_required_optional_fields.RequiredOptionalField
+            :member-order: bysource
+            :model-summary-list-order: bysource
 
    .. tab:: python
 

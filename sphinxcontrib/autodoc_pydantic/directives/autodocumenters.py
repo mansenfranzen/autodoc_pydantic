@@ -466,31 +466,63 @@ class PydanticFieldDocumenter(AttributeDocumenter):
 
         super().add_directive_header(sig)
 
-        self.add_default_value_or_required()
+        self.add_default_value_or_marker()
 
         if self.pydantic.options.is_true("field-show-alias"):
             self.add_alias()
 
-    def add_default_value_or_required(self):
-        """Adds default value or required marker.
+    @property
+    def needs_required_marker(self) -> bool:
+        """Indicate if field should be marked as required.
 
         """
 
         field_name = self.pydantic_field_name
         is_required = self.pydantic.inspect.fields.is_required(field_name)
-        show_default = self.pydantic.options.is_true("field-show-default")
         show_required = self.pydantic.options.is_true("field-show-required")
 
-        if show_required and is_required:
-            sourcename = self.get_sourcename()
+        return is_required and show_required
+
+    @property
+    def needs_optional_marker(self) -> bool:
+        """Indicate if field should be marked as optional.
+
+        """
+
+        field_name = self.pydantic_field_name
+        check_func = self.pydantic.inspect.fields.has_default_factory
+        has_default_factory = check_func(field_name)
+        show_optional = self.pydantic.options.is_true("field-show-optional")
+
+        return has_default_factory and show_optional
+
+    def get_default_value(self) -> str:
+        """Gets the default value of pydantic field as reST.
+
+        """
+
+        field_name = self.pydantic_field_name
+        default = self.pydantic.inspect.fields.get(field_name).default
+        value = object_description(default)
+
+        return f'   :value: {value}'
+
+    def add_default_value_or_marker(self):
+        """Adds default value or a marker for field being required or optional.
+
+        """
+
+        sourcename = self.get_sourcename()
+
+        show_default = self.pydantic.options.is_true("field-show-default")
+        if self.needs_required_marker:
             self.add_line('   :required:', sourcename)
 
+        elif self.needs_optional_marker:
+            self.add_line('   :optional:', sourcename)
+
         elif show_default:
-            func = self.pydantic.inspect.fields.get_property_from_field_info
-            default = func(field_name, "default")
-            value = object_description(default)
-            sourcename = self.get_sourcename()
-            self.add_line('   :value: ' + value, sourcename)
+            self.add_line(self.get_default_value(), sourcename)
 
     def add_alias(self):
         """Adds alias directive option.

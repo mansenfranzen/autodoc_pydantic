@@ -87,6 +87,7 @@ class PydanticField(PydanticDirectiveBase, PyAttribute):
     option_spec = PyAttribute.option_spec.copy()
     option_spec.update({"alias": unchanged,
                         "required": option_default_true,
+                        "optional": option_default_true,
                         "__doc_disable_except__": option_list_like,
                         "field-signature-prefix": unchanged})
 
@@ -100,6 +101,14 @@ class PydanticField(PydanticDirectiveBase, PyAttribute):
 
         if self.options.get("required"):
             signode += desc_annotation("", " [Required]")
+
+    def add_optional(self, signode: desc_signature):
+        """Add `[Optional]` if directive option `optional` is set.
+
+        """
+
+        if self.options.get("optional"):
+            signode += desc_annotation("", " [Optional]")
 
     def add_alias(self, signode: desc_signature):
         """Add alias to signature if alias is provided via directive option.
@@ -117,6 +126,7 @@ class PydanticField(PydanticDirectiveBase, PyAttribute):
 
         fullname, prefix = super().handle_signature(sig, signode)
         self.add_required(signode)
+        self.add_optional(signode)
         self.add_alias(signode)
 
         return fullname, prefix
