@@ -318,16 +318,11 @@ def test_autodoc_pydantic_field_show_alias_true(autodocument):
         '   :module: target.configuration',
         '   :type: int',
         '   :alias: field2',
+        '   :field-show-alias: True',
         '',
         '   Field.',
         '',
     ]
-
-    # explict global
-    actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_alias": True},
-        **kwargs)
-    assert result == actual
 
     # explicit local
     actual = autodocument(
@@ -365,6 +360,17 @@ def test_autodoc_pydantic_field_show_alias_false(autodocument):
     assert result == actual
 
     # explicit local
+    result = [
+        '',
+        '.. py:pydantic_field:: FieldShowAlias.field',
+        '   :module: target.configuration',
+        '   :type: int',
+        '   :field-show-alias: False',
+        '',
+        '   Field.',
+        '',
+    ]
+
     actual = autodocument(
         options_doc={"field-show-alias": False},
         **kwargs)
@@ -378,7 +384,46 @@ def test_autodoc_pydantic_field_show_alias_false(autodocument):
     assert result == actual
 
 
-def test_autodoc_pydantic_field_show_alias_true_directive(parse_rst):
+def test_autodoc_pydantic_field_show_alias_true_directive_local(parse_rst):
+    """Tests pydantic_validator directive.
+
+    """
+
+    default_value = desc_annotation_default_value("1")
+    prefix = desc_annotation_directive_prefix("field")
+
+    output_nodes = (
+        index,
+        [desc, ([desc_signature, ([desc_annotation, prefix],
+                                  [desc_addname, "FieldShowAlias."],
+                                  [desc_name, "field"],
+                                  default_value,
+                                  [desc_annotation, " (alias 'field2')"])],
+                [desc_content, ()])
+         ]
+    )
+
+    # explicit local
+    input_rst = [
+        '',
+        '.. py:pydantic_field:: FieldShowAlias.field',
+        '   :module: target.configuration',
+        '   :value: 1',
+        '   :field-show-alias:',
+        '   :alias: field2',
+        ''
+    ]
+
+    doctree = parse_rst(input_rst)
+    assert_node(doctree, output_nodes)
+
+    # explicit local overwrite explict global
+    doctree = parse_rst(input_rst,
+                        conf={"autodoc_pydantic_field_show_alias": False})
+    assert_node(doctree, output_nodes)
+
+
+def test_autodoc_pydantic_field_show_alias_true_directive_global(parse_rst):
     """Tests pydantic_validator directive.
 
     """
@@ -407,14 +452,7 @@ def test_autodoc_pydantic_field_show_alias_true_directive(parse_rst):
         ''
     ]
 
-    doctree = parse_rst(input_rst)
-    assert_node(doctree, output_nodes)
-
     # explicit local overwrite explict global
-    doctree = parse_rst(input_rst,
-                        conf={"autodoc_pydantic_field_show_alias": False})
-    assert_node(doctree, output_nodes)
-
     doctree = parse_rst(input_rst,
                         conf={"autodoc_pydantic_field_show_alias": True})
     assert_node(doctree, output_nodes)
@@ -444,6 +482,8 @@ def test_autodoc_pydantic_field_show_alias_false_directive(parse_rst):
         '.. py:pydantic_field:: FieldShowAlias.field',
         '   :module: target.configuration',
         '   :value: 1',
+        '   :alias: foobar',
+        '   :field-show-alias: False',
         ''
     ]
 
@@ -451,18 +491,6 @@ def test_autodoc_pydantic_field_show_alias_false_directive(parse_rst):
     assert_node(doctree, output_nodes)
 
     # explicit local overwrite explict global
-    doctree = parse_rst(input_rst,
-                        conf={"autodoc_pydantic_field_show_alias": True})
-    assert_node(doctree, output_nodes)
-
-    # explicit global
-    input_rst = [
-        '',
-        '.. py:pydantic_field:: FieldShowAlias.field',
-        '   :module: target.configuration',
-        '   :value: 1',
-        ''
-    ]
     doctree = parse_rst(input_rst,
                         conf={"autodoc_pydantic_field_show_alias": True})
     assert_node(doctree, output_nodes)
@@ -750,7 +778,6 @@ def test_autodoc_pydantic_field_show_required_false(field, autodocument):
 @pytest.mark.parametrize("field", ["field1", "field2", "field3"])
 def test_autodoc_pydantic_field_show_required_false_show_default_true(
         field, autodocument):
-
     result = [
         '',
         f'.. py:pydantic_field:: FieldShowRequired.{field}',
@@ -813,6 +840,7 @@ def test_autodoc_pydantic_field_show_required_true_directive(parse_rst):
         '.. py:pydantic_field:: FieldShowRequired.field',
         '   :module: target.configuration',
         '   :required:',
+        '   :field-show-alias:',
         '   :alias: field2',
         ''
     ]
@@ -847,6 +875,7 @@ def test_autodoc_pydantic_field_show_required_false_directive(parse_rst):
         '',
         '.. py:pydantic_field:: FieldShowRequired.field',
         '   :module: target.configuration',
+        '   :field-show-alias:',
         '   :alias: field2',
         ''
     ]
@@ -1006,4 +1035,261 @@ def test_autodoc_pydantic_field_show_optional_true_directive(field, parse_rst):
     # explicit local overwrite explict global
     doctree = parse_rst(input_rst,
                         conf={"autodoc_pydantic_field_show_optional": False})
+    assert_node(doctree, output_nodes)
+
+
+def test_autodoc_pydantic_field_swap_name_and_alias_with_alias(autodocument):
+    kwargs = dict(
+        object_path=f'target.configuration.FieldSwapNameAndAlias.field1',
+        **KWARGS)
+
+    result = [
+        '',
+        '.. py:pydantic_field:: FieldSwapNameAndAlias.field1',
+        '   :module: target.configuration',
+        '   :type: int',
+        '   :alias: field 1 alias',
+        '   :field-show-alias: True',
+        '   :field-swap-name-and-alias: True',
+        '',
+        '   Field1',
+        '',
+    ]
+
+    # explicit local
+    actual = autodocument(
+        options_doc={"field-swap-name-and-alias": True,
+                     "field-show-alias": True},
+        **kwargs)
+    assert result == actual
+
+    # explicit local overwrite global
+    actual = autodocument(
+        options_app={"autodoc_pydantic_field_swap_name_and_alias": False,
+                     "autodoc_pydantic_field_show_alias": False},
+        options_doc={"field-swap-name-and-alias": True,
+                     "field-show-alias": True},
+        **kwargs)
+    assert result == actual
+
+
+def test_autodoc_pydantic_field_swap_name_and_alias_with_alias_directive_local(
+        parse_rst):
+    prefix = desc_annotation_directive_prefix("field")
+    output_nodes = (
+        index,
+        [desc, ([desc_signature, ([desc_annotation, prefix],
+                                  [desc_addname, "FieldSwapNameAndAlias."],
+                                  [desc_name, "field 1 alias"],
+                                  [desc_annotation, " (name 'field1')"])],
+                [desc_content, ()])
+         ]
+    )
+
+    # explicit local
+    input_rst = [
+        '',
+        '.. py:pydantic_field:: FieldSwapNameAndAlias.field1',
+        '   :module: target.configuration',
+        '   :field-swap-name-and-alias:',
+        '   :field-show-alias:',
+        '   :alias: field 1 alias',
+        ''
+    ]
+
+    doctree = parse_rst(input_rst)
+    assert_node(doctree, output_nodes)
+
+    # explicit local overwrite explict global
+    doctree = parse_rst(
+        input_rst,
+        conf={"autodoc_pydantic_field_swap_name_and_alias": False})
+    assert_node(doctree, output_nodes)
+
+
+def test_autodoc_pydantic_field_swap_name_and_alias_with_alias_directive_global(
+        parse_rst):
+    prefix = desc_annotation_directive_prefix("field")
+    output_nodes = (
+        index,
+        [desc, ([desc_signature, ([desc_annotation, prefix],
+                                  [desc_addname, "FieldSwapNameAndAlias."],
+                                  [desc_name, "field 1 alias"],
+                                  [desc_annotation, " (name 'field1')"])],
+                [desc_content, ()])
+         ]
+    )
+
+    # explicit local
+    input_rst = [
+        '',
+        '.. py:pydantic_field:: FieldSwapNameAndAlias.field1',
+        '   :module: target.configuration',
+        '   :alias: field 1 alias',
+        ''
+    ]
+
+    # explicit local overwrite explict global
+    doctree = parse_rst(
+        input_rst,
+        conf={"autodoc_pydantic_field_swap_name_and_alias": True,
+              "autodoc_pydantic_field_show_alias": True})
+    assert_node(doctree, output_nodes)
+
+
+def test_autodoc_pydantic_field_swap_name_and_alias_true(autodocument):
+    kwargs = dict(
+        object_path=f'target.configuration.FieldSwapNameAndAlias.field1',
+        **KWARGS)
+
+    result = [
+        '',
+        '.. py:pydantic_field:: FieldSwapNameAndAlias.field1',
+        '   :module: target.configuration',
+        '   :type: int',
+        '   :alias: field 1 alias',
+        '   :field-swap-name-and-alias: True',
+        '',
+        '   Field1',
+        '',
+    ]
+
+    # explicit local
+    actual = autodocument(
+        options_doc={"field-swap-name-and-alias": True},
+        **kwargs)
+    assert result == actual
+
+    # explicit local overwrite global
+    actual = autodocument(
+        options_app={"autodoc_pydantic_field_swap_name_and_alias": False},
+        options_doc={"field-swap-name-and-alias": True},
+        **kwargs)
+    assert result == actual
+
+
+def test_autodoc_pydantic_field_swap_name_and_alias_false(autodocument):
+    kwargs = dict(
+        object_path=f'target.configuration.FieldSwapNameAndAlias.field1',
+        **KWARGS)
+
+    result = [
+        '',
+        '.. py:pydantic_field:: FieldSwapNameAndAlias.field1',
+        '   :module: target.configuration',
+        '   :type: int',
+        '   :field-swap-name-and-alias: False',
+        '',
+        '   Field1',
+        '',
+    ]
+
+    # explicit local
+    actual = autodocument(
+        options_doc={"field-swap-name-and-alias": False},
+        **kwargs)
+    assert result == actual
+
+    # explicit local overwrite global
+    actual = autodocument(
+        options_app={"autodoc_pydantic_field_swap_name_and_alias": True},
+        options_doc={"field-swap-name-and-alias": False},
+        **kwargs)
+    assert result == actual
+
+
+def test_autodoc_pydantic_field_swap_name_and_alias_true_directive_local(
+        parse_rst):
+
+    prefix = desc_annotation_directive_prefix("field")
+    output_nodes = (
+        index,
+        [desc, ([desc_signature, ([desc_annotation, prefix],
+                                  [desc_addname, "FieldSwapNameAndAlias."],
+                                  [desc_name, "field 1 alias"])],
+                [desc_content, ()])
+         ]
+    )
+
+    # explicit local
+    input_rst = [
+        '',
+        '.. py:pydantic_field:: FieldSwapNameAndAlias.field1',
+        '   :module: target.configuration',
+        '   :field-swap-name-and-alias:',
+        '   :field-show-alias: False',
+        '   :alias: field 1 alias',
+        ''
+    ]
+
+    doctree = parse_rst(input_rst)
+    assert_node(doctree, output_nodes)
+
+    # explicit local overwrite explict global
+    doctree = parse_rst(
+        input_rst,
+        conf={"autodoc_pydantic_field_swap_name_and_alias": False})
+    assert_node(doctree, output_nodes)
+
+
+def test_autodoc_pydantic_field_swap_name_and_alias_false_directive_local(
+        parse_rst):
+
+    prefix = desc_annotation_directive_prefix("field")
+    output_nodes = (
+        index,
+        [desc, ([desc_signature, ([desc_annotation, prefix],
+                                  [desc_addname, "FieldSwapNameAndAlias."],
+                                  [desc_name, "field1"])],
+                [desc_content, ()])
+         ]
+    )
+
+    # explicit local
+    input_rst = [
+        '',
+        '.. py:pydantic_field:: FieldSwapNameAndAlias.field1',
+        '   :module: target.configuration',
+        '   :field-swap-name-and-alias: False',
+        '   :field-show-alias: False',
+        '   :alias: field 1 alias',
+        ''
+    ]
+
+    doctree = parse_rst(input_rst)
+    assert_node(doctree, output_nodes)
+
+    # explicit local overwrite explict global
+    doctree = parse_rst(
+        input_rst,
+        conf={"autodoc_pydantic_field_swap_name_and_alias": True})
+    assert_node(doctree, output_nodes)
+
+
+def test_autodoc_pydantic_field_swap_name_and_alias_true_directive_global(
+        parse_rst):
+
+    prefix = desc_annotation_directive_prefix("field")
+    output_nodes = (
+        index,
+        [desc, ([desc_signature, ([desc_annotation, prefix],
+                                  [desc_addname, "FieldSwapNameAndAlias."],
+                                  [desc_name, "field 1 alias"])],
+                [desc_content, ()])
+         ]
+    )
+
+    # explicit local
+    input_rst = [
+        '',
+        '.. py:pydantic_field:: FieldSwapNameAndAlias.field1',
+        '   :module: target.configuration',
+        '   :alias: field 1 alias',
+        ''
+    ]
+
+    doctree = parse_rst(
+        input_rst,
+        conf={"autodoc_pydantic_field_swap_name_and_alias": True,
+              "autodoc_pydantic_field_show_alias": False})
     assert_node(doctree, output_nodes)

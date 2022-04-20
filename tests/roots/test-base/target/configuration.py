@@ -345,9 +345,9 @@ class FieldShowConstraintsIgnoreExtraKwargs(BaseModel):
 
 
 class FieldShowAlias(BaseModel):
-    """FieldShowConstraints."""
+    """FieldShowAlias."""
 
-    field: int = Field(1, alias="field2", env="field2")
+    field: int = Field(1, alias="field2")
     """Field."""
 
 
@@ -416,3 +416,10 @@ class FieldShowOptionalNot(BaseModel):
 
     field4: int = Field(default=0)
     """field4"""
+
+
+class FieldSwapNameAndAlias(BaseModel):
+    """FieldSwapNameAndAlias"""
+
+    field1: int = Field(default=1, alias="field 1 alias")
+    """Field1"""
