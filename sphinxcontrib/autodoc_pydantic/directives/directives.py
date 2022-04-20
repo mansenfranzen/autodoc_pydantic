@@ -9,9 +9,9 @@ from docutils.nodes import Text
 from docutils.parsers.rst.directives import unchanged
 from sphinx.addnodes import (
     desc_signature,
-    desc_annotation
+    desc_annotation, desc_name
 )
-from sphinx.domains.python import PyMethod, PyAttribute, PyClasslike
+from sphinx.domains.python import PyMethod, PyAttribute, PyClasslike, py_sig_re
 from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector
 from sphinxcontrib.autodoc_pydantic.directives.options.composites import (
     DirectiveOptions
@@ -86,6 +86,8 @@ class PydanticField(PydanticDirectiveBase, PyAttribute):
 
     option_spec = PyAttribute.option_spec.copy()
     option_spec.update({"alias": unchanged,
+                        "field-show-alias": option_default_true,
+                        "field-swap-name-and-alias": option_default_true,
                         "required": option_default_true,
                         "optional": option_default_true,
                         "__doc_disable_except__": option_list_like,
@@ -93,6 +95,14 @@ class PydanticField(PydanticDirectiveBase, PyAttribute):
 
     config_name = "field"
     default_prefix = "attribute"
+
+    def get_field_name(self, sig: str) -> str:
+        """Get field name from signature. Borrows implementation from
+        `PyObject.handle_signature`.
+
+        """
+
+        return py_sig_re.match(sig).groups()[1]
 
     def add_required(self, signode: desc_signature):
         """Add `[Required]` if directive option `required` is set.
@@ -110,14 +120,67 @@ class PydanticField(PydanticDirectiveBase, PyAttribute):
         if self.options.get("optional"):
             signode += desc_annotation("", " [Optional]")
 
-    def add_alias(self, signode: desc_signature):
-        """Add alias to signature if alias is provided via directive option.
+    def add_alias_or_name(self, sig: str, signode: desc_signature):
+        """Add alias or name to signature.
+
+         Alias is added if `show-alias` is enabled. Name is added if both
+         `show-alias` and `swap-name-and-alias` is enabled.
 
         """
 
-        alias = self.options.get("alias")
-        if alias:
-            signode += desc_annotation("", f" (alias '{alias}')")
+        if not self.pyautodoc.get_value("field-show-alias"):
+            return
+
+        elif self.pyautodoc.is_true("field-swap-name-and-alias"):
+            prefix = "name"
+            value = self.get_field_name(sig)
+
+        else:
+            prefix = "alias"
+            value = self.options.get("alias")
+
+        signode += desc_annotation("", f" ({prefix} '{value}')")
+
+    def _find_desc_name_node(self,
+                             sig: str,
+                             signode: desc_signature) -> desc_name:
+        """Return `desc_name` node  from `signode` that contains the field
+        name. This is used to replace the name with the alias.
+
+        """
+
+        name = self.get_field_name(sig)
+
+        for node in signode.children:
+            has_correct_text = node.astext() == name
+            is_desc_name = isinstance(node, desc_name)
+
+            if has_correct_text and is_desc_name:
+                return node
+
+    def swap_name_and_alias(self, sig: str, signode: desc_signature):
+        """Replaces name with alias if `swap-name-and-alias` is enabled.
+
+        Requires to replace existing `addnodes.desc_name` because name node is
+        added within `handle_signature` and this can't be intercepted or
+        overwritten otherwise.
+
+        """
+
+        if not self.pyautodoc.get_value("field-swap-name-and-alias"):
+            return
+
+        name_node = self._find_desc_name_node(sig, signode)
+
+        if not name_node:
+            logger = sphinx.util.logging.getLogger(__name__)
+            logger.warning("Field's `desc_name` node can't be located to "
+                           "swap name with alias.",
+                           location="autodoc_pydantic")
+        else:
+            text_node = Text(self.options.get("alias"))
+            text_node.parent = name_node
+            name_node.children[0] = text_node
 
     def handle_signature(self, sig: str, signode: desc_signature) -> TUPLE_STR:
         """Optionally call add alias method.
@@ -127,7 +190,10 @@ class PydanticField(PydanticDirectiveBase, PyAttribute):
         fullname, prefix = super().handle_signature(sig, signode)
         self.add_required(signode)
         self.add_optional(signode)
-        self.add_alias(signode)
+
+        if self.options.get("alias") is not None:
+            self.add_alias_or_name(sig, signode)
+            self.swap_name_and_alias(sig, signode)
 
         return fullname, prefix
 

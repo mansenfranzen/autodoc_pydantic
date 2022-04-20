@@ -428,6 +428,8 @@ class PydanticFieldDocumenter(AttributeDocumenter):
 
     pyautodoc_pass_to_directive = (
         "field-signature-prefix",
+        "field-show-alias",
+        "field-swap-name-and-alias"
     )
 
     def __init__(self, *args):
@@ -467,9 +469,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
         super().add_directive_header(sig)
 
         self.add_default_value_or_marker()
-
-        if self.pydantic.options.is_true("field-show-alias"):
-            self.add_alias()
+        self.add_alias()
 
     @property
     def needs_required_marker(self) -> bool:
@@ -531,8 +531,13 @@ class PydanticFieldDocumenter(AttributeDocumenter):
 
         field_name = self.pydantic_field_name
         field = self.pydantic.inspect.fields.get(field_name)
+        alias_given = field.alias != field_name
 
-        if field.alias != field_name:
+        show_alias = self.pydantic.options.is_true("field-show-alias")
+        swap = self.pydantic.options.is_true("field-swap-name-and-alias")
+        alias_required = show_alias or swap
+
+        if alias_given and alias_required:
             sourcename = self.get_sourcename()
             self.add_line('   :alias: ' + field.alias, sourcename)
 
