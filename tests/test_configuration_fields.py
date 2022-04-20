@@ -783,11 +783,12 @@ def test_autodoc_pydantic_field_show_required_false_show_default_true(
         f'.. py:pydantic_field:: FieldShowRequired.{field}',
         '   :module: target.configuration',
         '   :type: int',
-        f'   :value: None',
+        '   :value: None',
         '',
         f'   {field}',
         '',
     ]
+
 
     kwargs = dict(
         object_path=f'target.configuration.FieldShowRequired.{field}',
@@ -1040,8 +1041,10 @@ def test_autodoc_pydantic_field_show_optional_true_directive(field, parse_rst):
 
 def test_autodoc_pydantic_field_swap_name_and_alias_with_alias(autodocument):
     kwargs = dict(
-        object_path=f'target.configuration.FieldSwapNameAndAlias.field1',
-        **KWARGS)
+        object_path='target.configuration.FieldSwapNameAndAlias.field1',
+        **KWARGS
+    )
+
 
     result = [
         '',
@@ -1139,8 +1142,10 @@ def test_autodoc_pydantic_field_swap_name_and_alias_with_alias_directive_global(
 
 def test_autodoc_pydantic_field_swap_name_and_alias_true(autodocument):
     kwargs = dict(
-        object_path=f'target.configuration.FieldSwapNameAndAlias.field1',
-        **KWARGS)
+        object_path='target.configuration.FieldSwapNameAndAlias.field1',
+        **KWARGS
+    )
+
 
     result = [
         '',
@@ -1170,8 +1175,10 @@ def test_autodoc_pydantic_field_swap_name_and_alias_true(autodocument):
 
 def test_autodoc_pydantic_field_swap_name_and_alias_false(autodocument):
     kwargs = dict(
-        object_path=f'target.configuration.FieldSwapNameAndAlias.field1',
-        **KWARGS)
+        object_path='target.configuration.FieldSwapNameAndAlias.field1',
+        **KWARGS
+    )
+
 
     result = [
         '',

@@ -45,12 +45,10 @@ class PydanticDirectiveBase:
         prefix = self.pyautodoc.get_value(config_name)
         value = prefix or self.default_prefix
 
-        # account for changed signature in sphinx 4.3, see #62
-        if sphinx.version_info >= (4, 3):
-            from sphinx.addnodes import desc_sig_space
-            return [Text(value), desc_sig_space()]
-        else:
+        if sphinx.version_info < (4, 3):
             return f"{value} "
+        from sphinx.addnodes import desc_sig_space
+        return [Text(value), desc_sig_space()]
 
 
 class PydanticModel(PydanticDirectiveBase, PyClasslike):
@@ -170,17 +168,15 @@ class PydanticField(PydanticDirectiveBase, PyAttribute):
         if not self.pyautodoc.get_value("field-swap-name-and-alias"):
             return
 
-        name_node = self._find_desc_name_node(sig, signode)
-
-        if not name_node:
+        if name_node := self._find_desc_name_node(sig, signode):
+            text_node = Text(self.options.get("alias"))
+            text_node.parent = name_node
+            name_node.children[0] = text_node
+        else:
             logger = sphinx.util.logging.getLogger(__name__)
             logger.warning("Field's `desc_name` node can't be located to "
                            "swap name with alias.",
                            location="autodoc_pydantic")
-        else:
-            text_node = Text(self.options.get("alias"))
-            text_node.parent = name_node
-            name_node.children[0] = text_node
 
     def handle_signature(self, sig: str, signode: desc_signature) -> TUPLE_STR:
         """Optionally call add alias method.

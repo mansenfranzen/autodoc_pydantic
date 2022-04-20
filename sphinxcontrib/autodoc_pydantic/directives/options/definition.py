@@ -2,6 +2,7 @@
 
 """
 
+
 from docutils.parsers.rst.directives import unchanged
 
 from sphinxcontrib.autodoc_pydantic.directives.options.enums import \
@@ -35,9 +36,7 @@ OPTIONS_CONFIG = {"members": option_members,
                   "__doc_disable_except__": option_list_like}
 """Represents added directive options for :class:`PydanticConfigDocumenter`."""
 
-OPTIONS_MERGED = {**OPTIONS_FIELD,
-                  **OPTIONS_VALIDATOR,
-                  **OPTIONS_CONFIG}
+OPTIONS_MERGED = OPTIONS_FIELD | OPTIONS_VALIDATOR | OPTIONS_CONFIG
 
 OPTIONS_MODEL = {
     "model-show-json": option_default_true,
