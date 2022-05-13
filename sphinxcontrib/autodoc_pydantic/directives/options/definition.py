@@ -26,6 +26,7 @@ OPTIONS_FIELD = {
 OPTIONS_VALIDATOR = {"validator-replace-signature": option_default_true,
                      "validator-list-fields": option_default_true,
                      "validator-signature-prefix": unchanged,
+                     "field-swap-name-and-alias": option_default_true,
                      "__doc_disable_except__": option_list_like}
 """Represents added directive options for :class:`PydanticValidatorDocumenter`.
 """

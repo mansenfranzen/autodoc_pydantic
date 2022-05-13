@@ -206,7 +206,8 @@ class PydanticValidator(PydanticDirectiveBase, PyMethod):
     option_spec = PyMethod.option_spec.copy()
     option_spec.update({"validator-replace-signature": option_default_true,
                         "__doc_disable_except__": option_list_like,
-                        "validator-signature-prefix": unchanged})
+                        "validator-signature-prefix": unchanged,
+                        "field-swap-name-and-alias": option_default_true})
 
     config_name = "validator"
     default_prefix = "classmethod"
@@ -229,12 +230,14 @@ class PydanticValidator(PydanticDirectiveBase, PyMethod):
 
         # add field reference nodes
         mapping_first = mappings[0]
-        signode += create_field_href(name=mapping_first.field_name,
+        name = inspector.fields.get_alias_or_name(mapping_first.field_name)
+        signode += create_field_href(name=name,
                                      ref=mapping_first.field_ref,
                                      env=self.env)
         for mapping in mappings[1:]:
+            name = inspector.fields.get_alias_or_name(mapping.field_name)
             signode += desc_annotation("", ", ")
-            signode += create_field_href(name=mapping.field_name,
+            signode += create_field_href(name=name,
                                          ref=mapping.field_ref,
                                          env=self.env)
 
