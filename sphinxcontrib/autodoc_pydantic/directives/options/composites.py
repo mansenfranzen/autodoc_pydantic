@@ -4,7 +4,7 @@ management of directive options.
 
 """
 import functools
-from typing import Any, Union, Set
+from typing import Any, Union, Set, Optional
 
 from docutils.parsers.rst import Directive
 from sphinx.ext.autodoc import ALL, Documenter, Options
@@ -43,7 +43,7 @@ class DirectiveOptions:
             self.set_default_option(option)
 
     @staticmethod
-    def sanitize_configuration_option_name(name: str) -> str:
+    def determine_app_cfg_name(name: str) -> str:
         """Provide full app environment configuration name for given option
         name while converting "-" to "_".
 
@@ -82,7 +82,7 @@ class DirectiveOptions:
 
         """
 
-        config_name = self.sanitize_configuration_option_name(name)
+        config_name = self.determine_app_cfg_name(name)
         return getattr(self.parent.env.config, config_name, NONE)
 
     def get_value(self, name: str,
@@ -186,12 +186,39 @@ class AutoDocOptions(DirectiveOptions):
     """
 
     def __init__(self, *args):
+        self._configuration_names: Optional[Set[str]] = None
         super().__init__(*args)
         self.add_pass_through_to_directive()
 
-    def sanitize_configuration_option_name(self, name: str) -> str:
+    @property
+    def configuration_names(self) -> Set[str]:
+        """Returns all configuration names that exist for `autodoc_pydantic`.
+
+        This is used by :obj:`determine_app_cfg_name` to identify
+        configuration names that do not need to be prefixed. This is used when
+        options of foreign documenters are accessed (e.g. validator documenter
+        needs to read configuration values from field documenter).
+
+        """
+
+        if not self._configuration_names:
+            prefix = "autodoc_pydantic_"
+            self._configuration_names = {
+                config.name.replace(prefix, "")
+                for config in self.parent.env.config
+                if config.name.startswith(prefix)
+            }
+
+        return self._configuration_names
+
+    def determine_app_cfg_name(self, name: str) -> str:
         """Provide full app environment configuration name for given option
-        name.
+        name. It contains some logic to get the correct env configuration name,
+        as follows:
+
+        model-show-field-list -> autodoc_pydantic_model_show_field_list
+        undoc-members -> autodoc_pydantic_model_undoc_members
+        field-swap-name-and-alias -> autodoc_pydantic_field_swap_name_and_alias
 
         Parameters
         ----------
@@ -206,9 +233,12 @@ class AutoDocOptions(DirectiveOptions):
         """
 
         sanitized = name.replace("-", "_")
-        prefix = self.parent.objtype.split("_")[-1]
 
-        if prefix not in sanitized:
+        prefix = self.parent.objtype.split("_")[-1]
+        is_not_prefixed = prefix not in sanitized
+        is_not_existing = sanitized not in self.configuration_names
+
+        if is_not_prefixed and is_not_existing:
             sanitized = f"{prefix}_{sanitized}"
 
         return f"autodoc_pydantic_{sanitized}"
