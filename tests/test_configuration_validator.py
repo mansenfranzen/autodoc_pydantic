@@ -436,3 +436,32 @@ def test_autodoc_pydantic_validator_root_pre(parse_rst):
     ]
     doctree = parse_rst(input_rst)
     assert_node(doctree, output_nodes)
+
+
+def test_autodoc_pydantic_validator_replace_signature_true_with_swap_name_and_alias_directive(
+        parse_rst):
+    """Ensure that swapping field name and alias also modifies the signature
+    replacement of validator directive.
+
+    This relates to #99.
+
+    """
+
+    input_rst = [
+        '',
+        '.. py:pydantic_model:: ValidatorReplaceSignatureWithSwapNameAndAlias',
+        '   :module: target.configuration',
+        '',
+        '   ValidatorReplaceSignatureWithSwapNameAndAlias.',
+        '',
+        '   .. py:pydantic_validator:: ValidatorReplaceSignatureWithSwapNameAndAlias.check',
+        '      :module: target.configuration',
+        '      :classmethod:',
+        '      :field-swap-name-and-alias: True',
+        '',
+        '      Check.',
+        ''
+    ]
+
+    doctree = parse_rst(input_rst)
+    assert doctree[1][1][2][0][3][0].astext() == "field1 alias"

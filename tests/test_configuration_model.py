@@ -1073,3 +1073,156 @@ def test_autodoc_pydantic_model_signature_prefix_directive(parse_rst):
     doctree = parse_rst(input_rst)
     prefix = desc_annotation_directive_prefix("foobar")
     assert_node(doctree[1][0][0], [desc_annotation, prefix])
+
+
+def test_autodoc_pydantic_model_show_field_summary_with_swap_name_and_alias(
+        autodocument):
+    kwargs = dict(
+        object_path='target.configuration.ModelWithFieldSwapNameAndAlias',
+        **KWARGS)
+
+    result = [
+        '',
+        '.. py:pydantic_model:: ModelWithFieldSwapNameAndAlias',
+        '   :module: target.configuration',
+        '',
+        '   ModelWithFieldSwapNameAndAlias.',
+        '',
+        '   :Fields:',
+        '      - :py:obj:`field1 alias (int) <target.configuration.ModelWithFieldSwapNameAndAlias.field1>`',
+        '      - :py:obj:`field2 alias (str) <target.configuration.ModelWithFieldSwapNameAndAlias.field2>`',
+        ''
+    ]
+
+    # explict global
+    actual = autodocument(
+        options_app={"autodoc_pydantic_model_show_field_summary": True,
+                     "autodoc_pydantic_field_swap_name_and_alias": True},
+        **kwargs)
+    assert result == actual
+
+    # explict local
+    actual = autodocument(
+        options_doc={"model-show-field-summary": True,
+                     "field-swap-name-and-alias": True},
+        **kwargs)
+    assert result == actual
+
+    # explicit local overwrite global
+    actual = autodocument(
+        options_app={"autodoc_pydantic_model_show_field_summary": False,
+                     "autodoc_pydantic_field_swap_name_and_alias": False},
+        options_doc={"model-show-field-summary": True,
+                     "field-swap-name-and-alias": True},
+        **kwargs)
+    assert result == actual
+
+
+def test_autodoc_pydantic_model_show_validator_summary_with_swap_name_and_alias(
+        autodocument):
+    kwargs = dict(
+        object_path='target.configuration.ModelWithFieldSwapNameAndAlias',
+        **KWARGS)
+
+    result = [
+        '',
+        '.. py:pydantic_model:: ModelWithFieldSwapNameAndAlias',
+        '   :module: target.configuration',
+        '',
+        '   ModelWithFieldSwapNameAndAlias.',
+        '',
+        '   :Validators:',
+        '      - :py:obj:`check <target.configuration.ModelWithFieldSwapNameAndAlias.check>` » :py:obj:`field1 alias <target.configuration.ModelWithFieldSwapNameAndAlias.field1>`',
+        ''
+    ]
+
+    # explict global
+    actual = autodocument(
+        options_app={"autodoc_pydantic_field_swap_name_and_alias": True,
+                     "autodoc_pydantic_model_show_validator_summary": True},
+        **kwargs)
+    assert result == actual
+
+    # explict local
+    actual = autodocument(
+        options_doc={"model-show-validator-summary": True,
+                     "field-swap-name-and-alias": True},
+        **kwargs)
+    assert result == actual
+
+    # explicit local overwrite global
+    actual = autodocument(
+        options_app={"autodoc_pydantic_model_show_validator_summary": False,
+                     "autodoc_pydantic_field_swap_name_and_alias": False},
+        options_doc={"model-show-validator-summary": True,
+                     "field-swap-name-and-alias": True},
+        **kwargs)
+    assert result == actual
+
+
+def test_autodoc_pydantic_model_validator_signature_with_swap_name_and_alias(
+        autodocument):
+    """Ensure that directive option `:field-swap-name-and-alias:` is passed to
+    `py:pydantic_validator`.
+
+    This relates to ##99.
+
+    """
+
+    kwargs = dict(
+        object_path='target.configuration.ModelWithFieldSwapNameAndAlias',
+        **KWARGS)
+
+    result = [
+        '',
+        '.. py:pydantic_model:: ModelWithFieldSwapNameAndAlias',
+        '   :module: target.configuration',
+        '',
+        '   ModelWithFieldSwapNameAndAlias.',
+        '',
+        '',
+        '   .. py:pydantic_field:: ModelWithFieldSwapNameAndAlias.field1',
+        '      :module: target.configuration',
+        '      :type: int',
+        '      :alias: field1 alias',
+        '      :field-swap-name-and-alias: True',
+        '',
+        '      Field1',
+        '',
+        '',
+        '   .. py:pydantic_field:: ModelWithFieldSwapNameAndAlias.field2',
+        '      :module: target.configuration',
+        '      :type: str',
+        '      :alias: field2 alias',
+        '      :field-swap-name-and-alias: True',
+        '',
+        '      Field2',
+        '',
+        '',
+        '   .. py:pydantic_validator:: ModelWithFieldSwapNameAndAlias.check',
+        '      :module: target.configuration',
+        '      :classmethod:',
+        '      :field-swap-name-and-alias: True',
+        '',
+        '      Check.',
+        '']
+
+
+    # explict local
+    actual = autodocument(
+        options_doc={"model-show-validator-members": True,
+                     "field-swap-name-and-alias": True,
+                     "members": None},
+        **kwargs)
+    assert result == actual
+
+    # explicit local overwrite global
+    actual = autodocument(
+        options_app={"autodoc_pydantic_model_show_validator_members": False,
+                     "autodoc_pydantic_field_swap_name_and_alias": False,
+                     "autodoc_pydantic_model_members": False},
+        options_doc={"model-show-validator-members": True,
+                     "field-swap-name-and-alias": True,
+                     "members": None},
+        **kwargs)
+    assert result == actual
