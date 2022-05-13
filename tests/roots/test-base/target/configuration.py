@@ -128,6 +128,20 @@ class ModelSignaturePrefix(BaseModel):
     """ModelSignaturePrefix."""
 
 
+class ModelWithFieldSwapNameAndAlias(BaseModel):
+    """ModelWithFieldSwapNameAndAlias."""
+
+    field1: int = Field(default=5, alias="field1 alias")
+    """Field1"""
+    field2: str = Field(default="FooBar", alias="field2 alias")
+    """Field2"""
+
+    @validator("field1")
+    def check(cls, v) -> str:
+        """Check."""
+        return v
+
+
 class SettingsShowJson(BaseSettings):
     """SettingsShowJson."""
 
@@ -263,6 +277,18 @@ class ValidatorReplaceSignature(BaseModel):
     field: int = 1
 
     @validator("field")
+    def check(cls, v) -> str:
+        """Check."""
+        return v
+
+
+class ValidatorReplaceSignatureWithSwapNameAndAlias(BaseModel):
+    """ValidatorReplaceSignatureWithSwapNameAndAlias."""
+
+    field1: int = Field(default=5, alias="field1 alias")
+    """Field1"""
+
+    @validator("field1")
     def check(cls, v) -> str:
         """Check."""
         return v
