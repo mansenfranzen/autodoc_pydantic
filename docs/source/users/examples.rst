@@ -182,6 +182,34 @@ The following example outlines all available combinations with the default
 
       .. autocodeblock:: target.example_required_optional_fields
 
+.. _example_swap_name_with_alias:
+
+--------------------------
+Swap field name with alias
+--------------------------
+
+It is possible to completely replace the field name with the provided field:
+
+.. tabs::
+
+   .. tab:: *rendered output*
+
+      .. autopydantic_model:: target.example_swap_name_with_alias.SwapFieldWithAlias
+         :field-swap-name-and-alias:
+         :validator-list-fields:
+
+   .. tab:: reST
+
+      .. code-block::
+
+         .. autopydantic_model:: target.example_swap_name_with_alias.SwapFieldWithAlias
+            :field-swap-name-and-alias:
+            :validator-list-fields:
+
+   .. tab:: python
+
+      .. autocodeblock:: target.example_swap_name_with_alias
+
 --------------
 Generic Models
 --------------
