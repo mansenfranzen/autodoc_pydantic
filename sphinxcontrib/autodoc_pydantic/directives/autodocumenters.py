@@ -3,7 +3,8 @@
 """
 
 import json
-from typing import Any, Optional, Dict, List, Iterable
+from collections import defaultdict
+from typing import Any, Optional, Dict, List, Iterable, Callable
 
 import sphinx
 from docutils.statemachine import StringList
@@ -33,7 +34,8 @@ from sphinxcontrib.autodoc_pydantic.directives.options.definition import (
     OPTIONS_MERGED
 )
 from sphinxcontrib.autodoc_pydantic.directives.templates import TPL_COLLAPSE
-from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector
+from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector, \
+    ValidatorFieldMap
 from sphinxcontrib.autodoc_pydantic.directives.options.composites import (
     AutoDocOptions
 )
@@ -270,6 +272,64 @@ class PydanticModelDocumenter(ClassDocumenter):
             self.add_line(line, source_name)
         self.add_line("", source_name)
 
+    def _get_idx_mappings(self, members: Iterable[str]) -> Dict[str, int]:
+        """Get index positions for given members while respecting
+        `OptionsSummaryListOrder`.
+
+        """
+
+        sorted_members = self._sort_summary_list(members)
+        return {name: idx for idx, name in enumerate(sorted_members)}
+
+    def _get_reference_sort_func(self) -> Callable:
+        """Helper function to create sorting function for instances of
+        `ValidatorFieldMap` which first sorts by validator name and second by
+        field name while respecting `OptionsSummaryListOrder`.
+
+        """
+
+        all_validators = self.pydantic.inspect.validators.names
+        all_fields = self.pydantic.inspect.fields.names
+        idx_validators = self._get_idx_mappings(all_validators)
+        idx_fields = self._get_idx_mappings(all_fields)
+
+        def sort_func(reference: ValidatorFieldMap):
+            return (
+                idx_validators.get(reference.validator_name, -1),
+                idx_fields.get(reference.field_name, -1)
+            )
+
+        return sort_func
+
+    def _get_validator_summary_references(self) -> List[ValidatorFieldMap]:
+        """Filter and sort validator-field mappings for validator summary
+        section.
+
+        """
+
+        references = self.pydantic.inspect.references.mappings
+        valid_members = self.pydantic.options.get_filtered_member_names()
+        valid_references = [reference for reference in references
+                            if reference.validator_name in valid_members]
+
+        sort_func = self._get_reference_sort_func()
+        sorted_references = sorted(valid_references, key=sort_func)
+
+        return sorted_references
+
+    def _build_summary_reference_line(self, reference: ValidatorFieldMap):
+        """Generates reST line for validator-field mapping with references.
+
+        """
+
+        name = self.pydantic.get_field_name_or_alias(reference.field_name)
+        return (
+            f"   - "
+            f":py:obj:`{reference.validator_name} <{reference.validator_ref}>`"
+            f" » "
+            f":py:obj:`{name} <{reference.field_ref}>`"
+        )
+
     def add_validators_summary(self):
         """Adds summary section describing all validators with corresponding
         fields.
@@ -279,25 +339,12 @@ class PydanticModelDocumenter(ClassDocumenter):
         if not self.pydantic.inspect.validators:
             return
 
-        references = self.pydantic.inspect.references.mappings
-        valid_members = self.pydantic.options.get_filtered_member_names()
-        filtered_references = {reference.validator_name: reference
-                               for reference in references
-                               if reference.validator_name in valid_members}
-
-        # get correct sort order
-        validator_names = filtered_references.keys()
-        sorted_validator_names = self._sort_summary_list(validator_names)
+        sorted_references = self._get_validator_summary_references()
 
         source_name = self.get_sourcename()
         self.add_line(":Validators:", source_name)
-        for validator_name in sorted_validator_names:
-            ref = filtered_references[validator_name]
-            name = self.pydantic.get_field_name_or_alias(ref.field_name)
-            line = (f"   - "
-                    f":py:obj:`{ref.validator_name} <{ref.validator_ref}>`"
-                    f" » "
-                    f":py:obj:`{name} <{ref.field_ref}>`")
+        for ref in sorted_references:
+            line = self._build_summary_reference_line(ref)
             self.add_line(line, source_name)
 
         self.add_line("", source_name)
