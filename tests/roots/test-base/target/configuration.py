@@ -33,6 +33,19 @@ class ModelShowValidatorsSummaryInherited(ModelShowValidatorsSummary):
         return v
 
 
+class ModelShowValidatorsSummaryMultipleFields(BaseModel):
+    """ModelShowValidatorsSummaryMultipleFields."""
+
+    field1: int = 1
+
+    field2: int = 2
+
+    @validator("field1", "field2")
+    def check(cls, v) -> str:
+        return v
+
+
+
 class ModelShowFieldSummary(BaseModel):
     """ModelShowFieldSummary."""
 

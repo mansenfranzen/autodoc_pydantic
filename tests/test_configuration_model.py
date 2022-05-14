@@ -208,6 +208,44 @@ def test_autodoc_pydantic_model_show_validator_summary_true(autodocument):
     assert result == actual
 
 
+def test_autodoc_pydantic_model_show_validator_summary_multiple_true(autodocument):
+    kwargs = dict(
+        object_path='target.configuration.ModelShowValidatorsSummaryMultipleFields',
+        **KWARGS)
+
+    result = [
+        '',
+        '.. py:pydantic_model:: ModelShowValidatorsSummaryMultipleFields',
+        '   :module: target.configuration',
+        '',
+        '   ModelShowValidatorsSummaryMultipleFields.',
+        '',
+        '   :Validators:',
+        '      - :py:obj:`check <target.configuration.ModelShowValidatorsSummaryMultipleFields.check>` » :py:obj:`field1 <target.configuration.ModelShowValidatorsSummaryMultipleFields.field1>`',
+        '      - :py:obj:`check <target.configuration.ModelShowValidatorsSummaryMultipleFields.check>` » :py:obj:`field2 <target.configuration.ModelShowValidatorsSummaryMultipleFields.field2>`',
+        ''
+    ]
+
+    # explict global
+    actual = autodocument(
+        options_app={"autodoc_pydantic_model_show_validator_summary": True},
+        **kwargs)
+    assert result == actual
+
+    # explict local
+    actual = autodocument(
+        options_doc={"model-show-validator-summary": True},
+        **kwargs)
+    assert result == actual
+
+    # explicit local overwrite global
+    actual = autodocument(
+        options_app={"autodoc_pydantic_model_show_validators_summary": False},
+        options_doc={"model-show-validator-summary": True},
+        **kwargs)
+    assert result == actual
+
+
 def test_autodoc_pydantic_model_show_validator_summary_false(autodocument):
     kwargs = dict(
         object_path='target.configuration.ModelShowValidatorsSummary',
