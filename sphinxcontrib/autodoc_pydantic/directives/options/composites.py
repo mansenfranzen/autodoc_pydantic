@@ -214,7 +214,7 @@ class AutoDocOptions(DirectiveOptions):
     def determine_app_cfg_name(self, name: str) -> str:
         """Provide full app environment configuration name for given option
         name. It contains some logic to get the correct env configuration name,
-        as follows:
+        e.g. for pydantic model as follows:
 
         model-show-field-list -> autodoc_pydantic_model_show_field_list
         undoc-members -> autodoc_pydantic_model_undoc_members
