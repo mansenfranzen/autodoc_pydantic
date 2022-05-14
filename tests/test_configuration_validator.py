@@ -28,7 +28,7 @@ def test_autodoc_pydantic_validator_replace_signature_true(autodocument):
     kwargs = dict(
         object_path='target.configuration.ValidatorReplaceSignature.check',
         **KWARGS)
-    
+
     result = [
         '',
         '.. py:pydantic_validator:: ValidatorReplaceSignature.check',
@@ -465,3 +465,54 @@ def test_autodoc_pydantic_validator_replace_signature_true_with_swap_name_and_al
 
     doctree = parse_rst(input_rst)
     assert doctree[1][1][2][0][3][0].astext() == "field1 alias"
+
+
+def test_autodoc_pydantic_validator_replace_signature_true_without_swap_name_and_alias_directive(
+        parse_rst):
+    """Ensure that disabling swapping field name and alias does not modify the
+    signature replacement of validator directive.
+
+    This relates to #99.
+
+    """
+
+    # explicit local
+    input_rst = [
+        '',
+        '.. py:pydantic_model:: ValidatorReplaceSignatureWithSwapNameAndAlias',
+        '   :module: target.configuration',
+        '',
+        '   ValidatorReplaceSignatureWithSwapNameAndAlias.',
+        '',
+        '   .. py:pydantic_validator:: ValidatorReplaceSignatureWithSwapNameAndAlias.check',
+        '      :module: target.configuration',
+        '      :classmethod:',
+        '      :field-swap-name-and-alias: False',
+        '',
+        '      Check.',
+        ''
+    ]
+
+    doctree = parse_rst(input_rst)
+    assert doctree[1][1][2][0][3][0].astext() == "field1"
+
+    # explicit global
+    input_rst = [
+        '',
+        '.. py:pydantic_model:: ValidatorReplaceSignatureWithSwapNameAndAlias',
+        '   :module: target.configuration',
+        '',
+        '   ValidatorReplaceSignatureWithSwapNameAndAlias.',
+        '',
+        '   .. py:pydantic_validator:: ValidatorReplaceSignatureWithSwapNameAndAlias.check',
+        '      :module: target.configuration',
+        '      :classmethod:',
+        '',
+        '      Check.',
+        ''
+    ]
+
+    doctree = parse_rst(
+        input_rst,
+        conf={"autodoc_pydantic_field_swap_name_and_alias": False})
+    assert doctree[1][1][2][0][3][0].astext() == "field1"
