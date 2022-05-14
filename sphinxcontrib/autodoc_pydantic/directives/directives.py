@@ -9,10 +9,11 @@ from docutils.nodes import Text
 from docutils.parsers.rst.directives import unchanged
 from sphinx.addnodes import (
     desc_signature,
-    desc_annotation, desc_name
+    desc_annotation, desc_name, pending_xref
 )
 from sphinx.domains.python import PyMethod, PyAttribute, PyClasslike, py_sig_re
-from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector
+from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector, \
+    ValidatorFieldMap
 from sphinxcontrib.autodoc_pydantic.directives.options.composites import (
     DirectiveOptions
 )
@@ -212,6 +213,24 @@ class PydanticValidator(PydanticDirectiveBase, PyMethod):
     config_name = "validator"
     default_prefix = "classmethod"
 
+    def get_field_href_from_mapping(
+            self,
+            inspector: ModelInspector,
+            mapping: ValidatorFieldMap) -> pending_xref:
+        """Generate the field reference node aka `pending_xref` from given
+        validator-field `mapping` while respecting field name/alias swap
+        possibility.
+
+        """
+
+        name = mapping.field_name
+        if self.pyautodoc.is_true("field-swap-name-and-alias"):
+            name = inspector.fields.get_alias_or_name(mapping.field_name)
+
+        return create_field_href(name=name,
+                                 ref=mapping.field_ref,
+                                 env=self.env)
+
     def replace_return_node(self, signode: desc_signature):
         """Replaces the return node with references to validated fields.
 
@@ -229,17 +248,12 @@ class PydanticValidator(PydanticDirectiveBase, PyMethod):
         mappings = inspector.references.filter_by_validator_name(name)
 
         # add field reference nodes
-        mapping_first = mappings[0]
-        name = inspector.fields.get_alias_or_name(mapping_first.field_name)
-        signode += create_field_href(name=name,
-                                     ref=mapping_first.field_ref,
-                                     env=self.env)
+        signode += self.get_field_href_from_mapping(inspector=inspector,
+                                                    mapping=mappings[0])
         for mapping in mappings[1:]:
-            name = inspector.fields.get_alias_or_name(mapping.field_name)
             signode += desc_annotation("", ", ")
-            signode += create_field_href(name=name,
-                                         ref=mapping.field_ref,
-                                         env=self.env)
+            signode += self.get_field_href_from_mapping(inspector=inspector,
+                                                        mapping=mapping)
 
     def handle_signature(self, sig: str, signode: desc_signature) -> TUPLE_STR:
         """Optionally call replace return node method.
