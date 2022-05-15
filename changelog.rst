@@ -12,6 +12,12 @@ Changing behavior
 - Default values of pydantic fields such as ``UndefinedPydantic`` and
   ``Ellipsis`` will now be shown as ``None``.
 
+Bugfix
+~~~~~~
+
+- Fix missing validator-field references in ``model-show-validator-summary`` in
+  case a single validator method process multiple fields.
+
 Feature
 ~~~~~~~
 
@@ -23,6 +29,10 @@ Feature
 - Add ``autodoc_pydantic_field_swap_name_and_alias`` configuration which allows
   to use a field's alias as a name instead of the original field name
   `#99 <https://github.com/mansenfranzen/autodoc_pydantic/issues/99>`__ .
+- Respect interaction between ``autodoc_pydantic_field_swap_name_and_alias``
+  with ``model-show-validator-summary``, ``model-show-field-summary``,
+  ``validator-replace-signature`` and ``validator-list-fields`` by replacing
+  the field name with field alias in rendered documentation.
 
 Internals
 ~~~~~~~~~
@@ -36,6 +46,22 @@ Internals
   passed with value to denote ``field-show-alias``. However, since
   ``field-swap-name-and-alias`` was added, the value of the alias might be
   required even without ``field-show-alias`` being activated.
+- Refactor and split ``PydanticModelDocumenter.add_validators_summary`` in
+  multiple methods for better readability and maintainability.
+- Add ``get_field_name_or_alias`` to ``PydanticAutoDoc`` to centrally manage
+  the determination of field name/alias for all auto-documenters.
+- Rename ``sanitize_configuration_option_name`` into ``determine_app_cfg_name``
+  in ``directives/options/composites.py`` for better clarity.
+- Add ``configuration_names`` to ``AutoDocOptions`` to distinguish foreign
+  directive options in ``determine_app_cfg_name`` which is required because
+  ``field-swap-name-and-alias`` is also used by model/validator
+  auto-documenters.
+
+Documentation
+~~~~~~~~~~~~~
+
+- Add example section for ``field-swap-name-and-alias``.
+- Add configuration description for ``field-swap-name-and-alias``.
 
 Contributors
 ~~~~~~~~~~~~
