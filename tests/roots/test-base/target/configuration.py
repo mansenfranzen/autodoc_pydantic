@@ -318,6 +318,17 @@ class ValidatorListFields(BaseModel):
         return v
 
 
+class ValidatorListFieldsWithFieldSwapNameAndAlias(BaseModel):
+    """ValidatorListFieldsWithFieldSwapNameAndAlias."""
+
+    field: int = Field(1, alias="field_alias")
+
+    @validator("field")
+    def check(cls, v) -> str:
+        """Check."""
+        return v
+
+
 class ValidatorSignaturePrefix(BaseModel):
     """ValidatorSignaturePrefix."""
 
