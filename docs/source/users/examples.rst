@@ -188,15 +188,23 @@ The following example outlines all available combinations with the default
 Swap field name with alias
 --------------------------
 
-It is possible to completely replace the field name with the provided field:
+It is possible to completely replace the field name with the provided field
+alias when :ref:`field-swap-name-and-alias <autodoc_pydantic_field_swap_name_and_alias>`
+is enabled:
 
 .. tabs::
 
-   .. tab:: *rendered output*
+   .. tab:: *rendered output with swap*
 
       .. autopydantic_model:: target.example_swap_name_with_alias.SwapFieldWithAlias
          :field-swap-name-and-alias:
          :validator-list-fields:
+
+   .. tab:: *rendered output without swap*
+
+      .. autopydantic_model:: target.example_swap_name_with_alias.SwapFieldWithAlias
+         :validator-list-fields:
+         :noindex:
 
    .. tab:: reST
 

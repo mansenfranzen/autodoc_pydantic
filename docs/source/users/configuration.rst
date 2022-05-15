@@ -516,7 +516,7 @@ Fields
    .. hint::
 
       Enabling this option will automatically interact with the following
-      configurations while replacing the field name with the field alias:
+      configurations by replacing the field name with the field alias:
 
       - :ref:`model-show-field-summary <autodoc_pydantic_model_show_field_summary>`
       - :ref:`model-show-validator-summary <autodoc_pydantic_model_show_validator_summary>`
@@ -524,7 +524,6 @@ Fields
       - :ref:`validator-list-fields <autodoc_pydantic_validator_list_fields>`
 
       A complete example is provided :ref:`here <example_swap_name_with_alias>`.
-
 
 
 .. tabdocconfig:: autopydantic_model
