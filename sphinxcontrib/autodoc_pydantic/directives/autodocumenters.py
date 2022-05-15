@@ -3,7 +3,6 @@
 """
 
 import json
-from collections import defaultdict
 from typing import Any, Optional, Dict, List, Iterable, Callable
 
 import sphinx
