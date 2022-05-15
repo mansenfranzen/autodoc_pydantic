@@ -286,6 +286,8 @@ class PydanticModelDocumenter(ClassDocumenter):
         `ValidatorFieldMap` which first sorts by validator name and second by
         field name while respecting `OptionsSummaryListOrder`.
 
+        This is used for validator summary section.
+
         """
 
         all_validators = self.pydantic.inspect.validators.names
@@ -317,8 +319,9 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         return sorted_references
 
-    def _build_summary_reference_line(self, reference: ValidatorFieldMap):
-        """Generates reST line for validator-field mapping with references.
+    def _build_validator_summary_rest_line(self, reference: ValidatorFieldMap):
+        """Generates reST line for validator-field mapping with references for
+        validator summary section.
 
         """
 
@@ -344,7 +347,7 @@ class PydanticModelDocumenter(ClassDocumenter):
         source_name = self.get_sourcename()
         self.add_line(":Validators:", source_name)
         for ref in sorted_references:
-            line = self._build_summary_reference_line(ref)
+            line = self._build_validator_summary_rest_line(ref)
             self.add_line(line, source_name)
 
         self.add_line("", source_name)
@@ -751,6 +754,18 @@ class PydanticValidatorDocumenter(MethodDocumenter):
         if self.pydantic.options.is_true("validator-list-fields"):
             self.add_field_list()
 
+    def _build_field_list_rest_line(self, reference: ValidatorFieldMap):
+        """Generates reST line for field reference for field list section.
+
+        """
+
+        name = self.pydantic.get_field_name_or_alias(reference.field_name)
+        return (
+            f"   - :py:obj:"
+            f"`{name} "
+            f"<{reference.field_ref}>`"
+        )
+
     def add_field_list(self):
         """Adds a field list with all fields that are validated by this
         validator.
@@ -767,9 +782,7 @@ class PydanticValidatorDocumenter(MethodDocumenter):
         self.add_line(":Validates:", source_name)
 
         for reference in references:
-            line = f"   - :py:obj:" \
-                   f"`{reference.field_name} " \
-                   f"<{reference.field_ref}>`"
+            line = self._build_field_list_rest_line(reference)
             self.add_line(line, source_name)
 
         self.add_line("", source_name)
