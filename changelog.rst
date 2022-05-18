@@ -1,7 +1,7 @@
 Changelog
 =========
 
-v1.7.0 - 2022-05-XX
+v1.7.0 - 2022-05-18
 -------------------
 
 This is a feature release.
