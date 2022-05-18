@@ -58,6 +58,7 @@ CONF_DEACTIVATE = {
     "autodoc_pydantic_field_show_required": False,
     "autodoc_pydantic_field_show_optional": False,
     "autodoc_pydantic_field_show_default": False,
+    "autodoc_pydantic_field_swap_name_and_alias": False
 
 }
 

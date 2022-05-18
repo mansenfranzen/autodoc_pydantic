@@ -136,7 +136,23 @@ class FieldInspector(BaseInspectionComposite):
 
         return self.attribute[name]
 
-    def get_property_from_field_info(self, field_name: str,
+    def get_alias_or_name(self, field_name: str) -> str:
+        """Get the alias of a pydantic field if given. Otherwise, return the
+        field name.
+
+        """
+
+        if field_name == ASTERISK_FIELD_NAME:
+            return field_name
+
+        alias = self.get(field_name).alias
+        if alias is not None:
+            return alias
+        else:
+            return field_name
+
+    def get_property_from_field_info(self,
+                                     field_name: str,
                                      property_name: str) -> Any:
         """Get specific property value from pydantic's field info.
 

@@ -501,6 +501,32 @@ Fields
 
 
 .. tabdocconfig:: autopydantic_model
+   :title: Swap Name and Alias
+   :path: target.configuration.FieldSwapNameAndAlias
+   :confpy: autodoc_pydantic_field_swap_name_and_alias
+   :directive_option: field-swap-name-and-alias
+   :enable: members, field-show-alias
+   :values: False, True
+   :version: 1.7.0
+
+   Swaps field name with field alias. If
+   :ref:`field-show-alias <autodoc_pydantic_field_show_alias>` is enabled,
+   the original alias shows the actual field name instead.
+
+   .. hint::
+
+      Enabling this option will automatically interact with the following
+      configurations by replacing the field name with the field alias:
+
+      - :ref:`model-show-field-summary <autodoc_pydantic_model_show_field_summary>`
+      - :ref:`model-show-validator-summary <autodoc_pydantic_model_show_validator_summary>`
+      - :ref:`validator-replace-signature <autodoc_pydantic_validator_replace_signature>`
+      - :ref:`validator-list-fields <autodoc_pydantic_validator_list_fields>`
+
+      A complete example is provided :ref:`here <example_swap_name_with_alias>`.
+
+
+.. tabdocconfig:: autopydantic_model
    :title: Signature Prefix
    :path: target.configuration.FieldSignaturePrefix
    :confpy: autodoc_pydantic_field_signature_prefix

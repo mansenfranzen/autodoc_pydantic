@@ -33,6 +33,19 @@ class ModelShowValidatorsSummaryInherited(ModelShowValidatorsSummary):
         return v
 
 
+class ModelShowValidatorsSummaryMultipleFields(BaseModel):
+    """ModelShowValidatorsSummaryMultipleFields."""
+
+    field1: int = 1
+
+    field2: int = 2
+
+    @validator("field1", "field2")
+    def check(cls, v) -> str:
+        return v
+
+
+
 class ModelShowFieldSummary(BaseModel):
     """ModelShowFieldSummary."""
 
@@ -126,6 +139,20 @@ class ModelShowConfigMember(BaseModel):
 
 class ModelSignaturePrefix(BaseModel):
     """ModelSignaturePrefix."""
+
+
+class ModelWithFieldSwapNameAndAlias(BaseModel):
+    """ModelWithFieldSwapNameAndAlias."""
+
+    field1: int = Field(default=5, alias="field1 alias")
+    """Field1"""
+    field2: str = Field(default="FooBar", alias="field2 alias")
+    """Field2"""
+
+    @validator("field1")
+    def check(cls, v) -> str:
+        """Check."""
+        return v
 
 
 class SettingsShowJson(BaseSettings):
@@ -268,10 +295,33 @@ class ValidatorReplaceSignature(BaseModel):
         return v
 
 
+class ValidatorReplaceSignatureWithSwapNameAndAlias(BaseModel):
+    """ValidatorReplaceSignatureWithSwapNameAndAlias."""
+
+    field1: int = Field(default=5, alias="field1 alias")
+    """Field1"""
+
+    @validator("field1")
+    def check(cls, v) -> str:
+        """Check."""
+        return v
+
+
 class ValidatorListFields(BaseModel):
     """ValidatorListFields."""
 
     field: int = 1
+
+    @validator("field")
+    def check(cls, v) -> str:
+        """Check."""
+        return v
+
+
+class ValidatorListFieldsWithFieldSwapNameAndAlias(BaseModel):
+    """ValidatorListFieldsWithFieldSwapNameAndAlias."""
+
+    field: int = Field(1, alias="field_alias")
 
     @validator("field")
     def check(cls, v) -> str:
@@ -345,9 +395,9 @@ class FieldShowConstraintsIgnoreExtraKwargs(BaseModel):
 
 
 class FieldShowAlias(BaseModel):
-    """FieldShowConstraints."""
+    """FieldShowAlias."""
 
-    field: int = Field(1, alias="field2", env="field2")
+    field: int = Field(1, alias="field2")
     """Field."""
 
 
@@ -416,3 +466,10 @@ class FieldShowOptionalNot(BaseModel):
 
     field4: int = Field(default=0)
     """field4"""
+
+
+class FieldSwapNameAndAlias(BaseModel):
+    """FieldSwapNameAndAlias"""
+
+    field1: int = Field(default=1, alias="field 1 alias")
+    """Field1"""

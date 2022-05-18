@@ -9,10 +9,11 @@ from docutils.nodes import Text
 from docutils.parsers.rst.directives import unchanged
 from sphinx.addnodes import (
     desc_signature,
-    desc_annotation
+    desc_annotation, desc_name, pending_xref
 )
-from sphinx.domains.python import PyMethod, PyAttribute, PyClasslike
-from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector
+from sphinx.domains.python import PyMethod, PyAttribute, PyClasslike, py_sig_re
+from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector, \
+    ValidatorFieldMap
 from sphinxcontrib.autodoc_pydantic.directives.options.composites import (
     DirectiveOptions
 )
@@ -86,6 +87,8 @@ class PydanticField(PydanticDirectiveBase, PyAttribute):
 
     option_spec = PyAttribute.option_spec.copy()
     option_spec.update({"alias": unchanged,
+                        "field-show-alias": option_default_true,
+                        "field-swap-name-and-alias": option_default_true,
                         "required": option_default_true,
                         "optional": option_default_true,
                         "__doc_disable_except__": option_list_like,
@@ -93,6 +96,14 @@ class PydanticField(PydanticDirectiveBase, PyAttribute):
 
     config_name = "field"
     default_prefix = "attribute"
+
+    def get_field_name(self, sig: str) -> str:
+        """Get field name from signature. Borrows implementation from
+        `PyObject.handle_signature`.
+
+        """
+
+        return py_sig_re.match(sig).groups()[1]
 
     def add_required(self, signode: desc_signature):
         """Add `[Required]` if directive option `required` is set.
@@ -110,14 +121,67 @@ class PydanticField(PydanticDirectiveBase, PyAttribute):
         if self.options.get("optional"):
             signode += desc_annotation("", " [Optional]")
 
-    def add_alias(self, signode: desc_signature):
-        """Add alias to signature if alias is provided via directive option.
+    def add_alias_or_name(self, sig: str, signode: desc_signature):
+        """Add alias or name to signature.
+
+         Alias is added if `show-alias` is enabled. Name is added if both
+         `show-alias` and `swap-name-and-alias` is enabled.
 
         """
 
-        alias = self.options.get("alias")
-        if alias:
-            signode += desc_annotation("", f" (alias '{alias}')")
+        if not self.pyautodoc.get_value("field-show-alias"):
+            return
+
+        elif self.pyautodoc.is_true("field-swap-name-and-alias"):
+            prefix = "name"
+            value = self.get_field_name(sig)
+
+        else:
+            prefix = "alias"
+            value = self.options.get("alias")
+
+        signode += desc_annotation("", f" ({prefix} '{value}')")
+
+    def _find_desc_name_node(self,
+                             sig: str,
+                             signode: desc_signature) -> desc_name:
+        """Return `desc_name` node  from `signode` that contains the field
+        name. This is used to replace the name with the alias.
+
+        """
+
+        name = self.get_field_name(sig)
+
+        for node in signode.children:
+            has_correct_text = node.astext() == name
+            is_desc_name = isinstance(node, desc_name)
+
+            if has_correct_text and is_desc_name:
+                return node
+
+    def swap_name_and_alias(self, sig: str, signode: desc_signature):
+        """Replaces name with alias if `swap-name-and-alias` is enabled.
+
+        Requires to replace existing `addnodes.desc_name` because name node is
+        added within `handle_signature` and this can't be intercepted or
+        overwritten otherwise.
+
+        """
+
+        if not self.pyautodoc.get_value("field-swap-name-and-alias"):
+            return
+
+        name_node = self._find_desc_name_node(sig, signode)
+
+        if not name_node:
+            logger = sphinx.util.logging.getLogger(__name__)
+            logger.warning("Field's `desc_name` node can't be located to "
+                           "swap name with alias.",
+                           location="autodoc_pydantic")
+        else:
+            text_node = Text(self.options.get("alias"))
+            text_node.parent = name_node
+            name_node.children[0] = text_node
 
     def handle_signature(self, sig: str, signode: desc_signature) -> TUPLE_STR:
         """Optionally call add alias method.
@@ -127,7 +191,10 @@ class PydanticField(PydanticDirectiveBase, PyAttribute):
         fullname, prefix = super().handle_signature(sig, signode)
         self.add_required(signode)
         self.add_optional(signode)
-        self.add_alias(signode)
+
+        if self.options.get("alias") is not None:
+            self.add_alias_or_name(sig, signode)
+            self.swap_name_and_alias(sig, signode)
 
         return fullname, prefix
 
@@ -140,10 +207,29 @@ class PydanticValidator(PydanticDirectiveBase, PyMethod):
     option_spec = PyMethod.option_spec.copy()
     option_spec.update({"validator-replace-signature": option_default_true,
                         "__doc_disable_except__": option_list_like,
-                        "validator-signature-prefix": unchanged})
+                        "validator-signature-prefix": unchanged,
+                        "field-swap-name-and-alias": option_default_true})
 
     config_name = "validator"
     default_prefix = "classmethod"
+
+    def get_field_href_from_mapping(
+            self,
+            inspector: ModelInspector,
+            mapping: ValidatorFieldMap) -> pending_xref:
+        """Generate the field reference node aka `pending_xref` from given
+        validator-field `mapping` while respecting field name/alias swap
+        possibility.
+
+        """
+
+        name = mapping.field_name
+        if self.pyautodoc.is_true("field-swap-name-and-alias"):
+            name = inspector.fields.get_alias_or_name(mapping.field_name)
+
+        return create_field_href(name=name,
+                                 ref=mapping.field_ref,
+                                 env=self.env)
 
     def replace_return_node(self, signode: desc_signature):
         """Replaces the return node with references to validated fields.
@@ -162,15 +248,12 @@ class PydanticValidator(PydanticDirectiveBase, PyMethod):
         mappings = inspector.references.filter_by_validator_name(name)
 
         # add field reference nodes
-        mapping_first = mappings[0]
-        signode += create_field_href(name=mapping_first.field_name,
-                                     ref=mapping_first.field_ref,
-                                     env=self.env)
+        signode += self.get_field_href_from_mapping(inspector=inspector,
+                                                    mapping=mappings[0])
         for mapping in mappings[1:]:
             signode += desc_annotation("", ", ")
-            signode += create_field_href(name=mapping.field_name,
-                                         ref=mapping.field_ref,
-                                         env=self.env)
+            signode += self.get_field_href_from_mapping(inspector=inspector,
+                                                        mapping=mapping)
 
     def handle_signature(self, sig: str, signode: desc_signature) -> TUPLE_STR:
         """Optionally call replace return node method.
