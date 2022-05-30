@@ -30,7 +30,7 @@ Testing
 Contributors
 ~~~~~~~~~~~~
 
-- Thanks to `lukehsiao <https://github.com/lukehsiao >`__ for
+- Thanks to `lukehsiao <https://github.com/lukehsiao>`__ for
   reporting breaking changes in sphinx 5.0
   `#125 <https://github.com/mansenfranzen/autodoc_pydantic/issues/125>`__ .
 
