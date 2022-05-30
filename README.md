@@ -7,7 +7,7 @@
 [![Coverage](https://img.shields.io/codecov/c/gh/mansenfranzen/autodoc_pydantic?style=for-the-badge)](https://app.codecov.io/gh/mansenfranzen/autodoc_pydantic)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-23-orange.svg?style=for-the-badge)](#contributors)<!-- ALL-CONTRIBUTORS-BADGE:END -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-24-orange.svg?style=for-the-badge)](#contributors)<!-- ALL-CONTRIBUTORS-BADGE:END -->
 [![Downloads](https://img.shields.io/pypi/dm/autodoc_pydantic?color=fe7d37&style=for-the-badge)](https://pypistats.org/packages/autodoc-pydantic)
 
 You love [pydantic](https://pydantic-docs.helpmanual.io/) ❤ and you want to
@@ -86,6 +86,7 @@ Thanks to great open source projects [sphinx](https://www.sphinx-doc.org/en/mast
   <tr>
     <td align="center"><a href="https://github.com/iwyrkore"><img src="https://avatars.githubusercontent.com/u/92745880?v=4?s=100" width="100px;" alt=""/><br /><sub><b>iwyrkore</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/commits?author=iwyrkore" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/spacemanspiff2007"><img src="https://avatars.githubusercontent.com/u/10754716?v=4?s=100" width="100px;" alt=""/><br /><sub><b>spacemanspiff2007</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/issues?q=author%3Aspacemanspiff2007" title="Bug reports">🐛</a> <a href="#ideas-spacemanspiff2007" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://luke.hsiao.dev"><img src="https://avatars.githubusercontent.com/u/7573542?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Luke Hsiao</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/issues?q=author%3Alukehsiao" title="Bug reports">🐛</a></td>
   </tr>
 </table>
 

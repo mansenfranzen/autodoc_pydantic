@@ -228,6 +228,15 @@
         "bug",
         "ideas"
       ]
+    },
+    {
+      "login": "lukehsiao",
+      "name": "Luke Hsiao",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7573542?v=4",
+      "profile": "https://luke.hsiao.dev",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
