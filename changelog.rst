@@ -1,6 +1,39 @@
 Changelog
 =========
 
+v1.7.1 - 2022-05-30
+-------------------
+
+This is a bug release supporting sphinx 5.0.
+
+Bugfix
+~~~~~~
+
+- Adjust modified function signature of
+  ``sphinx.ext.autodoc.ClassDocumenter.add_content`` in sphinx 5.0 which causes
+  a type error otherwise
+  `#125 <https://github.com/mansenfranzen/autodoc_pydantic/issues/125>`__ .
+
+Packaging
+~~~~~~~~~
+
+- Convert ``sphinx-tabs`` and ``sphinxcontrib-mermaid`` to optional deps and
+  relax their version specification.
+
+Testing
+~~~~~~~
+
+- Add sphinx 5.0 to test matrix.
+- Adjust several tests for changed default behaviour of
+  ``autodoc_typehints_format``.
+
+Contributors
+~~~~~~~~~~~~
+
+- Thanks to `lukehsiao <https://github.com/lukehsiao>`__ for
+  reporting breaking changes in sphinx 5.0
+  `#125 <https://github.com/mansenfranzen/autodoc_pydantic/issues/125>`__ .
+
 v1.7.0 - 2022-05-18
 -------------------
 

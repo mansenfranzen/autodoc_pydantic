@@ -196,13 +196,13 @@ class PydanticModelDocumenter(ClassDocumenter):
 
     def add_content(self,
                     more_content: Optional[StringList],
-                    no_docstring: bool = False
+                    **kwargs
                     ) -> None:
         """Delegate additional content creation.
 
         """
 
-        super().add_content(more_content, no_docstring)
+        super().add_content(more_content, **kwargs)
 
         # do not provide any additional info if documented as attribute
         if self.doc_as_attr:
@@ -611,7 +611,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
 
     def add_content(self,
                     more_content: Optional[StringList],
-                    no_docstring: bool = False
+                    **kwargs,
                     ) -> None:
         """Delegate additional content creation.
 
@@ -621,7 +621,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
         if doc_policy in (OptionsFieldDocPolicy.DOCSTRING,
                           OptionsFieldDocPolicy.BOTH,
                           None, NONE):
-            super().add_content(more_content, no_docstring)
+            super().add_content(more_content, **kwargs)
         if doc_policy in (OptionsFieldDocPolicy.BOTH,
                           OptionsFieldDocPolicy.DESCRIPTION):
             self.add_description()
@@ -742,13 +742,13 @@ class PydanticValidatorDocumenter(MethodDocumenter):
 
     def add_content(self,
                     more_content: Optional[StringList],
-                    no_docstring: bool = False
+                    **kwargs
                     ) -> None:
         """Optionally show validator content.
 
         """
 
-        super().add_content(more_content, no_docstring)
+        super().add_content(more_content, **kwargs)
 
         if self.pydantic.options.is_true("validator-list-fields"):
             self.add_field_list()

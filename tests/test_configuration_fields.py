@@ -17,7 +17,8 @@ from sphinx.addnodes import (
 from sphinx.testing.util import assert_node
 from sphinxcontrib.autodoc_pydantic import PydanticFieldDocumenter
 from .compatibility import desc_annotation_default_value, \
-    desc_annotation_directive_prefix, convert_ellipsis_to_none
+    desc_annotation_directive_prefix, convert_ellipsis_to_none, \
+    typing_module_prefix
 
 KWARGS = dict(documenter=PydanticFieldDocumenter.directivetype,
               deactivate_all=True)
@@ -694,10 +695,11 @@ def test_autodoc_pydantic_field_show_required_true(field, autodocument):
     assert result == actual
 
 
-@pytest.mark.parametrize("expected", [("field1", "Optional[int]"),
-                                      ("field2", "Optional[int]"),
-                                      ("field3", "int"),
-                                      ("field4", "int")])
+@pytest.mark.parametrize("expected",
+                         [("field1", typing_module_prefix("Optional[int]")),
+                          ("field2", typing_module_prefix("Optional[int]")),
+                          ("field3", "int"),
+                          ("field4", "int")])
 def test_autodoc_pydantic_field_show_required_true_not(expected, autodocument):
     """Ensure that fields are not incorrectly tagged as required.
 
@@ -889,10 +891,11 @@ def test_autodoc_pydantic_field_show_required_false_directive(parse_rst):
     assert_node(doctree, output_nodes)
 
 
-@pytest.mark.parametrize(["field", "typ"], [("field1", "Optional[int]"),
-                                            ("field2", "Optional[int]"),
-                                            ("field3", "int"),
-                                            ("field4", "int")])
+@pytest.mark.parametrize(["field", "typ"],
+                         [("field1", typing_module_prefix("Optional[int]")),
+                          ("field2", typing_module_prefix("Optional[int]")),
+                          ("field3", "int"),
+                          ("field4", "int")])
 def test_autodoc_pydantic_field_show_optional_true_not(
         field, typ, autodocument):
     """Ensure that fields are not incorrectly tagged as optional.
@@ -932,8 +935,9 @@ def test_autodoc_pydantic_field_show_optional_true_not(
     assert result == actual
 
 
-@pytest.mark.parametrize(["field", "typ"], [("field1", "int"),
-                                            ("field2", "Optional[int]")])
+@pytest.mark.parametrize(["field", "typ"],
+                         [("field1", "int"),
+                          ("field2", typing_module_prefix("Optional[int]"))])
 def test_autodoc_pydantic_field_show_optional_true(field, typ, autodocument):
     kwargs = dict(
         object_path=f'target.configuration.FieldShowOptional.{field}',
@@ -970,8 +974,9 @@ def test_autodoc_pydantic_field_show_optional_true(field, typ, autodocument):
     assert result == actual
 
 
-@pytest.mark.parametrize(["field", "typ"], [("field1", "int"),
-                                            ("field2", "Optional[int]")])
+@pytest.mark.parametrize(["field", "typ"],
+                         [("field1", "int"),
+                          ("field2", typing_module_prefix("Optional[int]"))])
 def test_autodoc_pydantic_field_show_optional_false(field, typ, autodocument):
     kwargs = dict(
         object_path=f'target.configuration.FieldShowOptional.{field}',
@@ -1200,7 +1205,6 @@ def test_autodoc_pydantic_field_swap_name_and_alias_false(autodocument):
 
 def test_autodoc_pydantic_field_swap_name_and_alias_true_directive_local(
         parse_rst):
-
     prefix = desc_annotation_directive_prefix("field")
     output_nodes = (
         index,
@@ -1234,7 +1238,6 @@ def test_autodoc_pydantic_field_swap_name_and_alias_true_directive_local(
 
 def test_autodoc_pydantic_field_swap_name_and_alias_false_directive_local(
         parse_rst):
-
     prefix = desc_annotation_directive_prefix("field")
     output_nodes = (
         index,
@@ -1268,7 +1271,6 @@ def test_autodoc_pydantic_field_swap_name_and_alias_false_directive_local(
 
 def test_autodoc_pydantic_field_swap_name_and_alias_true_directive_global(
         parse_rst):
-
     prefix = desc_annotation_directive_prefix("field")
     output_nodes = (
         index,
