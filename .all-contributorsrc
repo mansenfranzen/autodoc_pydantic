@@ -264,6 +264,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "sneakers-the-rat",
+      "name": "Jonny Saunders",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12961499?v=4",
+      "profile": "https://jon-e.net",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
