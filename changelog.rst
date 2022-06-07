@@ -1,10 +1,33 @@
 Changelog
 =========
 
+v1.7.2 - 2022-06-XX
+-------------------
+
+This a bugfix release.
+
+Bugfix
+~~~~~~
+
+- Adjust ``PydanticFieldDocumenter.can_document_member`` to ignore non
+  pydantic fields
+  `#123 <https://github.com/mansenfranzen/autodoc_pydantic/issues/123>`__,
+  `#128 <https://github.com/mansenfranzen/autodoc_pydantic/issues/128>`__.
+
+Contributors
+~~~~~~~~~~~~
+
+- Thanks to `sneakers-the-rat  <https://github.com/sneakers-the-rat>`__ and
+  `PipeKnight <https://github.com/PipeKnight>`__ for
+  reporting a bug when encountering attributes that are not pydantic fields
+  `#123 <https://github.com/mansenfranzen/autodoc_pydantic/issues/123>`__,
+  `#128 <https://github.com/mansenfranzen/autodoc_pydantic/issues/128>`__.
+
+
 v1.7.1 - 2022-05-30
 -------------------
 
-This is a bug release supporting sphinx 5.0.
+This is a bugfix release supporting sphinx 5.0.
 
 Bugfix
 ~~~~~~
