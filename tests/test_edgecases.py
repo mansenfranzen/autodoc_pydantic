@@ -505,3 +505,45 @@ def test_non_field_attributes(autodocument):
         deactivate_all=False)
 
     assert result == actual
+
+
+def test_non_field_attributes(autodocument):
+    """Ensure that pydantic models can be documented as class attributes.
+
+    This relates to #129.
+
+    """
+
+    result = [
+        '',
+        '.. py:module:: target.edgecase_model_as_attribute',
+        '',
+        '',
+        '.. py:class:: Foo()',
+        '   :module: target.edgecase_model_as_attribute',
+        '',
+        '   Foo class',
+        '',
+        '',
+        '   .. py:pydantic_model:: Foo.Bar',
+        '      :module: target.edgecase_model_as_attribute',
+        '',
+        '      Bar class',
+        '',
+        '',
+        '      .. py:pydantic_validator:: Foo.Bar.do_nothing',
+        '         :module: target.edgecase_model_as_attribute',
+        '         :classmethod:',
+        '',
+        '         Foo',
+        ''
+    ]
+
+    actual = autodocument(
+        documenter='module',
+        object_path='target.edgecase_model_as_attribute',
+        options_doc={"members": None},
+        options_app={"autodoc_pydantic_model_show_validator_members": True},
+        deactivate_all=True)
+
+    assert result == actual

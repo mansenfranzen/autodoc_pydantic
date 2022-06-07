@@ -26,7 +26,7 @@ from sphinxcontrib.autodoc_pydantic.directives.directives import (
     PydanticSettings
 )
 
-__version__ = "1.7.1"
+__version__ = "1.7.2"
 
 from sphinxcontrib.autodoc_pydantic.events import add_fallback_css_class
 
