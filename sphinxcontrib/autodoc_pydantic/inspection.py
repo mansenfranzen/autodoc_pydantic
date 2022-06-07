@@ -509,6 +509,17 @@ class StaticInspector:
             return False
 
     @classmethod
+    def is_pydantic_field(cls, parent: Any, field_name: str) -> bool:
+        """Determine if given `field` is a pydantic field.
+
+        """
+
+        if not cls.is_pydantic_model(parent):
+            return False
+
+        return field_name in parent.__fields__
+
+    @classmethod
     def is_validator_by_name(cls, name: str, obj: Any) -> bool:
         """Determine if a validator is present under provided `name` for given
         `model`.
