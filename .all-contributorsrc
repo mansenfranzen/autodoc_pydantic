@@ -255,6 +255,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "iwishiwasaneagle",
+      "name": "Jan-Hendrik Ewers",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12383029?v=4",
+      "profile": "http://janhendrikewers.uk/",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
