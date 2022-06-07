@@ -13,6 +13,10 @@ Bugfix
   pydantic fields
   `#123 <https://github.com/mansenfranzen/autodoc_pydantic/issues/123>`__,
   `#128 <https://github.com/mansenfranzen/autodoc_pydantic/issues/128>`__.
+- Allow pydantic models to be documented as class attributes while adjusting
+  ``ModelInspector.from_child_signode`` to support nested object paths
+  `#124 <https://github.com/mansenfranzen/autodoc_pydantic/issues/123>`__,
+  `#129 <https://github.com/mansenfranzen/autodoc_pydantic/issues/128>`__.
 
 Contributors
 ~~~~~~~~~~~~
@@ -22,6 +26,19 @@ Contributors
   reporting a bug when encountering attributes that are not pydantic fields
   `#123 <https://github.com/mansenfranzen/autodoc_pydantic/issues/123>`__,
   `#128 <https://github.com/mansenfranzen/autodoc_pydantic/issues/128>`__.
+- Thanks to `iwishiwasaneagle  <https://github.com/iwishiwasaneagle>`__ and
+  `nickeldan <https://github.com/nickeldan>`__ for
+  reporting a bug pydantic models were documented as class attributes or
+  ``ModelInspector.from_child_signode`` returned the incorrect model reference
+  `#124 <https://github.com/mansenfranzen/autodoc_pydantic/issues/123>`__,
+  `#129 <https://github.com/mansenfranzen/autodoc_pydantic/issues/128>`__.
+
+Internal
+~~~~~~~~
+
+- Renamed ``from_signode`` to ``from_child_signode`` for better clarity.
+- Added explicit check to raise an exception if loaded object in
+  ``ModelInspector.from_child_signode`` is not a pydantic model.
 
 
 v1.7.1 - 2022-05-30
