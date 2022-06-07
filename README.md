@@ -6,10 +6,10 @@
 [![Master](https://img.shields.io/github/workflow/status/mansenfranzen/autodoc_pydantic/ci?style=for-the-badge)](https://github.com/mansenfranzen/autodoc_pydantic/actions/workflows/tests.yml)
 [![Coverage](https://img.shields.io/codecov/c/gh/mansenfranzen/autodoc_pydantic?style=for-the-badge)](https://app.codecov.io/gh/mansenfranzen/autodoc_pydantic)
 
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-27-orange.svg?style=for-the-badge)](#contributors)
+[![Downloads](https://img.shields.io/pypi/dm/autodoc_pydantic?color=fe7d37&style=for-the-badge)](https://pypistats.org/packages/autodoc-pydantic)<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-28-orange.svg?style=for-the-badge)](#contributors)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
-[![Downloads](https://img.shields.io/pypi/dm/autodoc_pydantic?color=fe7d37&style=for-the-badge)](https://pypistats.org/packages/autodoc-pydantic)
+
 
 You love [pydantic](https://pydantic-docs.helpmanual.io/) ❤ and you want to
 document your models and configuration settings with [sphinx](https://www.sphinx-doc.org/en/master/)?
@@ -91,6 +91,7 @@ Thanks to great open source projects [sphinx](https://www.sphinx-doc.org/en/mast
     <td align="center"><a href="https://github.com/nickeldan"><img src="https://avatars.githubusercontent.com/u/21210592?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Daniel Walker</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/issues?q=author%3Anickeldan" title="Bug reports">🐛</a></td>
     <td align="center"><a href="https://t.me/pipeknight"><img src="https://avatars.githubusercontent.com/u/34810566?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Evgeniy Lupashin</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/issues?q=author%3APipeKnight" title="Bug reports">🐛</a></td>
     <td align="center"><a href="http://janhendrikewers.uk/"><img src="https://avatars.githubusercontent.com/u/12383029?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jan-Hendrik Ewers</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/issues?q=author%3Aiwishiwasaneagle" title="Bug reports">🐛</a></td>
+    <td align="center"><a href="https://jon-e.net"><img src="https://avatars.githubusercontent.com/u/12961499?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Jonny Saunders</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/issues?q=author%3Asneakers-the-rat" title="Bug reports">🐛</a></td>
   </tr>
 </table>
 
