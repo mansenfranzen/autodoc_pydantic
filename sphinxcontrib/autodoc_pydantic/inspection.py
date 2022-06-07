@@ -557,4 +557,11 @@ class ModelInspector:
         model_path_parts = signode["fullname"].split(".")[:-1]
         model_path = ".".join(model_path_parts)
         model = pydoc.locate(f"{signode['module']}.{model_path}")
+
+        if not cls.static.is_pydantic_model(model):
+            raise ValueError(
+                f"Signode with full name {signode['fullname']} and extracted "
+                f"model path does reference pydantic model. "
+            )
+
         return cls(model)
