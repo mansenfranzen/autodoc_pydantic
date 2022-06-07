@@ -2,14 +2,13 @@
 
 """
 import copy
-from pathlib import Path
 
 import pytest
 import sphinx.errors
 from sphinx.transforms.post_transforms import ReferencesResolver
 
-from tests.compatibility import rst_alias_class_directive, typehints_prefix, \
-    typing_module_prefix
+from tests.compatibility import rst_alias_class_directive, \
+    TYPEHINTS_PREFIX, TYPING_MODULE_PREFIX
 
 
 def test_not_json_compliant(autodocument):
@@ -397,7 +396,6 @@ def test_model_as_attr(autodocument):
         deactivate_all=False)
 
     rst_class = rst_alias_class_directive()
-    prefix = typehints_prefix()
 
     assert actual == [
         '',
@@ -410,7 +408,7 @@ def test_model_as_attr(autodocument):
         '   .. py:attribute:: Container.TEST_MODEL',
         '      :module: target.edgecase_model_as_attr',
         '',
-        f'      alias of {rst_class}`{prefix}target.edgecase_model_as_attr.Model`'
+        f'      alias of {rst_class}`{TYPEHINTS_PREFIX}target.edgecase_model_as_attr.Model`'
     ]
 
 
@@ -494,7 +492,7 @@ def test_non_field_attributes(autodocument):
         '',
         '   .. py:attribute:: ClassAttribute.class_attribute',
         '      :module: target.edgecase_non_field_attribute',
-        f'      :type: {typing_module_prefix("ClassVar")}[str]',
+        f'      :type: {TYPING_MODULE_PREFIX}ClassVar[str]',
         '      :value: None',
         '',
         '      Dummy',
