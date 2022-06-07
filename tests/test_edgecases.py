@@ -8,7 +8,8 @@ import pytest
 import sphinx.errors
 from sphinx.transforms.post_transforms import ReferencesResolver
 
-from tests.compatibility import rst_alias_class_directive, typehints_prefix
+from tests.compatibility import rst_alias_class_directive, typehints_prefix, \
+    typing_module_prefix
 
 
 def test_not_json_compliant(autodocument):
@@ -493,7 +494,7 @@ def test_non_field_attributes(autodocument):
         '',
         '   .. py:attribute:: ClassAttribute.class_attribute',
         '      :module: target.edgecase_non_field_attribute',
-        '      :type: ClassVar[str]',
+        f'      :type: {typing_module_prefix("ClassVar")}[str]',
         '      :value: None',
         '',
         '      Dummy',

@@ -2,7 +2,7 @@
 differences between different sphinx versions.
 
 """
-
+import typing
 from typing import Tuple, List
 
 import pydantic
@@ -94,7 +94,8 @@ def typing_module_prefix(typ: str) -> str:
 
     """
 
-    if sphinx.version_info >= (5, ) and typ.startswith("Optional"):
+    is_included = getattr(typing, typ) is not None
+    if sphinx.version_info >= (5, ) and is_included:
         typ = f"~typing.{typ}"
 
     return typ
