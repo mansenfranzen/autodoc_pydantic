@@ -471,3 +471,38 @@ def test_field_description_correct_rst_rendering(autodocument):
                      "autodoc_pydantic_model_undoc_members": True},
         deactivate_all=True)
     assert result == actual
+
+
+def test_non_field_attributes(autodocument):
+    """Ensure that attributes which are not pydantic fields are correctly
+    ignored.
+
+    This relates to #123
+
+    """
+
+    result = [
+        '',
+        '.. py:pydantic_model:: ClassAttribute',
+        '   :module: target.edgecase_non_field_attribute',
+        '',
+        '   FooBar.',
+        '',
+        '',
+        '',
+        '',
+        '   .. py:attribute:: ClassAttribute.class_attribute',
+        '      :module: target.edgecase_non_field_attribute',
+        '      :type: ClassVar[str]',
+        '      :value: None',
+        '',
+        '      Dummy',
+        '']
+
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.edgecase_non_field_attribute.ClassAttribute',
+        options_app={"autodoc_pydantic_model_show_json": False},
+        deactivate_all=False)
+
+    assert result == actual
