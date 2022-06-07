@@ -244,7 +244,7 @@ class PydanticValidator(PydanticDirectiveBase, PyMethod):
 
         # get imports, names and fields of validator
         name = signode["fullname"].split(".")[-1]
-        inspector = ModelInspector.from_signode(signode)
+        inspector = ModelInspector.from_child_signode(signode)
         mappings = inspector.references.filter_by_validator_name(name)
 
         # add field reference nodes

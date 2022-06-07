@@ -548,11 +548,13 @@ class ModelInspector:
         self.references = ReferenceInspector(self)
 
     @classmethod
-    def from_signode(cls, signode: desc_signature) -> "ModelInspector":
-        """Create instance from a `signode` as used within sphinx directives.
+    def from_child_signode(cls, signode: desc_signature) -> "ModelInspector":
+        """Create instance from a child `signode` as used within sphinx
+        directives.
 
         """
 
-        model_name = signode["fullname"].split(".")[0]
-        model = pydoc.locate(f"{signode['module']}.{model_name}")
+        model_path_parts = signode["fullname"].split(".")[:-1]
+        model_path = ".".join(model_path_parts)
+        model = pydoc.locate(f"{signode['module']}.{model_path}")
         return cls(model)
