@@ -2,13 +2,13 @@
 
 """
 import copy
-from pathlib import Path
 
 import pytest
 import sphinx.errors
 from sphinx.transforms.post_transforms import ReferencesResolver
 
-from tests.compatibility import rst_alias_class_directive, typehints_prefix
+from tests.compatibility import rst_alias_class_directive, \
+    TYPEHINTS_PREFIX, TYPING_MODULE_PREFIX
 
 
 def test_not_json_compliant(autodocument):
@@ -396,7 +396,6 @@ def test_model_as_attr(autodocument):
         deactivate_all=False)
 
     rst_class = rst_alias_class_directive()
-    prefix = typehints_prefix()
 
     assert actual == [
         '',
@@ -409,7 +408,7 @@ def test_model_as_attr(autodocument):
         '   .. py:attribute:: Container.TEST_MODEL',
         '      :module: target.edgecase_model_as_attr',
         '',
-        f'      alias of {rst_class}`{prefix}target.edgecase_model_as_attr.Model`'
+        f'      alias of {rst_class}`{TYPEHINTS_PREFIX}target.edgecase_model_as_attr.Model`'
     ]
 
 
@@ -470,4 +469,39 @@ def test_field_description_correct_rst_rendering(autodocument):
         options_app={"autodoc_pydantic_model_members": True,
                      "autodoc_pydantic_model_undoc_members": True},
         deactivate_all=True)
+    assert result == actual
+
+
+def test_non_field_attributes(autodocument):
+    """Ensure that attributes which are not pydantic fields are correctly
+    ignored.
+
+    This relates to #123
+
+    """
+
+    result = [
+        '',
+        '.. py:pydantic_model:: ClassAttribute',
+        '   :module: target.edgecase_non_field_attribute',
+        '',
+        '   FooBar.',
+        '',
+        '',
+        '',
+        '',
+        '   .. py:attribute:: ClassAttribute.class_attribute',
+        '      :module: target.edgecase_non_field_attribute',
+        f'      :type: {TYPING_MODULE_PREFIX}ClassVar[str]',
+        '      :value: None',
+        '',
+        '      Dummy',
+        '']
+
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.edgecase_non_field_attribute.ClassAttribute',
+        options_app={"autodoc_pydantic_model_show_json": False},
+        deactivate_all=False)
+
     assert result == actual

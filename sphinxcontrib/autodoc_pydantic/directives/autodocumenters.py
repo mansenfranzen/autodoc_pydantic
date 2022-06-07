@@ -514,11 +514,17 @@ class PydanticFieldDocumenter(AttributeDocumenter):
 
         """
 
-        is_val = super().can_document_member(member, membername, isattr,
-                                             parent)
-        is_parent_model = ModelInspector.static.is_pydantic_model(
-            parent.object)
-        return is_val and is_parent_model and isattr
+        is_valid = super().can_document_member(member,
+                                               membername,
+                                               isattr,
+                                               parent)
+
+        is_field = ModelInspector.static.is_pydantic_field(
+            parent=parent.object,
+            field_name=membername
+        )
+
+        return is_valid and is_field and isattr
 
     @property
     def pydantic_field_name(self) -> str:

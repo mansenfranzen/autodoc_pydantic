@@ -2,7 +2,6 @@
 differences between different sphinx versions.
 
 """
-
 from typing import Tuple, List
 
 import pydantic
@@ -87,17 +86,17 @@ def convert_ellipsis_to_none(result: List[str]) -> List[str]:
     return [x.replace("Ellipsis", "None") for x in result]
 
 
-def typing_module_prefix(typ: str) -> str:
+def typing_module_prefix() -> str:
     """Provides compatibility abstraction to account for changed behaviour of
     `autodoc_typehints_format` in sphinx 5.0 from fully qualified to short
     which requires types of typing module to prefixed with `~typing.`.
 
     """
 
-    if sphinx.version_info >= (5, ) and typ.startswith("Optional"):
-        typ = f"~typing.{typ}"
+    if sphinx.version_info >= (5,):
+        return "~typing."
 
-    return typ
+    return ""
 
 
 def typehints_prefix() -> str:
@@ -111,3 +110,7 @@ def typehints_prefix() -> str:
         return "~"
 
     return ""
+
+
+TYPING_MODULE_PREFIX = typing_module_prefix()
+TYPEHINTS_PREFIX = typehints_prefix()
