@@ -80,7 +80,7 @@ and all `contributors <https://github.com/mansenfranzen/autodoc_pydantic/tree/re
 .. |DownloadsBadge| image:: https://img.shields.io/pypi/dm/autodoc_pydantic?color=fe7d37&style=flat
 .. _DownloadsBadge: https://pypistats.org/packages/autodoc-pydantic
 
-.. |ContributersBadge| image:: https://img.shields.io/badge/all_contributors-24-orange.svg?style=flat
+.. |ContributersBadge| image:: https://img.shields.io/badge/all_contributors-28-orange.svg?style=flat
 .. _ContributersBadge: https://github.com/mansenfranzen/autodoc_pydantic/tree/refactor_inspection#acknowledgements
 
 .. |CoverageBadge| image:: https://img.shields.io/codecov/c/gh/mansenfranzen/autodoc_pydantic?style=flat
