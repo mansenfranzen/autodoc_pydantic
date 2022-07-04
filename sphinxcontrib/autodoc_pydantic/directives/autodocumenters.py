@@ -3,11 +3,11 @@
 """
 
 import json
-from typing import Any, Optional, Dict, List, Iterable, Callable
+from typing import Any, Optional, Dict, List, Iterable, Callable, Set
 
 import sphinx
 from docutils.statemachine import StringList
-from pydantic import BaseSettings
+from pydantic import BaseSettings, BaseModel
 from sphinx.ext.autodoc import (
     MethodDocumenter,
     ClassDocumenter,
@@ -52,6 +52,24 @@ class PydanticAutoDoc:
         self._is_child = is_child
         self._inspect: Optional[ModelInspector] = None
         self._options = AutoDocOptions(self._documenter)
+        self._model: Optional[BaseModel] = None
+
+    @property
+    def model(self) -> BaseModel:
+        """Lazily load pydantic model after initialization. For more, please
+        read `inspect` doc string.
+
+        """
+
+        if self._model:
+            return self._model
+
+        if self._is_child:
+            self._model = self._documenter.parent
+        else:
+            self._model = self._documenter.object
+
+        return self._model
 
     @property
     def options(self) -> AutoDocOptions:
