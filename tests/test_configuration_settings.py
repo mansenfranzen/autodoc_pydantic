@@ -1109,7 +1109,7 @@ def test_autodoc_pydantic_settings_hide_reused_validator_true(autodocument):
 
     result = [
         '',
-        '.. py:pydantic_model:: SettingOne',
+        '.. py:pydantic_settings:: SettingOne',
         '   :module: target.configuration_settings_hide_reused_validator',
         '',
         '   :Validators:',
@@ -1137,7 +1137,7 @@ def test_autodoc_pydantic_settings_hide_reused_validator_true(autodocument):
 
     # explict local
     actual = autodocument(
-        options_doc={"setting-hide-reused-validator": True,
+        options_doc={"settings-hide-reused-validator": True,
                      "members": None,
                      "undoc-members": None},
         options_app={"autodoc_pydantic_settings_show_validator_summary": True,
@@ -1150,7 +1150,7 @@ def test_autodoc_pydantic_settings_hide_reused_validator_true(autodocument):
         options_app={"autodoc_pydantic_settings_hide_reused_validator": False,
                      "autodoc_pydantic_settings_show_validator_summary": True,
                      "autodoc_pydantic_field_list_validators": True},
-        options_doc={"setting-hide-reused-validator": True,
+        options_doc={"settings-hide-reused-validator": True,
                      "members": None,
                      "undoc-members": None},
         **kwargs)
@@ -1171,7 +1171,7 @@ def test_autodoc_pydantic_settings_hide_reused_validator_false(autodocument):
 
     result = [
         '',
-        '.. py:pydantic_model:: SettingOne',
+        '.. py:pydantic_settings:: SettingOne',
         '   :module: target.configuration_settings_hide_reused_validator',
         '',
         '   :Validators:',
@@ -1204,7 +1204,7 @@ def test_autodoc_pydantic_settings_hide_reused_validator_false(autodocument):
 
     # explict local
     actual = autodocument(
-        options_doc={"setting-hide-reused-validator": False,
+        options_doc={"settings-hide-reused-validator": False,
                      "members": None,
                      "undoc-members": None},
         options_app={"autodoc_pydantic_settings_show_validator_summary": True,
@@ -1217,7 +1217,7 @@ def test_autodoc_pydantic_settings_hide_reused_validator_false(autodocument):
         options_app={"autodoc_pydantic_settings_hide_reused_validator": True,
                      "autodoc_pydantic_settings_show_validator_summary": True,
                      "autodoc_pydantic_field_list_validators": True},
-        options_doc={"setting-hide-reused-validator": False,
+        options_doc={"settings-hide-reused-validator": False,
                      "members": None,
                      "undoc-members": None},
         **kwargs)
@@ -1239,7 +1239,7 @@ def test_autodoc_pydantic_settings_hide_reused_validator_true_identical_names(au
 
     result = [
         '',
-        '.. py:pydantic_model:: SettingTwo',
+        '.. py:pydantic_settings:: SettingTwo',
         '   :module: target.configuration_settings_hide_reused_validator',
         '',
         '   :Validators:',
@@ -1267,7 +1267,7 @@ def test_autodoc_pydantic_settings_hide_reused_validator_true_identical_names(au
 
     # explict local
     actual = autodocument(
-        options_doc={"setting-hide-reused-validator": True,
+        options_doc={"settings-hide-reused-validator": True,
                      "members": None,
                      "undoc-members": None},
         options_app={"autodoc_pydantic_settings_show_validator_summary": True,
@@ -1280,7 +1280,7 @@ def test_autodoc_pydantic_settings_hide_reused_validator_true_identical_names(au
         options_app={"autodoc_pydantic_settings_hide_reused_validator": False,
                      "autodoc_pydantic_settings_show_validator_summary": True,
                      "autodoc_pydantic_field_list_validators": True},
-        options_doc={"setting-hide-reused-validator": True,
+        options_doc={"settings-hide-reused-validator": True,
                      "members": None,
                      "undoc-members": None},
         **kwargs)
