@@ -572,11 +572,41 @@ class ModelInspector:
 
     def __init__(self, model: Type[BaseModel]):
         self.model = model
+        self.field_validator_mappings = self.get_field_validator_mapping()
+
         self.config = ConfigInspector(self)
         self.schema = SchemaInspector(self)
         self.fields = FieldInspector(self)
         self.validators = ValidatorInspector(self)
         self.references = ReferenceInspector(self)
+
+    def get_field_validator_mapping(self) -> Dict[str, List[ValidatorAdapter]]:
+        """Collect all available validators keyed by their corresponding
+        fields including post/pre root validators.
+
+        Validators are wrapped into `ValidatorAdapters` to provide uniform
+        interface within autodoc_pydantic.
+
+        """
+
+        mapping = defaultdict(list)
+
+        # standard validators
+        for field, validators in self.model.__validators__.items():
+            for validator in validators:
+                mapping[field].append(ValidatorAdapter(func=validator.func))
+
+        # root pre
+        for func in self.model.__pre_root_validators__:
+            mapping["*"].append(ValidatorAdapter(func=func,
+                                                 root_pre=True))
+
+        # root post
+        for _, func in self.model.__post_root_validators__:
+            mapping["*"].append(ValidatorAdapter(func=func,
+                                                 root_post=True))
+
+        return mapping
 
     @classmethod
     def from_child_signode(cls, signode: desc_signature) -> "ModelInspector":
