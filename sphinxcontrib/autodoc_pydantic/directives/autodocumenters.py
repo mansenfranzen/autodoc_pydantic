@@ -104,6 +104,46 @@ class PydanticAutoDoc:
         else:
             return field_name
 
+    def get_filtered_member_names(self) -> Set[str]:
+        """Return all member names of autodocumented object which are
+        prefiltered to exclude inherited members.
+
+        """
+
+        return {x[0] for x in self._documenter.get_object_members(True)[1]}
+
+    def resolve_inherited_validator_reference(self, ref: str) -> str:
+        """Provide correct validator reference in case validator is inherited
+        and explicitly shown in docs via directive option
+        `inherited-members`.
+
+        More concretely, inherited validators are not shown from parent class
+        unless directive option `inherited-members` is used. The validator
+        references may either point to the parent class or the child class.
+        This logic is implemented here.
+
+        """
+
+        ref_parts = ref.split(".")
+        class_name = ref_parts[-2]
+
+        # early exit if ref class name equals model name -> no inheritance
+        if class_name == self.model.__name__:
+            return ref
+
+        validator_name = ref_parts[-1]
+        base_class_names = (x.__name__ for x in self.model.__mro__)
+
+        is_base_class = class_name in base_class_names
+        is_inherited_enabled = "inherited-members" in self._documenter.options
+        is_member = validator_name in self.inspect.validators.names
+
+        if is_member and is_base_class and is_inherited_enabled:
+            ref_parts[-2] = self.model.__name__
+            return ".".join(ref_parts)
+        else:
+            return ref
+
 
 class PydanticModelDocumenter(ClassDocumenter):
     """Represents specialized Documenter subclass for pydantic models.

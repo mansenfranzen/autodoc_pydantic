@@ -278,10 +278,3 @@ class AutoDocOptions(DirectiveOptions):
 
             self.parent.add_line(f"   :{name}: {value}", source_name)
 
-    def get_filtered_member_names(self) -> Set[str]:
-        """Return all member names of autodocumented object which are
-        prefiltered to exclude inherited members.
-
-        """
-
-        return {x[0] for x in self.parent.get_object_members(True)[1]}
