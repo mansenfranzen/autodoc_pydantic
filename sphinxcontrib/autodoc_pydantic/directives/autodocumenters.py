@@ -219,6 +219,9 @@ class PydanticModelDocumenter(ClassDocumenter):
         if self.pydantic.options.is_false("show-validator-members", True):
             self.hide_validator_members()
 
+        if self.pydantic.options.is_true("hide-reused-validator", True):
+            self.hide_reused_validators()
+
         super().document_members(*args, **kwargs)
 
     def hide_config_member(self):
@@ -241,6 +244,19 @@ class PydanticModelDocumenter(ClassDocumenter):
             self.options["exclude-members"] = validators
         else:
             self.options["exclude-members"].update(validators)
+
+    def hide_reused_validators(self):
+        """Add reused validators to `exclude_members` option.
+
+        """
+
+        validators = self.pydantic.inspect.validators
+        reused_validators = validators.get_reused_validator_method_names()
+
+        if "exclude-members" not in self.options:
+            self.options["exclude-members"] = set(reused_validators)
+        else:
+            self.options["exclude-members"].update(reused_validators)
 
     def format_signature(self, **kwargs) -> str:
         """If parameter list is to be hidden, return only empty signature.
@@ -376,16 +392,21 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         return sorted_references
 
-    def _build_validator_summary_rest_line(self, reference: ValidatorFieldMap):
+    def _build_validator_summary_rest_line(
+            self, reference: ValidatorFieldMap) -> str:
         """Generates reST line for validator-field mapping with references for
         validator summary section.
 
         """
 
         name = self.pydantic.get_field_name_or_alias(reference.field_name)
+        validator_ref = self.pydantic.resolve_inherited_validator_reference(
+            reference.validator_ref
+        )
+
         return (
             f"   - "
-            f":py:obj:`{reference.validator_name} <{reference.validator_ref}>`"
+            f":py:obj:`{reference.validator_name} <{validator_ref}>`"
             f" » "
             f":py:obj:`{name} <{reference.field_ref}>`"
         )
@@ -434,7 +455,7 @@ class PydanticModelDocumenter(ClassDocumenter):
         """
 
         fields = self.pydantic.inspect.fields.names
-        valid_members = self.pydantic.options.get_filtered_member_names()
+        valid_members = self.pydantic.get_filtered_member_names()
         return [field for field in fields if field in valid_members]
 
     def _sort_summary_list(self, names: Iterable[str]) -> List[str]:
@@ -746,10 +767,10 @@ class PydanticFieldDocumenter(AttributeDocumenter):
 
         source_name = self.get_sourcename()
         self.add_line(":Validated by:", source_name)
-        for reference in references:
-            field_name = reference.validator_name
-            ref = reference.validator_ref
-            line = f"   - :py:obj:`{field_name} <{ref}>`"
+        for reference in sorted_references:
+            resolver = self.pydantic.resolve_inherited_validator_reference
+            ref = resolver(reference.validator_ref)
+            line = f"   - :py:obj:`{reference.validator_name} <{ref}>`"
             self.add_line(line, source_name)
 
         self.add_line("", source_name)
