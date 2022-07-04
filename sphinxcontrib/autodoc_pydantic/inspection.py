@@ -3,10 +3,13 @@ is used to retrieve relevant information about fields, validators, config and
 schema of pydantical models.
 
 """
-
+import inspect
+import itertools
 import pydoc
+from collections import defaultdict
 from itertools import chain
-from typing import NamedTuple, List, Dict, Any, Set, TypeVar, Iterator, Type
+from typing import NamedTuple, List, Dict, Any, Set, TypeVar, Iterator, Type, \
+    Callable, Optional
 
 import pydantic
 from pydantic import BaseModel, create_model
@@ -109,7 +112,7 @@ class BaseInspectionComposite:
     """
 
     def __init__(self, parent: 'ModelInspector'):
-        self._parent = parent
+        self._parent: 'ModelInspector' = parent
         self.model = self._parent.model
 
 
@@ -121,49 +124,6 @@ class FieldInspector(BaseInspectionComposite):
     def __init__(self, parent: 'ModelInspector'):
         super().__init__(parent)
         self.attribute = self.model.__fields__
-
-    @property
-    def validator_names(self) -> Dict[str, Set[str]]:
-        """Return mapping between all field names (keys) and their
-        corresponding validator names (values).
-
-        """
-
-        standard = self.validator_names_standard
-        root = self.validator_names_root
-
-        # add root names
-        complete = standard.copy()
-        asterisk = complete.get("*", set()).union(root["*"])
-        complete["*"] = asterisk
-
-        return complete
-
-    @property
-    def validator_names_root(self) -> Dict[str, Set[str]]:
-        """Return mapping between all field names (keys) and their
-        corresponding validator names (values) for root validators only.
-
-        """
-
-        root_validator_names = self._parent.validators.names_root_validators
-        return {"*": root_validator_names}
-
-    @property
-    def validator_names_standard(self) -> Dict[str, List[str]]:
-        """Return mapping between all field names (keys) and their
-        corresponding validator names (values) for standard validators only.
-
-        Please be aware, the asterisk field name `*` is used to represent all
-        fields.
-
-        """
-
-        validators_attribute = self._parent.validators.attribute
-        name_getter = self._parent.validators.get_names_from_wrappers
-
-        return {field: name_getter(validators)
-                for field, validators in validators_attribute.items()}
 
     @property
     def names(self) -> List[str]:
@@ -298,61 +258,43 @@ class ValidatorInspector(BaseInspectionComposite):
 
     def __init__(self, parent: 'ModelInspector'):
         super().__init__(parent)
-        self.attribute: Dict = self.model.__validators__
-
-    @staticmethod
-    def get_names_from_wrappers(validators: Iterator[Validator]) -> Set[str]:
-        """Return the actual validator names as defined in the class body from
-        list of pydantic validator wrappers.
-
-        Parameters
-        ----------
-        validators: list
-            Wrapper objects for pydantic validators.
-
-        """
-
-        return {validator.func.__name__ for validator in validators}
+        self.attribute: Dict[str, List[Validator]] = self.model.__validators__
 
     @property
-    def names_root_validators(self) -> Set[str]:
-        """Return all names of root validators.
+    def values(self) -> Set[ValidatorAdapter]:
+        """Returns set of all available validators.
 
         """
 
-        def get_name_pre_root(validators):
-            return {validator.__name__ for validator in validators}
+        all_validators = self._parent.field_validator_mappings.values()
+        flattened = itertools.chain.from_iterable(all_validators)
+        return set(flattened)
 
-        def get_name_post_root(validators):
-            return {validator[1].__name__ for validator in validators}
-
-        pre_root = get_name_pre_root(self.model.__pre_root_validators__)
-        post_root = get_name_post_root(self.model.__post_root_validators__)
-
-        return pre_root.union(post_root)
-
-    @property
-    def names_asterisk_validators(self) -> Set[str]:
-        """Return all names of asterisk validators. Asterisk are defined as
-        validators, that process all availble fields. They consist of root
-        validators and validators with the `*` field target.
+    def get_reused_validator_method_names(self) -> List[str]:
+        """Identify all bound methods names that are used to generate reused
+        validators as placeholders.
 
         """
 
-        asterisk_validators = self.attribute.get("*", [])
-        asterisk = self.get_names_from_wrappers(asterisk_validators)
-        return asterisk.union(self.names_root_validators)
+        reused_validators = self.get_reused_validators()
+        if not reused_validators:
+            return []
 
-    @property
-    def names_standard_validators(self) -> Set[str]:
-        """Return all names of standard validators which do not process all
-        fields at once (in contrast to asterisk validators).
+        validator_set = set([x.func for x in reused_validators])
+        bound_methods = {key: value
+                         for key, value in vars(self.model).items()
+                         if inspect.ismethod(getattr(self.model, key))}
+
+        return [key for key, value in bound_methods.items()
+                if value.__func__ in validator_set]
+
+    def get_reused_validators(self) -> List[ValidatorAdapter]:
+        """Identify all reused validators.
 
         """
 
-        validator_wrappers = chain.from_iterable(self.attribute.values())
-        names_all_validators = self.get_names_from_wrappers(validator_wrappers)
-        return names_all_validators.difference(self.names_asterisk_validators)
+        return [validator for validator in self.values
+                if not validator.is_member(self.model)]
 
     @property
     def names(self) -> Set[str]:
@@ -360,22 +302,7 @@ class ValidatorInspector(BaseInspectionComposite):
 
         """
 
-        asterisks = self.names_asterisk_validators
-        standard = self.names_standard_validators
-
-        return asterisks.union(standard)
-
-    def is_asterisk(self, name: str) -> bool:
-        """Check if provided validator `name` references an asterisk validator.
-
-        Parameters
-        ----------
-        name: str
-            Name of the validator.
-
-        """
-
-        return name in self.names_asterisk_validators
+        return set([validator.name for validator in self.values])
 
     def __bool__(self):
         """Equals to False if no validators are present.
