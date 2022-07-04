@@ -94,32 +94,11 @@ class ValidatorFieldMap(NamedTuple):
     validator_name: str
     """Name of the validator."""
 
-    model_ref: str
-    """Reference corresponding parent pydantic model."""
+    field_ref: str
+    """Reference to field."""
 
-    def _get_ref(self, name: str) -> str:
-        """Create reference for given `name` while prefixing it with model
-        path.
-
-        """
-
-        return f"{self.model_ref}.{name}"
-
-    @property
-    def field_ref(self):
-        """Reference to field..
-
-        """
-
-        return self._get_ref(self.field_name)
-
-    @property
-    def validator_ref(self):
-        """Reference to validator.
-
-        """
-
-        return self._get_ref(self.validator_name)
+    validator_ref: str
+    """Reference to validataor."""
 
 
 class BaseInspectionComposite:
@@ -455,10 +434,7 @@ class ReferenceInspector(BaseInspectionComposite):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        mappings_asterisk = self._create_mappings_asterisk()
-        mappings_standard = self._create_mappings_standard()
-        self.mappings = mappings_standard.union(mappings_asterisk)
+        self.mappings = self._create_mappings()
 
     @property
     def model_path(self) -> str:
@@ -476,39 +452,29 @@ class ReferenceInspector(BaseInspectionComposite):
 
         return f"{self.model_path}.{name}"
 
-    def _create_mappings_asterisk(self) -> Set[ValidatorFieldMap]:
-        """Generate `ValidatorFieldMap` instances for asterisk validators.
+    def _create_mappings(self) -> Set[ValidatorFieldMap]:
+        """Generate reference mappings between validators and corresponding
+        fields.
 
         """
+        mappings = set()
 
-        field_validator_names = self._parent.fields.validator_names
-        asterisk_validators = field_validator_names.pop("*")
-        model_path = self.model_path
+        for field, validators in self._parent.field_validator_mappings.items():
+            if field == "*":
+                field_name = ASTERISK_FIELD_NAME
+            else:
+                field_name = field
 
-        return {ValidatorFieldMap(field_name=ASTERISK_FIELD_NAME,
-                                  validator_name=validator,
-                                  model_ref=model_path)
-                for validator in asterisk_validators}
+            for validator in validators:
+                mapping = ValidatorFieldMap(
+                    field_name=field_name,
+                    field_ref=f"{self.model_path}.{field_name}",
+                    validator_name=validator.name,
+                    validator_ref=validator.object_path
+                )
+                mappings.add(mapping)
 
-    def _create_mappings_standard(self) -> Set[ValidatorFieldMap]:
-        """Generate `ValidatorFieldMap` instances for asterisk validators.
-
-        """
-
-        is_asterisk = self._parent.validators.is_asterisk
-        field_validator_names = self._parent.fields.validator_names
-        model_path = self.model_path
-
-        references = set()
-        for field, validators in field_validator_names.items():
-            refs = {ValidatorFieldMap(field_name=field,
-                                      validator_name=validator,
-                                      model_ref=model_path)
-                    for validator in validators
-                    if not is_asterisk(validator)}
-            references.update(refs)
-
-        return references
+        return mappings
 
     def filter_by_validator_name(self, name: str) -> List[ValidatorFieldMap]:
         """Return mappings for given validator `name`.
