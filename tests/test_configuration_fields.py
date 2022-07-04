@@ -2,7 +2,6 @@
 
 """
 
-import pydantic
 import pytest
 
 from sphinx.addnodes import (
@@ -18,7 +17,7 @@ from sphinx.testing.util import assert_node
 from sphinxcontrib.autodoc_pydantic import PydanticFieldDocumenter
 from .compatibility import desc_annotation_default_value, \
     desc_annotation_directive_prefix, convert_ellipsis_to_none, \
-    typing_module_prefix, TYPING_MODULE_PREFIX
+    TYPING_MODULE_PREFIX
 
 KWARGS = dict(documenter=PydanticFieldDocumenter.directivetype,
               deactivate_all=True)
