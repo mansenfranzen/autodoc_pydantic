@@ -18,6 +18,71 @@ from sphinx.addnodes import desc_signature
 ASTERISK_FIELD_NAME = "all fields"
 
 
+class ValidatorAdapter(BaseModel):
+    """Provide standardized interface to pydantic's validator objects with
+    additional metadata (e.g. root validator) for internal usage in
+    autodoc_pydantic.
+
+    """
+
+    func: Callable
+    root_pre: bool = False
+    root_post: bool = False
+
+    @property
+    def name(self) -> str:
+        """Return the validators function name.
+
+        """
+        return self.func.__name__
+
+    @property
+    def class_name(self) -> Optional[str]:
+        """Return the validators class name. It might be None if validator
+        is not bound to a class.
+
+        """
+
+        qualname = self.func.__qualname__.split(".")
+        if len(qualname) > 1:
+            return qualname[-2]
+
+    @property
+    def module(self) -> str:
+        """Return the validators module name.
+
+        """
+
+        return self.func.__module__
+
+    @property
+    def object_path(self) -> str:
+        """Return the fully qualified object path of the validators function.
+
+        """
+
+        return f"{self.func.__module__}.{self.func.__qualname__}"
+
+    def is_member(self, model: Type) -> bool:
+        """Check if `self.func` is a member of provided `model` class or its
+        base classes. This can be used to identify functions that are reused
+        as validators.
+
+        """
+
+        if self.class_name is None:
+            return False
+
+        bases = (f"{x.__module__}.{x.__qualname__}" for x in model.__mro__)
+        return f"{self.module}.{self.class_name}" in bases
+
+    class Config:
+        arbitrary_types_allowed = True
+
+    def __hash__(self):
+        return id(f"{self}")
+
+
 class ValidatorFieldMap(NamedTuple):
     """Contains single mapping of a pydantic validator and field.
 
