@@ -383,12 +383,8 @@ class PydanticModelDocumenter(ClassDocumenter):
         """
 
         references = self.pydantic.inspect.references.mappings
-        valid_members = self.pydantic.options.get_filtered_member_names()
-        valid_references = [reference for reference in references
-                            if reference.validator_name in valid_members]
-
         sort_func = self._get_reference_sort_func()
-        sorted_references = sorted(valid_references, key=sort_func)
+        sorted_references = sorted(references, key=sort_func)
 
         return sorted_references
 
@@ -761,6 +757,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
         field_name = self.pydantic_field_name
         func = self.pydantic.inspect.references.filter_by_field_name
         references = func(field_name)
+        sorted_references = sorted(references, key=lambda x: x.validator_name)
 
         if not references:
             return
