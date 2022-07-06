@@ -1291,6 +1291,8 @@ def test_autodoc_pydantic_model_hide_reused_validator_true(autodocument):
         '      :module: target.configuration_model_hide_reused_validator',
         '      :type: str',
         '',
+        '      Name',
+        '',
         '      :Validated by:',
         '         - :py:obj:`validation <target.configuration_model_hide_reused_validator.validation>`',
         ''
@@ -1353,6 +1355,8 @@ def test_autodoc_pydantic_model_hide_reused_validator_false(autodocument):
         '      :module: target.configuration_model_hide_reused_validator',
         '      :type: str',
         '',
+        '      Name',
+        '',
         '      :Validated by:',
         '         - :py:obj:`validation <target.configuration_model_hide_reused_validator.validation>`',
         '',
@@ -1360,6 +1364,8 @@ def test_autodoc_pydantic_model_hide_reused_validator_false(autodocument):
         '   .. py:method:: ModelOne.normalize_name()',
         '      :module: target.configuration_model_hide_reused_validator',
         '      :classmethod:',
+        '',
+        '      Reused validator class method.',
         ''
     ]
 
@@ -1389,69 +1395,6 @@ def test_autodoc_pydantic_model_hide_reused_validator_false(autodocument):
                      "autodoc_pydantic_model_show_validator_summary": True,
                      "autodoc_pydantic_field_list_validators": True},
         options_doc={"model-hide-reused-validator": False,
-                     "members": None,
-                     "undoc-members": None},
-        **kwargs)
-    assert result == actual
-
-
-def test_autodoc_pydantic_model_hide_reused_validator_true_identical_names(autodocument):
-    """Ensure that class attributes of reused validators are hidden and the
-    actual validator reference point to the correct function when the function
-    name is identical to validator/method name.
-
-    This relates to #122.
-
-    """
-
-    kwargs = dict(
-        object_path='target.configuration_model_hide_reused_validator.ModelTwo',
-        **KWARGS)
-
-    result = [
-        '',
-        '.. py:pydantic_model:: ModelTwo',
-        '   :module: target.configuration_model_hide_reused_validator',
-        '',
-        '   :Validators:',
-        '      - :py:obj:`validation <target.configuration_model_hide_reused_validator.validation>` » :py:obj:`name <target.configuration_model_hide_reused_validator.ModelTwo.name>`',
-        '',
-        '',
-        '   .. py:pydantic_field:: ModelTwo.name',
-        '      :module: target.configuration_model_hide_reused_validator',
-        '      :type: str',
-        '',
-        '      :Validated by:',
-        '         - :py:obj:`validation <target.configuration_model_hide_reused_validator.validation>`',
-        ''
-    ]
-
-    # explict global
-    actual = autodocument(
-        options_app={"autodoc_pydantic_model_hide_reused_validator": True,
-                     "autodoc_pydantic_model_show_validator_summary": True,
-                     "autodoc_pydantic_field_list_validators": True},
-        options_doc={"members": None,
-                     "undoc-members": None},
-        **kwargs)
-    assert result == actual
-
-    # explict local
-    actual = autodocument(
-        options_doc={"model-hide-reused-validator": True,
-                     "members": None,
-                     "undoc-members": None},
-        options_app={"autodoc_pydantic_model_show_validator_summary": True,
-                     "autodoc_pydantic_field_list_validators": True},
-        **kwargs)
-    assert result == actual
-
-    # explict global
-    actual = autodocument(
-        options_app={"autodoc_pydantic_model_hide_reused_validator": False,
-                     "autodoc_pydantic_model_show_validator_summary": True,
-                     "autodoc_pydantic_field_list_validators": True},
-        options_doc={"model-hide-reused-validator": True,
                      "members": None,
                      "undoc-members": None},
         **kwargs)

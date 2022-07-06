@@ -6,10 +6,10 @@ def validation(name):
     return name
 
 
-class SettingOne(BaseModel):
+class ModelOne(BaseModel):
     name: str
     """Name"""
 
-    normalize_name = validator('name', allow_reuse=True)(validation)
+    validation = validator('name', allow_reuse=True)(validation)
     """Reused validator class method."""
 
