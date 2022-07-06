@@ -406,13 +406,13 @@ implementation while the existing tests ensure that no regressions occur.
 If you have made it thus far, congratulations! Let's reward ourselves by updating
 the documentation to let others know about the new feature.
 
-**autodoc_pydantic** provides a custom directive named ``tabdocconfig`` to
+**autodoc_pydantic** provides a custom directive named ``config_description`` to
 simplify the process of adding documentation for new features:
 
 .. code-block:: rest
    :caption: docs/source/user_guide/configuration.rst
 
-   .. tabdocconfig:: autopydantic_model
+   .. config_description:: autopydantic_model
       :title: Summary List Order
       :path: target.configuration.ModelSummaryListOrder
       :confpy: autodoc_pydantic_model_summary_list_order
@@ -427,17 +427,19 @@ simplify the process of adding documentation for new features:
       respectively).
 
 You can see how this renders in the corresponding configuration section
-:ref:`here <autodoc_pydantic_model_summary_list_order>`. Importantly, the ``tabdocconfig``
+:ref:`here <autodoc_pydantic_model_summary_list_order>`. Importantly, the ``config_description``
 directive generates rendered output for all provided configuration values which
 greatly helps to understand how the feature changes the resulting documentation.
 
-The ``tabdocconfig`` directive takes the following parameters:
+The ``config_description`` directive takes the following parameters:
 
-:tabdocconfig: Represents the argument of the directive. Define the
+:directive header: Represents the argument of the directive. Define the
   auto-documenter to be used and documented.
 :title: Set the title of resulting section.
 :path: Provide a path to a pydantic object which is used to render
   exemplary output for provided configuration values.
+:example_path: Optionally provide explicit path to example code if ``path`` is
+  not sufficient for example code.
 :confpy: Represents the name of the global configuration setting that
   can be modified in ``conf.py``.
 :directive_option: Represents the name of the local configuration setting that
@@ -450,7 +452,7 @@ The ``tabdocconfig`` directive takes the following parameters:
 :values: Contains a list of available configuration values for this
   feature which each will be used to render the output.
 :version: Set the version when this configuration was added.
-:directive content: Represents the content of the directive. Provide reST
+:directive body: Represents the content of the directive. Provide reST
   describing the feature.
 
 .. note::
