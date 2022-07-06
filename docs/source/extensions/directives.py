@@ -7,6 +7,9 @@ import sphinx
 import sphinx_copybutton
 import sphinx_rtd_theme
 import sphinx_tabs
+from docutils.nodes import Node
+from docutils.statemachine import StringList
+from docutils.parsers.rst import directives
 
 from sphinx.directives.code import CodeBlock
 from sphinx.ext.autodoc.directive import DummyOptionSpec
