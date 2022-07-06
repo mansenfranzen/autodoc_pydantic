@@ -1,14 +1,15 @@
 from sphinx.application import Sphinx
 
-from .helper import (
+from .directives import (
+    DocumenterConfigToc,
+    ConfigDescription,
     AutoCodeBlock,
-    TabDocDirective,
-    ConfigurationToc,
     ShowVersions
 )
 
+
 def setup(app: Sphinx) -> None:
     app.add_directive("autocodeblock", AutoCodeBlock)
-    app.add_directive("tabdocconfig", TabDocDirective)
-    app.add_directive("configtoc", ConfigurationToc)
+    app.add_directive("config_description", ConfigDescription)
+    app.add_directive("documenter_config_toc", DocumenterConfigToc)
     app.add_directive("show_versions", ShowVersions)
