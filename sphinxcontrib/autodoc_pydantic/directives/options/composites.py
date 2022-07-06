@@ -277,4 +277,3 @@ class AutoDocOptions(DirectiveOptions):
                 value = ", ".join(value)
 
             self.parent.add_line(f"   :{name}: {value}", source_name)
-

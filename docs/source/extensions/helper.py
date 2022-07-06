@@ -1,12 +1,3 @@
-"""This module contains modified `:codeblock:` directive which allows to load
-the source code via a object path and render it via the standard sphinx code
-block.
-
-Additionally, it contains the `TabDocDirective` which creates a complete
-documentation section for config parameters.
-
-"""
-
 from docutils import nodes
 from docutils.statemachine import StringList
 
