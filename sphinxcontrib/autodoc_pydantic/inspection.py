@@ -6,10 +6,10 @@ schema of pydantical models.
 import inspect
 import itertools
 import pydoc
+import warnings
 from collections import defaultdict
-from itertools import chain
-from typing import NamedTuple, List, Dict, Any, Set, TypeVar, Iterator, Type, \
-    Callable, Optional
+from typing import NamedTuple, List, Dict, Any, Set, TypeVar, Type, Callable, \
+    Optional
 
 import pydantic
 from pydantic import BaseModel, create_model
@@ -222,6 +222,17 @@ class FieldInspector(BaseInspectionComposite):
                 for sub_field in field.sub_fields
             )
 
+        # hide user warnings in sphinx output
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            return cls._test_field_serializabiltiy(field)
+
+    @staticmethod
+    def _test_field_serializabiltiy(field: ModelField) -> bool:
+        """Test JSON serializability for given pydantic `ModelField`.
+
+        """
+
         class Cfg:
             arbitrary_types_allowed = True
 
@@ -230,6 +241,7 @@ class FieldInspector(BaseInspectionComposite):
             model = create_model("_", test_field=field_args, Config=Cfg)
             model.schema()
             return True
+
         except Exception:
             return False
 
@@ -434,7 +446,10 @@ class SchemaInspector(BaseInspectionComposite):
         """
 
         try:
-            return self.model.schema()
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                return self.model.schema()
+
         except (TypeError, ValueError):
             new_model = self.create_sanitized_model()
             return new_model.schema()
