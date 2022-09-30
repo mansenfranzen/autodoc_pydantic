@@ -46,6 +46,7 @@ OPTIONS_MODEL = {
         OptionsJsonErrorStrategy.values()
     ),
     "model-hide-paramlist": option_default_true,
+    "model-hide-reused-validator": option_default_true,
     "model-show-validator-members": option_default_true,
     "model-show-validator-summary": option_default_true,
     "model-show-field-summary": option_default_true,
@@ -66,6 +67,7 @@ OPTIONS_SETTINGS = {
         OptionsJsonErrorStrategy.values()
     ),
     "settings-hide-paramlist": option_default_true,
+    "settings-hide-reused-validator": option_default_true,
     "settings-show-validator-members": option_default_true,
     "settings-show-validator-summary": option_default_true,
     "settings-show-field-summary": option_default_true,

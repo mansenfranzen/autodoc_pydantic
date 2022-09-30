@@ -7,6 +7,7 @@ import pytest
 import sphinx.errors
 from sphinx.transforms.post_transforms import ReferencesResolver
 
+from sphinxcontrib.autodoc_pydantic import PydanticModelDocumenter
 from tests.compatibility import rst_alias_class_directive, \
     TYPEHINTS_PREFIX, TYPING_MODULE_PREFIX
 
@@ -333,7 +334,15 @@ def test_autodoc_pydantic_model_show_field_summary_inherited(autodocument):
     assert result == actual
 
 
-def test_autodoc_pydantic_model_show_validator_summary_inherited(autodocument):
+def test_autodoc_pydantic_model_show_validator_summary_inherited_with_inherited(
+        autodocument):
+    """Ensure that references to inherited validators point to child class
+    when `inherited-members` is given.
+
+    Relates to #122.
+
+    """
+
     result = [
         '',
         '.. py:pydantic_model:: ModelShowValidatorsSummaryInherited',
@@ -357,8 +366,15 @@ def test_autodoc_pydantic_model_show_validator_summary_inherited(autodocument):
     assert result == actual
 
 
-def test_autodoc_pydantic_model_show_validator_summary_not_inherited(
+def test_autodoc_pydantic_model_show_validator_summary_inherited_without_inherited(
         autodocument):
+    """Ensure that references to inherited validators point to parent class
+    when `inherited-members` is not given.
+
+    Relates to #122.
+
+    """
+
     result = [
         '',
         '.. py:pydantic_model:: ModelShowValidatorsSummaryInherited',
@@ -367,6 +383,7 @@ def test_autodoc_pydantic_model_show_validator_summary_not_inherited(
         '   ModelShowValidatorsSummaryInherited.',
         '',
         '   :Validators:',
+        '      - :py:obj:`check <target.configuration.ModelShowValidatorsSummary.check>` » :py:obj:`field <target.configuration.ModelShowValidatorsSummaryInherited.field>`',
         '      - :py:obj:`check_inherited <target.configuration.ModelShowValidatorsSummaryInherited.check_inherited>` » :py:obj:`field <target.configuration.ModelShowValidatorsSummaryInherited.field>`',
         ''
     ]
@@ -376,6 +393,85 @@ def test_autodoc_pydantic_model_show_validator_summary_not_inherited(
         object_path='target.configuration.ModelShowValidatorsSummaryInherited',
         options_app={"autodoc_pydantic_model_show_validator_summary": True,
                      "autodoc_pydantic_model_members": True},
+        deactivate_all=True)
+    assert result == actual
+
+
+def test_autodoc_pydantic_field_list_validators_inherited_with_inherited(
+        autodocument):
+    """Ensure that references to inherited validators point to child class
+    when `inherited-members` is given.
+
+    Relates to #122.
+
+    """
+
+    result = [
+        '',
+        '.. py:pydantic_model:: FieldListValidatorsInherited',
+        '   :module: target.configuration',
+        '',
+        '   FieldListValidatorsInherited.',
+        '',
+        '',
+        '   .. py:pydantic_field:: FieldListValidatorsInherited.field',
+        '      :module: target.configuration',
+        '      :type: int',
+        '',
+        '      Field.',
+        '',
+        '      :Validated by:',
+        '         - :py:obj:`check <target.configuration.FieldListValidatorsInherited.check>`',
+        '         - :py:obj:`check_inherited <target.configuration.FieldListValidatorsInherited.check_inherited>`',
+        ''
+    ]
+
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.FieldListValidatorsInherited',
+        options_app={"autodoc_pydantic_field_list_validators": True,
+                     "autodoc_pydantic_model_members": True,
+                     "autodoc_pydantic_model_undoc_members": True},
+        options_doc={"inherited-members": "BaseModel"},
+        deactivate_all=True)
+    assert result == actual
+
+
+def test_autodoc_pydantic_field_list_validators_inherited_without_inherited(
+        autodocument):
+    """Ensure that references to inherited validators point to parent class
+    when `inherited-members` is not given.
+
+    Relates to #122.
+
+    """
+
+    result = [
+        '',
+        '.. py:pydantic_model:: FieldListValidatorsInherited',
+        '   :module: target.configuration',
+        '',
+        '   FieldListValidatorsInherited.',
+        '',
+        '',
+        '   .. py:pydantic_field:: FieldListValidatorsInherited.field',
+        '      :module: target.configuration',
+        '      :type: int',
+        '',
+        '      Field.',
+        '',
+        '      :Validated by:',
+        '         - :py:obj:`check <target.configuration.FieldListValidators.check>`',
+        '         - :py:obj:`check_inherited <target.configuration.FieldListValidatorsInherited.check_inherited>`',
+        ''
+    ]
+
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.configuration.FieldListValidatorsInherited',
+        options_app={"autodoc_pydantic_field_list_validators": True,
+                     "autodoc_pydantic_model_members": True,
+                     "autodoc_pydantic_model_undoc_members": True},
         deactivate_all=True)
     assert result == actual
 
@@ -546,4 +642,72 @@ def test_non_field_attributes(autodocument):
         options_app={"autodoc_pydantic_model_show_validator_members": True},
         deactivate_all=True)
 
+    assert result == actual
+
+
+def test_autodoc_pydantic_model_hide_reused_validator_true_identical_names(
+        autodocument):
+    """Ensure that class attributes of reused validators are hidden and the
+    actual validator reference point to the correct function when the function
+    name is identical to validator/method name.
+
+    This relates to #122.
+
+    """
+
+    kwargs = dict(
+        object_path='target.edgecase_reused_validator_identical_names.ModelOne',
+        documenter=PydanticModelDocumenter.objtype,
+        deactivate_all=True
+    )
+
+    result = [
+        '',
+        '.. py:pydantic_model:: ModelOne',
+        '   :module: target.edgecase_reused_validator_identical_names',
+        '',
+        '   :Validators:',
+        '      - :py:obj:`validation <target.edgecase_reused_validator_identical_names.validation>` » :py:obj:`name <target.edgecase_reused_validator_identical_names.ModelOne.name>`',
+        '',
+        '',
+        '   .. py:pydantic_field:: ModelOne.name',
+        '      :module: target.edgecase_reused_validator_identical_names',
+        '      :type: str',
+        '',
+        '      Name',
+        '',
+        '      :Validated by:',
+        '         - :py:obj:`validation <target.edgecase_reused_validator_identical_names.validation>`',
+        ''
+    ]
+
+    # explict global
+    actual = autodocument(
+        options_app={"autodoc_pydantic_model_hide_reused_validator": True,
+                     "autodoc_pydantic_model_show_validator_summary": True,
+                     "autodoc_pydantic_field_list_validators": True},
+        options_doc={"members": None,
+                     "undoc-members": None},
+        **kwargs)
+    assert result == actual
+
+    # explict local
+    actual = autodocument(
+        options_doc={"model-hide-reused-validator": True,
+                     "members": None,
+                     "undoc-members": None},
+        options_app={"autodoc_pydantic_model_show_validator_summary": True,
+                     "autodoc_pydantic_field_list_validators": True},
+        **kwargs)
+    assert result == actual
+
+    # explict global
+    actual = autodocument(
+        options_app={"autodoc_pydantic_model_hide_reused_validator": False,
+                     "autodoc_pydantic_model_show_validator_summary": True,
+                     "autodoc_pydantic_field_list_validators": True},
+        options_doc={"model-hide-reused-validator": True,
+                     "members": None,
+                     "undoc-members": None},
+        **kwargs)
     assert result == actual

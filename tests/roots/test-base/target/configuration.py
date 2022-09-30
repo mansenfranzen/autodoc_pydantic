@@ -373,6 +373,15 @@ class FieldListValidators(BaseModel):
         return v
 
 
+class FieldListValidatorsInherited(FieldListValidators):
+    """FieldListValidatorsInherited."""
+
+    @validator("field")
+    def check_inherited(cls, v) -> str:
+        """Check inherited."""
+        return v
+
+
 class FieldDocPolicy(BaseModel):
     """FieldDocPolicy."""
 

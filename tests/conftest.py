@@ -36,6 +36,7 @@ CONF_DEACTIVATE = {
     "autodoc_pydantic_model_show_validator_summary": False,
     "autodoc_pydantic_model_show_field_summary": False,
     "autodoc_pydantic_model_hide_paramlist": True,
+    "autodoc_pydantic_model_hide_reused_validator": False,
     "autodoc_pydantic_model_undoc_members": False,
     "autodoc_pydantic_model_members": False,
 
@@ -46,6 +47,7 @@ CONF_DEACTIVATE = {
     "autodoc_pydantic_settings_show_validator_summary": False,
     "autodoc_pydantic_settings_show_field_summary": False,
     "autodoc_pydantic_settings_hide_paramlist": True,
+    "autodoc_pydantic_settings_hide_reused_validator": False,
     "autodoc_pydantic_settings_undoc_members": False,
     "autodoc_pydantic_settings_members": False,
 

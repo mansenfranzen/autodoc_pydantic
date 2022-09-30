@@ -1,10 +1,64 @@
 Changelog
 =========
 
+v1.8.0 - 2022-07-XX
+-------------------
+
+This is a feature and bugfix release with major internal refactorings.
+
+Feature
+~~~~~~~
+
+- Introduce ``hide-reused-validator`` configuration option for pydantic models
+  and settings to hide class methods that are created while declaring functions
+  as reusable validators
+  `#122 <https://github.com/mansenfranzen/autodoc_pydantic/issues/122>`__.
+
+Bugfix
+~~~~~~
+
+- Fix incorrect reference of reused validators
+  `#122 <https://github.com/mansenfranzen/autodoc_pydantic/issues/122>`__.
+- Provide deterministic sort order for model's validator summary and field's
+  validator list.
+- Hide pydantic user warnings in sphinx output when testing for pydantic field
+  serializability.
+
+Internal
+~~~~~~~~
+
+- Add ``ValidatorAdapter`` that provides a standardized interface to pydantic's
+  validator objects with additional metadata (e.g. root validator) for internal
+  usage in autodoc_pydantic.
+- Introduce ``field_validator_mappings`` to ``inspection.ModelInspector`` which
+  holds all mappings between fields and validators. It makes many helper
+  functions of ``ValidatorInspector`` and ``FieldInspector`` obsolete. Overall,
+  this greatly simplifies the inspection codebase.
+- Add ``PydanticAutoDoc.resolve_inherited_validator_reference`` to allow
+  proper reference resolution for inherited validators.
+
+Documentation
+~~~~~~~~~~~~~
+
+- Add description for ``autodoc_pydantic_model_hide_reused_validator`` and
+  ``autodoc_pydantic_settings_hide_reused_validator``.
+- Add example section for reused validators with detailed explanation.
+- Refactor sphinx extension helper for building ``autodoc_pydantic`` docs
+  for better readability and maintainability.
+- Add ``example_path`` to sphinx extension helper ``config_description``.
+
+Contributors
+~~~~~~~~~~~~
+
+- Thanks to `GlenNicholls <https://github.com/GlenNicholls>`__ for
+  reporting a bug regarding incorrect references of reused validators
+  `#122 <https://github.com/mansenfranzen/autodoc_pydantic/issues/122>`__ .
+
+
 v1.7.2 - 2022-06-12
 -------------------
 
-This a bugfix release.
+This is a bugfix release.
 
 Bugfix
 ~~~~~~

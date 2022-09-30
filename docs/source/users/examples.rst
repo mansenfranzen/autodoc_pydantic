@@ -223,8 +223,8 @@ Generic Models
 --------------
 
 Generic pydantic models can be documented just as normal models, too. The
-following example is borrowed from the official
-`pydantic documentation <https://pydantic-docs.helpmanual.io/usage/models/#generic-models>`_ :
+following example is borrowed from the official pydantic documentation for
+`generic models <https://pydantic-docs.helpmanual.io/usage/models/#generic-models>`_ :
 
 .. tabs::
 
@@ -243,3 +243,66 @@ following example is borrowed from the official
    .. tab:: python
 
       .. autocodeblock:: target.example_generics
+
+
+.. _example_reused_validators:
+
+-----------------
+Reused Validators
+-----------------
+
+Functions can be declared as
+`reusable validators <https://pydantic-docs.helpmanual.io/usage/validators/#reuse-validators>`_
+for pydantic models. Unlike normal validators which are bound methods, a
+reusable validator is an actual function. Therefore, the function should be
+referenced and linked with corresponding pydantic fields in the generated
+documentation.
+
+While declaring a reusable validator, a class method is automatically created
+for the pydantic model that conveys no meaningful information. Hence it can be
+hidden in the documentation via
+:ref:`model-hide-resued-validator <autodoc_pydantic_model_hide_reused_validator>`.
+
+The following example is borrowed from the official pydantic documentation for
+`reused validators <https://pydantic-docs.helpmanual.io/usage/validators/#reuse-validators>`_
+which shows how the reused function is correctly linked within the
+:ref:`model's validator summary <autodoc_pydantic_model_show_validator_summary>`
+and the
+:ref:`fields validator's list <autodoc_pydantic_field_list_validators>`:
+
+.. tabs::
+
+   .. tab:: *rendered output with hiding*
+
+      .. autofunction:: target.example_reused_validators.normalize
+
+      .. autopydantic_model:: target.example_reused_validators.Consumer
+
+      .. autopydantic_model:: target.example_reused_validators.Producer
+
+
+
+   .. tab:: *rendered output without hiding*
+
+      .. autofunction:: target.example_reused_validators.normalize
+         :noindex:
+
+      .. autopydantic_model:: target.example_reused_validators.Consumer
+         :model-hide-reused-validator: false
+         :noindex:
+
+      .. autopydantic_model:: target.example_reused_validators.Producer
+         :model-hide-reused-validator: false
+         :noindex:
+
+   .. tab:: reST
+
+      .. code-block::
+
+         .. automodule:: target.example_reused_validators
+            :members:
+            :undoc-members:
+
+   .. tab:: python
+
+      .. autocodeblock:: target.example_reused_validators

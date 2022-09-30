@@ -139,7 +139,7 @@ sensible default settings.
 
 To overwrite global defaults, the following directive options can be supplied:
 
-.. configtoc:: model
+.. documenter_config_toc:: model
 
 .. _autopydantic_settings:
 
@@ -167,7 +167,7 @@ Documenting pydantic models behaves exactly like :code:`autopydantic_model`.
 
 To overwrite global defaults, the following directive options can be supplied:
 
-.. configtoc:: settings
+.. documenter_config_toc:: settings
 
 .. _autopydantic_field:
 
@@ -196,7 +196,7 @@ pydantic fields are documented along with its corresponding pydantic model/setti
 
 To overwrite global defaults, the following directive options can be supplied:
 
-.. configtoc:: field
+.. documenter_config_toc:: field
 
 
 .. _autopydantic_validator:
@@ -226,7 +226,7 @@ from its corresponding pydantic model/settings but it is still possible.
 
 To overwrite global defaults, the following directive options can be supplied:
 
-.. configtoc:: validator
+.. documenter_config_toc:: validator
 
 .. _autopydantic_config:
 
@@ -256,4 +256,4 @@ directive is used by the :code:`autopydantic_model` and :code:`autopydantic_sett
 
 To overwrite global defaults, the following directive options can be supplied:
 
-.. configtoc:: config
+.. documenter_config_toc:: config
