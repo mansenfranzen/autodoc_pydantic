@@ -6,9 +6,9 @@
 Usage
 =====
 
-**autodoc_pydantic** integrates seamlessly with sphinx' auto-documentation
-utilities. You might not need to modify your code at all when
-using :code:`automodule` or :code:`autosummary` directives.
+**autodoc_pydantic** integrates seamlessly with sphinx' default
+auto-documentation directives such as :code:`automodule` and
+:code:`autosummary`.
 
 automodule
 ==========

@@ -46,6 +46,7 @@ Documentation
 - Refactor sphinx extension helper for building ``autodoc_pydantic`` docs
   for better readability and maintainability.
 - Add ``example_path`` to sphinx extension helper ``config_description``.
+- Add FAQ question regarding interoperability with ``autoapi``.
 
 Contributors
 ~~~~~~~~~~~~
