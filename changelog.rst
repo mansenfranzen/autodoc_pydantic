@@ -46,6 +46,7 @@ Documentation
 - Refactor sphinx extension helper for building ``autodoc_pydantic`` docs
   for better readability and maintainability.
 - Add ``example_path`` to sphinx extension helper ``config_description``.
+- Add FAQ question regarding interoperability with ``autoapi``.
 
 Contributors
 ~~~~~~~~~~~~
@@ -53,6 +54,9 @@ Contributors
 - Thanks to `GlenNicholls <https://github.com/GlenNicholls>`__ for
   reporting a bug regarding incorrect references of reused validators
   `#122 <https://github.com/mansenfranzen/autodoc_pydantic/issues/122>`__ .
+- Thanks to `csm10495 <https://github.com/csm10495>`__ for asking a question
+  regarding ``autoapi`` interoperability
+  `#138 <https://github.com/mansenfranzen/autodoc_pydantic/issues/138>`__ .
 
 
 v1.7.2 - 2022-06-12
