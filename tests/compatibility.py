@@ -9,6 +9,16 @@ import sphinx
 from sphinx.addnodes import desc_sig_punctuation, desc_annotation, pending_xref
 
 
+def get_pydantic_version() -> Tuple:
+    """Helper function to get major and minor pydantic version.
+
+    """
+
+    version_strings = pydantic.version.VERSION.split(".")[:2]
+    version_numbers = [int(x) for x in version_strings]
+    return tuple(version_numbers)
+
+
 def desc_annotation_default_value(value: str):
     """Provides compatibility abstraction for `desc_annotation` for default
     values for sphinx version smaller and greater equal sphinx 4.3.
@@ -65,7 +75,7 @@ def object_is_serializable() -> bool:
 
     """
 
-    return pydantic.version.VERSION[:3] >= "1.9"
+    return get_pydantic_version() >= (1, 9)
 
 
 def requires_forward_ref() -> bool:
@@ -74,7 +84,7 @@ def requires_forward_ref() -> bool:
 
     """
 
-    return pydantic.version.VERSION[:3] < "1.9"
+    return get_pydantic_version() < (1, 9)
 
 
 def convert_ellipsis_to_none(result: List[str]) -> List[str]:
@@ -111,6 +121,18 @@ def typehints_prefix() -> str:
 
     return ""
 
+
+def module_doc_string_tab() -> str:
+    """Provides compatibility abstraction to account for changed behaviour of
+    python module doc string in sphinx 5.2 that gains an additional whitespace
+    tab at the start.
+
+    """
+
+    if sphinx.version_info >= (5, 2):
+        return "   "
+
+    return ""
 
 TYPING_MODULE_PREFIX = typing_module_prefix()
 TYPEHINTS_PREFIX = typehints_prefix()

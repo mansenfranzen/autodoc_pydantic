@@ -14,7 +14,8 @@ from pydantic import BaseModel
 
 from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector, \
     StaticInspector
-from tests.compatibility import object_is_serializable, requires_forward_ref
+from tests.compatibility import object_is_serializable, requires_forward_ref, \
+    get_pydantic_version
 
 
 @pytest.fixture(scope="session")
@@ -34,7 +35,7 @@ def serializable_mix():
     new_type = TypeVar("Dummy")
 
     class NonSerializable(BaseModel):
-        field_1: str
+        field_1: str = "foo"
         field_2: object
         field_3: str = object()
         field_4: Custom = Custom()
@@ -142,7 +143,7 @@ def test_find_non_json_serializable_fields(serializable, serializable_mix):
     assert serializable.fields.non_json_serializable == []
 
     non_serial_fields = ["field_2", "field_3", "field_4"]
-    if pydantic.version.VERSION[:3] >= "1.9":
+    if get_pydantic_version() >= (1, 9):
         non_serial_fields.remove("field_2")
 
     assert serializable_mix.fields.non_json_serializable == non_serial_fields

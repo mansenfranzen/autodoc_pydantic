@@ -1,10 +1,11 @@
 Changelog
 =========
 
-v1.8.0 - 2022-07-XX
+v1.8.0 - 2022-10-13
 -------------------
 
-This is a feature and bugfix release with major internal refactorings.
+This is a feature and bugfix release with major internal refactorings and
+added support for pydantic ``1.10`` and sphinx ``5.1`` and ``5.2``.
 
 Feature
 ~~~~~~~
@@ -47,6 +48,13 @@ Documentation
   for better readability and maintainability.
 - Add ``example_path`` to sphinx extension helper ``config_description``.
 - Add FAQ question regarding interoperability with ``autoapi``.
+
+Testing
+~~~~~~~
+
+- Include pydantic ``1.10`` and sphinx ``5.1`` / ``5.2`` in test matrix.
+- Provide compatibility for new pydantic and sphinx versions.
+- Fix incorrect pydantic version comparison.
 
 Contributors
 ~~~~~~~~~~~~
