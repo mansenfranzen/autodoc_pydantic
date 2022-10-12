@@ -9,7 +9,7 @@ from sphinx.transforms.post_transforms import ReferencesResolver
 
 from sphinxcontrib.autodoc_pydantic import PydanticModelDocumenter
 from tests.compatibility import rst_alias_class_directive, \
-    TYPEHINTS_PREFIX, TYPING_MODULE_PREFIX
+    TYPEHINTS_PREFIX, TYPING_MODULE_PREFIX, module_doc_string_tab
 
 
 def test_not_json_compliant(autodocument):
@@ -164,7 +164,7 @@ def test_autodoc_member_order(autodocument):
         '',
         '.. py:module:: target.edgecase_member_order',
         '',
-        'Module doc string.',
+        f'{module_doc_string_tab()}Module doc string.',
         '',
         '',
         '.. py:pydantic_model:: C',

@@ -122,5 +122,17 @@ def typehints_prefix() -> str:
     return ""
 
 
+def module_doc_string_tab() -> str:
+    """Provides compatibility abstraction to account for changed behaviour of
+    python module doc string in sphinx 5.2 that gains an additional whitespace
+    tab at the start.
+
+    """
+
+    if sphinx.version_info >= (5, 2):
+        return "   "
+
+    return ""
+
 TYPING_MODULE_PREFIX = typing_module_prefix()
 TYPEHINTS_PREFIX = typehints_prefix()
