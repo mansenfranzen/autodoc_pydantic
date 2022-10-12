@@ -30,7 +30,6 @@ pytest = {version = "^6", optional = true }
 coverage = { version ="^5", optional = true }
 flake8 = { version = "^3", optional = true }
 tox = { version ="^3", optional = true }
-sphinx = "5.2"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
