@@ -273,6 +273,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "csm10495",
+      "name": "Charles Machalow",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5749838?v=4",
+      "profile": "http://charlie.machalow.com",
+      "contributions": [
+        "question"
+      ]
     }
   ],
   "contributorsPerLine": 7,
@@ -280,5 +289,6 @@
   "projectOwner": "mansenfranzen",
   "repoType": "github",
   "repoHost": "https://github.com",
-  "skipCi": true
+  "skipCi": true,
+  "commitConvention": "angular"
 }
