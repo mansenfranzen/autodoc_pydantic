@@ -8,6 +8,7 @@ try:
 except ImportError:
     from typing import _ForwardRef as ForwardRef
 
+import pydantic
 import pytest
 from pydantic import BaseModel
 
