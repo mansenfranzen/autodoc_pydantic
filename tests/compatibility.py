@@ -84,7 +84,7 @@ def requires_forward_ref() -> bool:
 
     """
 
-    return get_pydantic_version() >= (1, 9)
+    return get_pydantic_version() < (1, 9)
 
 
 def convert_ellipsis_to_none(result: List[str]) -> List[str]:
