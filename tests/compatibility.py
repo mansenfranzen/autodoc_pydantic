@@ -9,6 +9,16 @@ import sphinx
 from sphinx.addnodes import desc_sig_punctuation, desc_annotation, pending_xref
 
 
+def get_pydantic_version() -> Tuple:
+    """Helper function to get major and minor pydantic version.
+
+    """
+
+    version_strings = pydantic.version.VERSION.split(".")[:2]
+    version_numbers = [int(x) for x in version_strings]
+    return tuple(version_numbers)
+
+
 def desc_annotation_default_value(value: str):
     """Provides compatibility abstraction for `desc_annotation` for default
     values for sphinx version smaller and greater equal sphinx 4.3.
@@ -65,7 +75,7 @@ def object_is_serializable() -> bool:
 
     """
 
-    return pydantic.version.VERSION[:3] >= "1.9"
+    return get_pydantic_version() >= (1, 9)
 
 
 def requires_forward_ref() -> bool:
@@ -74,7 +84,7 @@ def requires_forward_ref() -> bool:
 
     """
 
-    return pydantic.version.VERSION[:3] < "1.9"
+    return get_pydantic_version() >= (1, 9)
 
 
 def convert_ellipsis_to_none(result: List[str]) -> List[str]:
