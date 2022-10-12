@@ -18,7 +18,7 @@ classifiers = [
 include = ["sphinxcontrib/autodoc_pydantic/css/autodoc_pydantic.css"]
 
 [tool.poetry.dependencies]
-python = ">=3.7,<4.0.0"
+python = ">=3.6,<4.0.0"
 Sphinx = ">=3.4"
 pydantic = ">=1.5"
 
@@ -30,6 +30,7 @@ pytest = {version = "^6", optional = true }
 coverage = { version ="^5", optional = true }
 flake8 = { version = "^3", optional = true }
 tox = { version ="^3", optional = true }
+sphinx = "5.2"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
