@@ -196,6 +196,16 @@ Contains all modifications for pydantic `BaseModel`.
 
 
 .. config_description:: autopydantic_model
+   :title: Show Erdantic figure
+   :path: target.configuration.ModelErdanticFigure
+   :confpy: autodoc_pydantic_model_erdantic_figure
+   :directive_option: model-erdantic-figure
+   :values: True, False
+
+   Show the entity relationship diagrams of the schemas using erdantic.
+
+
+.. config_description:: autopydantic_model
    :title: Show Schema JSON
    :path: target.configuration.ModelShowJson
    :confpy: autodoc_pydantic_model_show_json
@@ -210,15 +220,6 @@ Contains all modifications for pydantic `BaseModel`.
    Fields containing custom objects may not be JSON serializable. This will break
    the schema generation by default. However, it can be handled via :ref:`Show Schema JSON Error Strategy <autodoc_pydantic_model_show_json_error_strategy>`.
 
-
-.. config_description:: autopydantic_model
-   :title: Show Erdantic figure
-   :path: target.configuration.ModelErdanticFigure
-   :confpy: autodoc_pydantic_model_erdantic_figure
-   :directive_option: model-erdantic-figure
-   :values: True, False
-
-   Show the entity relationship diagrams of the schemas using erdantic.
 
 .. _autodoc_pydantic_model_show_json_error_strategy:
 
