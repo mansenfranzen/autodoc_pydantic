@@ -39,6 +39,7 @@ from sphinxcontrib.autodoc_pydantic.directives.options.composites import (
     AutoDocOptions
 )
 from sphinxcontrib.autodoc_pydantic.directives.utility import NONE
+import erdantic as erd
 
 
 class PydanticAutoDoc:
@@ -275,12 +276,14 @@ class PydanticModelDocumenter(ClassDocumenter):
         """Delegate additional content creation.
 
         """
-
         super().add_content(more_content, **kwargs)
 
         # do not provide any additional info if documented as attribute
         if self.doc_as_attr:
             return
+
+        if self.pydantic.options.is_true("erdantic-figure", True):
+            self.add_erdantic_figure()
 
         if self.pydantic.options.is_true("show-json", True):
             self.add_collapsable_schema()
@@ -327,6 +330,22 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         for line in schema_rest:
             self.add_line(line, source_name)
+
+    def add_erdantic_figure(self):
+        """Adds an erdantic image
+
+        """
+        source_name = self.get_sourcename()
+        PydanticClass = import_class(self.fullname)
+
+        # Graphviz [DOT language](https://graphviz.org/doc/info/lang.html) representation
+        figure_dot = erd.to_dot(PydanticClass)
+
+        self.add_line(".. graphviz::", source_name)
+        self.add_line("", source_name)
+        self.add_line('   ' + figure_dot, source_name)
+        self.add_line("", source_name)
+
 
     def add_config_summary(self):
         """Adds summary section describing the model configuration.
@@ -928,3 +947,10 @@ class PydanticConfigClassDocumenter(ClassDocumenter):
             super().document_members(all_members=False, **kwargs)
         else:
             super().document_members(*args, **kwargs)
+
+def import_class(source_name):
+    components_source_name = source_name.split('.')
+    mod = __import__(components_source_name[0])
+    for comp in components_source_name[1:]:
+        mod = getattr(mod, comp)
+    return mod

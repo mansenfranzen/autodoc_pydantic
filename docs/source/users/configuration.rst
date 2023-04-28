@@ -211,6 +211,15 @@ Contains all modifications for pydantic `BaseModel`.
    the schema generation by default. However, it can be handled via :ref:`Show Schema JSON Error Strategy <autodoc_pydantic_model_show_json_error_strategy>`.
 
 
+.. config_description:: autopydantic_model
+   :title: Show Erdantic figure
+   :path: target.configuration.ModelErdanticFigure
+   :confpy: autodoc_pydantic_model_erdantic_figure
+   :directive_option: model-erdantic-figure
+   :values: True, False
+
+   Show the entity relationship diagrams of the schemas using erdantic.
+
 .. _autodoc_pydantic_model_show_json_error_strategy:
 
 Show Schema JSON Error Strategy

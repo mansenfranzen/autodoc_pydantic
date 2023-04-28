@@ -43,6 +43,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
+    "sphinx.ext.graphviz",
     "sphinx_tabs.tabs",
     "sphinx_copybutton",
     "sphinxcontrib.autodoc_pydantic",
