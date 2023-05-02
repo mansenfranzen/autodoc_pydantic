@@ -63,6 +63,7 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python_version }}
+      - run: sudo apt-get install graphviz graphviz-dev
       - run: pip install tox
       - run: tox -e pydantic${{ matrix.pydantic_version }}-sphinx${{ matrix.sphinx_version }}
       - name: Codecov
@@ -79,6 +80,7 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: '3.x'
+      - run: sudo apt-get install graphviz graphviz-dev
       - run: pip install tox
       - run: tox -e latest
       - name: Codecov
@@ -95,6 +97,7 @@ jobs:
       - uses: actions/setup-python@v2
         with:
           python-version: '3.x'
+      - run: sudo apt-get install graphviz graphviz-dev
       - run: pip install tox
       - run: tox -e development
         continue-on-error: true
