@@ -1,6 +1,7 @@
 """This module contains tests for pydantic model configurations.
 
 """
+import re
 
 from sphinx.addnodes import desc_annotation
 from sphinx.testing.util import assert_node
@@ -79,6 +80,80 @@ def test_autodoc_pydantic_model_show_json_false(autodocument):
         '   :module: target.configuration',
         '',
         '   ModelShowJson.',
+        ''
+    ]
+
+    # explicit global
+    actual = autodocument(
+        options_app={"autodoc_pydantic_model_show_json": False},
+        **kwargs)
+    assert actual == result
+
+    # explicit local
+    actual = autodocument(
+        options_doc={"model-show-json": False},
+        **kwargs)
+    assert actual == result
+
+    # explicit local overwrite global
+    actual = autodocument(
+        options_app={"autodoc_pydantic_model_show_json": True},
+        options_doc={"model-show-json": False},
+        **kwargs)
+    assert actual == result
+
+
+def test_autodoc_pydantic_model_erdantic_figure_true(autodocument):
+    kwargs = dict(object_path='target.configuration.ModelErdanticFigure',
+                  **KWARGS)
+
+    result = [
+        '',
+        '.. py:pydantic_model:: ModelErdanticFigure',
+        '   :module: target.configuration',
+        '',
+        '   ModelErdanticFigure.',
+        '',
+        '   .. graphviz::',
+        '',
+        r'      digraph "Entity Relationship Diagram" {\n\tgraph \[fontcolor=gray66,\n\t\tfontsize=9,\n\t\tlabel="[^"]*",\n\t\tnodesep=0.5,\n\t\trankdir=LR,\n\t\tranksep=1.5\n\t\];\n\tnode \[fontsize=14,\n\t\tlabel="\\N",\n\t\tshape=plain\n\t\];\n\t"target.configuration.ModelErdanticFigure"\t\[label=<<table border="0" cellborder="1" cellspacing="0"><tr><td port="_root" colspan="2"><b>ModelErdanticFigure</b></td></tr><tr><td>field1</td><td port="field1">int</td></tr><tr><td>field2</td><td port="field2">str</td></tr><tr><td>related</td><td port="related">ModelErdanticFigureRelated</td></tr></table>>,\n\t\ttooltip="target.configuration.ModelErdanticFigure&#xA;&#xA;ModelErdanticFigure.&#xA;"\];\n\t"target.configuration.ModelErdanticFigureRelated"\t\[label=<<table border="0" cellborder="1" cellspacing="0"><tr><td port="_root" colspan="2"><b>ModelErdanticFigureRelated</b></td></tr><tr><td>field1</td><td port="field1">int</td></tr><tr><td>field2</td><td port="field2">str</td></tr></table>>,\n\t\ttooltip="target.configuration.ModelErdanticFigureRelated&#xA;&#xA;ModelErdanticFigureRelated.&#xA;"\];\n\t"target.configuration.ModelErdanticFigure":related:e -> "target.configuration.ModelErdanticFigureRelated":_root:w\t\[arrowhead=noneteetee\];\n}\n',
+        '']
+
+    # explicit global
+    actual = autodocument(
+        options_app={"autodoc_pydantic_model_erdantic_figure": True},
+        **kwargs)
+    assert actual[:8] == result[:8]
+    assert re.match(result[8], actual[8]) is not None
+    assert actual[9:] == result[9:]
+
+    # explicit local
+    actual = autodocument(
+        options_doc={"model-erdantic-figure": True},
+        **kwargs)
+    assert actual[:8] == result[:8]
+    assert re.match(result[8], actual[8]) is not None
+    assert actual[9:] == result[9:]
+
+    # explicit local overwrite global
+    actual = autodocument(
+        options_app={"autodoc_pydantic_model_erdantic_figure": False},
+        options_doc={"model-erdantic-figure": True},
+        **kwargs)
+    assert actual[:8] == result[:8]
+    assert re.match(result[8], actual[8]) is not None
+    assert actual[9:] == result[9:]
+
+def test_autodoc_pydantic_model_erdantic_figure_false(autodocument):
+    kwargs = dict(object_path='target.configuration.ModelErdanticFigure',
+                  **KWARGS)
+
+    result = [
+        '',
+        '.. py:pydantic_model:: ModelErdanticFigure',
+        '   :module: target.configuration',
+        '',
+        '   ModelErdanticFigure.',
         ''
     ]
 
