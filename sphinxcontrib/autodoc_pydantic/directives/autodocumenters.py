@@ -39,7 +39,10 @@ from sphinxcontrib.autodoc_pydantic.directives.options.composites import (
     AutoDocOptions
 )
 from sphinxcontrib.autodoc_pydantic.directives.utility import NONE
-import erdantic as erd
+try:
+    import erdantic as erd
+except ImportError:
+    erd = None
 
 
 class PydanticAutoDoc:
@@ -331,13 +334,28 @@ class PydanticModelDocumenter(ClassDocumenter):
         for line in schema_rest:
             self.add_line(line, source_name)
 
+    def _get_pydantic_class(self):
+        components_source_name = self.fullname.split('.')
+        mod = __import__(components_source_name[0])
+        for comp in components_source_name[1:]:
+            mod = getattr(mod, comp)
+        return mod
+
     def add_erdantic_figure(self):
-        """Adds an erdantic image
+        """Adds an erdantic entity relation diagram to the doc of an pydantic model.
 
         """
         source_name = self.get_sourcename()
-        PydanticClass = import_class(self.fullname)
+        if erd is None:
+            logger = sphinx.util.logging.getLogger(__name__)
+            error_msg = f'erdantic is not installed, no Entity Relationship Diagram for {self.fullname} is skipped.' + \
+                        ' See https://autodoc-pydantic.readthedocs.io/en/stable/users/installation.html'
+            logger.warning(error_msg, location="autodoc_pydantic")
+            self.add_line("..warning::")
+            self.add_line('   ' + error_msg)
+            return
 
+        PydanticClass = self._get_pydantic_class()
         # Graphviz [DOT language](https://graphviz.org/doc/info/lang.html) representation
         figure_dot = erd.to_dot(PydanticClass)
 
@@ -345,7 +363,6 @@ class PydanticModelDocumenter(ClassDocumenter):
         self.add_line("", source_name)
         self.add_line('   ' + figure_dot, source_name)
         self.add_line("", source_name)
-
 
     def add_config_summary(self):
         """Adds summary section describing the model configuration.
@@ -947,10 +964,3 @@ class PydanticConfigClassDocumenter(ClassDocumenter):
             super().document_members(all_members=False, **kwargs)
         else:
             super().document_members(*args, **kwargs)
-
-def import_class(source_name):
-    components_source_name = source_name.split('.')
-    mod = __import__(components_source_name[0])
-    for comp in components_source_name[1:]:
-        mod = getattr(mod, comp)
-    return mod
