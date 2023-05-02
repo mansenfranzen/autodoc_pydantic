@@ -75,6 +75,34 @@ this scenario covers all available display options for pydantic models/settings.
 
       .. autocodeblock:: target.example_setting
 
+----------------------------
+Entity-Relationship Diagram
+----------------------------
+
+This example shows the redered output of a pydantic model including an Entity-Relationship Diagram.
+
+
+.. tabs::
+
+   .. tab:: *rendered output*
+
+      .. autopydantic_model:: target.example_generics.Response
+         :noindex:
+         :model-erdantic-figure: True
+
+
+   .. tab:: reST
+
+      .. code-block::
+
+         .. autopydantic_model:: target.example_generics.Response
+            :model-erdantic-figure: True
+
+
+   .. tab:: python
+
+      .. autocodeblock:: target.example_generics
+
 
 -----------
 Fields only
