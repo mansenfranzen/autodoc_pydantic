@@ -85,3 +85,6 @@ mermaid_version = ""
 html_static_path = ["_static"]
 html_js_files = ['mermaid.min.js']
 html_css_files = ['custom.css']
+
+# Default output of graphviz in SVG (for erdantic diagrams)
+graphviz_output_format = 'svg'
