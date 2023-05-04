@@ -286,7 +286,10 @@ class PydanticModelDocumenter(ClassDocumenter):
             return
 
         if self.pydantic.options.is_true("erdantic-figure", True):
-            self.add_erdantic_figure()
+            if self.pydantic.options.is_true("erdantic-figure-collapsed", True):
+                self.add_erdantic_figure(collapsed=True)
+            else:
+                self.add_erdantic_figure(collapsed=False)
 
         if self.pydantic.options.is_true("show-json", True):
             self.add_collapsable_schema()
@@ -330,7 +333,6 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         schema_rest = self._convert_json_schema_to_rest(schema)
         source_name = self.get_sourcename()
-
         for line in schema_rest:
             self.add_line(line, source_name)
 
@@ -341,7 +343,7 @@ class PydanticModelDocumenter(ClassDocumenter):
             mod = getattr(mod, comp)
         return mod
 
-    def add_erdantic_figure(self):
+    def add_erdantic_figure(self, collapsed: bool):
         """Adds an erdantic entity relation diagram to the doc of an pydantic model.
 
         """
@@ -358,11 +360,20 @@ class PydanticModelDocumenter(ClassDocumenter):
         PydanticClass = self._get_pydantic_class()
         # Graphviz [DOT language](https://graphviz.org/doc/info/lang.html) representation
         figure_dot = erd.to_dot(PydanticClass)
+        lines = [
+            ".. graphviz::",
+            "",
+        ]
+        lines += ['   ' + line for line in figure_dot.replace('\t', '   ').split('\n')]
+        lines.append("")
 
-        self.add_line(".. graphviz::", source_name)
-        self.add_line("", source_name)
-        self.add_line('   ' + figure_dot, source_name)
-        self.add_line("", source_name)
+        if collapsed:
+            lines = "\n".join(lines)
+            lines = TPL_COLLAPSE.format(
+                lines=lines, summary="Show Entity Relationship Diagram", details_class="autodoc_pydantic_collapsable_erd"
+            ).split("\n")
+        for line in lines:
+            self.add_line(line, source_name)
 
     def add_config_summary(self):
         """Adds summary section describing the model configuration.
@@ -544,8 +555,11 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         schema = json.dumps(schema, default=str, indent=3)
         lines = [f"   {line}" for line in schema.split("\n")]
+        lines = ['.. code-block:: json', ''] + lines
         lines = "\n".join(lines)
-        lines = TPL_COLLAPSE.format(lines).split("\n")
+        lines = TPL_COLLAPSE.format(
+            lines=lines, summary="Show JSON schema", details_class="autodoc_pydantic_collapsable_json"
+        ).split("\n")
 
         return lines
 

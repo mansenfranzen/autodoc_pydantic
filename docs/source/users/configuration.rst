@@ -202,7 +202,19 @@ Contains all modifications for pydantic `BaseModel`.
    :directive_option: model-erdantic-figure
    :values: True, False
 
-   Show the entity relationship diagrams of the schemas using erdantic.
+   Show the entity relationship diagram of the schemas using erdantic.
+
+
+.. config_description:: autopydantic_model
+   :title: Show Erdantic figure collapsed
+   :path: target.configuration.ModelErdanticFigure
+   :confpy: autodoc_pydantic_model_erdantic_figure_collapsed
+   :directive_option: model-erdantic-figure-collapsed
+   :enable: model-erdantic-figure
+   :values: True, False
+
+   Show the entity relationship diagram collapsed or not.
+   :ref:`model-erdantic-figure <autodoc_pydantic_model_erdantic_figure_collapsed>` must be True for this to have any effect.
 
 
 .. config_description:: autopydantic_model

@@ -89,7 +89,7 @@ This example shows the redered output of a pydantic model including an Entity-Re
       .. autopydantic_model:: target.example_generics.Response
          :noindex:
          :model-erdantic-figure: True
-
+         :model-erdantic-figure-collapsed: False
 
    .. tab:: reST
 
@@ -97,7 +97,7 @@ This example shows the redered output of a pydantic model including an Entity-Re
 
          .. autopydantic_model:: target.example_generics.Response
             :model-erdantic-figure: True
-
+            :model-erdantic-figure-collapsed: False
 
    .. tab:: python
 

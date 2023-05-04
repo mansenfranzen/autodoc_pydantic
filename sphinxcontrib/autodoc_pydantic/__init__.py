@@ -107,6 +107,7 @@ def add_configuration_values(app: Sphinx):
     add(f'{stem}model_member_order', 'groupwise', True, str)
     add(f'{stem}model_signature_prefix', "pydantic model", True, str)
     add(f'{stem}model_erdantic_figure', False, True, bool)
+    add(f'{stem}model_erdantic_figure_collapsed', True, True, bool)
 
     add(f'{stem}validator_signature_prefix', "validator", True, str)
     add(f'{stem}validator_replace_signature', True, True, bool)

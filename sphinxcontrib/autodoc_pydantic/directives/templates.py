@@ -5,12 +5,10 @@
 TPL_COLLAPSE = """
 .. raw:: html
 
-   <p><details  class="autodoc_pydantic_collapsable_json">
-   <summary>Show JSON schema</summary>
+   <p><details  class="{details_class}">
+   <summary>{summary}</summary>
 
-.. code-block:: json
-
-{}
+{lines}
 
 .. raw:: html
 
