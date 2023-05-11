@@ -342,13 +342,10 @@ class PydanticModelDocumenter(ClassDocumenter):
         """
         source_name = self.get_sourcename()
         if erd is None:
-            logger = sphinx.util.logging.getLogger(__name__)
-            error_msg = f'erdantic is not installed, no Entity Relationship Diagram for {self.fullname} is skipped.' + \
+            error_msg = 'erdantic is not installed, you need to install it before creating an' \
+                        f' Entity Relationship Diagram for {self.fullname}.' + \
                         ' See https://autodoc-pydantic.readthedocs.io/en/stable/users/installation.html'
-            logger.warning(error_msg, location="autodoc_pydantic")
-            self.add_line("..warning::")
-            self.add_line('   ' + error_msg)
-            return
+            raise RuntimeError(error_msg)
 
         # Graphviz [DOT language](https://graphviz.org/doc/info/lang.html) representation
         figure_dot = erd.to_dot(self.object)
