@@ -30,6 +30,7 @@ pytest = {version = "^6", optional = true }
 coverage = { version ="^5", optional = true }
 flake8 = { version = "^3", optional = true }
 tox = { version ="^3", optional = true }
+erdantic= { version ="^0.5", optional = true }
 
 [tool.pytest.ini_options]
 minversion = "6.0"
@@ -38,10 +39,12 @@ minversion = "6.0"
 docs = ["sphinx-rtd-theme",
         "sphinx-tabs",
         "sphinx-copybutton",
-        "sphinxcontrib-mermaid"]
+        "sphinxcontrib-mermaid",
+        "erdantic"]
 
 test = ["pytest",
-        "coverage"]
+        "coverage",
+        "erdantic"]
 
 dev = ["pytest",
        "coverage",
@@ -50,9 +53,8 @@ dev = ["pytest",
        "sphinx-copybutton",
        "sphinxcontrib-mermaid",
        "flake8",
-       "tox"]
-
-erd = ["erdantic"]
+       "tox",
+       "erdantic"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
