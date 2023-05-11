@@ -336,13 +336,6 @@ class PydanticModelDocumenter(ClassDocumenter):
         for line in schema_rest:
             self.add_line(line, source_name)
 
-    def _get_pydantic_class(self):
-        components_source_name = self.fullname.split('.')
-        mod = __import__(components_source_name[0])
-        for comp in components_source_name[1:]:
-            mod = getattr(mod, comp)
-        return mod
-
     def add_erdantic_figure(self, collapsed: bool):
         """Adds an erdantic entity relation diagram to the doc of an pydantic model.
 
@@ -357,9 +350,8 @@ class PydanticModelDocumenter(ClassDocumenter):
             self.add_line('   ' + error_msg)
             return
 
-        PydanticClass = self._get_pydantic_class()
         # Graphviz [DOT language](https://graphviz.org/doc/info/lang.html) representation
-        figure_dot = erd.to_dot(PydanticClass)
+        figure_dot = erd.to_dot(self.object)
         lines = [
             ".. graphviz::",
             "",
