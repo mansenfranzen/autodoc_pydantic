@@ -1,7 +1,6 @@
 """This module contains tests for pydantic model configurations.
 
 """
-import re
 
 from sphinx.addnodes import desc_annotation
 from sphinx.testing.util import assert_node
