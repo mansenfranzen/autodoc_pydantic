@@ -57,7 +57,7 @@ jobs:
           - python_version: "3.10"
             pydantic_version: "110"
             sphinx_version:  "52"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
@@ -74,7 +74,7 @@ jobs:
   test-latest-version:
     if: "!contains(github.event.head_commit.message, 'skip ci')"
     environment: ci
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
@@ -91,7 +91,7 @@ jobs:
   test-development-versions-deps:
     if: "!contains(github.event.head_commit.message, 'skip ci')"
     environment: ci
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
@@ -106,7 +106,7 @@ jobs:
   test-linter:
     if: "!contains(github.event.head_commit.message, 'skip ci')"
     environment: ci
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2

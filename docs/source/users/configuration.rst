@@ -214,7 +214,7 @@ Contains all modifications for pydantic `BaseModel`.
    :values: True, False
 
    Show the entity relationship diagram collapsed or not.
-   :ref:`model-erdantic-figure <autodoc_pydantic_model_erdantic_figure_collapsed>` must be True for this to have any effect.
+   :ref:`model-erdantic-figure <autodoc_pydantic_model_erdantic_figure>` must be True for this to have any effect.
 
 
 .. config_description:: autopydantic_model
