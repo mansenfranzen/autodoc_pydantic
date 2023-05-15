@@ -286,7 +286,8 @@ class PydanticModelDocumenter(ClassDocumenter):
             return
 
         if self.pydantic.options.is_true("erdantic-figure", True):
-            if self.pydantic.options.is_true("erdantic-figure-collapsed", True):
+            if self.pydantic.options.is_true(
+                    "erdantic-figure-collapsed", True):
                 self.add_erdantic_figure(collapsed=True)
             else:
                 self.add_erdantic_figure(collapsed=False)
@@ -337,29 +338,35 @@ class PydanticModelDocumenter(ClassDocumenter):
             self.add_line(line, source_name)
 
     def add_erdantic_figure(self, collapsed: bool):
-        """Adds an erdantic entity relation diagram to the doc of an pydantic model.
+        """Adds an erdantic entity relation diagram to the doc of an
+        pydantic model.
 
         """
         source_name = self.get_sourcename()
         if erd is None:
-            error_msg = 'erdantic is not installed, you need to install it before creating an' \
-                        f' Entity Relationship Diagram for {self.fullname}.' + \
-                        ' See https://autodoc-pydantic.readthedocs.io/en/stable/users/installation.html'
+            error_msg = 'erdantic is not installed, you need to install ' \
+                'it before creating an Entity Relationship Diagram for ' \
+                'f{self.fullname}. See ' \
+                'https://autodoc-pydantic.readthedocs.io/' \
+                'en/stable/users/installation.html'
             raise RuntimeError(error_msg)
 
-        # Graphviz [DOT language](https://graphviz.org/doc/info/lang.html) representation
+        # Graphviz [DOT language](https://graphviz.org/doc/info/lang.html)
         figure_dot = erd.to_dot(self.object)
         lines = [
             ".. graphviz::",
             "",
         ]
-        lines += ['   ' + line for line in figure_dot.replace('\t', '   ').split('\n')]
+        lines += ['   ' + line
+                  for line in figure_dot.replace('\t', '   ').split('\n')]
         lines.append("")
 
         if collapsed:
             lines = "\n".join(lines)
             lines = TPL_COLLAPSE.format(
-                lines=lines, summary="Show Entity Relationship Diagram", details_class="autodoc_pydantic_collapsable_erd"
+                lines=lines,
+                summary="Show Entity Relationship Diagram",
+                details_class="autodoc_pydantic_collapsable_erd"
             ).split("\n")
         for line in lines:
             self.add_line(line, source_name)
@@ -547,7 +554,9 @@ class PydanticModelDocumenter(ClassDocumenter):
         lines = ['.. code-block:: json', ''] + lines
         lines = "\n".join(lines)
         lines = TPL_COLLAPSE.format(
-            lines=lines, summary="Show JSON schema", details_class="autodoc_pydantic_collapsable_json"
+            lines=lines,
+            summary="Show JSON schema",
+            details_class="autodoc_pydantic_collapsable_json"
         ).split("\n")
 
         return lines
