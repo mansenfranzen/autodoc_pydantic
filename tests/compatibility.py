@@ -3,6 +3,8 @@ differences between different sphinx versions.
 
 """
 from typing import Tuple, List
+from sys import version_info
+import re
 
 import pydantic
 import sphinx
@@ -103,7 +105,7 @@ def typing_module_prefix() -> str:
 
     """
 
-    if (5,) <= sphinx.version_info < (6,):
+    if (5,) <= sphinx.version_info < (6, 1):
         return "~typing."
 
     return ""
@@ -134,5 +136,15 @@ def module_doc_string_tab() -> str:
 
     return ""
 
+
+def get_type_expected(field_type: str):
+    if sphinx.version_info >= (6, 1):
+        optional_match = re.findall(r'Optional\[(\w*)\]', field_type)
+        if optional_match is not None and len(optional_match) > 0:
+            return optional_match[0] + ' | None'  # int | None
+    return field_type  # 'Optional[int]'
+
+
 TYPING_MODULE_PREFIX = typing_module_prefix()
 TYPEHINTS_PREFIX = typehints_prefix()
+OPTIONAL_INT = TYPING_MODULE_PREFIX + get_type_expected('Optional[int]')
