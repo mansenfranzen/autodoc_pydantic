@@ -695,8 +695,8 @@ def test_autodoc_pydantic_field_show_required_true(field, autodocument):
 
 
 @pytest.mark.parametrize("expected",
-                         [("field1", TYPING_MODULE_PREFIX + "Optional[int]"),
-                          ("field2", TYPING_MODULE_PREFIX + "Optional[int]"),
+                         [("field1", TYPING_MODULE_PREFIX + "int | None"),
+                          ("field2", TYPING_MODULE_PREFIX + "int | None"),
                           ("field3", "int"),
                           ("field4", "int")])
 def test_autodoc_pydantic_field_show_required_true_not(expected, autodocument):
@@ -891,8 +891,8 @@ def test_autodoc_pydantic_field_show_required_false_directive(parse_rst):
 
 
 @pytest.mark.parametrize(["field", "typ"],
-                         [("field1", TYPING_MODULE_PREFIX + "Optional[int]"),
-                          ("field2", TYPING_MODULE_PREFIX + "Optional[int]"),
+                         [("field1", TYPING_MODULE_PREFIX + "int | None"),
+                          ("field2", TYPING_MODULE_PREFIX + "int | None"),
                           ("field3", "int"),
                           ("field4", "int")])
 def test_autodoc_pydantic_field_show_optional_true_not(
@@ -936,7 +936,7 @@ def test_autodoc_pydantic_field_show_optional_true_not(
 
 @pytest.mark.parametrize(["field", "typ"],
                          [("field1", "int"),
-                          ("field2", TYPING_MODULE_PREFIX + "Optional[int]")])
+                          ("field2", TYPING_MODULE_PREFIX + "int | None")])
 def test_autodoc_pydantic_field_show_optional_true(field, typ, autodocument):
     kwargs = dict(
         object_path=f'target.configuration.FieldShowOptional.{field}',
@@ -975,7 +975,7 @@ def test_autodoc_pydantic_field_show_optional_true(field, typ, autodocument):
 
 @pytest.mark.parametrize(["field", "typ"],
                          [("field1", "int"),
-                          ("field2", TYPING_MODULE_PREFIX + "Optional[int]")])
+                          ("field2", TYPING_MODULE_PREFIX + "int | None")])
 def test_autodoc_pydantic_field_show_optional_false(field, typ, autodocument):
     kwargs = dict(
         object_path=f'target.configuration.FieldShowOptional.{field}',

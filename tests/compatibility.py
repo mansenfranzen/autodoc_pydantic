@@ -103,7 +103,7 @@ def typing_module_prefix() -> str:
 
     """
 
-    if sphinx.version_info >= (5,):
+    if (5,) <= sphinx.version_info < (6,):
         return "~typing."
 
     return ""
