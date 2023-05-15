@@ -54,6 +54,18 @@ jobs:
           - python_version: "3.10"
             pydantic_version: "110"
             sphinx_version:  "52"
+          - python_version: "3.10"
+            pydantic_version: "110"
+            sphinx_version: "60"
+          - python_version: "3.10"
+            pydantic_version: "110"
+            sphinx_version: "61"
+          - python_version: "3.10"
+            pydantic_version: "110"
+            sphinx_version: "62"
+          - python_version: "3.10"
+            pydantic_version: "110"
+            sphinx_version: "70"
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
