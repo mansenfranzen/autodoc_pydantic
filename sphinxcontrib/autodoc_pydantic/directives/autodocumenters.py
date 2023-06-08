@@ -32,7 +32,7 @@ from sphinxcontrib.autodoc_pydantic.directives.options.definition import (
     OPTIONS_CONFIG,
     OPTIONS_MERGED
 )
-from sphinxcontrib.autodoc_pydantic.directives.templates import TPL_COLLAPSE
+from sphinxcontrib.autodoc_pydantic.directives.templates import to_collapsable
 from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector, \
     ValidatorFieldMap
 from sphinxcontrib.autodoc_pydantic.directives.options.composites import (
@@ -358,12 +358,7 @@ class PydanticModelDocumenter(ClassDocumenter):
         lines.append("")
 
         if self.pydantic.options.is_true("erdantic-figure-collapsed", True):
-            lines = "\n".join(lines)
-            lines = TPL_COLLAPSE.format(
-                lines=lines,
-                summary="Show Entity Relationship Diagram",
-                details_class="autodoc_pydantic_collapsable_erd"
-            ).split("\n")
+            lines = to_collapsable(lines, "Show Entity Relationship Diagram", "autodoc_pydantic_collapsable_erd")
         for line in lines:
             self.add_line(line, source_name)
 
@@ -548,13 +543,7 @@ class PydanticModelDocumenter(ClassDocumenter):
         schema = json.dumps(schema, default=str, indent=3)
         lines = [f"   {line}" for line in schema.split("\n")]
         lines = ['.. code-block:: json', ''] + lines
-        lines = "\n".join(lines)
-        lines = TPL_COLLAPSE.format(
-            lines=lines,
-            summary="Show JSON schema",
-            details_class="autodoc_pydantic_collapsable_json"
-        ).split("\n")
-
+        lines = to_collapsable(lines, "Show JSON schema", "autodoc_pydantic_collapsable_json")
         return lines
 
 
