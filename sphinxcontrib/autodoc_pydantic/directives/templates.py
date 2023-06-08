@@ -19,7 +19,7 @@ TPL_COLLAPSE = """
 """
 
 
-def to_collapsable(lines: List[str], title, css_class) -> list[str]:
+def to_collapsable(lines: List[str], title, css_class) -> List[str]:
     """Place given lines into a collapsable HTML block.
 
     Parameters
