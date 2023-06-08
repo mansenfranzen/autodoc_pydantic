@@ -1,6 +1,57 @@
 Changelog
 =========
 
+v1.9.0 - 2023-06-08
+-------------------
+
+This is a feature release with an added support for entity relationship diagrams
+and a few changes in the compatibility matrix.
+
+Feature
+~~~~~~~
+
+- Introduce ``erdantic-figure`` and ``erdantic-figure-collapsed`` configuration
+  option for pydantic models to add entity relationship diagrams to models'
+  documentation either in collapsed form or as an image included to the HTML.
+  `#148 <https://github.com/mansenfranzen/autodoc_pydantic/pull/148>`__.
+
+Bugfix
+~~~~~~
+
+- remove compatibility for ``python <= 3.6``.
+- add compatibility for ``sphinx`` 6.0, 6.1, 6.2 and 7.0
+- run github actions on newest ``ubuntu-22.04``.
+- fix pytest errors with ``sphinx>=6.1`` where the type returned by
+  ``autodoc_typehints_format`` changed.
+
+Internal
+~~~~~~~~
+
+- Add ``to_collapsable`` to ``directives.templates`` that provides a
+  standardized interface to create a collapsable field.
+- Add ``erdantic`` to extras dependencies.
+
+Documentation
+~~~~~~~~~~~~~
+
+- Add descriptions for ``erdantic-figure`` and ``erdantic-figure-collapsed``
+  options in the configuration section.
+- Add an example of ERD in the example section.
+
+Testing
+~~~~~~~
+
+- Exclude ``python 3.6`` in test matrix.
+- Include ``sphinx`` 6.0, 6.1, 6.2 and 7.0 in test matrix.
+- Add tests for ``erdantic-figure`` and ``erdantic-figure-collapsed``.
+
+Contributors
+~~~~~~~~~~~~
+
+- Thanks to `yves-renier <https://github.com/yves-renier>`__ for
+  a pull request allowing the inclusion of entity relationship diagrams
+  `#148 <https://github.com/mansenfranzen/autodoc_pydantic/pull/148>`__.
+
 v1.8.0 - 2022-10-13
 -------------------
 
