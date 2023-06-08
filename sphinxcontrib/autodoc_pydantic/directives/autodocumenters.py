@@ -353,7 +353,11 @@ class PydanticModelDocumenter(ClassDocumenter):
         lines = [".. graphviz::", ""] + lines_dot + [""]
 
         if self.pydantic.options.is_true("erdantic-figure-collapsed", True):
-            lines = to_collapsable(lines, "Show Entity Relationship Diagram", "autodoc_pydantic_collapsable_erd")
+            lines = to_collapsable(
+                lines,
+                "Show Entity Relationship Diagram",
+                "autodoc_pydantic_collapsable_erd"
+            )
         for line in lines:
             self.add_line(line, source_name)
 
@@ -538,7 +542,11 @@ class PydanticModelDocumenter(ClassDocumenter):
         schema = json.dumps(schema, default=str, indent=3)
         lines = [f"   {line}" for line in schema.split("\n")]
         lines = ['.. code-block:: json', ''] + lines
-        lines = to_collapsable(lines, "Show JSON schema", "autodoc_pydantic_collapsable_json")
+        lines = to_collapsable(
+            lines,
+            "Show JSON schema",
+            "autodoc_pydantic_collapsable_json"
+        )
         return lines
 
 
