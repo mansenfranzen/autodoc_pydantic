@@ -286,11 +286,7 @@ class PydanticModelDocumenter(ClassDocumenter):
             return
 
         if self.pydantic.options.is_true("erdantic-figure", True):
-            if self.pydantic.options.is_true(
-                    "erdantic-figure-collapsed", True):
-                self.add_erdantic_figure(collapsed=True)
-            else:
-                self.add_erdantic_figure(collapsed=False)
+            self.add_erdantic_figure()
 
         if self.pydantic.options.is_true("show-json", True):
             self.add_collapsable_schema()
@@ -337,7 +333,7 @@ class PydanticModelDocumenter(ClassDocumenter):
         for line in schema_rest:
             self.add_line(line, source_name)
 
-    def add_erdantic_figure(self, collapsed: bool):
+    def add_erdantic_figure(self):
         """Adds an erdantic entity relation diagram to the doc of an
         pydantic model.
 
@@ -361,7 +357,7 @@ class PydanticModelDocumenter(ClassDocumenter):
                   for line in figure_dot.replace('\t', '   ').split('\n')]
         lines.append("")
 
-        if collapsed:
+        if self.pydantic.options.is_true("erdantic-figure-collapsed", True):
             lines = "\n".join(lines)
             lines = TPL_COLLAPSE.format(
                 lines=lines,
