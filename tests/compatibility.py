@@ -138,6 +138,10 @@ def module_doc_string_tab() -> str:
 
 
 def get_type_expected(field_type: str):
+    """Provide compatibility to account for changed behaviour of
+    autodoc_typehints_format which return either
+    `Optional[<type>]` or `<type> | None` depending on the version.
+    """
     if sphinx.version_info >= (6, 1):
         optional_match = re.findall(r'Optional\[(\w*)\]', field_type)
         if optional_match is not None and len(optional_match) > 0:
