@@ -202,7 +202,14 @@ Contains all modifications for pydantic `BaseModel`.
    :directive_option: model-erdantic-figure
    :values: True, False
 
-   Show the entity relationship diagram of the schemas using erdantic.
+   Show the entity relationship diagram of the schemas using erdantic. To
+   use this option, you need first to install
+   `graphviz <https://graphviz.org/download/>`_ , then install
+   **autodoc_pydantic** with the dev option:
+
+   .. code-block:: bash
+
+      pip install autodoc_pydantic[dev].
 
 
 .. config_description:: autopydantic_model
