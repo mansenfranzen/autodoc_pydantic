@@ -348,14 +348,9 @@ class PydanticModelDocumenter(ClassDocumenter):
             raise RuntimeError(error_msg)
 
         # Graphviz [DOT language](https://graphviz.org/doc/info/lang.html)
-        figure_dot = erd.to_dot(self.object)
-        lines = [
-            ".. graphviz::",
-            "",
-        ]
-        lines += ['   ' + line
-                  for line in figure_dot.replace('\t', '   ').split('\n')]
-        lines.append("")
+        figure_dot = erd.to_dot(self.object).replace('\t', '   ').split('\n')
+        lines_dot = ['   ' + line for line in figure_dot]
+        lines = [".. graphviz::", ""] + lines_dot + [""]
 
         if self.pydantic.options.is_true("erdantic-figure-collapsed", True):
             lines = to_collapsable(lines, "Show Entity Relationship Diagram", "autodoc_pydantic_collapsable_erd")
