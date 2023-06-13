@@ -74,7 +74,7 @@ and all `contributors <https://github.com/mansenfranzen/autodoc_pydantic/tree/re
 .. |PyPIBadge| image:: https://img.shields.io/pypi/v/autodoc_pydantic?style=flat
 .. _PyPIBadge: https://pypi.org/project/autodoc-pydantic/
 
-.. |CIBadge| image:: https://img.shields.io/github/workflow/status/mansenfranzen/autodoc_pydantic/ci?style=flat
+.. |CIBadge| image:: https://img.shields.io/github/actions/workflow/status/mansenfranzen/autodoc_pydantic/tests.yml?branch=main&style=flat
 .. _CIBadge: https://github.com/mansenfranzen/autodoc_pydantic/actions/workflows/tests.yml
 
 .. |DownloadsBadge| image:: https://img.shields.io/pypi/dm/autodoc_pydantic?color=fe7d37&style=flat
