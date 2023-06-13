@@ -4,9 +4,9 @@ build:
   os: "ubuntu-22.04"
   tools:
     python: "3.10"
-  jobs:
-    pre_create_environment:
-      - apt-get install graphviz graphviz-dev
+  apt_packages:
+    - graphviz
+    - graphviz-dev
 
 python:
   install:
