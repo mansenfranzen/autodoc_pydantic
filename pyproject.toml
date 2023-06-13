@@ -39,12 +39,10 @@ minversion = "6.0"
 docs = ["sphinx-rtd-theme",
         "sphinx-tabs",
         "sphinx-copybutton",
-        "sphinxcontrib-mermaid",
-        "erdantic"]
+        "sphinxcontrib-mermaid"]
 
 test = ["pytest",
-        "coverage",
-        "erdantic"]
+        "coverage"]
 
 dev = ["pytest",
        "coverage",
@@ -53,8 +51,9 @@ dev = ["pytest",
        "sphinx-copybutton",
        "sphinxcontrib-mermaid",
        "flake8",
-       "tox",
-       "erdantic"]
+       "tox"]
+
+erdantic = ["erdantic"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

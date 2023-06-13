@@ -17,11 +17,11 @@ into your documentation building environment:
 
 .. warning::
    If you wish to use the :ref:`model-erdantic-figure <autodoc_pydantic_model_erdantic_figure>` option, you need to
-   first install `graphviz <https://graphviz.org/download/>`_, then install **autodoc_pydantic** with the dev option:
+   first install `graphviz <https://graphviz.org/download/>`_, then install **autodoc_pydantic** with the erdantic option:
 
    .. code-block:: bash
 
-      pip install autodoc_pydantic[dev]
+      pip install autodoc_pydantic[erdantic]
 
 2. Enable extension
 ===================
