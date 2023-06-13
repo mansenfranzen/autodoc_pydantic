@@ -2,13 +2,22 @@
 differences between different sphinx versions.
 
 """
+import importlib
 from typing import Tuple, List
-from sys import version_info
 import re
 
 import pydantic
 import sphinx
 from sphinx.addnodes import desc_sig_punctuation, desc_annotation, pending_xref
+
+
+def package_is_missing(package_name):
+    """Check if a Python package is not available"""
+    try:
+        importlib.import_module(package_name)
+        return False
+    except ImportError:
+        return True
 
 
 def get_pydantic_version() -> Tuple:
@@ -168,4 +177,5 @@ def get_optional_type_expected(field_type: str):
 
 TYPING_MODULE_PREFIX = typing_module_prefix()
 TYPEHINTS_PREFIX = typehints_prefix()
-OPTIONAL_INT = TYPING_MODULE_PREFIX + get_optional_type_expected('Optional[int]')
+OPTIONAL_INT = TYPING_MODULE_PREFIX + get_optional_type_expected(
+    'Optional[int]')
