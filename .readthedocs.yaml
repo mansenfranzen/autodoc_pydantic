@@ -5,8 +5,8 @@ build:
   tools:
     python: "3.10"
   jobs:
-    pre_install:
-      - sudo apt-get install graphviz graphviz-dev
+    pre_create_environment:
+      - apt-get install graphviz graphviz-dev
 
 python:
   install:
