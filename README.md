@@ -96,7 +96,8 @@ Thanks to great open source projects [sphinx](https://www.sphinx-doc.org/en/mast
     </tr>
     <tr>
       <td align="center"><a href="http://charlie.machalow.com"><img src="https://avatars.githubusercontent.com/u/5749838?v=4?s=100" width="100px;" alt="Charles Machalow"/><br /><sub><b>Charles Machalow</b></sub></a><br /><a href="#question-csm10495" title="Answering Questions">💬</a></td>
-    </tr>
+      <td align="center"><a href="https://github.com/yves-renier"><img src="https://avatars.githubusercontent.com/u/102358016?v=4?s=100" width="100px;" alt="Yves Renier"/><br /><sub><b>Yves Renier</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/commits?author=yves-renier" title="Documentation">📖</a> <a href="https://github.com/mansenfranzen/autodoc_pydantic/commits?author=yves-renier" title="Tests">⚠️</a> <a href="#content-yves-renier" title="Content">🖋</a></td>
+</tr>
   </tbody>
 </table>
 
