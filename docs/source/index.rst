@@ -74,17 +74,17 @@ and all `contributors <https://github.com/mansenfranzen/autodoc_pydantic/tree/re
 .. |PyPIBadge| image:: https://img.shields.io/pypi/v/autodoc_pydantic?style=flat
 .. _PyPIBadge: https://pypi.org/project/autodoc-pydantic/
 
-.. |CIBadge| image:: https://img.shields.io/github/workflow/status/mansenfranzen/autodoc_pydantic/ci?style=flat
+.. |CIBadge| image:: https://img.shields.io/github/actions/workflow/status/mansenfranzen/autodoc_pydantic/tests.yml?branch=main&style=flat
 .. _CIBadge: https://github.com/mansenfranzen/autodoc_pydantic/actions/workflows/tests.yml
 
 .. |DownloadsBadge| image:: https://img.shields.io/pypi/dm/autodoc_pydantic?color=fe7d37&style=flat
 .. _DownloadsBadge: https://pypistats.org/packages/autodoc-pydantic
 
-.. |ContributersBadge| image:: https://img.shields.io/badge/all_contributors-28-orange.svg?style=flat
+.. |ContributersBadge| image:: https://img.shields.io/badge/all_contributors-30-orange.svg?style=flat
 .. _ContributersBadge: https://github.com/mansenfranzen/autodoc_pydantic/tree/refactor_inspection#acknowledgements
 
 .. |CoverageBadge| image:: https://img.shields.io/codecov/c/gh/mansenfranzen/autodoc_pydantic?style=flat
 .. _CoverageBadge: https://app.codecov.io/gh/mansenfranzen/autodoc_pydantic
 
-.. |PythonBadge| image:: https://img.shields.io/badge/python-3.6+-blue.svg?style=flat
+.. |PythonBadge| image:: https://img.shields.io/badge/python-3.7+-blue.svg?style=flat
 .. _PythonBadge: http://www.python.org/

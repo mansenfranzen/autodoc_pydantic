@@ -55,6 +55,8 @@ OPTIONS_MODEL = {
     ),
     "model-show-config-member": option_default_true,
     "model-show-config-summary": option_default_true,
+    "model-erdantic-figure": option_default_true,
+    "model-erdantic-figure-collapsed": option_default_true,
     "model-signature-prefix": unchanged,
     "undoc-members": option_default_true,
     "members": option_members,

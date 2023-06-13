@@ -2,11 +2,22 @@
 differences between different sphinx versions.
 
 """
+import importlib
 from typing import Tuple, List
+import re
 
 import pydantic
 import sphinx
 from sphinx.addnodes import desc_sig_punctuation, desc_annotation, pending_xref
+
+
+def package_is_missing(package_name):
+    """Check if a Python package is not available"""
+    try:
+        importlib.import_module(package_name)
+        return False
+    except ImportError:
+        return True
 
 
 def get_pydantic_version() -> Tuple:
@@ -103,7 +114,7 @@ def typing_module_prefix() -> str:
 
     """
 
-    if sphinx.version_info >= (5,):
+    if (5,) <= sphinx.version_info < (6, 1):
         return "~typing."
 
     return ""
@@ -134,5 +145,37 @@ def module_doc_string_tab() -> str:
 
     return ""
 
+
+def get_optional_type_expected(field_type: str):
+    """Provide compatibility to account for changed behaviour of
+    autodoc_typehints_format with optional field which return either
+    `Optional[<type>]` or `<type> | None` depending on the version.
+
+    Here is an example output with sphinx 5.3:
+
+    .. code-block: pycon
+        >>> import sphinx
+        >>> print(sphinx.version_info[:2])
+        (5, 3)
+        >>> get_optional_type_expected('int')
+        int | None
+
+    Here is an example output with sphinx 6.1:
+    .. code-block: pycon
+        >>> import sphinx
+        >>> print(sphinx.version_info[:2])
+        (6, 1)
+        >>> get_optional_type_expected('int')
+        Optional[int]
+    """
+    if sphinx.version_info >= (6, 1):
+        optional_match = re.findall(r'Optional\[(\w*)\]', field_type)
+        if optional_match is not None and len(optional_match) > 0:
+            return optional_match[0] + ' | None'  # int | None
+    return field_type  # 'Optional[int]'
+
+
 TYPING_MODULE_PREFIX = typing_module_prefix()
 TYPEHINTS_PREFIX = typehints_prefix()
+OPTIONAL_INT = TYPING_MODULE_PREFIX + get_optional_type_expected(
+    'Optional[int]')

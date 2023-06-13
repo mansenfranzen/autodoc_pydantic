@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "autodoc_pydantic"
-version = "1.8.0"
+version = "1.9.0"
 description = "Seamlessly integrate pydantic models in your Sphinx documentation."
 authors = ["mansenfranzen <franz.woellert@gmail.com>"]
 packages = [{ include = "sphinxcontrib" }]
@@ -18,7 +18,7 @@ classifiers = [
 include = ["sphinxcontrib/autodoc_pydantic/css/autodoc_pydantic.css"]
 
 [tool.poetry.dependencies]
-python = ">=3.6,<4.0.0"
+python = ">=3.7.1,<4.0.0"
 Sphinx = ">=3.4"
 pydantic = ">=1.5"
 
@@ -30,6 +30,7 @@ pytest = {version = "^6", optional = true }
 coverage = { version ="^5", optional = true }
 flake8 = { version = "^3", optional = true }
 tox = { version ="^3", optional = true }
+erdantic= { version ="^0.5", optional = true }
 
 [tool.pytest.ini_options]
 minversion = "6.0"
@@ -51,6 +52,8 @@ dev = ["pytest",
        "sphinxcontrib-mermaid",
        "flake8",
        "tox"]
+
+erdantic = ["erdantic"]
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

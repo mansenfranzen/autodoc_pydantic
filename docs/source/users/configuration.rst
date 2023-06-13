@@ -196,6 +196,35 @@ Contains all modifications for pydantic `BaseModel`.
 
 
 .. config_description:: autopydantic_model
+   :title: Show Erdantic figure
+   :path: target.configuration.ModelErdanticFigure
+   :confpy: autodoc_pydantic_model_erdantic_figure
+   :directive_option: model-erdantic-figure
+   :values: True, False
+
+   Show the entity relationship diagram of the schemas using erdantic. To
+   use this option, you need first to install
+   `graphviz <https://graphviz.org/download/>`_ , then install
+   **autodoc_pydantic** with the dev option:
+
+   .. code-block:: bash
+
+      pip install autodoc_pydantic[dev].
+
+
+.. config_description:: autopydantic_model
+   :title: Show Erdantic figure collapsed
+   :path: target.configuration.ModelErdanticFigure
+   :confpy: autodoc_pydantic_model_erdantic_figure_collapsed
+   :directive_option: model-erdantic-figure-collapsed
+   :enable: model-erdantic-figure
+   :values: True, False
+
+   Show the entity relationship diagram collapsed or not.
+   :ref:`model-erdantic-figure <autodoc_pydantic_model_erdantic_figure>` must be True for this to have any effect.
+
+
+.. config_description:: autopydantic_model
    :title: Show Schema JSON
    :path: target.configuration.ModelShowJson
    :confpy: autodoc_pydantic_model_show_json

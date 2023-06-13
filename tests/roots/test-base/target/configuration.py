@@ -482,3 +482,12 @@ class FieldSwapNameAndAlias(BaseModel):
 
     field1: int = Field(default=1, alias="field 1 alias")
     """Field1"""
+
+
+class ModelErdanticFigureRelated(ModelShowFieldSummary):
+    """ModelErdanticFigureRelated."""
+
+
+class ModelErdanticFigure(ModelShowFieldSummary):
+    """ModelErdanticFigure."""
+    related: ModelErdanticFigureRelated

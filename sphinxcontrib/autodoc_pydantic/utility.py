@@ -53,7 +53,9 @@ def show_versions():
         f"pydantic: {get_version_special('pydantic')} | "
         f"sphinx: {get_version('sphinx')} | "
         f"sphinx_rtd_theme: {get_version('sphinx_rtd_theme')} | "
-        f"sphinx_tabs: {get_version('sphinx_tabs')}")
+        f"sphinx_tabs: {get_version('sphinx_tabs')} | "
+        f"erdantic: {get_version('erdantic')}"
+    )
 
 
 class CustomEnum:

@@ -32,13 +32,17 @@ from sphinxcontrib.autodoc_pydantic.directives.options.definition import (
     OPTIONS_CONFIG,
     OPTIONS_MERGED
 )
-from sphinxcontrib.autodoc_pydantic.directives.templates import TPL_COLLAPSE
+from sphinxcontrib.autodoc_pydantic.directives.templates import to_collapsable
 from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector, \
     ValidatorFieldMap
 from sphinxcontrib.autodoc_pydantic.directives.options.composites import (
     AutoDocOptions
 )
 from sphinxcontrib.autodoc_pydantic.directives.utility import NONE
+try:
+    import erdantic as erd
+except ImportError:
+    erd = None
 
 
 class PydanticAutoDoc:
@@ -275,12 +279,14 @@ class PydanticModelDocumenter(ClassDocumenter):
         """Delegate additional content creation.
 
         """
-
         super().add_content(more_content, **kwargs)
 
         # do not provide any additional info if documented as attribute
         if self.doc_as_attr:
             return
+
+        if self.pydantic.options.is_true("erdantic-figure", True):
+            self.add_erdantic_figure()
 
         if self.pydantic.options.is_true("show-json", True):
             self.add_collapsable_schema()
@@ -324,8 +330,35 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         schema_rest = self._convert_json_schema_to_rest(schema)
         source_name = self.get_sourcename()
-
         for line in schema_rest:
+            self.add_line(line, source_name)
+
+    def add_erdantic_figure(self):
+        """Adds an erdantic entity relation diagram to the doc of an
+        pydantic model.
+
+        """
+        source_name = self.get_sourcename()
+        if erd is None:
+            error_msg = 'erdantic is not installed, you need to install ' \
+                'it before creating an Entity Relationship Diagram for ' \
+                'f{self.fullname}. See ' \
+                'https://autodoc-pydantic.readthedocs.io/' \
+                'en/stable/users/installation.html'
+            raise RuntimeError(error_msg)
+
+        # Graphviz [DOT language](https://graphviz.org/doc/info/lang.html)
+        figure_dot = erd.to_dot(self.object).replace('\t', '   ').split('\n')
+        lines_dot = ['   ' + line for line in figure_dot]
+        lines = [".. graphviz::", ""] + lines_dot + [""]
+
+        if self.pydantic.options.is_true("erdantic-figure-collapsed", True):
+            lines = to_collapsable(
+                lines,
+                "Show Entity Relationship Diagram",
+                "autodoc_pydantic_collapsable_erd"
+            )
+        for line in lines:
             self.add_line(line, source_name)
 
     def add_config_summary(self):
@@ -508,9 +541,12 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         schema = json.dumps(schema, default=str, indent=3)
         lines = [f"   {line}" for line in schema.split("\n")]
-        lines = "\n".join(lines)
-        lines = TPL_COLLAPSE.format(lines).split("\n")
-
+        lines = ['.. code-block:: json', ''] + lines
+        lines = to_collapsable(
+            lines,
+            "Show JSON schema",
+            "autodoc_pydantic_collapsable_json"
+        )
         return lines
 
 

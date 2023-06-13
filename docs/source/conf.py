@@ -31,7 +31,7 @@ copyright = '2022, Franz Wöllert'
 author = 'Franz Wöllert'
 
 # The full version, including alpha/beta/rc tags
-release = '1.8.0'
+release = '1.9.0'
 
 # -- General configuration ---------------------------------------------------
 
@@ -43,6 +43,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
+    "sphinx.ext.graphviz",
     "sphinx_tabs.tabs",
     "sphinx_copybutton",
     "sphinxcontrib.autodoc_pydantic",
@@ -84,3 +85,6 @@ mermaid_version = ""
 html_static_path = ["_static"]
 html_js_files = ['mermaid.min.js']
 html_css_files = ['custom.css']
+
+# Default output of graphviz in SVG (for erdantic diagrams)
+graphviz_output_format = 'svg'
