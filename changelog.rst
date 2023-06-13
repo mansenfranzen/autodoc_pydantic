@@ -4,8 +4,9 @@ Changelog
 v1.9.0 - 2023-06-08
 -------------------
 
-This is a feature release with an added support for entity relationship diagrams
-and a few changes in the compatibility matrix.
+This is a feature release adding support for entity relationship diagrams
+while dropping support for python 3.6 is dropped. Moreover, newest sphinx
+versions are added to test matrix.
 
 Feature
 ~~~~~~~
@@ -18,10 +19,8 @@ Feature
 Bugfix
 ~~~~~~
 
-- remove compatibility for ``python <= 3.6``.
-- add compatibility for ``sphinx`` 6.0, 6.1, 6.2 and 7.0
-- run github actions on newest ``ubuntu-22.04``.
-- fix pytest errors with ``sphinx>=6.1`` where the type returned by
+- Run github actions on newest ``ubuntu-22.04``.
+- Fix pytest errors with ``sphinx>=6.1`` where the type returned by
   ``autodoc_typehints_format`` changed.
 
 Internal
@@ -44,12 +43,14 @@ Testing
 - Exclude ``python 3.6`` in test matrix.
 - Include ``sphinx`` 6.0, 6.1, 6.2 and 7.0 in test matrix.
 - Add tests for ``erdantic-figure`` and ``erdantic-figure-collapsed``.
+- Fix github actions CI pipeline due to unsupported ubuntu while upgrading to
+  newest ``ubuntu-22.04``.
 
 Contributors
 ~~~~~~~~~~~~
 
-- Thanks to `yves-renier <https://github.com/yves-renier>`__ for
-  a pull request allowing the inclusion of entity relationship diagrams
+- Many thanks to `yves-renier <https://github.com/yves-renier>`__ for adding
+  entity relationship diagrams and fixing the CI pipeline
   `#148 <https://github.com/mansenfranzen/autodoc_pydantic/pull/148>`__.
 
 v1.8.0 - 2022-10-13
