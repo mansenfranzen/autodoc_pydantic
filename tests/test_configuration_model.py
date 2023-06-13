@@ -1,12 +1,12 @@
 """This module contains tests for pydantic model configurations.
 
 """
-
+import pytest
 from sphinx.addnodes import desc_annotation
 from sphinx.testing.util import assert_node
 
 from sphinxcontrib.autodoc_pydantic import PydanticModelDocumenter
-from .compatibility import desc_annotation_directive_prefix
+from .compatibility import desc_annotation_directive_prefix, package_is_missing
 
 KWARGS = dict(documenter=PydanticModelDocumenter.objtype,
               deactivate_all=True)
@@ -102,6 +102,7 @@ def test_autodoc_pydantic_model_show_json_false(autodocument):
     assert actual == result
 
 
+@pytest.mark.skipif(package_is_missing('erdantic'), reason="erdantic missing")
 def test_autodoc_pydantic_model_erdantic_figure_true(autodocument):
     kwargs = dict(object_path='target.configuration.ModelErdanticFigure',
                   **KWARGS)
@@ -167,6 +168,7 @@ def test_autodoc_pydantic_model_erdantic_figure_true(autodocument):
     assert actual[18:] == result[18:]
 
 
+@pytest.mark.skipif(package_is_missing('erdantic'), reason="erdantic missing")
 def test_autodoc_pydantic_model_erdantic_figure_collapsed_false(autodocument):
     kwargs = dict(object_path='target.configuration.ModelErdanticFigure',
                   **KWARGS)
@@ -228,6 +230,7 @@ def test_autodoc_pydantic_model_erdantic_figure_collapsed_false(autodocument):
     assert actual[11:] == result[11:]
 
 
+@pytest.mark.skipif(package_is_missing('erdantic'), reason="erdantic missing")
 def test_autodoc_pydantic_model_erdantic_figure_false(autodocument):
     kwargs = dict(object_path='target.configuration.ModelErdanticFigure',
                   **KWARGS)
