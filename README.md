@@ -29,7 +29,7 @@ Don't worry - just `pip install autodoc_pydantic` ☺.
 - 📋 shows summary section for model configuration, fields and validators
 - 👀 hides overloaded and redundant model class signature
 - 📚 sorts fields, validators and model config within models by type
-- 🍀 Supports `pydantic >= 1.5.0` and `sphinx >= 3.4.0`
+- 🍀 Supports `pydantic >= 1.5.0, < 2.0.0` and `sphinx >= 3.4.0`
 
 ### Comparison between autodoc sphinx and autodoc pydantic
 
