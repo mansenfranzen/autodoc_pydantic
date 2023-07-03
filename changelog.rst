@@ -5,8 +5,9 @@ v1.9.0 - 2023-06-08
 -------------------
 
 This is a feature release adding support for entity relationship diagrams
-while dropping support for python 3.6 is dropped. Moreover, newest sphinx
-versions are added to test matrix.
+while dropping python 3.6. Additionally, pydantic v2 is currently excluded
+until support will be added. Moreover, newest sphinx versions are
+added to test matrix.
 
 Feature
 ~~~~~~~
@@ -22,6 +23,8 @@ Bugfix
 - Run github actions on newest ``ubuntu-22.04``.
 - Fix pytest errors with ``sphinx>=6.1`` where the type returned by
   ``autodoc_typehints_format`` changed.
+- Provide upper version boundary for pydantic to exclude v2 which
+  is not supported, yet.
 
 Internal
 ~~~~~~~~
