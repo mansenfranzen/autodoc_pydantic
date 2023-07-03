@@ -23,7 +23,7 @@ Features
 - 📋 shows summary section for model configuration, fields and validators
 - 👀 hides overloaded and redundant model class signature
 - 📚 sorts fields, validators and model config within models by type
-- 🍀 Supports `pydantic >= 1.5.0` and `sphinx >= 3.4.0`
+- 🍀 Supports `pydantic >= 1.5.0, <2.0.0` and `sphinx >= 3.4.0`
 
 To see those features in action, jump over to the :ref:`example <showcase>` section comparing
 the appearance of standard sphinx autodoc with **autodoc_pydantic**.
