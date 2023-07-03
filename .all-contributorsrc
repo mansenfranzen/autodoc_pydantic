@@ -293,6 +293,15 @@
       "contributions": [
         "question"
       ]
+    },
+    {
+      "login": "tkaraouzene",
+      "name": "Thomas Karaouzene",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20064077?v=4",
+      "profile": "https://github.com/tkaraouzene",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
@@ -301,5 +310,6 @@
   "repoType": "github",
   "repoHost": "https://github.com",
   "skipCi": true,
-  "commitConvention": "angular"
+  "commitConvention": "angular",
+  "commitType": "docs"
 }
