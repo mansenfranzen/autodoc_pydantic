@@ -14,7 +14,7 @@ how pydantic objects are displayed:
    .. code-block:: python
 
       autodoc_pydantic_model_show_json = True
-      autodoc_pydantic_model_show_config = False
+      autodoc_pydantic_model_show_config_summary = False
 
 - **directive**: Locally define specific configurations via directive options.
   This overrides global configuration settings:
