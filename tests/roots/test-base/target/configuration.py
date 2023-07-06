@@ -1,6 +1,7 @@
 from typing import Optional
 
-from pydantic import BaseModel, validator, Field, BaseSettings, root_validator
+from pydantic import BaseModel, validator, Field, root_validator
+from pydantic_settings import BaseSettings
 
 
 class ModelShowJson(BaseModel):

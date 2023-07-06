@@ -1,4 +1,5 @@
-from pydantic import BaseModel, Field, validator, BaseSettings
+from pydantic import BaseModel, Field, validator
+from pydantic_settings import BaseSettings
 
 
 class AutoSummaryModel(BaseModel):

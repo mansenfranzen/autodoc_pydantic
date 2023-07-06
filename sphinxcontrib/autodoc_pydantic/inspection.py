@@ -14,8 +14,9 @@ from typing import NamedTuple, List, Dict, Any, Set, TypeVar, Type, Callable, \
 import pydantic
 from pydantic import BaseModel, create_model
 from pydantic.class_validators import Validator
-from pydantic.fields import ModelField
+from pydantic.fields import FieldInfo
 from pydantic.schema import get_field_schema_validations
+from pydantic_settings import SettingsConfigDict
 from sphinx.addnodes import desc_signature
 
 ASTERISK_FIELD_NAME = "all fields"
@@ -123,7 +124,7 @@ class FieldInspector(BaseInspectionComposite):
 
     def __init__(self, parent: 'ModelInspector'):
         super().__init__(parent)
-        self.attribute = self.model.__fields__
+        self.attribute = self.model.model_fields
 
     @property
     def names(self) -> List[str]:
@@ -133,8 +134,8 @@ class FieldInspector(BaseInspectionComposite):
 
         return list(self.attribute.keys())
 
-    def get(self, name: str) -> ModelField:
-        """Get the instance of `ModelField` for given field `name`.
+    def get(self, name: str) -> FieldInfo:
+        """Get the instance of `FieldInfo` for given field `name`.
 
         """
 
@@ -163,7 +164,7 @@ class FieldInspector(BaseInspectionComposite):
         """
 
         field = self.get(field_name)
-        return getattr(field.field_info, property_name, None)
+        return getattr(field, property_name, None)
 
     def get_constraints(self, field_name: str) -> Dict[str, Any]:
         """Get constraints for given `field_name`.
@@ -189,7 +190,7 @@ class FieldInspector(BaseInspectionComposite):
 
         """
 
-        return self.get(field_name).required
+        return self.get(field_name).is_required()
 
     def has_default_factory(self, field_name: str) -> bool:
         """Check if field has a `default_factory` being set. This information
@@ -210,26 +211,18 @@ class FieldInspector(BaseInspectionComposite):
         return self._is_json_serializable(field)
 
     @classmethod
-    def _is_json_serializable(cls, field: ModelField):
-        """Ensure JSON serializability for given pydantic `ModelField`.
+    def _is_json_serializable(cls, field: FieldInfo):
+        """Ensure JSON serializability for given pydantic `FieldInfo`.
 
         """
-
-        # check for sub fields in case of `Union` or alike, see #98
-        if field.sub_fields:
-            return all(
-                cls._is_json_serializable(sub_field)
-                for sub_field in field.sub_fields
-            )
-
         # hide user warnings in sphinx output
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             return cls._test_field_serializabiltiy(field)
 
     @staticmethod
-    def _test_field_serializabiltiy(field: ModelField) -> bool:
-        """Test JSON serializability for given pydantic `ModelField`.
+    def _test_field_serializabiltiy(field: FieldInfo) -> bool:
+        """Test JSON serializability for given pydantic `FieldInfo`.
 
         """
 
@@ -237,9 +230,9 @@ class FieldInspector(BaseInspectionComposite):
             arbitrary_types_allowed = True
 
         try:
-            field_args = (field.type_, field.default)
+            field_args = (field.annotation, field.default)
             model = create_model("_", test_field=field_args, Config=Cfg)
-            model.schema()
+            model.model_json_schema()
             return True
 
         except Exception:
@@ -345,7 +338,7 @@ class ConfigInspector(BaseInspectionComposite):
         cfg = self.attribute
 
         is_main_config = cfg is pydantic.main.BaseConfig
-        is_setting_config = cfg is pydantic.env_settings.BaseSettings.Config
+        is_setting_config = cfg is SettingsConfigDict
         is_default_config = is_main_config or is_setting_config
 
         return not is_default_config
@@ -452,7 +445,7 @@ class SchemaInspector(BaseInspectionComposite):
 
         except (TypeError, ValueError):
             new_model = self.create_sanitized_model()
-            return new_model.schema()
+            return new_model.model_json_schema()
 
     def create_sanitized_model(self) -> BaseModel:
         """Generates a new pydantic model from the original one while

@@ -1,4 +1,5 @@
-from pydantic import BaseSettings, validator, Field
+from pydantic import validator, Field
+from pydantic_settings import BaseSettings
 
 
 class AutoModuleSettings(BaseSettings):
