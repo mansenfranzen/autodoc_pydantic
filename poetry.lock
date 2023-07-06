@@ -660,6 +660,21 @@ files = [
 typing-extensions = ">=4.6.0,<4.7.0 || >4.7.0"
 
 [[package]]
+name = "pydantic-settings"
+version = "2.0.1"
+description = "Settings management using Pydantic"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "pydantic_settings-2.0.1-py3-none-any.whl", hash = "sha256:579bbcbec3501e62bab73867b097ae10218201950e897463c98a182ffe7ed104"},
+    {file = "pydantic_settings-2.0.1.tar.gz", hash = "sha256:f440ec7cfb6dc63f03226c47b0e7803750d1b66a49ed944ac23eb4f0c84f8722"},
+]
+
+[package.dependencies]
+pydantic = ">=2.0.1"
+python-dotenv = ">=0.21.0"
+
+[[package]]
 name = "pyflakes"
 version = "2.3.1"
 description = "passive checker of Python programs"
@@ -716,6 +731,20 @@ tomli = {version = ">=1.0.0", markers = "python_version < \"3.11\""}
 
 [package.extras]
 testing = ["argcomplete", "attrs (>=19.2.0)", "hypothesis (>=3.56)", "mock", "nose", "pygments (>=2.7.2)", "requests", "setuptools", "xmlschema"]
+
+[[package]]
+name = "python-dotenv"
+version = "0.21.1"
+description = "Read key-value pairs from a .env file and set them as environment variables"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "python-dotenv-0.21.1.tar.gz", hash = "sha256:1c93de8f636cde3ce377292818d0e440b6e45a82f215c3744979151fa8151c49"},
+    {file = "python_dotenv-0.21.1-py3-none-any.whl", hash = "sha256:41e12e0318bebc859fcc4d97d4db8d20ad21721a6aa5047dd59f090391cb549a"},
+]
+
+[package.extras]
+cli = ["click (>=5.0)"]
 
 [[package]]
 name = "pytz"
@@ -1108,4 +1137,4 @@ test = ["coverage", "pytest"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.7.2,<4.0.0"
-content-hash = "1c8749d49968701ecdf548046584d95c5c666e353e3c86539c161e42fedb367f"
+content-hash = "4848e0572b46e35592999b9d96fb0169fe6a9c49bcc0140225a7bc3d135bbefa"
