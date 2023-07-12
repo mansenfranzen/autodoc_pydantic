@@ -7,7 +7,8 @@ from typing import Any, Optional, Dict, List, Iterable, Callable, Set
 
 import sphinx
 from docutils.statemachine import StringList
-from pydantic import BaseSettings, BaseModel
+from pydantic import BaseModel
+from pydantic_settings import BaseSettings
 from sphinx.ext.autodoc import (
     MethodDocumenter,
     ClassDocumenter,
@@ -724,7 +725,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
 
         if alias_given and alias_required:
             sourcename = self.get_sourcename()
-            self.add_line('   :alias: ' + field.alias, sourcename)
+            self.add_line(f'   :alias: {field.alias}', sourcename)
 
     def add_content(self,
                     more_content: Optional[StringList],

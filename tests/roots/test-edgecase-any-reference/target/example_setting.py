@@ -21,7 +21,7 @@ class ExampleSettings(BaseSettings):
         description="Shows constraints within doc string."
     )
 
-    @validator("field_with_validator_and_alias", "field_plain_with_validator")
+    @field_validator("field_with_validator_and_alias", "field_plain_with_validator")
     def check_max_length_ten(cls, v):
         """Show corresponding field with link/anchor.
 

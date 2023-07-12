@@ -92,7 +92,7 @@ programmatically to inspect pydantic models:
        field_a: int = Field(1, min=0, max=10)
        field_b: str = "FooBar"
 
-       @validator("field_a")
+       @field_validator("field_a")
        def validate_field_a(cls, v):
            return v
 

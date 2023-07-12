@@ -9,7 +9,7 @@ class ExampleValidators(BaseModel):
     name: str
     email: str
 
-    @validator("*")
+    @field_validator("*")
     def check_non_whitespaces(cls, v):
         """Confirm that string contains non whitespace characters.
 

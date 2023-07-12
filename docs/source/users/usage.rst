@@ -126,11 +126,11 @@ sensible default settings.
 
       .. code-block:: rest
 
-         .. autopydantic_model:: target.usage_model.ExampleModel
+         .. autopydantic_model:: target.usage_model.ExampleSettings
 
    .. tab:: *rendered output*
 
-      .. autopydantic_model:: target.usage_model.ExampleModel
+      .. autopydantic_model:: target.usage_model.ExampleSettings
          :noindex:
 
    .. tab:: python

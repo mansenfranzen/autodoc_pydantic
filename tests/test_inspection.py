@@ -8,9 +8,8 @@ try:
 except ImportError:
     from typing import _ForwardRef as ForwardRef
 
-import pydantic
 import pytest
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector, \
     StaticInspector
@@ -35,15 +34,13 @@ def serializable_mix():
     new_type = TypeVar("Dummy")
 
     class NonSerializable(BaseModel):
+        model_config = ConfigDict(arbitrary_types_allowed=True)
         field_1: str = "foo"
         field_2: object
         field_3: str = object()
         field_4: Custom = Custom()
         field_5: new_type
         field_6: int = 10
-
-        class Config:
-            arbitrary_types_allowed = True
 
     return ModelInspector(NonSerializable)
 

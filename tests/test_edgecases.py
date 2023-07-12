@@ -59,7 +59,7 @@ def test_current_module_model(parse_rst):
 
     input_rst = ['.. py:currentmodule:: target.example_model',
                  '',
-                 '.. autopydantic_model:: ExampleModel',
+                 '.. autopydantic_model:: ExampleSettings',
                  '   :model-show-json: True',
                  '   :model-show-config-member: False',
                  '   :model-show-config-summary: True',

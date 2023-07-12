@@ -12,11 +12,11 @@ from typing import NamedTuple, List, Dict, Any, Set, TypeVar, Type, Callable, \
     Optional
 
 import pydantic
-from pydantic import BaseModel, create_model
-from pydantic.class_validators import Validator
+from pydantic import BaseModel, create_model, ConfigDict
 from pydantic.fields import FieldInfo
-from pydantic.schema import get_field_schema_validations
+from pydantic.type_adapter import TypeAdapter
 from pydantic_settings import SettingsConfigDict
+from pydantic_core import SchemaValidator
 from sphinx.addnodes import desc_signature
 
 ASTERISK_FIELD_NAME = "all fields"
@@ -28,6 +28,8 @@ class ValidatorAdapter(BaseModel):
     autodoc_pydantic.
 
     """
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     func: Callable
     root_pre: bool = False
@@ -79,9 +81,6 @@ class ValidatorAdapter(BaseModel):
 
         bases = (f"{x.__module__}.{x.__qualname__}" for x in model.__mro__)
         return f"{self.module}.{self.class_name}" in bases
-
-    class Config:
-        arbitrary_types_allowed = True
 
     def __hash__(self):
         return id(f"{self}")
@@ -172,7 +171,7 @@ class FieldInspector(BaseInspectionComposite):
         """
 
         field = self.get(field_name)
-        constraints = get_field_schema_validations(field)
+        constraints = TypeAdapter(field).json_schema()
         ignore = {"env_names", "env"}
 
         # ignore additional kwargs from pydantic `Field`, see #110
@@ -263,7 +262,8 @@ class ValidatorInspector(BaseInspectionComposite):
 
     def __init__(self, parent: 'ModelInspector'):
         super().__init__(parent)
-        self.attribute: Dict[str, List[Validator]] = self.model.__validators__
+
+        self.attribute: SchemaValidator = self.model.__pydantic_validator__
 
     @property
     def values(self) -> Set[ValidatorAdapter]:
@@ -325,7 +325,7 @@ class ConfigInspector(BaseInspectionComposite):
 
     def __init__(self, parent: 'ModelInspector'):
         super().__init__(parent)
-        self.attribute: Dict = self.model.Config
+        self.attribute: ConfigDict = self.model.model_config
 
     @property
     def is_configured(self) -> bool:
@@ -337,7 +337,7 @@ class ConfigInspector(BaseInspectionComposite):
 
         cfg = self.attribute
 
-        is_main_config = cfg is pydantic.main.BaseConfig
+        is_main_config = cfg is pydantic.ConfigDict
         is_setting_config = cfg is SettingsConfigDict
         is_default_config = is_main_config or is_setting_config
 
@@ -483,7 +483,7 @@ class StaticInspector:
         if not cls.is_pydantic_model(parent):
             return False
 
-        return field_name in parent.__fields__
+        return field_name in parent.model_fields
 
     @classmethod
     def is_validator_by_name(cls, name: str, obj: Any) -> bool:
@@ -525,21 +525,19 @@ class ModelInspector:
         """
 
         mapping = defaultdict(list)
+        model_decorators = self.model.__pydantic_decorators__
 
         # standard validators
-        for field, validators in self.model.__validators__.items():
-            for validator in validators:
-                mapping[field].append(ValidatorAdapter(func=validator.func))
+        for field, validator in model_decorators.validators.items():
+            print('field', field, validator)
+            mapping[field].append(ValidatorAdapter(func=validator.func))
 
         # root pre
-        for func in self.model.__pre_root_validators__:
-            mapping["*"].append(ValidatorAdapter(func=func,
-                                                 root_pre=True))
-
-        # root post
-        for _, func in self.model.__post_root_validators__:
-            mapping["*"].append(ValidatorAdapter(func=func,
-                                                 root_post=True))
+        for what, validator in model_decorators.root_validators.items(): # TODO
+            print('root', what, validator)
+            is_pre = validator.info.mode == "before"
+            mapping["*"].append(ValidatorAdapter(func=validator.func,
+                                                 root_pre=is_pre))
 
         return mapping
 

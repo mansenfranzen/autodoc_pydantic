@@ -1,4 +1,4 @@
-from pydantic import BaseModel, validator, Field
+from pydantic import BaseModel, field_validator, Field, ConfigDict
 
 
 class PlainModel(BaseModel):
@@ -18,7 +18,7 @@ class ModelWithFieldValidator(BaseModel):
     field: int = 1
     """Doc field"""
 
-    @validator("field")
+    @field_validator("field")
     def is_integer(cls, v) -> str:
         """Doc validator."""
         return v
@@ -27,10 +27,8 @@ class ModelWithFieldValidator(BaseModel):
 class ModelWithConfig(BaseModel):
     """Model with Config."""
 
-    class Config:
-        """With Doc String."""
-        allow_mutation = True
-        """FooBar."""
+    """With Doc String."""
+    model_config = ConfigDict(frozen=False)
 
 
 class ModelWithAlias(BaseModel):

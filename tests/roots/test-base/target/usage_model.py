@@ -1,7 +1,8 @@
-from pydantic import BaseModel, validator, Field
+from pydantic import field_validator, Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-class ExampleModel(BaseModel):
+class ExampleSettings(BaseSettings):
     """Document your project settings very conveniently. Applies like wise
     to pydantic models.
 
@@ -20,7 +21,7 @@ class ExampleModel(BaseModel):
         description="Shows constraints within doc string."
     )
 
-    @validator("field_with_validator_and_alias", "field_plain_with_validator")
+    @field_validator("field_with_validator_and_alias", "field_plain_with_validator")
     def check_max_length_ten(cls, v):
         """Show corresponding field with link/anchor.
 
@@ -31,6 +32,4 @@ class ExampleModel(BaseModel):
 
         return v
 
-    class Config:
-        env_prefix = "foo_"
-        allow_mutation = True
+    model_config = SettingsConfigDict(frozen=False, env_prefix="foo_")
