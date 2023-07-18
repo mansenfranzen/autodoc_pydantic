@@ -1,5 +1,5 @@
-from pydantic import validator, Field
-from pydantic_settings import BaseSettings
+from pydantic import field_validator, Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class AutoModuleSettings(BaseSettings):
@@ -37,6 +37,4 @@ class AutoModuleSettings(BaseSettings):
 
         return v
 
-    class Config:
-        env_prefix = "foo_"
-        allow_mutation = True
+    model_config = SettingsConfigDict(env_prefix="foo_", frozen=False)

@@ -116,7 +116,7 @@ def test_autodoc_pydantic_settings_show_config_summary_summary_true(autodocument
         '   SettingsShowConfigSummary.',
         '',
         '   :Config:',
-        '      - **allow_mutation**: *bool = True*',
+        '      - **frozen**: *bool = True*',
         '      - **title**: *str = FooBar*',
         '']
 
@@ -928,7 +928,7 @@ def test_autodoc_pydantic_settings_show_config_members_true(autodocument):
         '      Config.',
         '',
         '',
-        '      .. py:attribute:: SettingsShowConfigMember.Config.allow_mutation',
+        '      .. py:attribute:: SettingsShowConfigMember.Config.frozen',
         '         :module: target.configuration',
         '         :value: True',
         '']

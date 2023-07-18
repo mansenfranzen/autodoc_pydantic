@@ -1,4 +1,4 @@
-from pydantic import BaseModel, validator, root_validator
+from pydantic import BaseModel, field_validator, root_validator
 
 
 class ExampleValidators(BaseModel):

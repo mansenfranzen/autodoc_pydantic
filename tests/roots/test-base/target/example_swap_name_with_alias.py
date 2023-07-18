@@ -1,4 +1,4 @@
-from pydantic import BaseModel, validator, Field
+from pydantic import BaseModel, field_validator, Field
 
 
 class SwapFieldWithAlias(BaseModel):

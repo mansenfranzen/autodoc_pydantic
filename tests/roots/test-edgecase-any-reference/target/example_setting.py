@@ -1,5 +1,5 @@
-from pydantic import validator, Field
-from pydantic_settings import BaseSettings
+from pydantic import field_validator, Field
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class ExampleSettings(BaseSettings):
@@ -30,6 +30,4 @@ class ExampleSettings(BaseSettings):
         if not len(v) < 10:
             raise ValueError("No more than 10 characters allowed")
 
-    class Config:
-        env_prefix = "foo_"
-        allow_mutation = True
+    model_config = SettingsConfigDict(env_prefix="foo_", frozen=False)

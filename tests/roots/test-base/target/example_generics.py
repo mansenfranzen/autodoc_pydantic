@@ -1,6 +1,6 @@
 from typing import Generic, TypeVar, Optional, List
 
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator
 from pydantic.generics import GenericModel
 
 DataT = TypeVar('DataT')

@@ -429,7 +429,7 @@ Additionally, it adds support for sphinx 4.3.
 Bugfix
 ~~~~~~
 
-- Fix a corner-case where a module that imported 
+- Fix a corner-case where a module that imported
   ``numpy.typing.NDArray`` caused autodoc_pydantic to experience
   an uncaught exception
   `#57 <https://github.com/mansenfranzen/autodoc_pydantic/issues/57>`__.
@@ -975,7 +975,7 @@ Added
 -  ``config_members``
 
 -  Directives ``PydanticModel``, ``PydanticSettings``,
-   ``PydanticField``, ``PydanticValidator``, ``PydanticConfigClass``
+   ``PydanticField``, ``PydanticValidator``
 
 Internal
 ~~~~~~~~

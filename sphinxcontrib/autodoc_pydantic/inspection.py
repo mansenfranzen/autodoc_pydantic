@@ -9,12 +9,12 @@ import pydoc
 import warnings
 from collections import defaultdict
 from typing import NamedTuple, List, Dict, Any, Set, TypeVar, Type, Callable, \
-    Optional
+    Optional, Union
 
-import pydantic
 from pydantic import BaseModel, create_model, ConfigDict
 from pydantic.fields import FieldInfo
 from pydantic.type_adapter import TypeAdapter
+from pydantic._internal._decorators import Decorator, ValidatorDecoratorInfo
 from pydantic_settings import SettingsConfigDict
 from pydantic_core import SchemaValidator
 from sphinx.addnodes import desc_signature
@@ -123,6 +123,8 @@ class FieldInspector(BaseInspectionComposite):
 
     def __init__(self, parent: 'ModelInspector'):
         super().__init__(parent)
+        # json schema can reliably be created only at model level
+        self.model_json_schema = self.model.model_json_schema()
         self.attribute = self.model.model_fields
 
     @property
@@ -170,9 +172,8 @@ class FieldInspector(BaseInspectionComposite):
 
         """
 
-        field = self.get(field_name)
-        constraints = TypeAdapter(field).json_schema()
-        ignore = {"env_names", "env"}
+        constraints = self.model_json_schema["properties"].get(field_name, {})
+        ignore = {"env_names", "env", "default", "title", "type"}
 
         # ignore additional kwargs from pydantic `Field`, see #110
         extra_kwargs = self.get_property_from_field_info(field_name=field_name,
@@ -262,8 +263,11 @@ class ValidatorInspector(BaseInspectionComposite):
 
     def __init__(self, parent: 'ModelInspector'):
         super().__init__(parent)
-
-        self.attribute: SchemaValidator = self.model.__pydantic_validator__
+        self.attribute: Dict[str, Decorator[ValidatorDecoratorInfo]] = dict(
+            **self.model.__pydantic_decorators__.validators,
+            **self.model.__pydantic_decorators__.field_validators,
+            **self.model.__pydantic_decorators__.root_validators
+        )
 
     @property
     def values(self) -> Set[ValidatorAdapter]:
@@ -317,6 +321,7 @@ class ValidatorInspector(BaseInspectionComposite):
         return bool(self.attribute)
 
 
+# TODO: remove (made useless by model.model_config in pydantic v2).
 class ConfigInspector(BaseInspectionComposite):
     """Provide namespace for inspection methods for config class of pydantic
     models.
@@ -335,24 +340,16 @@ class ConfigInspector(BaseInspectionComposite):
 
         """
 
-        cfg = self.attribute
-
-        is_main_config = cfg is pydantic.ConfigDict
-        is_setting_config = cfg is SettingsConfigDict
-        is_default_config = is_main_config or is_setting_config
-
-        return not is_default_config
+        return bool(self.attribute)
 
     @property
-    def items(self) -> Dict:
+    def items(self) -> Union[ConfigDict, SettingsConfigDict]:
         """Return all non private (without leading underscore `_`) items of
         pydantic configuration class.
 
         """
 
-        return {key: getattr(self.attribute, key)
-                for key in dir(self.attribute)
-                if not key.startswith("_")}
+        return self.attribute
 
 
 class ReferenceInspector(BaseInspectionComposite):
@@ -441,11 +438,17 @@ class SchemaInspector(BaseInspectionComposite):
         try:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
-                return self.model.schema()
+                schema = self.model.model_json_schema()
 
         except (TypeError, ValueError):
             new_model = self.create_sanitized_model()
-            return new_model.model_json_schema()
+            schema = new_model.model_json_schema()
+
+        keys_order = ["title", "description", "type", "properties"]
+        reordered_schema = {k: schema[k] for k in keys_order if k in schema}
+        reordered_schema.update(schema)
+        return reordered_schema
+
 
     def create_sanitized_model(self) -> BaseModel:
         """Generates a new pydantic model from the original one while
@@ -528,13 +531,15 @@ class ModelInspector:
         model_decorators = self.model.__pydantic_decorators__
 
         # standard validators
-        for field, validator in model_decorators.validators.items():
-            print('field', field, validator)
-            mapping[field].append(ValidatorAdapter(func=validator.func))
+        for validator in model_decorators.validators.values():
+            for field in validator.info.fields:
+                mapping[field].append(ValidatorAdapter(func=validator.func))
+        for validator in model_decorators.field_validators.values():
+            for field in validator.info.fields:
+                mapping[field].append(ValidatorAdapter(func=validator.func))
 
-        # root pre
-        for what, validator in model_decorators.root_validators.items(): # TODO
-            print('root', what, validator)
+        # root validators
+        for validator in model_decorators.root_validators.values():
             is_pre = validator.info.mode == "before"
             mapping["*"].append(ValidatorAdapter(func=validator.func,
                                                  root_pre=is_pre))

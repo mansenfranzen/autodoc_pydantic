@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import BaseModel, field_validator, Field, root_validator, ConfigDict
+from pydantic import BaseModel, field_validator, Field, model_validator, ConfigDict, root_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -260,7 +260,9 @@ class SettingsSignaturePrefix(BaseSettings):
 class ConfigMembers(BaseModel):
     """ConfigUndocMembers."""
 
-    model_config = ConfigDict(frozen=False, title="FooBar")
+    class Config:
+        frozen = False
+        title = "FooBar"
 
 
 class ConfigSignaturePrefix(BaseModel):
@@ -335,12 +337,12 @@ class ValidatorAsteriskRootValidator(BaseModel):
         """Check."""
         return v
 
-    @root_validator
+    @root_validator(skip_on_failure=True)
     def check_root(cls, values):
         """Check root."""
         return values
 
-    @root_validator(pre=True)
+    @model_validator(mode="before")
     def check_root_pre(cls, values):
         """Check root pre."""
         return values

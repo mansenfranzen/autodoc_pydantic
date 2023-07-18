@@ -85,7 +85,7 @@ programmatically to inspect pydantic models:
 .. code-block:: python
 
    from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector
-   from pydantic import BaseModel, validator, Field
+   from pydantic import BaseModel, field_validator, Field
 
 
    class TestModel(BaseModel):
@@ -139,7 +139,6 @@ The following auto-documenters exist in the :ref:`autodocumenters <api_autodocum
 - :class:`PydanticSettingsDocumenter <sphinxcontrib.autodoc_pydantic.directives.autodocumenters.PydanticSettingsDocumenter>`
 - :class:`PydanticFieldDocumenter <sphinxcontrib.autodoc_pydantic.directives.autodocumenters.PydanticFieldDocumenter>`
 - :class:`PydanticValidatorDocumenter <sphinxcontrib.autodoc_pydantic.directives.autodocumenters.PydanticValidatorDocumenter>`
-- :class:`PydanticConfigClassDocumenter <sphinxcontrib.autodoc_pydantic.directives.autodocumenters.PydanticConfigClassDocumenter>`
 
 All auto-documenters are not written from scratch but inherit from
 the default auto-documenters to borrow most of the main functionality provided
@@ -300,4 +299,3 @@ customization:
 - :class:`PydanticSettings <sphinxcontrib.autodoc_pydantic.directives.directives.PydanticSettings>`
 - :class:`PydanticField <sphinxcontrib.autodoc_pydantic.directives.directives.PydanticField>`
 - :class:`PydanticValidator <sphinxcontrib.autodoc_pydantic.directives.directives.PydanticValidator>`
-- :class:`PydanticConfigClass <sphinxcontrib.autodoc_pydantic.directives.directives.PydanticConfigClass>`

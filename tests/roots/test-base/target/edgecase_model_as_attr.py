@@ -2,7 +2,7 @@
 models/settings when used as class attributes.
 
 """
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator
 
 
 class Model(BaseModel):

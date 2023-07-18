@@ -31,14 +31,8 @@ OPTIONS_VALIDATOR = {"validator-replace-signature": option_default_true,
 """Represents added directive options for :class:`PydanticValidatorDocumenter`.
 """
 
-OPTIONS_CONFIG = {"members": option_members,
-                  "config-signature-prefix": unchanged,
-                  "__doc_disable_except__": option_list_like}
-"""Represents added directive options for :class:`PydanticConfigDocumenter`."""
-
 OPTIONS_MERGED = {**OPTIONS_FIELD,
-                  **OPTIONS_VALIDATOR,
-                  **OPTIONS_CONFIG}
+                  **OPTIONS_VALIDATOR}
 
 OPTIONS_MODEL = {
     "model-show-json": option_default_true,

@@ -3,25 +3,25 @@
 """
 
 from docutils.nodes import (
-    paragraph, 
-    field_list, 
+    paragraph,
+    field_list,
     field,
-    field_name, 
-    field_body, 
-    bullet_list, 
-    list_item, 
-    literal, 
-    emphasis, 
+    field_name,
+    field_body,
+    bullet_list,
+    list_item,
+    literal,
+    emphasis,
     strong
 )
 from sphinx.addnodes import (
-    desc, 
-    desc_signature, 
-    desc_name, 
+    desc,
+    desc_signature,
+    desc_name,
     desc_content,
-    desc_annotation, 
-    desc_addname, 
-    pending_xref, 
+    desc_annotation,
+    desc_addname,
+    pending_xref,
     index
 )
 from sphinx.testing.util import assert_node
@@ -221,7 +221,7 @@ def test_example_model_with_config(parse_rst):
         '   Model with Config.',
         '',
         '   :Config:',
-        '      - **allow_mutation**: *bool = True*',
+        '      - **frozen**: *bool = True*',
         '',
         '   .. py:pydantic_config:: ModelWithConfig.Config()',
         '      :module: target.examples',
@@ -229,7 +229,7 @@ def test_example_model_with_config(parse_rst):
         '      With Doc String.',
         '',
         '',
-        '      .. py:attribute:: ModelWithConfig.Config.allow_mutation',
+        '      .. py:attribute:: ModelWithConfig.Config.frozen',
         '         :module: target.examples',
         '         :value: True',
         '',
@@ -245,7 +245,7 @@ def test_example_model_with_config(parse_rst):
             [desc_content, ([paragraph, "With Doc String."],
                             index,
                             [desc, (
-                                [desc_signature, ([desc_name, "allow_mutation"],
+                                [desc_signature, ([desc_name, "frozen"],
                                                   default_value)],
                                 [desc_content, ([paragraph, "FooBar."])])
                              ]
@@ -258,7 +258,7 @@ def test_example_model_with_config(parse_rst):
                     [field_body, ([
                         bullet_list, ([
                             list_item, ([
-                                paragraph, ([strong, "allow_mutation"],
+                                paragraph, ([strong, "frozen"],
                                             ": ",
                                             [emphasis, "bool = True"])
                             ])
