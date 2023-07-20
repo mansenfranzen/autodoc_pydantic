@@ -425,7 +425,7 @@ class FieldShowRequired(BaseModel):
 class FieldShowRequiredNot(BaseModel):
     """FieldShowRequiredNot"""
 
-    field1: Optional[int]
+    field1: Optional[int] = None
     """field1"""
 
     field2: Optional[int] = 0
