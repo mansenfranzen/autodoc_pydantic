@@ -214,8 +214,8 @@ def test_autodoc_pydantic_field_show_constraints_true(autodocument):
         '   Field.',
         '',
         '   :Constraints:',
-        '      - **minimum** = 0',
         '      - **maximum** = 100',
+        '      - **minimum** = 0',
         ''
     ]
 
