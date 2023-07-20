@@ -261,8 +261,8 @@ def test_autodoc_pydantic_field_show_constraints_ignore_extra_kwargs(
         '   Field.',
         '',
         '   :Constraints:',
-        '      - **minimum** = 0',
         '      - **maximum** = 100',
+        '      - **minimum** = 0',
         ''
     ]
 

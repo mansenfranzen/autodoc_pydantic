@@ -176,8 +176,11 @@ class FieldInspector(BaseInspectionComposite):
         ignore = {"env_names", "env", "default", "title", "type"}
 
         # ignore additional kwargs from pydantic `Field`, see #110
-        extra_kwargs = self.get_property_from_field_info(field_name=field_name,
-                                                         property_name="extra")
+        extra_kwargs = self.get_property_from_field_info(
+            field_name=field_name,
+            property_name="json_schema_extra"
+        )
+
         if extra_kwargs:
             ignore = ignore.union(extra_kwargs.keys())
 
