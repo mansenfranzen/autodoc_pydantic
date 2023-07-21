@@ -507,7 +507,7 @@ class ModelInspector:
                 mapping[field].append(ValidatorAdapter(func=validator.func))
 
         # root validators
-        for validator in decorators.root_validators.values():
+        for validator in decorators.model_validators.values():
             is_pre = validator.info.mode == "before"
             mapping["*"].append(ValidatorAdapter(func=validator.func,
                                                  root_pre=is_pre))

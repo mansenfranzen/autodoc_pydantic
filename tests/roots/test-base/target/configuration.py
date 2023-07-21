@@ -337,7 +337,7 @@ class ValidatorAsteriskRootValidator(BaseModel):
         """Check."""
         return v
 
-    @root_validator(skip_on_failure=True)
+    @model_validator(mode="after")
     def check_root(cls, values):
         """Check root."""
         return values
