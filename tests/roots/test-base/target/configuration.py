@@ -420,6 +420,8 @@ class FieldShowRequired(BaseModel):
     """field2"""
     field3: int = Field(default=...)
     """field3"""
+    field4: Optional[int]
+    """field4"""
 
 
 class FieldShowRequiredNot(BaseModel):
