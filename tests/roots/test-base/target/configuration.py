@@ -11,7 +11,7 @@ class ModelShowJson(BaseModel):
 class ModelShowConfigSummary(BaseModel):
     """ModelShowConfigSummary."""
 
-    model_config = ConfigDict(title="FooBar", frozen=False)
+    model_config = ConfigDict(frozen=True, title="FooBar")
 
 
 class ModelShowValidatorsSummary(BaseModel):
