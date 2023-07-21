@@ -741,20 +741,28 @@ def test_autodoc_pydantic_field_show_required_true_not(expected, autodocument):
     assert result == actual
 
 
-@pytest.mark.parametrize("field", ["field1", "field2", "field3"])
-def test_autodoc_pydantic_field_show_required_false(field, autodocument):
+@pytest.mark.parametrize("field_values", (("field1", "int"),
+                                          ("field2", "int"),
+                                          ("field3", "int"),
+                                          ("field4", "~typing.Optional[int]")))
+def test_autodoc_pydantic_field_show_required_false(field_values,
+                                                    autodocument):
+    """Ensure that the required marker is not shown if deactivated.
+
+    """
+    field_name, type_value = field_values
     result = [
         '',
-        f'.. py:pydantic_field:: FieldShowRequired.{field}',
+        f'.. py:pydantic_field:: FieldShowRequired.{field_name}',
         '   :module: target.configuration',
-        '   :type: int',
+        f'   :type: {type_value}',
         '',
-        f'   {field}',
+        f'   {field_name}',
         '',
     ]
 
     kwargs = dict(
-        object_path=f'target.configuration.FieldShowRequired.{field}',
+        object_path=f'target.configuration.FieldShowRequired.{field_name}',
         **KWARGS
     )
 
@@ -776,22 +784,32 @@ def test_autodoc_pydantic_field_show_required_false(field, autodocument):
     assert result == actual
 
 
-@pytest.mark.parametrize("field", ["field1", "field2", "field3"])
+@pytest.mark.parametrize("field_values", (("field1", "int"),
+                                          ("field2", "int"),
+                                          ("field3", "int"),
+                                          ("field4", "~typing.Optional[int]")))
 def test_autodoc_pydantic_field_show_required_false_show_default_true(
-        field, autodocument):
+        field_values, autodocument):
+    """Ensure that the required marker is not shown while the default value
+    is present.
+
+    """
+
+    field_name, type_value = field_values
+
     result = [
         '',
-        f'.. py:pydantic_field:: FieldShowRequired.{field}',
+        f'.. py:pydantic_field:: FieldShowRequired.{field_name}',
         '   :module: target.configuration',
-        '   :type: int',
-        f'   :value: None',
+        f'   :type: {type_value}',
+        f'   :value: PydanticUndefined',
         '',
-        f'   {field}',
+        f'   {field_name}',
         '',
     ]
 
     kwargs = dict(
-        object_path=f'target.configuration.FieldShowRequired.{field}',
+        object_path=f'target.configuration.FieldShowRequired.{field_name}',
         **KWARGS
     )
 
