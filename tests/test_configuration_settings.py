@@ -664,12 +664,6 @@ def test_autodoc_pydantic_settings_member_order_groupwise(autodocument):
         '      :classmethod:',
         '',
         '      Check.',
-        '',
-        '',
-        '   .. py:pydantic_config:: SettingsMemberOrder.Config()',
-        '      :module: target.configuration',
-        '',
-        '      Config.',
         ''
     ]
 
@@ -715,12 +709,6 @@ def test_autodoc_pydantic_settings_member_order_bysource(autodocument):
         '      Check.',
         '',
         '',
-        '   .. py:pydantic_config:: SettingsMemberOrder.Config()',
-        '      :module: target.configuration',
-        '',
-        '      Config.',
-        '',
-        '',
         '   .. py:pydantic_field:: SettingsMemberOrder.field',
         '      :module: target.configuration',
         '      :type: int',
@@ -762,12 +750,6 @@ def test_autodoc_pydantic_settings_member_order_alphabetical(autodocument):
         '   :module: target.configuration',
         '',
         '   SettingsMemberOrder.',
-        '',
-        '',
-        '   .. py:pydantic_config:: SettingsMemberOrder.Config()',
-        '      :module: target.configuration',
-        '',
-        '      Config.',
         '',
         '',
         '   .. py:pydantic_validator:: SettingsMemberOrder.dummy',
@@ -897,106 +879,6 @@ def test_autodoc_pydantic_settings_show_validator_members_false(autodocument):
         options_app={"autodoc_pydantic_settings_members": True,
                      "autodoc_pydantic_settings_show_validator_members": True},
         options_doc={"settings-show-validator-members": False},
-        **kwargs)
-    assert result == actual
-
-
-def test_autodoc_pydantic_settings_show_config_members_true(autodocument):
-    kwargs = dict(object_path='target.configuration.SettingsShowConfigMember',
-                  **KWARGS)
-    enable = {"autodoc_pydantic_settings_members": True,
-              "autodoc_pydantic_config_members": True}
-
-    result = [
-        '',
-        ".. py:pydantic_settings:: SettingsShowConfigMember",
-        '   :module: target.configuration',
-        '',
-        '   SettingsShowConfigMember.',
-        '',
-        '',
-        '   .. py:pydantic_field:: SettingsShowConfigMember.field',
-        '      :module: target.configuration',
-        '      :type: int',
-        '',
-        '      Field.',
-        '',
-        '',
-        '   .. py:pydantic_config:: SettingsShowConfigMember.Config()',
-        '      :module: target.configuration',
-        '',
-        '      Config.',
-        '',
-        '',
-        '      .. py:attribute:: SettingsShowConfigMember.Config.frozen',
-        '         :module: target.configuration',
-        '         :value: True',
-        '']
-
-    # explict global
-    actual = autodocument(
-        options_app={"autodoc_pydantic_settings_show_config_member": True,
-                     **enable},
-        **kwargs)
-    assert result == actual
-
-    # explict local
-    actual = autodocument(
-        options_app=enable,
-        options_doc={"settings-show-config-member": True},
-        **kwargs)
-    assert result == actual
-
-    # explicit local overwrite global
-    actual = autodocument(
-        options_app={"autodoc_pydantic_settings_show_config_member": False,
-                     **enable},
-        options_doc={"settings-show-config-member": True},
-        **kwargs)
-    assert result == actual
-
-
-def test_autodoc_pydantic_settings_show_config_members_false(autodocument):
-    kwargs = dict(object_path='target.configuration.SettingsShowConfigMember',
-                  **KWARGS)
-    enable = {"autodoc_pydantic_settings_members": True,
-              "autodoc_pydantic_config_members": True}
-
-    result = [
-        '',
-        ".. py:pydantic_settings:: SettingsShowConfigMember",
-        '   :module: target.configuration',
-        '',
-        '   SettingsShowConfigMember.',
-        '',
-        '',
-        '   .. py:pydantic_field:: SettingsShowConfigMember.field',
-        '      :module: target.configuration',
-        '      :type: int',
-        '',
-        '      Field.',
-        '',
-    ]
-
-    # explict global
-    actual = autodocument(
-        options_app={"autodoc_pydantic_settings_show_config_member": False,
-                     **enable},
-        **kwargs)
-    assert result == actual
-
-    # explict local
-    actual = autodocument(
-        options_app=enable,
-        options_doc={"settings-show-config-member": False},
-        **kwargs)
-    assert result == actual
-
-    # explicit local overwrite global
-    actual = autodocument(
-        options_app={"autodoc_pydantic_settings_show_config_member": True,
-                     **enable},
-        options_doc={"settings-show-config-member": False},
         **kwargs)
     assert result == actual
 
@@ -1192,7 +1074,6 @@ def test_autodoc_pydantic_settings_hide_reused_validator_false(autodocument):
         '',
         '   .. py:method:: SettingOne.normalize_name()',
         '      :module: target.configuration_settings_hide_reused_validator',
-        '      :classmethod:',
         '',
         '      Reused validator class method.',
         ''
