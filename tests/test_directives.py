@@ -208,83 +208,6 @@ def test_example_model_with_field_and_validator(parse_rst):
     assert_node(doctree, output_nodes)
 
 
-def test_example_model_with_config(parse_rst):
-    """Tests plain pydantic model config class.
-
-    """
-
-    input_rst = [
-        '',
-        '.. py:pydantic_model:: ModelWithConfig',
-        '   :module: target.examples',
-        '',
-        '   Model with Config.',
-        '',
-        '   :Config:',
-        '      - **frozen**: *bool = True*',
-        '',
-        '   .. py:pydantic_config:: ModelWithConfig.Config()',
-        '      :module: target.examples',
-        '',
-        '      With Doc String.',
-        '',
-        '',
-        '      .. py:attribute:: ModelWithConfig.Config.frozen',
-        '         :module: target.examples',
-        '         :value: True',
-        '',
-        '         FooBar.',
-        '']
-
-    default_value = desc_annotation_default_value("True")
-    prefix_model = desc_annotation_directive_prefix("model")
-    config_class_node = [
-        desc, (
-            [desc_signature, ([desc_annotation, prefix_model],
-                              [desc_name, "Config"])],
-            [desc_content, ([paragraph, "With Doc String."],
-                            index,
-                            [desc, (
-                                [desc_signature, ([desc_name, "frozen"],
-                                                  default_value)],
-                                [desc_content, ([paragraph, "FooBar."])])
-                             ]
-                            )])
-    ]
-
-    config_node = [
-        field_list, ([
-            field, ([field_name, "Config"],
-                    [field_body, ([
-                        bullet_list, ([
-                            list_item, ([
-                                paragraph, ([strong, "frozen"],
-                                            ": ",
-                                            [emphasis, "bool = True"])
-                            ])
-                        ])
-                    ])])
-        ])
-    ]
-
-    prefix_model = desc_annotation_directive_prefix("pydantic model")
-    output_nodes = (
-        index,
-        [desc, ([desc_signature, ([desc_annotation, prefix_model],
-                                  [desc_addname, "target.examples."],
-                                  [desc_name, "ModelWithConfig"])],
-                [desc_content, ([paragraph, "Model with Config."],
-                                config_node,
-                                index,
-                                config_class_node)
-                 ])
-         ]
-    )
-
-    doctree = parse_rst(input_rst)
-    assert_node(doctree, output_nodes)
-
-
 def test_pydantic_model(parse_rst):
     """Tests pydantic_model directive.
 
@@ -328,31 +251,6 @@ def test_pydantic_settings(parse_rst):
                                   [desc_addname, "target.examples."],
                                   [desc_name, "PlainSettings"])],
                 [desc_content, ([paragraph, "Settings Plain."])])
-         ]
-    )
-
-    doctree = parse_rst(input_rst)
-    assert_node(doctree, output_nodes)
-
-
-def test_pydantic_config(parse_rst):
-    """Tests pydantic_config_class directive.
-
-    """
-
-    input_rst = ['.. py:pydantic_config:: Model.Config',
-                 '   :module: target.examples',
-                 '',
-                 '   Config Plain.',
-                 '']
-
-    prefix_model = desc_annotation_directive_prefix("model")
-    output_nodes = (
-        index,
-        [desc, ([desc_signature, ([desc_annotation, prefix_model],
-                                  [desc_addname, "Model."],
-                                  [desc_name, "Config"])],
-                [desc_content, ([paragraph, "Config Plain."])])
          ]
     )
 
