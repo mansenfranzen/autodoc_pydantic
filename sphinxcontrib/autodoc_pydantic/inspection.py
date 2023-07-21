@@ -69,18 +69,6 @@ class ValidatorAdapter(BaseModel):
 
         return f"{self.func.__module__}.{self.func.__qualname__}"
 
-    def is_member(self, model: Type) -> bool:
-        """Check if `self.func` is a member of provided `model` class or its
-        base classes. This can be used to identify functions that are reused
-        as validators.
-
-        """
-
-        if self.class_name is None:
-            return False
-
-        bases = (f"{x.__module__}.{x.__qualname__}" for x in model.__mro__)
-        return f"{self.module}.{self.class_name}" in bases
 
     def __hash__(self):
         return id(f"{self}")
@@ -266,11 +254,6 @@ class ValidatorInspector(BaseInspectionComposite):
 
     def __init__(self, parent: 'ModelInspector'):
         super().__init__(parent)
-        self.attribute: Dict[str, Decorator[ValidatorDecoratorInfo]] = dict(
-            **self.model.__pydantic_decorators__.validators,
-            **self.model.__pydantic_decorators__.field_validators,
-            **self.model.__pydantic_decorators__.root_validators
-        )
 
     @property
     def values(self) -> Set[ValidatorAdapter]:
@@ -282,31 +265,15 @@ class ValidatorInspector(BaseInspectionComposite):
         flattened = itertools.chain.from_iterable(all_validators)
         return set(flattened)
 
-    def get_reused_validator_method_names(self) -> List[str]:
-        """Identify all bound methods names that are used to generate reused
-        validators as placeholders.
-
-        """
-
-        reused_validators = self.get_reused_validators()
-        if not reused_validators:
-            return []
-
-        validator_set = set([x.func for x in reused_validators])
-        bound_methods = {key: value
-                         for key, value in vars(self.model).items()
-                         if inspect.ismethod(getattr(self.model, key))}
-
-        return [key for key, value in bound_methods.items()
-                if value.__func__ in validator_set]
-
-    def get_reused_validators(self) -> List[ValidatorAdapter]:
+    def get_reused_validators_names(self) -> List[str]:
         """Identify all reused validators.
 
         """
 
-        return [validator for validator in self.values
-                if not validator.is_member(self.model)]
+        validators = self.model.__pydantic_decorators__.field_validators
+        return [x.cls_var_name
+                for x in validators.values()
+                if inspect.isfunction(x.func)]
 
     @property
     def names(self) -> Set[str]:
@@ -321,8 +288,7 @@ class ValidatorInspector(BaseInspectionComposite):
 
         """
 
-        return bool(self.attribute)
-
+        return bool(self.values)
 
 # TODO: remove (made useless by model.model_config in pydantic v2).
 class ConfigInspector(BaseInspectionComposite):
@@ -531,18 +497,19 @@ class ModelInspector:
         """
 
         mapping = defaultdict(list)
-        model_decorators = self.model.__pydantic_decorators__
+        decorators = self.model.__pydantic_decorators__
 
         # standard validators
-        for validator in model_decorators.validators.values():
+        for validator in decorators.validators.values():
             for field in validator.info.fields:
                 mapping[field].append(ValidatorAdapter(func=validator.func))
-        for validator in model_decorators.field_validators.values():
+
+        for validator in decorators.field_validators.values():
             for field in validator.info.fields:
                 mapping[field].append(ValidatorAdapter(func=validator.func))
 
         # root validators
-        for validator in model_decorators.root_validators.values():
+        for validator in decorators.root_validators.values():
             is_pre = validator.info.mode == "before"
             mapping["*"].append(ValidatorAdapter(func=validator.func,
                                                  root_pre=is_pre))

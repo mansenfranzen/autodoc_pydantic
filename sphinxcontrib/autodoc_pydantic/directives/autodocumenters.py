@@ -254,7 +254,7 @@ class PydanticModelDocumenter(ClassDocumenter):
         """
 
         validators = self.pydantic.inspect.validators
-        reused_validators = validators.get_reused_validator_method_names()
+        reused_validators = validators.get_reused_validators_names()
         exclude_members = self.options["exclude-members"]
         exclude_members.update(reused_validators)
 
