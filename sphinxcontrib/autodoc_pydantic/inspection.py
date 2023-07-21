@@ -69,7 +69,6 @@ class ValidatorAdapter(BaseModel):
 
         return f"{self.func.__module__}.{self.func.__qualname__}"
 
-
     def __hash__(self):
         return id(f"{self}")
 
@@ -290,7 +289,7 @@ class ValidatorInspector(BaseInspectionComposite):
 
         return bool(self.values)
 
-# TODO: remove (made useless by model.model_config in pydantic v2).
+
 class ConfigInspector(BaseInspectionComposite):
     """Provide namespace for inspection methods for config class of pydantic
     models.
@@ -417,7 +416,6 @@ class SchemaInspector(BaseInspectionComposite):
         reordered_schema = {k: schema[k] for k in keys_order if k in schema}
         reordered_schema.update(schema)
         return reordered_schema
-
 
     def create_sanitized_model(self) -> BaseModel:
         """Generates a new pydantic model from the original one while
