@@ -1405,7 +1405,6 @@ def test_autodoc_pydantic_model_hide_reused_validator_false(autodocument):
         '',
         '   .. py:method:: ModelOne.normalize_name()',
         '      :module: target.configuration_model_hide_reused_validator',
-        '      :classmethod:',
         '',
         '      Reused validator class method.',
         ''
