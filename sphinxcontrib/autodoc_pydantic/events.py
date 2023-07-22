@@ -4,8 +4,7 @@ from sphinx.application import Sphinx
 OBJTYPES_CSS_FALLBACKS = {"pydantic_model": "class",
                           "pydantic_settings": "class",
                           "pydantic_validator": "method",
-                          "pydantic_field": "attribute",
-                          "pydantic_config": "class"}
+                          "pydantic_field": "attribute"}
 
 
 def add_fallback_css_class(app: Sphinx,

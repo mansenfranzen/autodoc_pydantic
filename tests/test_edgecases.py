@@ -37,6 +37,7 @@ def test_not_json_compliant(autodocument):
         '         "type": "object",',
         '         "properties": {',
         '            "field": {',
+        '               "default": null,',
         '               "title": "Field"',
         '            }',
         '         }',

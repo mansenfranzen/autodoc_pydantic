@@ -1,15 +1,15 @@
-import pydantic
+from pydantic import field_validator, BaseModel
 
 
 class Foo:
     """Foo class"""
 
-    class Bar(pydantic.BaseModel):
+    class Bar(BaseModel):
         """Bar class"""
 
         x: str
 
-        @pydantic.validator('x')
+        @field_validator('x')
         def do_nothing(cls, value):
             """Foo"""
             return value
