@@ -228,6 +228,29 @@ def test_json_error_strategy_raise(test_app):
         app.build()
 
 
+def test_json_error_strategy_coerce(test_app, log_capturer):
+    """Confirm that a non serializable field triggers no warning during build
+    process but is coerced.
+
+    This relates to #28.
+
+    """
+
+    conf = {"autodoc_pydantic_model_show_json_error_strategy": "coerce"}
+
+    with log_capturer() as logs:
+        app = test_app("json-error-strategy-coerce", conf=conf)
+        app.build()
+
+    message = (
+        "JSON schema can't be generated for 'example.NonSerializable' "
+        "because the following pydantic fields can't be serialized properly: "
+        "['field']."
+    )
+
+    assert not [log for log in logs if log.msg == message]
+
+
 def test_json_error_strategy_warn(test_app, log_capturer):
     """Confirm that a non serializable field triggers a warning during build
     process.
@@ -249,29 +272,6 @@ def test_json_error_strategy_warn(test_app, log_capturer):
     )
 
     assert [log for log in logs if log.msg == message]
-
-
-def test_json_error_strategy_coerce(test_app, log_capturer):
-    """Confirm that a non serializable field triggers no warning during build
-    process.
-
-    This relates to #28.
-
-    """
-
-    conf = {"autodoc_pydantic_model_show_json_error_strategy": "coerce"}
-
-    with log_capturer() as logs:
-        app = test_app("json-error-strategy", conf=conf)
-        app.build()
-
-    message = (
-        "JSON schema can't be generated for 'example.NonSerializable' "
-        "because the following pydantic fields can't be serialized properly: "
-        "['field']."
-    )
-
-    assert not [log for log in logs if log.msg == message]
 
 
 def test_autodoc_pydantic_model_show_field_summary_not_inherited(autodocument):
