@@ -11,7 +11,7 @@ from collections import defaultdict
 from typing import NamedTuple, List, Dict, Any, Set, TypeVar, Type, Callable, \
     Optional, Union
 
-from pydantic import BaseModel, create_model, ConfigDict, Strict
+from pydantic import BaseModel, create_model, ConfigDict
 from pydantic.fields import FieldInfo
 from pydantic_settings import SettingsConfigDict
 from sphinx.addnodes import desc_signature
@@ -252,12 +252,13 @@ class FieldInspector(BaseInspectionComposite):
 
         """
 
-        class Cfg:
-            arbitrary_types_allowed = True
+        model_config = ConfigDict(arbitrary_types_allowed=True)
 
         try:
             field_args = (field.annotation, field.default)
-            model = create_model("_", test_field=field_args, Config=Cfg)
+            model = create_model("_",
+                                 __config__=model_config,
+                                 test_field=field_args)
             model.model_json_schema()
             return True
 

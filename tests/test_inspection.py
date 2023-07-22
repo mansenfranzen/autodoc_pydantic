@@ -139,10 +139,7 @@ def test_is_serializable_self_reference(serializable_self_reference):
 def test_find_non_json_serializable_fields(serializable, serializable_mix):
     assert serializable.fields.non_json_serializable == []
 
-    non_serial_fields = ["field_2", "field_3", "field_4"]
-    if get_pydantic_version() >= (1, 9):
-        non_serial_fields.remove("field_2")
-
+    non_serial_fields = ["field_4"]
     assert serializable_mix.fields.non_json_serializable == non_serial_fields
 
 
