@@ -9,11 +9,12 @@ import pydoc
 import warnings
 from collections import defaultdict
 from typing import NamedTuple, List, Dict, Any, Set, TypeVar, Type, Callable, \
-    Optional, Union
+    Optional
 
-from pydantic import BaseModel, create_model, ConfigDict
+from pydantic import BaseModel, create_model, ConfigDict, \
+    PydanticInvalidForJsonSchema
 from pydantic.fields import FieldInfo
-from pydantic_settings import SettingsConfigDict, BaseSettings
+from pydantic_settings import BaseSettings
 from sphinx.addnodes import desc_signature
 
 ASTERISK_FIELD_NAME = "all fields"
@@ -465,7 +466,7 @@ class SchemaInspector(BaseInspectionComposite):
                 warnings.simplefilter("ignore")
                 schema = self.model.model_json_schema()
 
-        except (TypeError, ValueError):
+        except (TypeError, ValueError, PydanticInvalidForJsonSchema):
             new_model = self.create_sanitized_model()
             schema = new_model.model_json_schema()
 
@@ -555,10 +556,6 @@ class ModelInspector:
         decorators = self.model.__pydantic_decorators__
 
         # standard validators
-        for validator in decorators.validators.values():
-            for field in validator.info.fields:
-                mapping[field].append(ValidatorAdapter(func=validator.func))
-
         for validator in decorators.field_validators.values():
             for field in validator.info.fields:
                 mapping[field].append(ValidatorAdapter(func=validator.func))
