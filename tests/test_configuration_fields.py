@@ -883,7 +883,7 @@ def test_autodoc_pydantic_field_show_required_true_not(expected, autodocument):
 @pytest.mark.parametrize("field_values", (("field1", "int"),
                                           ("field2", "int"),
                                           ("field3", "int"),
-                                          ("field4", "~typing.Optional[int]")))
+                                          ("field4", OPTIONAL_INT)))
 def test_autodoc_pydantic_field_show_required_false(field_values,
                                                     autodocument):
     """Ensure that the required marker is not shown if deactivated.
@@ -926,7 +926,7 @@ def test_autodoc_pydantic_field_show_required_false(field_values,
 @pytest.mark.parametrize("field_values", (("field1", "int"),
                                           ("field2", "int"),
                                           ("field3", "int"),
-                                          ("field4", "~typing.Optional[int]")))
+                                          ("field4", OPTIONAL_INT)))
 def test_autodoc_pydantic_field_show_required_false_show_default_true(
         field_values, autodocument):
     """Ensure that the required marker is not shown while the default value
