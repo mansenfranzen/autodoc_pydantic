@@ -1,6 +1,22 @@
 Changelog
 =========
 
+v2.0.0 - 2023-07-XX
+-------------------
+
+This is a major release supporting pydantic v2.
+
+Features
+~~~~~~~~
+
+TBD
+
+Changed Behavior
+~~~~~~~~~~~~~~~~
+
+TBD
+
+
 v1.9.0 - 2023-06-08
 -------------------
 
