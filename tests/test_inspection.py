@@ -92,7 +92,7 @@ def serializable_self_reference():
     [
         ("field_1", True),
         ("field_2", object_is_serializable()),
-        ("field_3", False),
+        ("field_3", True),
         ("field_4", False),
         ("field_5", True),
         ("field_6", True),
