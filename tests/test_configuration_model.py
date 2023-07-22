@@ -209,24 +209,23 @@ def test_autodoc_pydantic_model_erdantic_figure_collapsed_false(autodocument):
             "autodoc_pydantic_model_erdantic_figure_collapsed": False
         },
         **kwargs)
-    print(actual)
-    assert actual[:10] == result[:10]
-    assert actual[11:] == result[11:]
+    assert actual[:11] == result[:11]
+    assert actual[12:] == result[12:]
 
     # explicit local
     actual = autodocument(
         options_doc={"model-erdantic-figure": True, "model-erdantic-figure-collapsed": False},
         **kwargs)
-    assert actual[:10] == result[:10]
-    assert actual[11:] == result[11:]
+    assert actual[:11] == result[:11]
+    assert actual[12:] == result[12:]
 
     # explicit local overwrite global
     actual = autodocument(
         options_app={"autodoc_pydantic_model_erdantic_figure_collapsed": True},
         options_doc={"model-erdantic-figure": True, "model-erdantic-figure-collapsed": False},
         **kwargs)
-    assert actual[:10] == result[:10]
-    assert actual[11:] == result[11:]
+    assert actual[:11] == result[:11]
+    assert actual[12:] == result[12:]
 
 
 @pytest.mark.skipif(package_is_missing('erdantic'), reason="erdantic missing")
