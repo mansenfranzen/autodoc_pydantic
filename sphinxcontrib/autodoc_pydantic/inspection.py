@@ -190,9 +190,20 @@ class FieldInspector(BaseInspectionComposite):
         """
 
         definition = self.model.__pydantic_core_schema__["definitions"][0]
-        schema = definition["schema"]["fields"][field_name]["schema"]
 
-        # account for yet another level on model-field
+        # account for varying levels of nesting :-(
+        try:
+            field_schemas = definition["schema"]["fields"]
+        except KeyError:
+            field_schemas = definition["schema"]["schema"]["fields"]
+
+        # account for generics and other non-native fields without schema info
+        try:
+            schema = field_schemas[field_name]["schema"]
+        except KeyError:
+            return set()
+
+        # account for yet another level on model-field :-(
         if "schema" in schema:
             schema = schema["schema"]
 
