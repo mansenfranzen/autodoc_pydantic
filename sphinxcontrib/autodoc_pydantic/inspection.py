@@ -13,7 +13,7 @@ from typing import NamedTuple, List, Dict, Any, Set, TypeVar, Type, Callable, \
 
 from pydantic import BaseModel, create_model, ConfigDict
 from pydantic.fields import FieldInfo
-from pydantic_settings import SettingsConfigDict
+from pydantic_settings import SettingsConfigDict, BaseSettings
 from sphinx.addnodes import desc_signature
 
 ASTERISK_FIELD_NAME = "all fields"
@@ -335,27 +335,36 @@ class ConfigInspector(BaseInspectionComposite):
 
     def __init__(self, parent: 'ModelInspector'):
         super().__init__(parent)
-        self.attribute: ConfigDict = self.model.model_config
+        self.items = self._get_values_per_type()
+
+    def _get_values_per_type(self) -> Dict[str, str]:
+        """Get the configuration values from any pydantic model.
+
+        Behavior of configuration values varies between `BaseModel` and
+        BaseSettings`. For `BaseModel`, if no configs are provided, then
+        model_config` is empty. However, for `BaseSettings`, `model_config`
+        contains a predefined set of values. This needs to be handled properly
+        otherwise the `BaseSettings` always show up a lot of irrelevant default
+        values. Hence, the default values are removed.
+
+        """
+
+        values = self.model.model_config
+
+        if issubclass(self.model, BaseSettings):
+            default = tuple(BaseSettings.model_config.items())
+            available = tuple(values.items())
+
+            result = [given for given in available if given not in default]
+            values = dict(result)
+
+        return values
 
     @property
     def is_configured(self) -> bool:
-        """Check if pydantic model config was explicitly configured. If not,
-        it defaults to the standard configuration provided by pydantic and
-        typically does not required documentation.
+        """Check if pydantic model config was explicitly configured."""
 
-        """
-
-        return bool(self.attribute)
-
-    @property
-    def items(self) -> Union[ConfigDict, SettingsConfigDict]:
-        """Return all non private (without leading underscore `_`) items of
-        pydantic configuration class.
-
-        """
-
-        return self.attribute
-
+        return bool(self.items)
 
 class ReferenceInspector(BaseInspectionComposite):
     """Provide namespace for inspection methods for creating references

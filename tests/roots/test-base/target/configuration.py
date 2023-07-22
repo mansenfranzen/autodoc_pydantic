@@ -160,6 +160,10 @@ class SettingsShowConfigSummary(BaseSettings):
     model_config = SettingsConfigDict(title="FooBar", frozen=False)
 
 
+class SettingsShowConfigSummaryEmpty(BaseSettings):
+    """SettingsShowConfigSummaryEmpty."""
+
+
 class SettingsShowValidatorsSummary(BaseSettings):
     """SettingsShowValidatorsSummary."""
 

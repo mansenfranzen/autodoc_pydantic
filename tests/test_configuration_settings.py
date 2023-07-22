@@ -116,8 +116,8 @@ def test_autodoc_pydantic_settings_show_config_summary_summary_true(autodocument
         '   SettingsShowConfigSummary.',
         '',
         '   :Config:',
-        '      - **frozen**: *bool = True*',
         '      - **title**: *str = FooBar*',
+        '      - **frozen**: *bool = False*',
         '']
 
     # explict global
@@ -169,6 +169,43 @@ def test_autodoc_pydantic_settings_show_config_summary_false(autodocument):
     actual = autodocument(
         options_app={"autodoc_pydantic_settings_show_config_summary": True},
         options_doc={"settings-show-config-summary": False},
+        **kwargs)
+    assert actual == result
+
+
+def test_autodoc_pydantic_settings_show_config_summary_summary_true_but_empty(autodocument):
+    """In case there are not configuration settings provided, then ensure that
+    the config summary section is not shown at all.
+
+    """
+
+    kwargs = dict(object_path='target.configuration.SettingsShowConfigSummaryEmpty',
+                  **KWARGS)
+
+    result = [
+        '',
+        '.. py:pydantic_settings:: SettingsShowConfigSummaryEmpty',
+        '   :module: target.configuration',
+        '',
+        '   SettingsShowConfigSummaryEmpty.',
+        '']
+
+    # explict global
+    actual = autodocument(
+        options_app={"autodoc_pydantic_settings_show_config_summary": True},
+        **kwargs)
+    assert actual == result
+
+    # explict local
+    actual = autodocument(
+        options_doc={"settings-show-config-summary": True},
+        **kwargs)
+    assert actual == result
+
+    # explicit local overwrite global
+    actual = autodocument(
+        options_app={"autodoc_pydantic_settings_show_config_summary": False},
+        options_doc={"settings-show-config-summary": True},
         **kwargs)
     assert actual == result
 
