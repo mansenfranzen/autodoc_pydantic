@@ -11,12 +11,9 @@ from collections import defaultdict
 from typing import NamedTuple, List, Dict, Any, Set, TypeVar, Type, Callable, \
     Optional, Union
 
-from pydantic import BaseModel, create_model, ConfigDict
+from pydantic import BaseModel, create_model, ConfigDict, Strict
 from pydantic.fields import FieldInfo
-from pydantic.type_adapter import TypeAdapter
-from pydantic._internal._decorators import Decorator, ValidatorDecoratorInfo
 from pydantic_settings import SettingsConfigDict
-from pydantic_core import SchemaValidator
 from sphinx.addnodes import desc_signature
 
 ASTERISK_FIELD_NAME = "all fields"
@@ -111,7 +108,6 @@ class FieldInspector(BaseInspectionComposite):
     def __init__(self, parent: 'ModelInspector'):
         super().__init__(parent)
         # json schema can reliably be created only at model level
-        self.model_json_schema = self.model.model_json_schema()
         self.attribute = self.model.model_fields
 
     @property
@@ -154,25 +150,65 @@ class FieldInspector(BaseInspectionComposite):
         field = self.get(field_name)
         return getattr(field, property_name, None)
 
+    def get_constraint_items(self, field_name: str) -> Dict[str, str]:
+        """Extract all possible constraints along with their default values
+        from a fields meta attribute.
+
+        """
+
+        metadata = self.model.model_fields[field_name].metadata
+        available = [meta for meta in metadata if meta is not None]
+
+        return {key: getattr(meta, key)
+                for meta in available
+                for key, value in self._get_meta_items(meta).items()}
+
+    @staticmethod
+    def _get_meta_items(meta_class: Any) -> Dict[str, str]:
+        """Helper method to extract constraint names and values from different
+        pydantic Metadata objects such as `pydantic.types.Strict`.
+
+        """
+
+        try:
+            return meta_class.__dataclass_fields__
+        except AttributeError:
+            return meta_class.__dict__
+
+    def get_given_constraint_keys(self, field_name: str) -> Set[str]:
+        """Retrieves all schema attribute keys that have been set.
+        This information is relevant to distinguish given values that are
+        equivalent to their default values. Otherwise, there is no chance
+        to determine if a constraint was actually given by the user or set as
+        a default value.
+
+        Note: Accessing private attributes with many levels of nesting is far
+        from being desired but currently there is no proper solution around
+        this. Accessing the `properties` via the `model_schema_json` may fail
+        in cases where fields are not serializable.
+
+        """
+
+        definition = self.model.__pydantic_core_schema__["definitions"][0]
+        schema = definition["schema"]["fields"][field_name]["schema"]
+
+        # account for yet another level on model-field
+        if "schema" in schema:
+            schema = schema["schema"]
+
+        return set(schema.keys())
+
     def get_constraints(self, field_name: str) -> Dict[str, Any]:
         """Get constraints for given `field_name`.
 
         """
 
-        constraints = self.model_json_schema["properties"].get(field_name, {})
-        ignore = {"env_names", "env", "default", "title", "type"}
+        constraint_items = self.get_constraint_items(field_name).items()
+        given_constraint_keys = self.get_given_constraint_keys(field_name)
 
-        # ignore additional kwargs from pydantic `Field`, see #110
-        extra_kwargs = self.get_property_from_field_info(
-            field_name=field_name,
-            property_name="json_schema_extra"
-        )
-
-        if extra_kwargs:
-            ignore = ignore.union(extra_kwargs.keys())
-
-        return {key: value for key, value in constraints.items()
-                if key not in ignore}
+        return {key: value
+                for key, value in constraint_items
+                if key in given_constraint_keys}
 
     def is_required(self, field_name: str) -> bool:
         """Check if a given pydantic field is required/mandatory. Returns True,

@@ -1,6 +1,7 @@
-from typing import Optional
+from typing import Optional, Annotated
 
-from pydantic import BaseModel, field_validator, Field, model_validator, ConfigDict, root_validator
+from pydantic import BaseModel, field_validator, Field, model_validator, \
+    ConfigDict, root_validator, conint, constr, Strict
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -42,7 +43,6 @@ class ModelShowValidatorsSummaryMultipleFields(BaseModel):
     @field_validator("field1", "field2")
     def check(cls, v) -> str:
         return v
-
 
 
 class ModelShowFieldSummary(BaseModel):
@@ -381,6 +381,19 @@ class FieldShowConstraints(BaseModel):
 
     field: int = Field(1, ge=0, le=100)
     """Field."""
+
+
+class FieldShowConstraintsNativeConstraintTypes(BaseModel):
+    """FieldShowConstraints."""
+
+    field_int: conint(ge=0, le=100, strict=True)
+    """field_int"""
+
+    field_str: constr(min_length=5, strict=True, pattern="[a-z]+")
+    """field_str"""
+
+    field_annotated: Annotated[float, Strict()]
+    """field_annotated"""
 
 
 class FieldShowConstraintsIgnoreExtraKwargs(BaseModel):
