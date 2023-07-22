@@ -7,15 +7,13 @@ from sphinxcontrib.autodoc_pydantic import (
     PydanticSettingsDocumenter,
     PydanticFieldDocumenter,
     PydanticValidatorDocumenter,
-    PydanticConfigClassDocumenter
 )
 
 
 @pytest.mark.parametrize("klass", [PydanticModelDocumenter,
                                    PydanticSettingsDocumenter,
                                    PydanticFieldDocumenter,
-                                   PydanticValidatorDocumenter,
-                                   PydanticConfigClassDocumenter])
+                                   PydanticValidatorDocumenter])
 def test_autosummary_fake_directive(klass):
     """Ensure that using autosummary's `FakeDirective` works with
     pydantic autodocumenters.

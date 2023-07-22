@@ -1,4 +1,4 @@
-from pydantic import BaseModel, validator, Field
+from pydantic import BaseModel, field_validator, Field
 
 
 class SwapFieldWithAlias(BaseModel):
@@ -10,7 +10,7 @@ class SwapFieldWithAlias(BaseModel):
     field_without_alias: int = 5
     """Field without alias."""
 
-    @validator("field_with_alias", "field_without_alias")
+    @field_validator("field_with_alias", "field_without_alias")
     def check(cls, v) -> str:
         """Check."""
         return v

@@ -4,6 +4,7 @@
 
 from pathlib import Path
 from typing import Dict, Any
+from importlib.metadata import version
 
 from sphinx.domains import ObjType
 from sphinx.application import Sphinx
@@ -11,7 +12,6 @@ from sphinx.application import Sphinx
 from sphinxcontrib.autodoc_pydantic.directives.autodocumenters import (
     PydanticValidatorDocumenter,
     PydanticModelDocumenter,
-    PydanticConfigClassDocumenter,
     PydanticFieldDocumenter,
     PydanticSettingsDocumenter
 )
@@ -20,13 +20,12 @@ from sphinxcontrib.autodoc_pydantic.directives.options.enums import \
 
 from sphinxcontrib.autodoc_pydantic.directives.directives import (
     PydanticField,
-    PydanticConfigClass,
     PydanticValidator,
     PydanticModel,
     PydanticSettings
 )
 
-__version__ = "1.8.0"
+__version__ = version("autodoc_pydantic")
 
 from sphinxcontrib.autodoc_pydantic.events import add_fallback_css_class
 
@@ -135,7 +134,6 @@ def add_directives_and_autodocumenters(app: Sphinx):
     app.add_directive_to_domain("py", "pydantic_field", PydanticField)
     app.add_directive_to_domain("py", "pydantic_model", PydanticModel)
     app.add_directive_to_domain("py", "pydantic_settings", PydanticSettings)
-    app.add_directive_to_domain("py", "pydantic_config", PydanticConfigClass)
     app.add_directive_to_domain("py", "pydantic_validator", PydanticValidator)
 
     app.setup_extension('sphinx.ext.autodoc')
@@ -143,7 +141,6 @@ def add_directives_and_autodocumenters(app: Sphinx):
     app.add_autodocumenter(PydanticModelDocumenter)
     app.add_autodocumenter(PydanticSettingsDocumenter)
     app.add_autodocumenter(PydanticValidatorDocumenter)
-    app.add_autodocumenter(PydanticConfigClassDocumenter)
 
     app.connect('object-description-transform', add_fallback_css_class)
 

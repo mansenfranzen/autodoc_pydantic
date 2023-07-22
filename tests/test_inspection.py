@@ -8,9 +8,8 @@ try:
 except ImportError:
     from typing import _ForwardRef as ForwardRef
 
-import pydantic
 import pytest
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector, \
     StaticInspector
@@ -35,15 +34,13 @@ def serializable_mix():
     new_type = TypeVar("Dummy")
 
     class NonSerializable(BaseModel):
+        model_config = ConfigDict(arbitrary_types_allowed=True)
         field_1: str = "foo"
         field_2: object
         field_3: str = object()
         field_4: Custom = Custom()
         field_5: new_type
         field_6: int = 10
-
-        class Config:
-            arbitrary_types_allowed = True
 
     return ModelInspector(NonSerializable)
 
@@ -95,7 +92,7 @@ def serializable_self_reference():
     [
         ("field_1", True),
         ("field_2", object_is_serializable()),
-        ("field_3", False),
+        ("field_3", True),
         ("field_4", False),
         ("field_5", True),
         ("field_6", True),
@@ -142,10 +139,7 @@ def test_is_serializable_self_reference(serializable_self_reference):
 def test_find_non_json_serializable_fields(serializable, serializable_mix):
     assert serializable.fields.non_json_serializable == []
 
-    non_serial_fields = ["field_2", "field_3", "field_4"]
-    if get_pydantic_version() >= (1, 9):
-        non_serial_fields.remove("field_2")
-
+    non_serial_fields = ["field_4"]
     assert serializable_mix.fields.non_json_serializable == non_serial_fields
 
 

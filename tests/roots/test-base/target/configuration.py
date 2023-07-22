@@ -1,6 +1,8 @@
-from typing import Optional
+from typing import Optional, Annotated
 
-from pydantic import BaseModel, validator, Field, BaseSettings, root_validator
+from pydantic import BaseModel, field_validator, Field, model_validator, \
+    ConfigDict, root_validator, conint, constr, Strict
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class ModelShowJson(BaseModel):
@@ -10,9 +12,7 @@ class ModelShowJson(BaseModel):
 class ModelShowConfigSummary(BaseModel):
     """ModelShowConfigSummary."""
 
-    class Config:
-        title: str = "FooBar"
-        allow_mutation: bool = True
+    model_config = ConfigDict(frozen=True, title="FooBar")
 
 
 class ModelShowValidatorsSummary(BaseModel):
@@ -20,7 +20,7 @@ class ModelShowValidatorsSummary(BaseModel):
 
     field: int = 1
 
-    @validator("field")
+    @field_validator("field")
     def check(cls, v) -> str:
         return v
 
@@ -28,7 +28,7 @@ class ModelShowValidatorsSummary(BaseModel):
 class ModelShowValidatorsSummaryInherited(ModelShowValidatorsSummary):
     """ModelShowValidatorsSummaryInherited."""
 
-    @validator("field")
+    @field_validator("field")
     def check_inherited(cls, v) -> str:
         return v
 
@@ -40,10 +40,9 @@ class ModelShowValidatorsSummaryMultipleFields(BaseModel):
 
     field2: int = 2
 
-    @validator("field1", "field2")
+    @field_validator("field1", "field2")
     def check(cls, v) -> str:
         return v
-
 
 
 class ModelShowFieldSummary(BaseModel):
@@ -65,11 +64,11 @@ class ModelSummaryListOrder(BaseModel):
     field_b: int = 1
     field_a: int = 1
 
-    @validator("field_b")
+    @field_validator("field_b")
     def validate_b(cls, v):
         return v
 
-    @validator("field_a")
+    @field_validator("field_a")
     def validate_a(cls, v):
         return v
 
@@ -101,14 +100,12 @@ class ModelMembers(BaseModel):
 class ModelMemberOrder(BaseModel):
     """ModelMemberOrder."""
 
-    @validator("field")
+    @field_validator("field")
     def dummy(cls, v) -> str:
         """Check."""
         return v
 
-    class Config:
-        """Config."""
-        allow_mutation = True
+    model_config = ConfigDict(frozen=False)
 
     field: int = 1
     """Field."""
@@ -120,7 +117,7 @@ class ModelShowValidatorMembers(BaseModel):
     field: int = 1
     """Field."""
 
-    @validator("field")
+    @field_validator("field")
     def dummy(cls, v) -> str:
         """Check."""
         return v
@@ -132,9 +129,7 @@ class ModelShowConfigMember(BaseModel):
     field: int = 1
     """Field."""
 
-    class Config:
-        """Config."""
-        allow_mutation = True
+    model_config = ConfigDict(frozen=False)
 
 
 class ModelSignaturePrefix(BaseModel):
@@ -149,7 +144,7 @@ class ModelWithFieldSwapNameAndAlias(BaseModel):
     field2: str = Field(default="FooBar", alias="field2 alias")
     """Field2"""
 
-    @validator("field1")
+    @field_validator("field1")
     def check(cls, v) -> str:
         """Check."""
         return v
@@ -162,9 +157,11 @@ class SettingsShowJson(BaseSettings):
 class SettingsShowConfigSummary(BaseSettings):
     """SettingsShowConfigSummary."""
 
-    class Config:
-        title: str = "FooBar"
-        allow_mutation: bool = True
+    model_config = SettingsConfigDict(title="FooBar", frozen=False)
+
+
+class SettingsShowConfigSummaryEmpty(BaseSettings):
+    """SettingsShowConfigSummaryEmpty."""
 
 
 class SettingsShowValidatorsSummary(BaseSettings):
@@ -172,7 +169,7 @@ class SettingsShowValidatorsSummary(BaseSettings):
 
     field: int = 1
 
-    @validator("field")
+    @field_validator("field")
     def check(cls, v) -> str:
         return v
 
@@ -192,11 +189,11 @@ class SettingsSummaryListOrder(BaseSettings):
     field_b: int = 1
     field_a: int = 1
 
-    @validator("field_b")
+    @field_validator("field_b")
     def validate_b(cls, v):
         return v
 
-    @validator("field_a")
+    @field_validator("field_a")
     def validate_a(cls, v):
         return v
 
@@ -228,14 +225,12 @@ class SettingsMembers(BaseSettings):
 class SettingsMemberOrder(BaseSettings):
     """SettingsMemberOrder."""
 
-    @validator("field")
+    @field_validator("field")
     def dummy(cls, v) -> str:
         """Check."""
         return v
 
-    class Config:
-        """Config."""
-        allow_mutation = True
+    model_config = SettingsConfigDict(frozen=False)
 
     field: int = 1
     """Field."""
@@ -247,7 +242,7 @@ class SettingsShowValidatorMembers(BaseSettings):
     field: int = 1
     """Field."""
 
-    @validator("field")
+    @field_validator("field")
     def dummy(cls, v) -> str:
         """Check."""
         return v
@@ -259,9 +254,7 @@ class SettingsShowConfigMember(BaseSettings):
     field: int = 1
     """Field."""
 
-    class Config:
-        """Config."""
-        allow_mutation = True
+    model_config = SettingsConfigDict(frozen=False)
 
 
 class SettingsSignaturePrefix(BaseSettings):
@@ -272,16 +265,14 @@ class ConfigMembers(BaseModel):
     """ConfigUndocMembers."""
 
     class Config:
-        allow_mutation = True
-        """Allow Mutation."""
-        title = "foobar"
+        frozen = False
+        title = "FooBar"
 
 
 class ConfigSignaturePrefix(BaseModel):
     """ConfigSignaturePrefix."""
 
-    class Config:
-        """Config."""
+    model_config = ConfigDict()
 
 
 class ValidatorReplaceSignature(BaseModel):
@@ -289,7 +280,7 @@ class ValidatorReplaceSignature(BaseModel):
 
     field: int = 1
 
-    @validator("field")
+    @field_validator("field")
     def check(cls, v) -> str:
         """Check."""
         return v
@@ -301,7 +292,7 @@ class ValidatorReplaceSignatureWithSwapNameAndAlias(BaseModel):
     field1: int = Field(default=5, alias="field1 alias")
     """Field1"""
 
-    @validator("field1")
+    @field_validator("field1")
     def check(cls, v) -> str:
         """Check."""
         return v
@@ -312,7 +303,7 @@ class ValidatorListFields(BaseModel):
 
     field: int = 1
 
-    @validator("field")
+    @field_validator("field")
     def check(cls, v) -> str:
         """Check."""
         return v
@@ -323,7 +314,7 @@ class ValidatorListFieldsWithFieldSwapNameAndAlias(BaseModel):
 
     field: int = Field(1, alias="field_alias")
 
-    @validator("field")
+    @field_validator("field")
     def check(cls, v) -> str:
         """Check."""
         return v
@@ -334,7 +325,7 @@ class ValidatorSignaturePrefix(BaseModel):
 
     field: int = 1
 
-    @validator("field")
+    @field_validator("field")
     def check(cls, v) -> str:
         """Check."""
         return v
@@ -345,17 +336,17 @@ class ValidatorAsteriskRootValidator(BaseModel):
 
     field: int = 1
 
-    @validator("*")
+    @field_validator("*")
     def check(cls, v):
         """Check."""
         return v
 
-    @root_validator
+    @model_validator(mode="after")
     def check_root(cls, values):
         """Check root."""
         return values
 
-    @root_validator(pre=True)
+    @model_validator(mode="before")
     def check_root_pre(cls, values):
         """Check root pre."""
         return values
@@ -367,7 +358,7 @@ class FieldListValidators(BaseModel):
     field: int = 1
     """Field."""
 
-    @validator("field")
+    @field_validator("field")
     def check(cls, v) -> str:
         """Check."""
         return v
@@ -376,7 +367,7 @@ class FieldListValidators(BaseModel):
 class FieldListValidatorsInherited(FieldListValidators):
     """FieldListValidatorsInherited."""
 
-    @validator("field")
+    @field_validator("field")
     def check_inherited(cls, v) -> str:
         """Check inherited."""
         return v
@@ -394,6 +385,19 @@ class FieldShowConstraints(BaseModel):
 
     field: int = Field(1, ge=0, le=100)
     """Field."""
+
+
+class FieldShowConstraintsNativeConstraintTypes(BaseModel):
+    """FieldShowConstraints."""
+
+    field_int: conint(ge=0, le=100, strict=True)
+    """field_int"""
+
+    field_str: constr(min_length=5, strict=True, pattern="[a-z]+")
+    """field_str"""
+
+    field_annotated: Annotated[float, Strict()]
+    """field_annotated"""
 
 
 class FieldShowConstraintsIgnoreExtraKwargs(BaseModel):
@@ -433,12 +437,14 @@ class FieldShowRequired(BaseModel):
     """field2"""
     field3: int = Field(default=...)
     """field3"""
+    field4: Optional[int]
+    """field4"""
 
 
 class FieldShowRequiredNot(BaseModel):
     """FieldShowRequiredNot"""
 
-    field1: Optional[int]
+    field1: Optional[int] = None
     """field1"""
 
     field2: Optional[int] = 0

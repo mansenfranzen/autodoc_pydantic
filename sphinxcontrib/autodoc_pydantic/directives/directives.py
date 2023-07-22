@@ -266,16 +266,3 @@ class PydanticValidator(PydanticDirectiveBase, PyMethod):
             self.replace_return_node(signode)
 
         return fullname, prefix
-
-
-class PydanticConfigClass(PydanticDirectiveBase, PyClasslike):
-    """Specialized directive for pydantic config class.
-
-    """
-
-    option_spec = PyClasslike.option_spec.copy()
-    option_spec.update({"__doc_disable_except__": option_list_like,
-                        "config-signature-prefix": unchanged})
-
-    config_name = "config"
-    default_prefix = "class"

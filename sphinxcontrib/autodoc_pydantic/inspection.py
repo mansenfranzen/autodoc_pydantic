@@ -11,11 +11,10 @@ from collections import defaultdict
 from typing import NamedTuple, List, Dict, Any, Set, TypeVar, Type, Callable, \
     Optional
 
-import pydantic
-from pydantic import BaseModel, create_model
-from pydantic.class_validators import Validator
-from pydantic.fields import ModelField
-from pydantic.schema import get_field_schema_validations
+from pydantic import BaseModel, create_model, ConfigDict, \
+    PydanticInvalidForJsonSchema
+from pydantic.fields import FieldInfo
+from pydantic_settings import BaseSettings
 from sphinx.addnodes import desc_signature
 
 ASTERISK_FIELD_NAME = "all fields"
@@ -27,6 +26,8 @@ class ValidatorAdapter(BaseModel):
     autodoc_pydantic.
 
     """
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
     func: Callable
     root_pre: bool = False
@@ -65,22 +66,6 @@ class ValidatorAdapter(BaseModel):
         """
 
         return f"{self.func.__module__}.{self.func.__qualname__}"
-
-    def is_member(self, model: Type) -> bool:
-        """Check if `self.func` is a member of provided `model` class or its
-        base classes. This can be used to identify functions that are reused
-        as validators.
-
-        """
-
-        if self.class_name is None:
-            return False
-
-        bases = (f"{x.__module__}.{x.__qualname__}" for x in model.__mro__)
-        return f"{self.module}.{self.class_name}" in bases
-
-    class Config:
-        arbitrary_types_allowed = True
 
     def __hash__(self):
         return id(f"{self}")
@@ -123,7 +108,8 @@ class FieldInspector(BaseInspectionComposite):
 
     def __init__(self, parent: 'ModelInspector'):
         super().__init__(parent)
-        self.attribute = self.model.__fields__
+        # json schema can reliably be created only at model level
+        self.attribute = self.model.model_fields
 
     @property
     def names(self) -> List[str]:
@@ -133,8 +119,8 @@ class FieldInspector(BaseInspectionComposite):
 
         return list(self.attribute.keys())
 
-    def get(self, name: str) -> ModelField:
-        """Get the instance of `ModelField` for given field `name`.
+    def get(self, name: str) -> FieldInfo:
+        """Get the instance of `FieldInfo` for given field `name`.
 
         """
 
@@ -163,25 +149,78 @@ class FieldInspector(BaseInspectionComposite):
         """
 
         field = self.get(field_name)
-        return getattr(field.field_info, property_name, None)
+        return getattr(field, property_name, None)
+
+    def get_constraint_items(self, field_name: str) -> Dict[str, str]:
+        """Extract all possible constraints along with their default values
+        from a fields meta attribute.
+
+        """
+
+        metadata = self.model.model_fields[field_name].metadata
+        available = [meta for meta in metadata if meta is not None]
+
+        return {key: getattr(meta, key)
+                for meta in available
+                for key, value in self._get_meta_items(meta).items()}
+
+    @staticmethod
+    def _get_meta_items(meta_class: Any) -> Dict[str, str]:
+        """Helper method to extract constraint names and values from different
+        pydantic Metadata objects such as `pydantic.types.Strict`.
+
+        """
+
+        try:
+            return meta_class.__dataclass_fields__
+        except AttributeError:
+            return meta_class.__dict__
+
+    def get_given_constraint_keys(self, field_name: str) -> Set[str]:
+        """Retrieves all schema attribute keys that have been set.
+        This information is relevant to distinguish given values that are
+        equivalent to their default values. Otherwise, there is no chance
+        to determine if a constraint was actually given by the user or set as
+        a default value.
+
+        Note: Accessing private attributes with many levels of nesting is far
+        from being desired but currently there is no proper solution around
+        this. Accessing the `properties` via the `model_schema_json` may fail
+        in cases where fields are not serializable.
+
+        """
+
+        definition = self.model.__pydantic_core_schema__["definitions"][0]
+
+        # account for varying levels of nesting :-(
+        try:
+            field_schemas = definition["schema"]["fields"]
+        except KeyError:
+            field_schemas = definition["schema"]["schema"]["fields"]
+
+        # account for generics and other non-native fields without schema info
+        try:
+            schema = field_schemas[field_name]["schema"]
+        except KeyError:
+            return set()
+
+        # account for yet another level on model-field :-(
+        if "schema" in schema:
+            schema = schema["schema"]
+
+        return set(schema.keys())
 
     def get_constraints(self, field_name: str) -> Dict[str, Any]:
         """Get constraints for given `field_name`.
 
         """
 
-        field = self.get(field_name)
-        constraints = get_field_schema_validations(field)
-        ignore = {"env_names", "env"}
+        constraint_items = self.get_constraint_items(field_name).items()
+        given_constraint_keys = self.get_given_constraint_keys(field_name)
 
-        # ignore additional kwargs from pydantic `Field`, see #110
-        extra_kwargs = self.get_property_from_field_info(field_name=field_name,
-                                                         property_name="extra")
-        if extra_kwargs:
-            ignore = ignore.union(extra_kwargs.keys())
-
-        return {key: value for key, value in constraints.items()
-                if key not in ignore}
+        return {key: value
+                for key, value in constraint_items
+                if key in given_constraint_keys}
 
     def is_required(self, field_name: str) -> bool:
         """Check if a given pydantic field is required/mandatory. Returns True,
@@ -189,7 +228,7 @@ class FieldInspector(BaseInspectionComposite):
 
         """
 
-        return self.get(field_name).required
+        return self.get(field_name).is_required()
 
     def has_default_factory(self, field_name: str) -> bool:
         """Check if field has a `default_factory` being set. This information
@@ -210,36 +249,29 @@ class FieldInspector(BaseInspectionComposite):
         return self._is_json_serializable(field)
 
     @classmethod
-    def _is_json_serializable(cls, field: ModelField):
-        """Ensure JSON serializability for given pydantic `ModelField`.
+    def _is_json_serializable(cls, field: FieldInfo):
+        """Ensure JSON serializability for given pydantic `FieldInfo`.
 
         """
-
-        # check for sub fields in case of `Union` or alike, see #98
-        if field.sub_fields:
-            return all(
-                cls._is_json_serializable(sub_field)
-                for sub_field in field.sub_fields
-            )
-
         # hide user warnings in sphinx output
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
             return cls._test_field_serializabiltiy(field)
 
     @staticmethod
-    def _test_field_serializabiltiy(field: ModelField) -> bool:
-        """Test JSON serializability for given pydantic `ModelField`.
+    def _test_field_serializabiltiy(field: FieldInfo) -> bool:
+        """Test JSON serializability for given pydantic `FieldInfo`.
 
         """
 
-        class Cfg:
-            arbitrary_types_allowed = True
+        model_config = ConfigDict(arbitrary_types_allowed=True)
 
         try:
-            field_args = (field.type_, field.default)
-            model = create_model("_", test_field=field_args, Config=Cfg)
-            model.schema()
+            field_args = (field.annotation, field.default)
+            model = create_model("_",
+                                 __config__=model_config,
+                                 test_field=field_args)
+            model.model_json_schema()
             return True
 
         except Exception:
@@ -270,7 +302,6 @@ class ValidatorInspector(BaseInspectionComposite):
 
     def __init__(self, parent: 'ModelInspector'):
         super().__init__(parent)
-        self.attribute: Dict[str, List[Validator]] = self.model.__validators__
 
     @property
     def values(self) -> Set[ValidatorAdapter]:
@@ -282,31 +313,15 @@ class ValidatorInspector(BaseInspectionComposite):
         flattened = itertools.chain.from_iterable(all_validators)
         return set(flattened)
 
-    def get_reused_validator_method_names(self) -> List[str]:
-        """Identify all bound methods names that are used to generate reused
-        validators as placeholders.
-
-        """
-
-        reused_validators = self.get_reused_validators()
-        if not reused_validators:
-            return []
-
-        validator_set = set([x.func for x in reused_validators])
-        bound_methods = {key: value
-                         for key, value in vars(self.model).items()
-                         if inspect.ismethod(getattr(self.model, key))}
-
-        return [key for key, value in bound_methods.items()
-                if value.__func__ in validator_set]
-
-    def get_reused_validators(self) -> List[ValidatorAdapter]:
+    def get_reused_validators_names(self) -> List[str]:
         """Identify all reused validators.
 
         """
 
-        return [validator for validator in self.values
-                if not validator.is_member(self.model)]
+        validators = self.model.__pydantic_decorators__.field_validators
+        return [x.cls_var_name
+                for x in validators.values()
+                if inspect.isfunction(x.func)]
 
     @property
     def names(self) -> Set[str]:
@@ -321,7 +336,7 @@ class ValidatorInspector(BaseInspectionComposite):
 
         """
 
-        return bool(self.attribute)
+        return bool(self.values)
 
 
 class ConfigInspector(BaseInspectionComposite):
@@ -332,35 +347,36 @@ class ConfigInspector(BaseInspectionComposite):
 
     def __init__(self, parent: 'ModelInspector'):
         super().__init__(parent)
-        self.attribute: Dict = self.model.Config
+        self.items = self._get_values_per_type()
+
+    def _get_values_per_type(self) -> Dict[str, str]:
+        """Get the configuration values from any pydantic model.
+
+        Behavior of configuration values varies between `BaseModel` and
+        BaseSettings`. For `BaseModel`, if no configs are provided, then
+        model_config` is empty. However, for `BaseSettings`, `model_config`
+        contains a predefined set of values. This needs to be handled properly
+        otherwise the `BaseSettings` always show up a lot of irrelevant default
+        values. Hence, the default values are removed.
+
+        """
+
+        values = self.model.model_config
+
+        if issubclass(self.model, BaseSettings):
+            default = tuple(BaseSettings.model_config.items())
+            available = tuple(values.items())
+
+            result = [given for given in available if given not in default]
+            values = dict(result)
+
+        return values
 
     @property
     def is_configured(self) -> bool:
-        """Check if pydantic model config was explicitly configured. If not,
-        it defaults to the standard configuration provided by pydantic and
-        typically does not required documentation.
+        """Check if pydantic model config was explicitly configured."""
 
-        """
-
-        cfg = self.attribute
-
-        is_main_config = cfg is pydantic.main.BaseConfig
-        is_setting_config = cfg is pydantic.env_settings.BaseSettings.Config
-        is_default_config = is_main_config or is_setting_config
-
-        return not is_default_config
-
-    @property
-    def items(self) -> Dict:
-        """Return all non private (without leading underscore `_`) items of
-        pydantic configuration class.
-
-        """
-
-        return {key: getattr(self.attribute, key)
-                for key in dir(self.attribute)
-                if not key.startswith("_")}
-
+        return bool(self.items)
 
 class ReferenceInspector(BaseInspectionComposite):
     """Provide namespace for inspection methods for creating references
@@ -448,11 +464,16 @@ class SchemaInspector(BaseInspectionComposite):
         try:
             with warnings.catch_warnings():
                 warnings.simplefilter("ignore")
-                return self.model.schema()
+                schema = self.model.model_json_schema()
 
-        except (TypeError, ValueError):
+        except (TypeError, ValueError, PydanticInvalidForJsonSchema):
             new_model = self.create_sanitized_model()
-            return new_model.schema()
+            schema = new_model.model_json_schema()
+
+        keys_order = ["title", "description", "type", "properties"]
+        reordered_schema = {k: schema[k] for k in keys_order if k in schema}
+        reordered_schema.update(schema)
+        return reordered_schema
 
     def create_sanitized_model(self) -> BaseModel:
         """Generates a new pydantic model from the original one while
@@ -490,7 +511,7 @@ class StaticInspector:
         if not cls.is_pydantic_model(parent):
             return False
 
-        return field_name in parent.__fields__
+        return field_name in parent.model_fields
 
     @classmethod
     def is_validator_by_name(cls, name: str, obj: Any) -> bool:
@@ -532,21 +553,18 @@ class ModelInspector:
         """
 
         mapping = defaultdict(list)
+        decorators = self.model.__pydantic_decorators__
 
         # standard validators
-        for field, validators in self.model.__validators__.items():
-            for validator in validators:
+        for validator in decorators.field_validators.values():
+            for field in validator.info.fields:
                 mapping[field].append(ValidatorAdapter(func=validator.func))
 
-        # root pre
-        for func in self.model.__pre_root_validators__:
-            mapping["*"].append(ValidatorAdapter(func=func,
-                                                 root_pre=True))
-
-        # root post
-        for _, func in self.model.__post_root_validators__:
-            mapping["*"].append(ValidatorAdapter(func=func,
-                                                 root_post=True))
+        # root validators
+        for validator in decorators.model_validators.values():
+            is_pre = validator.info.mode == "before"
+            mapping["*"].append(ValidatorAdapter(func=validator.func,
+                                                 root_pre=is_pre))
 
         return mapping
 

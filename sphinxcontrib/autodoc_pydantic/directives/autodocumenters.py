@@ -7,7 +7,8 @@ from typing import Any, Optional, Dict, List, Iterable, Callable, Set
 
 import sphinx
 from docutils.statemachine import StringList
-from pydantic import BaseSettings, BaseModel
+from pydantic import BaseModel
+from pydantic_settings import BaseSettings
 from sphinx.ext.autodoc import (
     MethodDocumenter,
     ClassDocumenter,
@@ -29,7 +30,6 @@ from sphinxcontrib.autodoc_pydantic.directives.options.definition import (
     OPTIONS_SETTINGS,
     OPTIONS_FIELD,
     OPTIONS_VALIDATOR,
-    OPTIONS_CONFIG,
     OPTIONS_MERGED
 )
 from sphinxcontrib.autodoc_pydantic.directives.templates import to_collapsable
@@ -206,6 +206,9 @@ class PydanticModelDocumenter(ClassDocumenter):
 
     def __init__(self, *args: Any) -> None:
         super().__init__(*args)
+        exclude_members = self.options.setdefault("exclude-members", set())
+        exclude_members.add("model_fields")
+        exclude_members.add("model_config")
         self.pydantic = PydanticAutoDoc(self, is_child=False)
 
     def document_members(self, *args, **kwargs):
@@ -233,21 +236,17 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         """
 
-        if "exclude-members" not in self.options:
-            self.options["exclude-members"] = {"Config"}
-        else:
-            self.options["exclude-members"].add("Config")
+        exclude_members = self.options["exclude-members"]
+        exclude_members.add("Config")  # deprecated since pydantic v2
+        exclude_members.add("model_config")
 
     def hide_validator_members(self):
         """Add validator names to `exclude_members`.
 
         """
-
         validators = self.pydantic.inspect.validators.names
-        if "exclude-members" not in self.options:
-            self.options["exclude-members"] = validators
-        else:
-            self.options["exclude-members"].update(validators)
+        exclude_members = self.options["exclude-members"]
+        exclude_members.update(validators)
 
     def hide_reused_validators(self):
         """Add reused validators to `exclude_members` option.
@@ -255,12 +254,9 @@ class PydanticModelDocumenter(ClassDocumenter):
         """
 
         validators = self.pydantic.inspect.validators
-        reused_validators = validators.get_reused_validator_method_names()
-
-        if "exclude-members" not in self.options:
-            self.options["exclude-members"] = set(reused_validators)
-        else:
-            self.options["exclude-members"].update(reused_validators)
+        reused_validators = validators.get_reused_validators_names()
+        exclude_members = self.options["exclude-members"]
+        exclude_members.update(reused_validators)
 
     def format_signature(self, **kwargs) -> str:
         """If parameter list is to be hidden, return only empty signature.
@@ -305,7 +301,6 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         """
 
-        schema = self.pydantic.inspect.schema.sanitized
         non_serializable = self.pydantic.inspect.fields.non_json_serializable
 
         # handle non serializable fields
@@ -328,6 +323,7 @@ class PydanticModelDocumenter(ClassDocumenter):
                     f"Allowed values are f{OptionsJsonErrorStrategy.values()}"
                 )
 
+        schema = self.pydantic.inspect.schema.sanitized
         schema_rest = self._convert_json_schema_to_rest(schema)
         source_name = self.get_sourcename()
         for line in schema_rest:
@@ -448,7 +444,6 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         if not self.pydantic.inspect.validators:
             return
-
         sorted_references = self._get_validator_summary_references()
 
         source_name = self.get_sourcename()
@@ -538,7 +533,6 @@ class PydanticModelDocumenter(ClassDocumenter):
         """Convert model's schema dict into reST.
 
         """
-
         schema = json.dumps(schema, default=str, indent=3)
         lines = [f"   {line}" for line in schema.split("\n")]
         lines = ['.. code-block:: json', ''] + lines
@@ -650,7 +644,6 @@ class PydanticFieldDocumenter(AttributeDocumenter):
         """Delegate header options.
 
         """
-
         super().add_directive_header(sig)
 
         self.add_default_value_or_marker()
@@ -716,7 +709,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
 
         field_name = self.pydantic_field_name
         field = self.pydantic.inspect.fields.get(field_name)
-        alias_given = field.alias != field_name
+        alias_given = field.alias and field.alias != field_name
 
         show_alias = self.pydantic.options.is_true("field-show-alias")
         swap = self.pydantic.options.is_true("field-swap-name-and-alias")
@@ -724,7 +717,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
 
         if alias_given and alias_required:
             sourcename = self.get_sourcename()
-            self.add_line('   :alias: ' + field.alias, sourcename)
+            self.add_line(f'   :alias: {field.alias}', sourcename)
 
     def add_content(self,
                     more_content: Optional[StringList],
@@ -904,63 +897,3 @@ class PydanticValidatorDocumenter(MethodDocumenter):
 
         self.add_line("", source_name)
 
-
-class PydanticConfigClassDocumenter(ClassDocumenter):
-    """Represents specialized Documenter subclass for pydantic model
-    configuration.
-
-    """
-
-    objtype = 'pydantic_config'
-    directivetype = 'pydantic_config'
-    option_spec = ClassDocumenter.option_spec.copy()
-    option_spec.update(OPTIONS_CONFIG)
-    member_order = 100
-    priority = 10 + ClassDocumenter.priority
-
-    pyautodoc_pass_to_directive = (
-        "config-signature-prefix",
-    )
-
-    def __init__(self, *args: Any) -> None:
-        super().__init__(*args)
-        self.pydantic = PydanticAutoDoc(self, is_child=True)
-
-    @classmethod
-    def can_document_member(cls,
-                            member: Any,
-                            membername: str,
-                            isattr: bool,
-                            parent: Any) -> bool:
-        """Filter only pydantic model configurations.
-
-        """
-
-        is_val = super().can_document_member(member, membername, isattr,
-                                             parent)
-        is_parent_model = ModelInspector.static.is_pydantic_model(
-            parent.object)
-        is_config = membername == "Config"
-        is_class = isinstance(member, type)
-        return is_val and is_parent_model and is_config and is_class
-
-    def document_members(self, *args, **kwargs):
-        """Modify member options before starting to document members.
-
-        """
-
-        self.pydantic.options.set_members_all()
-        if self.options.get("members"):
-            self.options["undoc-members"] = True
-
-        # handle special case when Config is documented as an attribute
-        # in which case `all_members` defaults to True which has to be
-        # overruled by `autodoc_pydantic_config_members` app cfg
-        app_cfg = self.pydantic.options.get_app_cfg_by_name("members")
-        hide_members = app_cfg is False
-        no_members = bool(self.options.get("members")) is False
-
-        if hide_members and no_members:
-            super().document_members(all_members=False, **kwargs)
-        else:
-            super().document_members(*args, **kwargs)

@@ -11,7 +11,7 @@ from unittest.mock import Mock
 
 import pytest
 import sphinx
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from sphinx import application
 from sphinx.application import Sphinx
 from sphinx.cmd import build
@@ -284,12 +284,10 @@ class SphinxResult(BaseModel):
 
     """
 
-    app: Optional[application.Sphinx]
-    doctree: Optional[Dict[str, Any]]
-    return_code: Optional[int]
-
-    class Config:
-        arbitrary_types_allowed = True
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+    app: Optional[application.Sphinx] = None
+    doctree: Optional[Dict[str, Any]] = None
+    return_code: Optional[int] = None
 
 
 def combine_sphinx_init_arguments(args: List, kwargs: Dict) -> Dict:

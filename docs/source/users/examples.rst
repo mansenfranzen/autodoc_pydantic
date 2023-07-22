@@ -153,7 +153,7 @@ Asterisk and root validators
 ----------------------------
 
 This example highlights how `asterisk <https://pydantic-docs.helpmanual.io/usage/validators/#pre-and-per-item-validators>`_
-(``@validator('*')``) and `root validators <https://pydantic-docs.helpmanual.io/usage/validators/#root-validators>`_ (``@root_validator``)
+(``@field_validator('*')``) and `root validators <https://pydantic-docs.helpmanual.io/usage/validators/#root-validators>`_ (``@root_validator``)
 are represented. Since they validate all fields, their corresponding field reference is replaced
 with a simple ``all fields`` marker which hyperlinks to the related model itself.
 

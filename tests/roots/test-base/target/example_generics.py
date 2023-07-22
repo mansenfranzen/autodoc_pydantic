@@ -1,7 +1,6 @@
 from typing import Generic, TypeVar, Optional, List
 
-from pydantic import BaseModel, validator
-from pydantic.generics import GenericModel
+from pydantic import BaseModel, field_validator
 
 DataT = TypeVar('DataT')
 
@@ -18,13 +17,13 @@ class DataModel(BaseModel):
     people: List[str]
 
 
-class Response(GenericModel, Generic[DataT]):
+class Response(BaseModel, Generic[DataT]):
     """HTTP Response representation."""
 
     data: Optional[DataT]
     error: Optional[Error]
 
-    @validator('error', always=True)
+    @field_validator('error')
     def check_consistency(cls, v, values):
         if v is not None and values['data'] is not None:
             raise ValueError('must not provide both data and error')
