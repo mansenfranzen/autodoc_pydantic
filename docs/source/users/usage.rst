@@ -109,7 +109,6 @@ specialized directives provided by *autodoc_pydantic*:
 - :ref:`autopydantic_settings`
 - :ref:`autopydantic_field`
 - :ref:`autopydantic_validator`
-- :ref:`autopydantic_config`
 
 .. _autopydantic_model:
 
