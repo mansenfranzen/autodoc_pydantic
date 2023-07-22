@@ -301,7 +301,6 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         """
 
-        schema = self.pydantic.inspect.schema.sanitized
         non_serializable = self.pydantic.inspect.fields.non_json_serializable
 
         # handle non serializable fields
@@ -324,6 +323,7 @@ class PydanticModelDocumenter(ClassDocumenter):
                     f"Allowed values are f{OptionsJsonErrorStrategy.values()}"
                 )
 
+        schema = self.pydantic.inspect.schema.sanitized
         schema_rest = self._convert_json_schema_to_rest(schema)
         source_name = self.get_sourcename()
         for line in schema_rest:
