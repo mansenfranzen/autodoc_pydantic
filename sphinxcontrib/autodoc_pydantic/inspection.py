@@ -376,6 +376,7 @@ class ConfigInspector(BaseInspectionComposite):
 
         return bool(self.items)
 
+
 class ReferenceInspector(BaseInspectionComposite):
     """Provide namespace for inspection methods for creating references
     mainly between pydantic fields and validators.

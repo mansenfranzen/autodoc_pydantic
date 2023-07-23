@@ -39,6 +39,7 @@ from sphinxcontrib.autodoc_pydantic.directives.options.composites import (
     AutoDocOptions
 )
 from sphinxcontrib.autodoc_pydantic.directives.utility import NONE
+
 try:
     import erdantic as erd
 except ImportError:
@@ -896,4 +897,3 @@ class PydanticValidatorDocumenter(MethodDocumenter):
             self.add_line(line, source_name)
 
         self.add_line("", source_name)
-
