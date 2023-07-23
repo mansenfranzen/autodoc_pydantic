@@ -10,8 +10,8 @@ from docutils.nodes import emphasis
 from sphinx.addnodes import pending_xref
 from sphinx.environment import BuildEnvironment
 
-
 REGEX_TYPE_ANNOT = re.compile(r"\s+:type:\s([a-zA-Z1-9]+)\[([a-zA-Z1-9]+)\]")
+
 
 class NullType:
     """Helper class to present a Null value which is not the same
