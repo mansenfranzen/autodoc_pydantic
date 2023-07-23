@@ -29,7 +29,7 @@ Don't worry - just `pip install autodoc_pydantic` ☺.
 - 📋 shows summary section for model configuration, fields and validators
 - 👀 hides overloaded and redundant model class signature
 - 🔱 visualizes entity-relationship-diagrams for class hierarchies
-- 🍀 Supports `pydantic >= 1.5.0` and `sphinx >= 3.5.0`
+- 🍀 Supports `pydantic >= 1.5.0` and `sphinx >= 4.0.0`
 
 ## Documentation
 
