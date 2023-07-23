@@ -20,9 +20,9 @@ of **autodoc_pydantic** (v1.9.0 -> v2.0.0), too.
 Do I need to migrate existing sphinx code?
 ------------------------------------------
 
-Luckily, this will not be mandatory in most of the case. **autodoc_pydantic**'s
-API remained stable, however a redundant and rather exotic feature was removed
-to reduce complexity and maintenance efforts.
+Maybe under rare circumstances 😋: **autodoc_pydantic**'s API remained stable,
+however a redundant and rather exotic feature was removed to reduce complexity
+and maintenance efforts.
 
 Specifically, the following global ``conf.py`` configurations and their
 corresponding local directive options are no longer available:
