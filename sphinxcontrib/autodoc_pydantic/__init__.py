@@ -4,7 +4,11 @@
 
 from pathlib import Path
 from typing import Dict, Any
-from importlib.metadata import version
+
+try:
+    from importlib.metadata import version
+except ModuleNotFoundError:
+    from importlib_metadata import version
 
 from sphinx.domains import ObjType
 from sphinx.application import Sphinx
