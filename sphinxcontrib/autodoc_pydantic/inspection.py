@@ -20,18 +20,14 @@ from sphinx.addnodes import desc_signature
 ASTERISK_FIELD_NAME = "all fields"
 
 
-class ValidatorAdapter(BaseModel):
+class ValidatorAdapter(NamedTuple):
     """Provide standardized interface to pydantic's validator objects with
     additional metadata (e.g. root validator) for internal usage in
     autodoc_pydantic.
 
     """
 
-    model_config = ConfigDict(arbitrary_types_allowed=True)
-
     func: Callable
-    root_pre: bool = False
-    root_post: bool = False
 
     @property
     def name(self) -> str:
