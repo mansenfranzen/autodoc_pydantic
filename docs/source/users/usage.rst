@@ -103,7 +103,7 @@ autopydantic
 ============
 
 You may want to document pydantic objects explicitly. This is possible via the
-specialized directives provided by *autodoc_pydantic*:
+specialized directives provided by **autodoc_pydantic**:
 
 - :ref:`autopydantic_model`
 - :ref:`autopydantic_settings`
