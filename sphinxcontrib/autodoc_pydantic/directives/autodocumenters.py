@@ -38,7 +38,8 @@ from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector, \
 from sphinxcontrib.autodoc_pydantic.directives.options.composites import (
     AutoDocOptions
 )
-from sphinxcontrib.autodoc_pydantic.directives.utility import NONE
+from sphinxcontrib.autodoc_pydantic.directives.utility import NONE, \
+    intercept_type_annotations_py_gt_39
 
 try:
     import erdantic as erd
@@ -337,11 +338,12 @@ class PydanticModelDocumenter(ClassDocumenter):
         """
         source_name = self.get_sourcename()
         if erd is None:
-            error_msg = 'erdantic is not installed, you need to install ' \
-                'it before creating an Entity Relationship Diagram for ' \
-                'f{self.fullname}. See ' \
-                'https://autodoc-pydantic.readthedocs.io/' \
-                'en/stable/users/installation.html'
+            error_msg = (
+                'erdantic is not installed, you need to install it before '
+                'creating an Entity Relationship Diagram for '
+                'f{self.fullname}. See '
+                'https://autodoc-pydantic.readthedocs.io/'
+                'en/stable/users/installation.html')
             raise RuntimeError(error_msg)
 
         # Graphviz [DOT language](https://graphviz.org/doc/info/lang.html)
@@ -801,6 +803,15 @@ class PydanticFieldDocumenter(AttributeDocumenter):
             self.add_line(line, source_name)
 
         self.add_line("", source_name)
+
+    def add_line(self, line: str, source: str, *lineno: int) -> None:
+        """Intercept added rst lines to handle edge cases such as correct
+        string representation for annotated types in python < 3.9.
+
+        """
+
+        line = intercept_type_annotations_py_gt_39(line)
+        super().add_line(line, source, *lineno)
 
 
 class PydanticValidatorDocumenter(MethodDocumenter):

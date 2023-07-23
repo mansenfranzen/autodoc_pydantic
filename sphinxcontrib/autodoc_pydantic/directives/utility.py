@@ -3,12 +3,15 @@ autodocumenters and directives.
 
 """
 
+import re
 from typing import List
 
 from docutils.nodes import emphasis
 from sphinx.addnodes import pending_xref
 from sphinx.environment import BuildEnvironment
 
+
+REGEX_TYPE_ANNOT = re.compile(r"\s+:type:\s([a-zA-Z1-9]+)\[([a-zA-Z1-9]+)\]")
 
 class NullType:
     """Helper class to present a Null value which is not the same
@@ -49,3 +52,23 @@ def remove_node_by_tagname(nodes: List, tagname: str):
 
     for remove in [node for node in nodes if node.tagname == tagname]:
         nodes.remove(remove)
+
+
+def intercept_type_annotations_py_gt_39(line: str) -> str:
+    """Helper function to modify string representation of annotated types for
+    python < 3.9. Without modification, an annotated int will result in
+    `int[int]` instead of `int`.
+
+    """
+
+    contains_type = ":type:" in line
+    contains_bracket = "[" in line
+
+    if contains_type and contains_bracket:
+        match = REGEX_TYPE_ANNOT.match(line)
+        if match:
+            t1, t2 = match.groups()
+            if t1 == t2:
+                return line.replace(f"{t1}[{t1}]", t1)
+
+    return line
