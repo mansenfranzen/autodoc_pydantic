@@ -12,6 +12,14 @@ Perfect, let's go. But wait, sphinx' `autodoc <https://www.sphinx-doc.org/en/mas
 does not integrate too well with pydantic models 😕.
 Don't worry - just :code:`pip install autodoc_pydantic` 😉.
 
+.. note::
+
+   This documentation is based on ``autodoc_pydantic >= 2.0.0``. If you are
+   using pydantic v1 along with ``autodoc_pydantic < 2.0.0``, please find the
+   latest v1 documentation `here <add_old_link_here>`_ .
+
+   For **migration** guidance from v1 to v2, please see `here <asd>`_ .
+
 Features
 --------
 
@@ -22,8 +30,8 @@ Features
 - 📎 defines explicit pydantic prefixes for models, settings, fields, validators and model config
 - 📋 shows summary section for model configuration, fields and validators
 - 👀 hides overloaded and redundant model class signature
-- 📚 sorts fields, validators and model config within models by type
-- 🍀 Supports `pydantic >= 1.5.0, <2.0.0` and `sphinx >= 3.4.0`
+- visualizes entity-relationship-diagrams for class hierarchies
+- 🍀 Supports `pydantic >= 1.5.0` and `sphinx >= 3.5.0`
 
 To see those features in action, jump over to the :ref:`example <showcase>` section comparing
 the appearance of standard sphinx autodoc with **autodoc_pydantic**.
