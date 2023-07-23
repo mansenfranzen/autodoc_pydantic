@@ -310,7 +310,9 @@ class ValidatorInspector(BaseInspectionComposite):
         return set(flattened)
 
     def get_reused_validators_names(self) -> List[str]:
-        """Identify all reused validators.
+        """Identify all reused validators. This is done implicitly by relying
+        on the fact the reused validators are registered as unbound functions
+        instead of bound methods.
 
         """
 
@@ -551,16 +553,14 @@ class ModelInspector:
         mapping = defaultdict(list)
         decorators = self.model.__pydantic_decorators__
 
-        # standard validators
+        # field validators
         for validator in decorators.field_validators.values():
             for field in validator.info.fields:
                 mapping[field].append(ValidatorAdapter(func=validator.func))
 
-        # root validators
+        # model validators
         for validator in decorators.model_validators.values():
-            is_pre = validator.info.mode == "before"
-            mapping["*"].append(ValidatorAdapter(func=validator.func,
-                                                 root_pre=is_pre))
+            mapping["*"].append(ValidatorAdapter(func=validator.func))
 
         return mapping
 
