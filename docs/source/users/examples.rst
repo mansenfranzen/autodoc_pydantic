@@ -43,38 +43,6 @@ In contrast, it also shows how standard sphinx autodoc displays the same example
          .. autopydantic_settings:: target.example_setting.ExampleSettings
 
 
---------
-Complete
---------
-
-This example represents a rendered output for which all features are enabled.
-It deviates from the default configuration above because it contains redundant
-information which is most likely not required. However, for demonstration purposes,
-this scenario covers all available display options for pydantic models/settings.
-
-
-.. tabs::
-
-   .. tab:: *rendered output*
-
-      .. autopydantic_settings:: target.example_setting.ExampleSettings
-         :noindex:
-         :settings-show-config-member: True
-         :validator-list-fields: True
-
-   .. tab:: reST
-
-      .. code-block::
-
-         .. autopydantic_settings:: target.example_setting.ExampleSettings
-            :noindex:
-            :settings-show-config-member: True
-            :validator-list-fields: True
-
-   .. tab:: python
-
-      .. autocodeblock:: target.example_setting
-
 ----------------------------
 Entity-Relationship Diagram
 ----------------------------
