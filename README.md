@@ -28,15 +28,8 @@ Don't worry - just `pip install autodoc_pydantic` ☺.
 - 📎 defines explicit pydantic prefixes for models, settings, fields, validators and model config
 - 📋 shows summary section for model configuration, fields and validators
 - 👀 hides overloaded and redundant model class signature
-- 📚 sorts fields, validators and model config within models by type
-- 🍀 Supports `pydantic >= 1.5.0, < 2.0.0` and `sphinx >= 3.4.0`
-
-### Comparison between autodoc sphinx and autodoc pydantic
-
-[![Comparison](https://raw.githubusercontent.com/mansenfranzen/autodoc_pydantic/main/docs/source/material/example_comparison_v1.0.0.gif)](https://autodoc-pydantic.readthedocs.io/en/latest/examples.html#default-configuration)
-
-To see those features in action, jump over to the [example documentation](https://autodoc-pydantic.readthedocs.io/en/stable/users/examples.html#default-configuration) to compare
-the appearance of standard sphinx autodoc with *autodoc_pydantic*.
+- visualizes entity-relationship-diagrams for class hierarchies
+- 🍀 Supports `pydantic >= 1.5.0` and `sphinx >= 3.5.0`
 
 ## Documentation
 
@@ -46,6 +39,14 @@ For more details, please visit the official [documentation](https://autodoc-pyda
 - [Configuration](https://autodoc-pydantic.readthedocs.io/en/stable/users/configuration.html)
 - [Usage](https://autodoc-pydantic.readthedocs.io/en/stable/users/usage.html)
 - [Examples](https://autodoc-pydantic.readthedocs.io/en/stable/users/examples.html)
+
+### Comparison between autodoc sphinx and autodoc pydantic
+
+[![Comparison](https://raw.githubusercontent.com/mansenfranzen/autodoc_pydantic/main/docs/source/material/example_comparison_v1.0.0.gif)](https://autodoc-pydantic.readthedocs.io/en/latest/examples.html#default-configuration)
+
+To see those features in action, jump over to the [example documentation](https://autodoc-pydantic.readthedocs.io/en/stable/users/examples.html#default-configuration) to compare
+the appearance of standard sphinx autodoc with *autodoc_pydantic*.
+
 
 ## Acknowledgements
 
