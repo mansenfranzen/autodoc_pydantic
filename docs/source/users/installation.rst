@@ -7,17 +7,11 @@ Installation
 
 .. note::
 
-   In June 2023, pydantic v2 was released. This introduced backwards
-   incompatible API and behavioral semantic changes in comparison to pydantic
-   v1. Hence, **autodoc_pydantic** required substantial changes, too. In order
-   to keep the codebase clean and concise, a separate branch for v2 was created
-   while the original code remains in the v1 branch.
-
-   In a nutshell, support for pydantic v2 is provided via
-   ``autodoc_pydantic >= 2.0.0`` whereas pydantic v1 will required
-   ``autodoc_pydantic < 2.0.0``. By default, your dependency resolver should
-   automatically select the correct version depending on the given pydantic
-   version.
+   Pydantic v2 is supported by ``autodoc_pydantic >= 2.0.0`` while pydantic v1
+   remains functional via ``autodoc_pydantic < 2.0.0``. By default, your
+   dependency resolver will automatically select the correct
+   **autodoc_pydantic** version based on the given pydantic version. For more
+   information, please refer to the `FAQ <link here>`_ .
 
 
 1. Install with pip
