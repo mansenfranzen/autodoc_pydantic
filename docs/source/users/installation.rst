@@ -9,9 +9,12 @@ Installation
 
    Pydantic v2 is supported by ``autodoc_pydantic >= 2.0.0`` while pydantic v1
    remains functional via ``autodoc_pydantic < 2.0.0``. By default, your
-   dependency resolver will automatically select the correct
-   **autodoc_pydantic** version based on the given pydantic version. For more
-   information, please refer to the `FAQ <link here>`_ .
+   dependency resolver automatically selects the correct **autodoc_pydantic**
+   version based on the given pydantic version. However, it is best practice to
+   manually pin your dependency ranges accordingly.
+
+   For more information regarding the migration from v1 to v2, please refer to
+   the :ref:`FAQ <faq_migration_guide>`.
 
 
 1. Install with pip

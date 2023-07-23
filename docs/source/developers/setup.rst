@@ -1,3 +1,6 @@
+.. _main-1.x: https://github.com/mansenfranzen/autodoc_pydantic/tree/main-1.x
+.. _main: https://github.com/mansenfranzen/autodoc_pydantic/tree/main
+
 =====
 Setup
 =====
@@ -19,15 +22,15 @@ Cloning repository
 
 .. note::
 
-   In June 2023, pydantic v2 was released. This introduced backwards
+   In June 2023, **pydantic v2** was released. This introduced backwards
    incompatible API and behavioral changes in comparison to pydantic v1. Hence,
    **autodoc_pydantic** required substantial adjustments, too. In order to keep
-   the codebase clean and concise, separate version for v1 and v2 were created.
-   The v2 branch will eventually become the new `main <asd>`_ branch while the
-   code for v1 resides in the `main-1.x <asd>`_ branch.
+   the codebase clean and concise, separate versions for v1 and v2 were
+   created. The v2 branch will eventually become the new `main`_ branch while
+   the code for v1 remains in the `main-1.x`_ branch.
 
    In a nutshell, if you want to work on v1, please checkout the corresponding
-   `main-1.x <asd>`_ branch.
+   `main-1.x`_ branch. Otherwise, refer to the `main`_ branch.
 
 Creating environment
 --------------------
@@ -75,7 +78,7 @@ Please visit the ``tox.ini`` for all available test environments.
 Building & writing docs
 -----------------------
 
-**autodoc_pydantic**'s documentation is generated with `sphinx <https://www.sphinx-doc.org>`__.
+**autodoc_pydantic**'s documentation is generated with `sphinx <https://www.sphinx-doc.org>`_ .
 To generate the HTML documentation, please use the following:
 
 .. code-block:: bash
