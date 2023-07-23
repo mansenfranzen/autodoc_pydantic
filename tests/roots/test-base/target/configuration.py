@@ -1,7 +1,12 @@
-from typing import Optional, Annotated
+from typing import Optional
+
+try:
+    from typing import Annotated
+except ImportError:
+    from typing_extensions import Annotated
 
 from pydantic import BaseModel, field_validator, Field, model_validator, \
-    ConfigDict, root_validator, conint, constr, Strict
+    ConfigDict, conint, constr, Strict
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
