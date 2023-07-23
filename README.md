@@ -28,7 +28,7 @@ Don't worry - just `pip install autodoc_pydantic` ☺.
 - 📎 defines explicit pydantic prefixes for models, settings, fields, validators and model config
 - 📋 shows summary section for model configuration, fields and validators
 - 👀 hides overloaded and redundant model class signature
-- visualizes entity-relationship-diagrams for class hierarchies
+- 🔱 visualizes entity-relationship-diagrams for class hierarchies
 - 🍀 Supports `pydantic >= 1.5.0` and `sphinx >= 3.5.0`
 
 ## Documentation
