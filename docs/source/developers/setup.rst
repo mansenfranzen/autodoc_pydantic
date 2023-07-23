@@ -17,6 +17,18 @@ Cloning repository
    git clone https://github.com/mansenfranzen/autodoc_pydantic.git
    cd autodoc_pydantic
 
+.. note::
+
+   In June 2023, pydantic v2 was released. This introduced backwards
+   incompatible API and behavioral changes in comparison to pydantic v1. Hence,
+   **autodoc_pydantic** required substantial adjustments, too. In order to keep
+   the codebase clean and concise, separate version for v1 and v2 were created.
+   The v2 branch will eventually become the new `main <asd>`_ branch while the
+   code for v1 resides in the `main-1.x <asd>`_ branch.
+
+   In a nutshell, if you want to work on v1, please checkout the corresponding
+   `main-1.x <asd>`_ branch.
+
 Creating environment
 --------------------
 
