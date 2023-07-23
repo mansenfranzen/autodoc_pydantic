@@ -5,6 +5,43 @@
 FAQ
 ===
 
+Migration guide from v1 to v2
+=============================
+
+In June 2023, pydantic v2 was released while introducing backwards incompatible
+API and behavioral changes in comparison to pydantic v1. Supporting pydantic v2
+required substantial adjustments to the codebase leading to a new major release
+of **autodoc_pydantic** (v1.9.0 -> v2.0.0), too.
+
+Do I need to migrate existing sphinx code?
+------------------------------------------
+
+Luckily, this will not be mandatory in most of the case. **autodoc_pydantic**'s
+API remained stable, however a redundant and rather exotic feature was removed
+to reduce complexity and maintenance efforts.
+
+Specifically, the following global ``conf.py`` configurations and their
+corresponding local directive options are no longer available:
+
+- ``autodoc_pydantic_model_show_config_member``
+- ``autodoc_pydantic_settings_show_config_member``
+- ``autodoc_pydantic_config_members``
+- ``autodoc_pydantic_config_signature_prefix``
+
+These enabled documenting pydantic model configurations in isolation or as a
+separate member of the pydantic model (see `here <asd>`_ ). However, they are
+redundant and less concise in regard to
+``autodoc_pydantic_model_show_config_summary`` and
+``autodoc_pydantic_settings_show_config_summary``. Please use these instead
+in order to document your model configurations.
+
+Are pydantic's v2 semantic changes preserved?
+---------------------------------------------
+
+**autodoc_pydantic** does not modify the underlying behavior of pydantic in
+any way. Instead, it only documents whatever pydantic exposes. Hence, all
+behavioral changes such as the new default strict mode are preserved.
+
 Show inherited fields/validators
 ================================
 
