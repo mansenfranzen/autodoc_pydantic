@@ -29,7 +29,7 @@ In contrast, it also shows how standard sphinx autodoc displays the same example
       .. autopydantic_settings:: target.example_setting.ExampleSettings
          :members:
          :undoc-members:
-         :__doc_disable_except__: members, undoc-members, settings-show-validator-members, settings-show-config-member, config-members
+         :__doc_disable_except__: members, undoc-members, settings-show-validator-members
          :noindex:
 
    .. tab:: python
@@ -86,7 +86,6 @@ and model/setting config is hidden.
       .. autopydantic_settings:: target.example_setting.ExampleSettings
          :noindex:
          :settings-show-json: False
-         :settings-show-config-member: False
          :settings-show-config-summary: False
          :settings-show-validator-members: False
          :settings-show-validator-summary: False
@@ -99,7 +98,6 @@ and model/setting config is hidden.
 
          .. autopydantic_settings:: target.example_setting.ExampleSettings
             :settings-show-json: False
-            :settings-show-config-member: False
             :settings-show-config-summary: False
             :settings-show-validator-members: False
             :settings-show-validator-summary: False
@@ -114,16 +112,16 @@ Specifics
 =========
 
 This section focuses rendered documentation examples of pydantic specific
-concepts such as root validators, required/optional fields or generic models.
+concepts such as model validators, required/optional fields or generic models.
 
-----------------------------
-Asterisk and root validators
-----------------------------
+----------------
+Model validators
+----------------
 
-This example highlights how `asterisk <https://pydantic-docs.helpmanual.io/usage/validators/#pre-and-per-item-validators>`_
-(``@field_validator('*')``) and `root validators <https://pydantic-docs.helpmanual.io/usage/validators/#root-validators>`_ (``@root_validator``)
-are represented. Since they validate all fields, their corresponding field reference is replaced
-with a simple ``all fields`` marker which hyperlinks to the related model itself.
+This example highlights how ``model validators <https://docs.pydantic.dev/latest/usage/validators/#model-validators>`_
+(``@model_validator`` or ``@field_validator('*')``) are represented. Since they
+validate all fields, their corresponding field reference is replaced with a
+simple ``all fields`` marker which hyperlinks to the related model itself.
 
 .. tabs::
 
