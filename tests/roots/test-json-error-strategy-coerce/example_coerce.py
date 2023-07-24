@@ -1,16 +1,16 @@
 from pydantic import BaseModel, ConfigDict
 
 
-class Custom:
+class CustomCoerce:
     pass
 
 
-class NonSerializable(BaseModel):
+class NonSerializableCoerce(BaseModel):
     """NonSerializable
 
     """
 
-    field: Custom
+    test_me: CustomCoerce
     """Field"""
 
     model_config = ConfigDict(arbitrary_types_allowed=True)

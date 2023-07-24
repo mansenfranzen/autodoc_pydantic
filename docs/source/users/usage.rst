@@ -103,13 +103,12 @@ autopydantic
 ============
 
 You may want to document pydantic objects explicitly. This is possible via the
-specialized directives provided by *autodoc_pydantic*:
+specialized directives provided by **autodoc_pydantic**:
 
 - :ref:`autopydantic_model`
 - :ref:`autopydantic_settings`
 - :ref:`autopydantic_field`
 - :ref:`autopydantic_validator`
-- :ref:`autopydantic_config`
 
 .. _autopydantic_model:
 
@@ -126,11 +125,11 @@ sensible default settings.
 
       .. code-block:: rest
 
-         .. autopydantic_model:: target.usage_model.ExampleModel
+         .. autopydantic_model:: target.usage_model.ExampleSettings
 
    .. tab:: *rendered output*
 
-      .. autopydantic_model:: target.usage_model.ExampleModel
+      .. autopydantic_model:: target.usage_model.ExampleSettings
          :noindex:
 
    .. tab:: python
@@ -227,33 +226,3 @@ from its corresponding pydantic model/settings but it is still possible.
 To overwrite global defaults, the following directive options can be supplied:
 
 .. documenter_config_toc:: validator
-
-.. _autopydantic_config:
-
-autopydantic_config
--------------------
-
-Very rarely, you may want to document a pydantic config class without the corresponding
-pydantic model/setting. However, technically it's possible since the :code:`autopydantic_config`
-directive is used by the :code:`autopydantic_model` and :code:`autopydantic_settings`.
-
-.. tabs::
-
-   .. tab:: reST
-
-      .. code-block:: rest
-
-         .. autopydantic_config:: target.usage_setting.ExampleSettings.Config
-
-   .. tab:: *rendered output*
-
-      .. autopydantic_config:: target.usage_setting.ExampleSettings.Config
-         :noindex:
-
-   .. tab:: python
-
-      .. autocodeblock:: target.usage_setting
-
-To overwrite global defaults, the following directive options can be supplied:
-
-.. documenter_config_toc:: config

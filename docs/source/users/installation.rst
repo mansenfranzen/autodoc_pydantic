@@ -3,7 +3,19 @@ Installation
 ============
 
 **autodoc_pydantic** is a sphinx extension and works well with
-:code:`pydantic >= 1.5.0` and :code:`sphinx >= 3.4.0`.
+:code:`pydantic >= 1.5.0` and :code:`sphinx >= 3.5.0`.
+
+.. note::
+
+   Pydantic v2 is supported by ``autodoc_pydantic >= 2.0.0`` while pydantic v1
+   remains functional via ``autodoc_pydantic < 2.0.0``. By default, your
+   dependency resolver automatically selects the correct **autodoc_pydantic**
+   version based on the given pydantic version. However, it is best practice to
+   manually pin your dependency ranges accordingly.
+
+   For more information regarding the migration from v1 to v2, please refer to
+   the :ref:`FAQ <faq_migration_guide>`.
+
 
 1. Install with pip
 ===================
@@ -16,8 +28,11 @@ into your documentation building environment:
    pip install autodoc_pydantic
 
 .. warning::
-   If you wish to use the :ref:`model-erdantic-figure <autodoc_pydantic_model_erdantic_figure>` option, you need to
-   first install `graphviz <https://graphviz.org/download/>`_, then install **autodoc_pydantic** with the erdantic option:
+   If you wish to use the
+   :ref:`model-erdantic-figure <autodoc_pydantic_model_erdantic_figure>`
+   feature to visualize ERD, you will need to install
+   `graphviz <https://graphviz.org/download/>`_ first, then install
+   **autodoc_pydantic** with the erdantic option:
 
    .. code-block:: bash
 

@@ -13,8 +13,7 @@ KWARGS = dict(documenter=PydanticModelDocumenter.objtype,
 
 SETTING_MEMBER_ORDER = {
     "autodoc_pydantic_model_members": True,
-    "autodoc_pydantic_model_show_validator_members": True,
-    "autodoc_pydantic_model_show_config_member": True}
+    "autodoc_pydantic_model_show_validator_members": True}
 
 
 def test_autodoc_pydantic_model_show_json_true(autodocument):
@@ -210,24 +209,23 @@ def test_autodoc_pydantic_model_erdantic_figure_collapsed_false(autodocument):
             "autodoc_pydantic_model_erdantic_figure_collapsed": False
         },
         **kwargs)
-    print(actual)
-    assert actual[:10] == result[:10]
-    assert actual[11:] == result[11:]
+    assert actual[:11] == result[:11]
+    assert actual[12:] == result[12:]
 
     # explicit local
     actual = autodocument(
         options_doc={"model-erdantic-figure": True, "model-erdantic-figure-collapsed": False},
         **kwargs)
-    assert actual[:10] == result[:10]
-    assert actual[11:] == result[11:]
+    assert actual[:11] == result[:11]
+    assert actual[12:] == result[12:]
 
     # explicit local overwrite global
     actual = autodocument(
         options_app={"autodoc_pydantic_model_erdantic_figure_collapsed": True},
         options_doc={"model-erdantic-figure": True, "model-erdantic-figure-collapsed": False},
         **kwargs)
-    assert actual[:10] == result[:10]
-    assert actual[11:] == result[11:]
+    assert actual[:11] == result[:11]
+    assert actual[12:] == result[12:]
 
 
 @pytest.mark.skipif(package_is_missing('erdantic'), reason="erdantic missing")
@@ -276,7 +274,7 @@ def test_autodoc_pydantic_model_show_config_summary_summary_true(autodocument):
         '   ModelShowConfigSummary.',
         '',
         '   :Config:',
-        '      - **allow_mutation**: *bool = True*',
+        '      - **frozen**: *bool = True*',
         '      - **title**: *str = FooBar*',
         '']
 
@@ -845,14 +843,7 @@ def test_autodoc_pydantic_model_member_order_groupwise(autodocument):
         '      :classmethod:',
         '',
         '      Check.',
-        '',
-        '',
-        '   .. py:pydantic_config:: ModelMemberOrder.Config()',
-        '      :module: target.configuration',
-        '',
-        '      Config.',
-        ''
-    ]
+        '']
 
     # explict global
     actual = autodocument(
@@ -896,12 +887,6 @@ def test_autodoc_pydantic_model_member_order_bysource(autodocument):
         '      Check.',
         '',
         '',
-        '   .. py:pydantic_config:: ModelMemberOrder.Config()',
-        '      :module: target.configuration',
-        '',
-        '      Config.',
-        '',
-        '',
         '   .. py:pydantic_field:: ModelMemberOrder.field',
         '      :module: target.configuration',
         '      :type: int',
@@ -943,12 +928,6 @@ def test_autodoc_pydantic_model_member_order_alphabetical(autodocument):
         '   :module: target.configuration',
         '',
         '   ModelMemberOrder.',
-        '',
-        '',
-        '   .. py:pydantic_config:: ModelMemberOrder.Config()',
-        '      :module: target.configuration',
-        '',
-        '      Config.',
         '',
         '',
         '   .. py:pydantic_validator:: ModelMemberOrder.dummy',
@@ -1078,106 +1057,6 @@ def test_autodoc_pydantic_model_show_validator_members_false(autodocument):
         options_app={"autodoc_pydantic_model_members": True,
                      "autodoc_pydantic_model_show_validator_members": True},
         options_doc={"model-show-validator-members": False},
-        **kwargs)
-    assert result == actual
-
-
-def test_autodoc_pydantic_model_show_config_members_true(autodocument):
-    kwargs = dict(object_path='target.configuration.ModelShowConfigMember',
-                  **KWARGS)
-    enable = {"autodoc_pydantic_model_members": True,
-              "autodoc_pydantic_config_members": True}
-
-    result = [
-        '',
-        ".. py:pydantic_model:: ModelShowConfigMember",
-        '   :module: target.configuration',
-        '',
-        '   ModelShowConfigMember.',
-        '',
-        '',
-        '   .. py:pydantic_field:: ModelShowConfigMember.field',
-        '      :module: target.configuration',
-        '      :type: int',
-        '',
-        '      Field.',
-        '',
-        '',
-        '   .. py:pydantic_config:: ModelShowConfigMember.Config()',
-        '      :module: target.configuration',
-        '',
-        '      Config.',
-        '',
-        '',
-        '      .. py:attribute:: ModelShowConfigMember.Config.allow_mutation',
-        '         :module: target.configuration',
-        '         :value: True',
-        '']
-
-    # explict global
-    actual = autodocument(
-        options_app={"autodoc_pydantic_model_show_config_member": True,
-                     **enable},
-        **kwargs)
-    assert result == actual
-
-    # explict local
-    actual = autodocument(
-        options_app=enable,
-        options_doc={"model-show-config-member": True},
-        **kwargs)
-    assert result == actual
-
-    # explicit local overwrite global
-    actual = autodocument(
-        options_app={"autodoc_pydantic_model_show_config_member": False,
-                     **enable},
-        options_doc={"model-show-config-member": True},
-        **kwargs)
-    assert result == actual
-
-
-def test_autodoc_pydantic_model_show_config_members_false(autodocument):
-    kwargs = dict(object_path='target.configuration.ModelShowConfigMember',
-                  **KWARGS)
-    enable = {"autodoc_pydantic_model_members": True,
-              "autodoc_pydantic_config_members": True}
-
-    result = [
-        '',
-        ".. py:pydantic_model:: ModelShowConfigMember",
-        '   :module: target.configuration',
-        '',
-        '   ModelShowConfigMember.',
-        '',
-        '',
-        '   .. py:pydantic_field:: ModelShowConfigMember.field',
-        '      :module: target.configuration',
-        '      :type: int',
-        '',
-        '      Field.',
-        '',
-    ]
-
-    # explict global
-    actual = autodocument(
-        options_app={"autodoc_pydantic_model_show_config_member": False,
-                     **enable},
-        **kwargs)
-    assert result == actual
-
-    # explict local
-    actual = autodocument(
-        options_app=enable,
-        options_doc={"model-show-config-member": False},
-        **kwargs)
-    assert result == actual
-
-    # explicit local overwrite global
-    actual = autodocument(
-        options_app={"autodoc_pydantic_model_show_config_member": True,
-                     **enable},
-        options_doc={"model-show-config-member": False},
         **kwargs)
     assert result == actual
 
@@ -1525,7 +1404,6 @@ def test_autodoc_pydantic_model_hide_reused_validator_false(autodocument):
         '',
         '   .. py:method:: ModelOne.normalize_name()',
         '      :module: target.configuration_model_hide_reused_validator',
-        '      :classmethod:',
         '',
         '      Reused validator class method.',
         ''

@@ -1,4 +1,4 @@
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator
 
 
 def validation(name):
@@ -10,6 +10,5 @@ class ModelOne(BaseModel):
     name: str
     """Name"""
 
-    normalize_name = validator('name', allow_reuse=True)(validation)
+    normalize_name = field_validator('name')(validation)
     """Reused validator class method."""
-

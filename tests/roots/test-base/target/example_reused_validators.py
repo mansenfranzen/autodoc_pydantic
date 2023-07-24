@@ -1,4 +1,4 @@
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator
 
 
 def normalize(name: str) -> str:
@@ -10,11 +10,11 @@ class Producer(BaseModel):
     name: str
 
     # validators
-    normalize_name = validator('name', allow_reuse=True)(normalize)
+    normalize_name = field_validator('name')(normalize)
 
 
 class Consumer(BaseModel):
     name: str
 
     # validators
-    normalize_name = validator('name', allow_reuse=True)(normalize)
+    normalize_name = field_validator('name')(normalize)

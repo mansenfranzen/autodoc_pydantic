@@ -7,7 +7,7 @@
 [![Coverage](https://img.shields.io/codecov/c/gh/mansenfranzen/autodoc_pydantic?style=for-the-badge)](https://app.codecov.io/gh/mansenfranzen/autodoc_pydantic)
 
 [![Downloads](https://img.shields.io/pypi/dm/autodoc_pydantic?color=fe7d37&style=for-the-badge)](https://pypistats.org/packages/autodoc-pydantic)<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-32-orange.svg?style=for-the-badge)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-34-orange.svg?style=for-the-badge)](#contributors)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 
@@ -28,15 +28,8 @@ Don't worry - just `pip install autodoc_pydantic` ☺.
 - 📎 defines explicit pydantic prefixes for models, settings, fields, validators and model config
 - 📋 shows summary section for model configuration, fields and validators
 - 👀 hides overloaded and redundant model class signature
-- 📚 sorts fields, validators and model config within models by type
-- 🍀 Supports `pydantic >= 1.5.0, < 2.0.0` and `sphinx >= 3.4.0`
-
-### Comparison between autodoc sphinx and autodoc pydantic
-
-[![Comparison](https://raw.githubusercontent.com/mansenfranzen/autodoc_pydantic/main/docs/source/material/example_comparison_v1.0.0.gif)](https://autodoc-pydantic.readthedocs.io/en/latest/examples.html#default-configuration)
-
-To see those features in action, jump over to the [example documentation](https://autodoc-pydantic.readthedocs.io/en/stable/users/examples.html#default-configuration) to compare
-the appearance of standard sphinx autodoc with *autodoc_pydantic*.
+- 🔱 visualizes entity-relationship-diagrams for class hierarchies
+- 🍀 Supports `pydantic >= 1.5.0` and `sphinx >= 4.0.0`
 
 ## Documentation
 
@@ -46,6 +39,14 @@ For more details, please visit the official [documentation](https://autodoc-pyda
 - [Configuration](https://autodoc-pydantic.readthedocs.io/en/stable/users/configuration.html)
 - [Usage](https://autodoc-pydantic.readthedocs.io/en/stable/users/usage.html)
 - [Examples](https://autodoc-pydantic.readthedocs.io/en/stable/users/examples.html)
+- [Developer Guide](https://autodoc-pydantic.readthedocs.io/en/stable/developers/setup.html)
+
+## Comparison between autodoc sphinx and autodoc pydantic
+
+[![Comparison](https://raw.githubusercontent.com/mansenfranzen/autodoc_pydantic/main/docs/source/material/example_comparison_v1.0.0.gif)](https://autodoc-pydantic.readthedocs.io/en/latest/examples.html#default-configuration)
+
+To see those features in action, jump over to the [example documentation](https://autodoc-pydantic.readthedocs.io/en/stable/users/examples.html#default-configuration) to compare
+the appearance of standard sphinx autodoc with *autodoc_pydantic*.
 
 ## Acknowledgements
 
@@ -99,6 +100,8 @@ Thanks to great open source projects [sphinx](https://www.sphinx-doc.org/en/mast
       <td align="center" valign="top" width="14.28%"><a href="http://charlie.machalow.com"><img src="https://avatars.githubusercontent.com/u/5749838?v=4?s=100" width="100px;" alt="Charles Machalow"/><br /><sub><b>Charles Machalow</b></sub></a><br /><a href="#question-csm10495" title="Answering Questions">💬</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/tkaraouzene"><img src="https://avatars.githubusercontent.com/u/20064077?v=4?s=100" width="100px;" alt="Thomas Karaouzene"/><br /><sub><b>Thomas Karaouzene</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/issues?q=author%3Atkaraouzene" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/caseyzak24"><img src="https://avatars.githubusercontent.com/u/29411281?v=4?s=100" width="100px;" alt="caseyzak24"/><br /><sub><b>caseyzak24</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/commits?author=caseyzak24" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/PriOliveira"><img src="https://avatars.githubusercontent.com/u/13801839?v=4?s=100" width="100px;" alt="Priscila Oliveira"/><br /><sub><b>Priscila Oliveira</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/pulls?q=is%3Apr+reviewed-by%3APriOliveira" title="Reviewed Pull Requests">👀</a> <a href="#userTesting-PriOliveira" title="User Testing">📓</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/awoimbee"><img src="https://avatars.githubusercontent.com/u/22431493?v=4?s=100" width="100px;" alt="Arthur Woimbée"/><br /><sub><b>Arthur Woimbée</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/pulls?q=is%3Apr+reviewed-by%3Aawoimbee" title="Reviewed Pull Requests">👀</a> <a href="#userTesting-awoimbee" title="User Testing">📓</a> <a href="https://github.com/mansenfranzen/autodoc_pydantic/commits?author=awoimbee" title="Code">💻</a> <a href="https://github.com/mansenfranzen/autodoc_pydantic/commits?author=awoimbee" title="Tests">⚠️</a></td>
     </tr>
   </tbody>
 </table>

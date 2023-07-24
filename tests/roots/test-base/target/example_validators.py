@@ -1,4 +1,4 @@
-from pydantic import BaseModel, validator, root_validator
+from pydantic import BaseModel, field_validator, model_validator
 
 
 class ExampleValidators(BaseModel):
@@ -9,7 +9,7 @@ class ExampleValidators(BaseModel):
     name: str
     email: str
 
-    @validator("*")
+    @field_validator("*")
     def check_non_whitespaces(cls, v):
         """Confirm that string contains non whitespace characters.
 
@@ -21,7 +21,7 @@ class ExampleValidators(BaseModel):
         else:
             raise ValueError("String contains only whitespace characters.")
 
-    @root_validator
+    @model_validator(mode="after")
     def check_contains_letters(cls, values):
         """Confirm that string contains at least one letter.
 
