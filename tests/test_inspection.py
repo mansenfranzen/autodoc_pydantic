@@ -13,8 +13,6 @@ from pydantic import BaseModel, ConfigDict
 
 from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector, \
     StaticInspector
-from tests.compatibility import object_is_serializable, requires_forward_ref, \
-    get_pydantic_version
 
 
 @pytest.fixture(scope="session")
@@ -54,9 +52,6 @@ def serializable_forward_ref():
         b: Foo = None
         c: "Foo" = None
 
-    if requires_forward_ref():
-        Foo.update_forward_refs()
-
     return ModelInspector(Foo)
 
 
@@ -69,9 +64,6 @@ def serializable_forward_ref_union():
         b: Union[Foo, int] = 2
         c: Union["Foo", str] = "foobar"
 
-    if requires_forward_ref():
-        Foo.update_forward_refs()
-
     return ModelInspector(Foo)
 
 
@@ -81,9 +73,6 @@ def serializable_self_reference():
         a: int = 123
         c: "Foo" = None
 
-    if requires_forward_ref():
-        Foo.update_forward_refs()
-
     return ModelInspector(Foo)
 
 
@@ -91,7 +80,7 @@ def serializable_self_reference():
     "field_test",
     [
         ("field_1", True),
-        ("field_2", object_is_serializable()),
+        ("field_2", True),
         ("field_3", True),
         ("field_4", False),
         ("field_5", True),
