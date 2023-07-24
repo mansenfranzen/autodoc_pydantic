@@ -109,20 +109,7 @@ def test_model_with_config(autodocument):
         '   Model with Config.',
         '',
         '   :Config:',
-        '      - **allow_mutation**: *bool = True*',
-        '',
-        '',
-        '   .. py:pydantic_config:: ModelWithConfig.Config()',
-        '      :module: target.examples',
-        '',
-        '      With Doc String.',
-        '',
-        '',
-        '      .. py:attribute:: ModelWithConfig.Config.allow_mutation',
-        '         :module: target.examples',
-        '         :value: True',
-        '',
-        '         FooBar.',
+        '      - **frozen**: *bool = False*',
         '']
 
 

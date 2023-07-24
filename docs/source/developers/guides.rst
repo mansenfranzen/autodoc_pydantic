@@ -144,11 +144,11 @@ This requires at least two pydantic fields and validators to be sortable.
        field_b: int = 1
        field_a: int = 1
 
-       @validator("field_b")
+       @field_validator("field_b")
        def validate_b(cls, v):
            return v
 
-       @validator("field_a")
+       @field_validator("field_a")
        def validate_a(cls, v):
            return v
 

@@ -1,4 +1,5 @@
-from pydantic import BaseModel, Field, validator, BaseSettings
+from pydantic import BaseModel, Field, field_validator, ConfigDict
+from pydantic_settings import BaseSettings
 
 
 class AutoSummaryModel(BaseModel):
@@ -20,7 +21,7 @@ class AutoSummaryModel(BaseModel):
         description="Shows constraints within doc string."
     )
 
-    @validator("field_with_validator_and_alias", "field_plain_with_validator")
+    @field_validator("field_with_validator_and_alias", "field_plain_with_validator")
     def check_max_length_ten(cls, v):
         """Show corresponding field with link/anchor.
 
@@ -29,10 +30,7 @@ class AutoSummaryModel(BaseModel):
         if not len(v) < 10:
             raise ValueError("No more than 10 characters allowed")
 
-    class Config:
-        env_prefix = "foo_"
-        allow_mutation = True
-
+    model_config = ConfigDict(frozen=False)
 
 class AutoSummarySettings(BaseSettings):
     """Some settings with pydantic."""
