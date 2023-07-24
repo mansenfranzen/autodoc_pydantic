@@ -4,17 +4,89 @@ Changelog
 v2.0.0 - 2023-07-XX
 -------------------
 
-This is a major release supporting pydantic v2.
+This is a major release supporting pydantic v2. In June 2023, pydantic v2 was
+released while introducing backwards incompatible API and behavioral changes in
+comparison to pydantic v1. Supporting pydantic v2 required substantial
+adjustments to the codebase leading to a new major release of autodoc_pydantic
+(v1.9.0 -> v2.0.0), too.
 
-Features
-~~~~~~~~
-
-TBD
+In order to keep the codebase clean and concise, separate versions for v1 and
+v2 were created. The v2 branch will eventually become the new main branch
+while the code for v1 remains in the main-1.x branch.
 
 Changed Behavior
 ~~~~~~~~~~~~~~~~
 
-TBD
+- Documenting pydantic model configurations in isolation or as a separate
+  member of the pydantic model is no longer available. The following options
+  have been removed:
+
+  - ``autodoc_pydantic_model_show_config_member``
+  - ``autodoc_pydantic_settings_show_config_member``
+  - ``autodoc_pydantic_config_members``
+  - ``autodoc_pydantic_config_signature_prefix``
+
+- All semantic changes from pydantic v1 to v2 take full effect.
+  **autodoc_pydantic** does not modify the underlying behavior of pydantic in
+  any way. Instead, it only documents whatever pydantic exposes. Hence, all
+  behavioral changes such as the new default strict mode are preserved in v2.
+
+- Sphinx ``< 4.0.0`` is no longer supported.
+
+Features
+~~~~~~~~
+
+- Support for pydantic v2 💫.
+- Support annotated type hints.
+
+Internal
+~~~~~~~~
+
+- Adjust imports to refer to ``pydantic-settings`` (v2) instead of ``pydantic`` (v1).
+- Adjust imports to refer to ``field_validator`` (v2) insteaf of ``validator`` (v1).
+- Adjust imports to refer to ``model_validator`` (v2) insteaf of ``root_validator`` (v1).
+- Replace ``pydantic.generics.GenericModel`` (v1) with ``typing.Generic`` (v2).
+- Simplify ``ValidatorAdapter`` and ``ValidatorInspector``.
+- Simplify reused validators retrieval.
+- Completely rewrite the model's field constraint retrieval functionality in ``inspection.FieldInspector``.
+- Adjust model's field serializability checks in ``inspection.FieldInspector``.
+- Replace ``BaseModel`` with ``NamedTuple`` for ``ValidatorAdapter``.
+- Remove obsolete pre/post validator attributes.
+- Introduce ``importlib-metadata`` to fetch version number including support for python 3.7.
+
+Testing
+~~~~~~~
+
+- Remove all obsolete pydantic versions from test matrix.
+- Remove all tests for documenting config members.
+- Remove compatibility helpers for older pydantic versions.
+- Remove obsolete pydantic model example which was not used anywhere.
+- Adjust serializability tests to account for changed behavior in v2.
+- Adjust optional/required field marker tests to account for changed behavior in v2.
+- Adjust field constraint tests to account for changed behavior in v2.
+- Adjust erdantic tests to exclude the erdantic version number which caused tests to fail upon erdantic update.
+
+Documentation
+~~~~~~~~~~~~~
+
+- Add FAQ section regarding migration guide from v1 to v2.
+- Remove ``complete`` showcase from user's example.
+- Update READMEs with newest features and version specifiers.
+- Update developer's setup section to address v1 to v2 changes.
+- Updates user's installation section to address v1 to v2 changes.
+- Remove all obsolete documentation on removed config documenters.
+- Rename all occurences to v2 ``field_validator`` and ``model_validator``.
+
+Contributors
+~~~~~~~~~~~~
+
+- Special thanks to `awoimbee <https://github.com/awoimbee>`__ for providing
+  a draft for the v1 to v2 migration which really initiated the work on
+  supporting pydantic v2
+  `#160 <https://github.com/mansenfranzen/autodoc_pydantic/pull/160>`__.
+- Many thanks to `PriOliveira <https://github.com/PriOliveira>`__ for reviewing
+  changes required for the v1 to v2 release
+  `#160 <https://github.com/mansenfranzen/autodoc_pydantic/pull/160>`__.
 
 
 v1.9.0 - 2023-06-08
