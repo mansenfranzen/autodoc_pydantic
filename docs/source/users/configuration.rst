@@ -23,7 +23,7 @@ how pydantic objects are displayed:
 
       .. autopydantic_model:: module.Model
          :model-show-json: True
-         :model-show-config: False
+         :model-show-config-summary: False
 
 
 .. note::
@@ -47,21 +47,7 @@ Contains all modifications for pydantic `BaseModel`.
    :values: True, False
 
    Show model config summary within the class doc string. It may be meaningful
-   when the class configuration carries some relevant information and you don't
-   want to show the entire config class as an explicit member
-   (see :ref:`model-show-config-member <autodoc_pydantic_model_show_config_member>`).
-
-
-.. config_description:: autopydantic_model
-   :title: Show Config Member
-   :path: target.configuration.ModelShowConfigMember
-   :confpy: autodoc_pydantic_model_show_config_member
-   :directive_option: model-show-config-member
-   :enable: members
-   :values: True, False*
-
-   Show pydantic config class. It can be hidden if it is irrelevant or if
-   replaced with :ref:`model-show-config-summary <autodoc_pydantic_model_show_config_summary>`.
+   when the class configuration carries some relevant information.
 
 
 .. config_description:: autopydantic_model
@@ -277,21 +263,7 @@ Contains all modifications for pydantic `BaseSettings`.
    :values: True, False
 
    Show model config summary within the class doc string. It may be meaningful
-   when the class configuration carries some relevant information and you don't
-   want to show the entire config class as an explicit member
-   (see :ref:`settings-show-config-member <autodoc_pydantic_settings_show_config_member>`).
-
-
-.. config_description:: autopydantic_settings
-   :title: Show Config Member
-   :path: target.configuration.SettingsShowConfigMember
-   :confpy: autodoc_pydantic_settings_show_config_member
-   :directive_option: settings-show-config-member
-   :enable: members
-   :values: True, False*
-
-   Show pydantic config class. It can be hidden if it is irrelevant or if
-   replaced with :ref:`settings-show-config-summary <autodoc_pydantic_settings_show_config_summary>`.
+   when the class configuration carries some relevant information.
 
 
 .. config_description:: autopydantic_settings

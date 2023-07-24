@@ -4,7 +4,11 @@
 
 from pathlib import Path
 from typing import Dict, Any
-from importlib.metadata import version
+
+try:
+    from importlib.metadata import version
+except ModuleNotFoundError:
+    from importlib_metadata import version
 
 from sphinx.domains import ObjType
 from sphinx.application import Sphinx
@@ -78,7 +82,6 @@ def add_configuration_values(app: Sphinx):
 
     add(f'{stem}settings_show_json', True, True, bool)
     add(f'{stem}settings_show_json_error_strategy', json_strategy, True, str)
-    add(f'{stem}settings_show_config_member', False, True, bool)
     add(f'{stem}settings_show_config_summary', True, True, bool)
     add(f'{stem}settings_show_validator_members', True, True, bool)
     add(f'{stem}settings_show_validator_summary', True, True, bool)
@@ -93,7 +96,6 @@ def add_configuration_values(app: Sphinx):
 
     add(f'{stem}model_show_json', True, True, bool)
     add(f'{stem}model_show_json_error_strategy', json_strategy, True, str)
-    add(f'{stem}model_show_config_member', False, True, bool)
     add(f'{stem}model_show_config_summary', True, True, bool)
     add(f'{stem}model_show_validator_members', True, True, bool)
     add(f'{stem}model_show_validator_summary', True, True, bool)

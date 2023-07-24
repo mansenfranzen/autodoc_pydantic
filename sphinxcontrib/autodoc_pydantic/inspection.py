@@ -20,18 +20,14 @@ from sphinx.addnodes import desc_signature
 ASTERISK_FIELD_NAME = "all fields"
 
 
-class ValidatorAdapter(BaseModel):
+class ValidatorAdapter(NamedTuple):
     """Provide standardized interface to pydantic's validator objects with
     additional metadata (e.g. root validator) for internal usage in
     autodoc_pydantic.
 
     """
 
-    model_config = ConfigDict(arbitrary_types_allowed=True)
-
     func: Callable
-    root_pre: bool = False
-    root_post: bool = False
 
     @property
     def name(self) -> str:
@@ -314,7 +310,9 @@ class ValidatorInspector(BaseInspectionComposite):
         return set(flattened)
 
     def get_reused_validators_names(self) -> List[str]:
-        """Identify all reused validators.
+        """Identify all reused validators. This is done implicitly by relying
+        on the fact the reused validators are registered as unbound functions
+        instead of bound methods.
 
         """
 
@@ -377,6 +375,7 @@ class ConfigInspector(BaseInspectionComposite):
         """Check if pydantic model config was explicitly configured."""
 
         return bool(self.items)
+
 
 class ReferenceInspector(BaseInspectionComposite):
     """Provide namespace for inspection methods for creating references
@@ -555,16 +554,14 @@ class ModelInspector:
         mapping = defaultdict(list)
         decorators = self.model.__pydantic_decorators__
 
-        # standard validators
+        # field validators
         for validator in decorators.field_validators.values():
             for field in validator.info.fields:
                 mapping[field].append(ValidatorAdapter(func=validator.func))
 
-        # root validators
+        # model validators
         for validator in decorators.model_validators.values():
-            is_pre = validator.info.mode == "before"
-            mapping["*"].append(ValidatorAdapter(func=validator.func,
-                                                 root_pre=is_pre))
+            mapping["*"].append(ValidatorAdapter(func=validator.func))
 
         return mapping
 

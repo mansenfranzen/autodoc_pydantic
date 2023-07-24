@@ -20,16 +20,6 @@ def package_is_missing(package_name):
         return True
 
 
-def get_pydantic_version() -> Tuple:
-    """Helper function to get major and minor pydantic version.
-
-    """
-
-    version_strings = pydantic.version.VERSION.split(".")[:2]
-    version_numbers = [int(x) for x in version_strings]
-    return tuple(version_numbers)
-
-
 def desc_annotation_default_value(value: str):
     """Provides compatibility abstraction for `desc_annotation` for default
     values for sphinx version smaller and greater equal sphinx 4.3.
@@ -78,24 +68,6 @@ def rst_alias_class_directive() -> str:
     """
 
     return ":py:class:" if sphinx.version_info >= (4, 3) else ":class:"
-
-
-def object_is_serializable() -> bool:
-    """Provides compatibility abstraction to define whether type object is
-    serializable or not.
-
-    """
-
-    return get_pydantic_version() >= (1, 9)
-
-
-def requires_forward_ref() -> bool:
-    """Provides compatibility abstraction to define whether forward references
-    require `model.update_forward_refs()` in pydantic.
-
-    """
-
-    return get_pydantic_version() < (1, 9)
 
 
 def convert_ellipsis_to_none(result: List[str]) -> List[str]:
