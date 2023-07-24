@@ -37,7 +37,7 @@ Creating environment
 
 .. code-block:: bash
 
-   poetry install -E dev
+   poetry install -E dev -E erdantic
 
 -----------------------
 Running & writing tests
