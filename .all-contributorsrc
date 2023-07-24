@@ -311,6 +311,16 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "PriOliveira",
+      "name": "Priscila Oliveira",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13801839?v=4",
+      "profile": "https://github.com/PriOliveira",
+      "contributions": [
+        "review",
+        "userTesting"
+      ]
     }
   ],
   "contributorsPerLine": 7,
