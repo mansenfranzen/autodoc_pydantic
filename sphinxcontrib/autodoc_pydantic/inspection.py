@@ -186,7 +186,12 @@ class FieldInspector(BaseInspectionComposite):
 
         """
 
-        definition = self.model.__pydantic_core_schema__["definitions"][0]
+        definition = None
+        for current_def in self.model.__pydantic_core_schema__["definitions"]:
+            if current_def.get('cls', None) == self.model:
+                definition = current_def
+                break
+        assert definition is not None
 
         # account for varying levels of nesting :-(
         try:
