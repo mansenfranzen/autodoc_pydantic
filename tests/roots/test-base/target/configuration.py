@@ -1,4 +1,11 @@
+import datetime
+from pathlib import Path
 from typing import Optional
+from uuid import UUID
+
+import annotated_types
+from pydantic.types import UuidVersion, PathType, condate, condecimal, conlist, \
+    conset
 
 try:
     from typing import Annotated
@@ -6,7 +13,7 @@ except ImportError:
     from typing_extensions import Annotated
 
 from pydantic import BaseModel, field_validator, Field, model_validator, \
-    ConfigDict, conint, constr, Strict
+    ConfigDict, conint, constr, Strict, AllowInfNan
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -395,14 +402,39 @@ class FieldShowConstraints(BaseModel):
 class FieldShowConstraintsNativeConstraintTypes(BaseModel):
     """FieldShowConstraints."""
 
-    field_int: conint(ge=0, le=100, strict=True)
-    """field_int"""
+    field_conint: conint(ge=0, le=100, strict=True)
+    """field_conint"""
 
-    field_str: constr(min_length=5, strict=True, pattern="[a-z]+")
-    """field_str"""
+    field_constr: constr(min_length=5, pattern="[a-z]+")
+    """field_constr"""
 
-    field_annotated: Annotated[float, Strict()]
-    """field_annotated"""
+    field_condate: condate(strict=True,
+                           gt=datetime.date(year=2023, month=8, day=1))
+    """field_condate"""
+
+    field_condecimal: condecimal(max_digits=4, decimal_places=1)
+    """field_condecimal"""
+
+    field_conset: conset(item_type=int, max_length=5, min_length=3)
+    """field_conset"""
+
+    field_conlist: conlist(max_length=3, item_type=str)
+    """field_conlist"""
+
+    field_strict_float: Annotated[float, Strict()]
+    """field_strict_float"""
+
+    field_strict_bool: Annotated[bool, Strict()]
+    """field_strict_bool"""
+
+    field_positive_int: Annotated[int, annotated_types.Gt(0)]
+    """field_positive_int"""
+
+    uuid4: Annotated[UUID, UuidVersion(4)]
+    """uuid4"""
+
+    file_path: Annotated[Path, PathType('file')]
+    """file_path"""
 
 
 class FieldShowConstraintsIgnoreExtraKwargs(BaseModel):

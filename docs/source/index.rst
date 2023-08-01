@@ -30,7 +30,7 @@ the appearance of standard sphinx autodoc with **autodoc_pydantic**.
 
 .. note::
 
-   This documentation is based on ``autodoc_pydantic >= 2.0.0``. If you are
+   This documentation is based on ``autodoc_pydantic >= 2.0.1``. If you are
    using pydantic v1 along with ``autodoc_pydantic < 2.0.0``, please find the
    latest v1 documentation `here <https://autodoc-pydantic.readthedocs.io/en/main-1.x/>`_ .
 
@@ -86,7 +86,7 @@ and all `contributors <https://github.com/mansenfranzen/autodoc_pydantic/tree/re
 .. |DownloadsBadge| image:: https://img.shields.io/pypi/dm/autodoc_pydantic?color=fe7d37&style=flat
 .. _DownloadsBadge: https://pypistats.org/packages/autodoc-pydantic
 
-.. |ContributersBadge| image:: https://img.shields.io/badge/all_contributors-35-orange.svg?style=flat
+.. |ContributersBadge| image:: https://img.shields.io/badge/all_contributors-37-orange.svg?style=flat
 .. _ContributersBadge: https://github.com/mansenfranzen/autodoc_pydantic/tree/refactor_inspection#acknowledgements
 
 .. |CoverageBadge| image:: https://img.shields.io/codecov/c/gh/mansenfranzen/autodoc_pydantic?style=flat

@@ -3,7 +3,6 @@
 """
 
 import pytest
-
 from sphinx.addnodes import (
     desc,
     desc_signature,
@@ -14,10 +13,12 @@ from sphinx.addnodes import (
     index
 )
 from sphinx.testing.util import assert_node
+
 from sphinxcontrib.autodoc_pydantic import PydanticFieldDocumenter
 from .compatibility import desc_annotation_default_value, \
     desc_annotation_directive_prefix, convert_ellipsis_to_none, \
-    TYPING_MODULE_PREFIX, OPTIONAL_INT
+    OPTIONAL_INT, TYPEHINTS_PREFIX, TYPING_MODULE_PREFIX_V1, \
+    TYPING_MODULE_PREFIX_V2
 
 KWARGS = dict(documenter=PydanticFieldDocumenter.directivetype,
               deactivate_all=True)
@@ -244,138 +245,86 @@ def test_autodoc_pydantic_field_show_constraints_true(autodocument):
     assert result == actual
 
 
-def test_autodoc_pydantic_field_show_constraints_native_int_type(autodocument):
-    """Ensure that constraints are properly show via specialized constraint
+CONSTRAINTS_TEST_DATA = {
+    "field_conint": {
+        "type": "int",
+        "constraints": ["**strict** = True", "**ge** = 0", "**le** = 100"]
+    },
+    "field_constr": {
+        "type": "str",
+        "constraints": ["**min_length** = 5", "**pattern** = [a-z]+"]
+    },
+    "field_condate": {
+        "type": f"{TYPEHINTS_PREFIX}datetime.date",
+        "constraints": ["**strict** = True", "**gt** = 2023-08-01"]
+    },
+    "field_condecimal": {
+        "type": f"{TYPEHINTS_PREFIX}decimal.Decimal",
+        "constraints": ["**max_digits** = 4", "**decimal_places** = 1"]
+    },
+    "field_conset": {
+        "type": f"{TYPING_MODULE_PREFIX_V2}Set[int]",
+        "constraints": ["**min_length** = 3", "**max_length** = 5"]
+    },
+    "field_conlist": {
+        "type": f"{TYPING_MODULE_PREFIX_V2}List[str]",
+        "constraints": ["**min_length** = 0", "**max_length** = 3"]
+    },
+    "field_strict_float": {
+        "type": "float",
+        "constraints": ["**strict** = True"]
+    },
+    "field_strict_bool": {
+        "type": "bool",
+        "constraints": ["**strict** = True"]
+    },
+    "field_positive_int": {
+        "type": "int",
+        "constraints": ["**gt** = 0"]
+    },
+    "uuid4": {
+        "type": f"{TYPEHINTS_PREFIX}uuid.UUID",
+        "constraints": ["**uuid_version** = 4"]
+    },
+    "file_path": {
+        "type": f"{TYPEHINTS_PREFIX}pathlib.Path",
+        "constraints": ["**path_type** = file"]
+    }
+}
+
+
+@pytest.mark.parametrize("test_data",
+                         argvalues=CONSTRAINTS_TEST_DATA.items(),
+                         ids=CONSTRAINTS_TEST_DATA.keys())
+def test_autodoc_pydantic_field_show_constraints_various(autodocument,
+                                                         test_data):
+    """Ensure that constraints are properly show for specialized constraint
     types.
 
     """
 
+    name, values = test_data
+    constraints = [f'      - {x}' for x in values["constraints"]] + [""]
+
     kwargs = dict(
-        object_path='target.configuration.FieldShowConstraintsNativeConstraintTypes.field_int',
+        object_path=f'target.configuration.FieldShowConstraintsNativeConstraintTypes.{name}',
         **KWARGS)
 
     result = [
-        '',
-        '.. py:pydantic_field:: FieldShowConstraintsNativeConstraintTypes.field_int',
-        '   :module: target.configuration',
-        '   :type: int',
-        '',
-        '   field_int',
-        '',
-        '   :Constraints:',
-        '      - **strict** = True',
-        '      - **ge** = 0',
-        '      - **le** = 100',
-        ''
-    ]
+                 '',
+                 f'.. py:pydantic_field:: FieldShowConstraintsNativeConstraintTypes.{name}',
+                 '   :module: target.configuration',
+                 f'   :type: {values["type"]}',
+                 '',
+                 f'   {name}',
+                 '',
+                 '   :Constraints:',
+             ] + constraints
 
-    # explict global
     actual = autodocument(
         options_app={"autodoc_pydantic_field_show_constraints": True},
         **kwargs)
     assert result == actual
-
-    # explicit local
-    actual = autodocument(
-        options_doc={"field-show-constraints": True},
-        **kwargs)
-    assert result == actual
-
-    # explicit local overwrite global
-    actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_constraints": False},
-        options_doc={"field-show-constraints": True},
-        **kwargs)
-    assert result == actual
-
-
-def test_autodoc_pydantic_field_show_constraints_native_str_type(autodocument):
-    """Ensure that constraints are properly show via specialized constraint
-    types.
-
-    """
-
-    kwargs = dict(
-        object_path='target.configuration.FieldShowConstraintsNativeConstraintTypes.field_str',
-        **KWARGS)
-
-    result = [
-        '',
-        '.. py:pydantic_field:: FieldShowConstraintsNativeConstraintTypes.field_str',
-        '   :module: target.configuration',
-        '   :type: str',
-        '',
-        '   field_str',
-        '',
-        '   :Constraints:',
-        '      - **strict** = True',
-        '      - **min_length** = 5',
-        '      - **pattern** = [a-z]+',
-        ''
-    ]
-
-    # explict global
-    actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_constraints": True},
-        **kwargs)
-    assert result == actual
-
-    # explicit local
-    actual = autodocument(
-        options_doc={"field-show-constraints": True},
-        **kwargs)
-    assert result == actual
-
-    # explicit local overwrite global
-    actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_constraints": False},
-        options_doc={"field-show-constraints": True},
-        **kwargs)
-    assert result == actual
-
-
-def test_autodoc_pydantic_field_show_constraints_native_annotated_type(autodocument):
-    """Ensure that constraints are properly show via specialized constraint
-    types.
-
-    """
-
-    kwargs = dict(
-        object_path='target.configuration.FieldShowConstraintsNativeConstraintTypes.field_annotated',
-        **KWARGS)
-
-    result = [
-        '',
-        '.. py:pydantic_field:: FieldShowConstraintsNativeConstraintTypes.field_annotated',
-        '   :module: target.configuration',
-        '   :type: float',
-        '',
-        '   field_annotated',
-        '',
-        '   :Constraints:',
-        '      - **strict** = True',
-        ''
-    ]
-
-    # explict global
-    actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_constraints": True},
-        **kwargs)
-    assert result == actual
-
-    # explicit local
-    actual = autodocument(
-        options_doc={"field-show-constraints": True},
-        **kwargs)
-    assert result == actual
-
-    # explicit local overwrite global
-    actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_constraints": False},
-        options_doc={"field-show-constraints": True},
-        **kwargs)
-    assert result == actual
-
 
 
 def test_autodoc_pydantic_field_show_constraints_ignore_extra_kwargs(

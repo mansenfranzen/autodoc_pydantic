@@ -1,7 +1,46 @@
 Changelog
 =========
 
-v2.0.0 - 2023-07-XX
+v2.0.1 - 2023-08-01
+-------------------
+
+This is a bugfix release handling an exception while documenting pydantic
+models using enums.
+
+Internal
+~~~~~~~~
+
+- Simplify model field's constraint extraction removing dependency on private
+  methods.
+
+Bugfix
+~~~~~~
+
+- Properly handle constraint extraction avoiding exceptions due to prior
+  reliance on unpredictable behavior of private attributes.
+- Fix incorrect type annotation string results for non-builtin types in
+  ``intercept_type_annotations_py_gt_39``.
+
+Testing
+~~~~~~~
+
+- Add pydantic 2.1 to test matrix.
+- Add tests for various kinds of constrained types.
+- Add "no exception" tests for specific pydantic models, such as containing
+  enums.
+
+Contributors
+~~~~~~~~~~~~
+
+- Thanks to `nagledb <https://github.com/nagledb>`__ for reporting a bug
+  related to enums
+  `#169 <https://github.com/mansenfranzen/autodoc_pydantic/issues/169>`__.
+- Thanks to `jerryjiahaha <https://github.com/jerryjiahaha>`__ for providing
+  a pull request fixing the enums bug
+  `#170 <https://github.com/mansenfranzen/autodoc_pydantic/pull/170>`__.
+
+
+v2.0.0 - 2023-07-24
 -------------------
 
 This is a major release supporting pydantic v2. In June 2023, pydantic v2 was

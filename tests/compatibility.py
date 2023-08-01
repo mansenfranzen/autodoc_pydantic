@@ -91,6 +91,29 @@ def typing_module_prefix() -> str:
 
     return ""
 
+def typing_module_prefix_v1() -> str:
+    """Provides compatibility abstraction to account for changed behaviour of
+    `autodoc_typehints_format` in sphinx 5.0 from fully qualified to short
+    which requires types of typing module to prefixed with `~typing.`.
+
+    """
+
+    if (5,) <= sphinx.version_info < (6, 1):
+        return "~typing."
+
+    return ""
+
+def typing_module_prefix_v2() -> str:
+    """Provides compatibility abstraction to account for changed behaviour of
+    `autodoc_typehints_format` in sphinx 5.0 from fully qualified to short
+    which requires types of typing module to prefixed with `~typing.`.
+
+    """
+
+    if (5,) <= sphinx.version_info:
+        return "~typing."
+
+    return ""
 
 def typehints_prefix() -> str:
     """Provides compatibility abstraction to account for changed behaviour of
@@ -147,7 +170,8 @@ def get_optional_type_expected(field_type: str):
     return field_type  # 'Optional[int]'
 
 
-TYPING_MODULE_PREFIX = typing_module_prefix()
+TYPING_MODULE_PREFIX_V1 = typing_module_prefix_v1()
+TYPING_MODULE_PREFIX_V2 = typing_module_prefix_v2()
 TYPEHINTS_PREFIX = typehints_prefix()
-OPTIONAL_INT = TYPING_MODULE_PREFIX + get_optional_type_expected(
+OPTIONAL_INT = TYPING_MODULE_PREFIX_V1 + get_optional_type_expected(
     'Optional[int]')
