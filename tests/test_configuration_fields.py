@@ -17,7 +17,7 @@ from sphinx.testing.util import assert_node
 from sphinxcontrib.autodoc_pydantic import PydanticFieldDocumenter
 from .compatibility import desc_annotation_default_value, \
     desc_annotation_directive_prefix, convert_ellipsis_to_none, \
-    OPTIONAL_INT, TYPEHINTS_PREFIX
+    OPTIONAL_INT, TYPEHINTS_PREFIX, TYPING_MODULE_PREFIX
 
 KWARGS = dict(documenter=PydanticFieldDocumenter.directivetype,
               deactivate_all=True)
@@ -262,11 +262,11 @@ CONSTRAINTS_TEST_DATA = {
         "constraints": ["**max_digits** = 4", "**decimal_places** = 1"]
     },
     "field_conset": {
-        "type": f"{TYPEHINTS_PREFIX}typing.Set[int]",
+        "type": f"{TYPING_MODULE_PREFIX}Set[int]",
         "constraints": ["**min_length** = 3", "**max_length** = 5"]
     },
     "field_conlist": {
-        "type": f"{TYPEHINTS_PREFIX}typing.List[str]",
+        "type": f"{TYPING_MODULE_PREFIX}List[str]",
         "constraints": ["**min_length** = 0", "**max_length** = 3"]
     },
     "field_strict_float": {

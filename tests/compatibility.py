@@ -91,6 +91,18 @@ def typing_module_prefix() -> str:
 
     return ""
 
+def typing_module_prefix() -> str:
+    """Provides compatibility abstraction to account for changed behaviour of
+    `autodoc_typehints_format` in sphinx 5.0 from fully qualified to short
+    which requires types of typing module to prefixed with `~typing.`.
+
+    """
+
+    if sphinx.version_info >= (5,):
+        return "~typing."
+
+    return ""
+
 
 def typehints_prefix() -> str:
     """Provides compatibility abstraction to account for changed behaviour of
