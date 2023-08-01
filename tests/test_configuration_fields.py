@@ -17,7 +17,7 @@ from sphinx.testing.util import assert_node
 from sphinxcontrib.autodoc_pydantic import PydanticFieldDocumenter
 from .compatibility import desc_annotation_default_value, \
     desc_annotation_directive_prefix, convert_ellipsis_to_none, \
-    OPTIONAL_INT, typehints_prefix
+    OPTIONAL_INT, TYPEHINTS_PREFIX
 
 KWARGS = dict(documenter=PydanticFieldDocumenter.directivetype,
               deactivate_all=True)
@@ -303,7 +303,6 @@ def test_autodoc_pydantic_field_show_constraints_various(autodocument,
     """
 
     name, values = test_data
-    typ = typehints_prefix(values["type"])
     constraints = [f'      - {x}' for x in values["constraints"]] + [""]
 
     kwargs = dict(
@@ -314,7 +313,7 @@ def test_autodoc_pydantic_field_show_constraints_various(autodocument,
                  '',
                  f'.. py:pydantic_field:: FieldShowConstraintsNativeConstraintTypes.{name}',
                  '   :module: target.configuration',
-                 f'   :type: {typ}',
+                 f'   :type: {TYPEHINTS_PREFIX}{values["type"]}',
                  '',
                  f'   {name}',
                  '',
