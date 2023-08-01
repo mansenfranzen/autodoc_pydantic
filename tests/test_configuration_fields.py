@@ -254,19 +254,19 @@ CONSTRAINTS_TEST_DATA = {
         "constraints": ["**min_length** = 5", "**pattern** = [a-z]+"]
     },
     "field_condate": {
-        "type": "~datetime.date",
+        "type": f"{TYPEHINTS_PREFIX}datetime.date",
         "constraints": ["**strict** = True", "**gt** = 2023-08-01"]
     },
     "field_condecimal": {
-        "type": "~decimal.Decimal",
+        "type": f"{TYPEHINTS_PREFIX}decimal.Decimal",
         "constraints": ["**max_digits** = 4", "**decimal_places** = 1"]
     },
     "field_conset": {
-        "type": "~typing.Set[int]",
+        "type": f"{TYPEHINTS_PREFIX}typing.Set[int]",
         "constraints": ["**min_length** = 3", "**max_length** = 5"]
     },
     "field_conlist": {
-        "type": "~typing.List[str]",
+        "type": f"{TYPEHINTS_PREFIX}typing.List[str]",
         "constraints": ["**min_length** = 0", "**max_length** = 3"]
     },
     "field_strict_float": {
@@ -282,11 +282,11 @@ CONSTRAINTS_TEST_DATA = {
         "constraints": ["**gt** = 0"]
     },
     "uuid4": {
-        "type": "~uuid.UUID",
+        "type": f"{TYPEHINTS_PREFIX}uuid.UUID",
         "constraints": ["**uuid_version** = 4"]
     },
     "file_path": {
-        "type": "~pathlib.Path",
+        "type": f"{TYPEHINTS_PREFIX}pathlib.Path",
         "constraints": ["**path_type** = file"]
     }
 }
@@ -313,7 +313,7 @@ def test_autodoc_pydantic_field_show_constraints_various(autodocument,
                  '',
                  f'.. py:pydantic_field:: FieldShowConstraintsNativeConstraintTypes.{name}',
                  '   :module: target.configuration',
-                 f'   :type: {TYPEHINTS_PREFIX}{values["type"]}',
+                 f'   :type: {values["type"]}',
                  '',
                  f'   {name}',
                  '',
