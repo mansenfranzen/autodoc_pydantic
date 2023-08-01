@@ -147,19 +147,6 @@ class FieldInspector(BaseInspectionComposite):
         field = self.get(field_name)
         return getattr(field, property_name, None)
 
-    def get_constraint_items(self, field_name: str) -> Dict[str, str]:
-        """Extract all possible constraints along with their default values
-        from a fields meta attribute.
-
-        """
-
-        metadata = self.model.model_fields[field_name].metadata
-        available = [meta for meta in metadata if meta is not None]
-
-        return {key: getattr(meta, key)
-                for meta in available
-                for key, value in self._get_meta_items(meta).items()}
-
     @staticmethod
     def _get_meta_items(meta_class: Any) -> Dict[str, str]:
         """Helper method to extract constraint names and values from different
@@ -172,56 +159,18 @@ class FieldInspector(BaseInspectionComposite):
         except AttributeError:
             return meta_class.__dict__
 
-    def get_given_constraint_keys(self, field_name: str) -> Set[str]:
-        """Retrieves all schema attribute keys that have been set.
-        This information is relevant to distinguish given values that are
-        equivalent to their default values. Otherwise, there is no chance
-        to determine if a constraint was actually given by the user or set as
-        a default value.
-
-        Note: Accessing private attributes with many levels of nesting is far
-        from being desired but currently there is no proper solution around
-        this. Accessing the `properties` via the `model_schema_json` may fail
-        in cases where fields are not serializable.
-
-        """
-
-        definition = None
-        for current_def in self.model.__pydantic_core_schema__["definitions"]:
-            if current_def.get('cls', None) == self.model:
-                definition = current_def
-                break
-        assert definition is not None
-
-        # account for varying levels of nesting :-(
-        try:
-            field_schemas = definition["schema"]["fields"]
-        except KeyError:
-            field_schemas = definition["schema"]["schema"]["fields"]
-
-        # account for generics and other non-native fields without schema info
-        try:
-            schema = field_schemas[field_name]["schema"]
-        except KeyError:
-            return set()
-
-        # account for yet another level on model-field :-(
-        if "schema" in schema:
-            schema = schema["schema"]
-
-        return set(schema.keys())
-
     def get_constraints(self, field_name: str) -> Dict[str, Any]:
         """Get constraints for given `field_name`.
 
         """
 
-        constraint_items = self.get_constraint_items(field_name).items()
-        given_constraint_keys = self.get_given_constraint_keys(field_name)
+        metadata = self.model.model_fields[field_name].metadata
+        available = [meta for meta in metadata if meta is not None]
 
-        return {key: value
-                for key, value in constraint_items
-                if key in given_constraint_keys}
+        return {key: getattr(meta, key)
+                for meta in available
+                for key, value in self._get_meta_items(meta).items()
+                if getattr(meta, key) is not None}
 
     def is_required(self, field_name: str) -> bool:
         """Check if a given pydantic field is required/mandatory. Returns True,
