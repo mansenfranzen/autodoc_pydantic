@@ -351,6 +351,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "jerryjiahaha",
+      "name": "JerryJia",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3163720?v=4",
+      "profile": "https://github.com/jerryjiahaha",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
