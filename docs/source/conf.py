@@ -27,11 +27,11 @@ sys.path.insert(0, str(path_autodoc_pydantic))
 # -- Project information -----------------------------------------------------
 
 project = 'autodoc_pydantic'
-copyright = '2022, Franz Wöllert'
+copyright = '2023, Franz Wöllert'
 author = 'Franz Wöllert'
 
 # The full version, including alpha/beta/rc tags
-release = '2.0.0'
+release = '2.0.1'
 
 # -- General configuration ---------------------------------------------------
 
