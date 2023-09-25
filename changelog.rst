@@ -13,6 +13,13 @@ Bugfix
   `PEP 420 <https://peps.python.org/pep-0420/>`__ without ``__init_.py`` to match with
   other extensions.
 
+Testing
+~~~~~~~
+
+- Update ``conftest`` to use ``pathlib`` instead of older Sphinx ``sphinx.testing.path`` module
+  that is being deprecated for forward-compatibility with newer Sphinx versions.
+
+
 v2.0.1 - 2023-08-01
 -------------------
 
