@@ -1,6 +1,18 @@
 Changelog
 =========
 
+v2.0.2 - 2023-XX-YY
+-------------------
+
+Bugfix
+~~~~~~
+
+- `#176 <https://github.com/mansenfranzen/autodoc_pydantic/issues/176>`__ -
+  Remove ``sphinxcontrib/__init__.py` causing ``ModuleNotFoundError`` exception
+  in some environments.  This should be a namespace package per
+  `PEP 420 <https://peps.python.org/pep-0420/>`__ without ``__init_.py`` to match with
+  other extensions.
+
 v2.0.1 - 2023-08-01
 -------------------
 
