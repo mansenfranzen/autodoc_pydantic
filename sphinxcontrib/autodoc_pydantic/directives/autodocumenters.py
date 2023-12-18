@@ -396,7 +396,7 @@ class PydanticModelDocumenter(ClassDocumenter):
         """
 
         all_validators = self.pydantic.inspect.validators.names
-        all_fields = self.pydantic.inspect.fields.names
+        all_fields = self._get_valid_fields()
         idx_validators = self._get_idx_mappings(all_validators)
         idx_fields = self._get_idx_mappings(all_fields)
 
