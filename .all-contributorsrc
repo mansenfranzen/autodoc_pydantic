@@ -360,6 +360,26 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "devmonkey22",
+      "name": "Mike D",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5084545?v=4",
+      "profile": "https://github.com/devmonkey22",
+      "contributions": [
+        "code",
+        "bug",
+        "test"
+      ]
+    },
+    {
+      "login": "daquinteroflex",
+      "name": "Dario Quintero (Flexcompute)",
+      "avatar_url": "https://avatars.githubusercontent.com/u/149674618?v=4",
+      "profile": "https://github.com/daquinteroflex",
+      "contributions": [
+        "review"
+      ]
     }
   ],
   "contributorsPerLine": 7,

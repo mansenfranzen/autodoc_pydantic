@@ -2,10 +2,12 @@
 
 """
 import copy
+import shutil
 import inspect
 import logging
 from logging.handlers import MemoryHandler
 from pathlib import Path
+import shutil
 from typing import Optional, Dict, List, Callable, Union, Any
 from unittest.mock import Mock
 
@@ -15,7 +17,7 @@ from pydantic import BaseModel, ConfigDict
 from sphinx import application
 from sphinx.application import Sphinx
 from sphinx.cmd import build
-from sphinx.testing.path import path
+
 from sphinx.testing.restructuredtext import parse
 from sphinx.util.docutils import LoggingReporter
 from sphinx.ext.autodoc.directive import (
@@ -66,12 +68,12 @@ CONF_DEACTIVATE = {
 
 
 @pytest.fixture(scope='session')
-def rootdir():
-    return path(__file__).parent.abspath() / 'roots'
+def rootdir() -> Path:
+    return Path(__file__).parent.resolve() / 'roots'
 
 
 @pytest.fixture(scope='session')
-def docdir():
+def docdir() -> Path:
     """Provides path to actual sphinx documentation of autodoc_pydantic.
 
     """
@@ -142,12 +144,13 @@ def test_app(make_app, sphinx_test_tempdir, rootdir):
     def create(testroot: str,
                conf: Optional[Dict] = None,
                deactivate_all: bool = False):
+        
         srcdir = sphinx_test_tempdir / testroot
-        srcdir.rmtree(ignore_errors=True)
+        shutil.rmtree(srcdir, ignore_errors=True)
 
         if rootdir and not srcdir.exists():
             testroot_path = rootdir / ('test-' + testroot)
-            testroot_path.copytree(srcdir)
+            shutil.copytree(testroot_path, srcdir)
 
         kwargs = dict(srcdir=srcdir, confoverrides={})
 
