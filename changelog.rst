@@ -37,6 +37,11 @@ Internal
 - Fix deprecation warning for tuple interface of ``ObjectMember`` in 
   ``directives/autodocumenters.py``.
 
+Documentation
+~~~~~~~~~~~~~
+
+- Add pydantic to PyPI classifiers to improve discoverability.
+
 Contributors
 ~~~~~~~~~~~~
 
@@ -50,6 +55,9 @@ Contributors
   ``directives/autodocumenters.py`` 
   `#174 <https://github.com/mansenfranzen/autodoc_pydantic/issues/174>`__ and 
   `j-carson <https://github.com/j-carson>`__ for reporting it.
+- Thanks to `caerulescens <https://github.com/caerulescens>`__ for providing a 
+  PR to add pydantic to PyPI classifiers 
+  `#179 <https://github.com/mansenfranzen/autodoc_pydantic/pull/179>`__.
 
 v2.0.1 - 2023-08-01
 -------------------
