@@ -11,6 +11,8 @@ repository = "https://github.com/mansenfranzen/autodoc_pydantic"
 documentation = "https://github.com/mansenfranzen/autodoc_pydantic"
 keywords = ["sphinx", "pydantic", "autodoc", "documentation", "extension"]
 classifiers = [
+    "Framework :: Pydantic",
+    "Framework :: Pydantic :: 2",
     "Framework :: Sphinx :: Extension",
     "Topic :: Documentation :: Sphinx",
     "Topic :: Software Development :: Documentation"
