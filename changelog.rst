@@ -1,6 +1,27 @@
 Changelog
 =========
 
+v2.1.0 - 2024-01-XX
+-------------------
+
+This is a maintenance and bugfix release extending support to pydantic v2.5, 
+sphinx v7.2 and python 3.12. Python 3.7 is removed from the test matrix and will no
+longer be supported.
+
+Testing
+~~~~~~~
+
+- Add pydantic 2.2/2.3/2.4/2.5 to test matrix.
+- Add python 3.12 to test matrix.
+- Add sphinx 7.1/7.2 to test matrix.
+- Remove obsolete `skip ci` condition from github actions.
+
+Bugfix
+~~~~~~
+
+- Fix incompatibity with sphinx 7.2 due to changed usage of path objects.
+  For more, see `#11606 <https://github.com/sphinx-doc/sphinx/issues/11605>`__.
+
 v2.0.1 - 2023-08-01
 -------------------
 
