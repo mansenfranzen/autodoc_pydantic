@@ -2,6 +2,7 @@
 
 """
 import copy
+import shutil
 import inspect
 import logging
 from logging.handlers import MemoryHandler
@@ -147,7 +148,7 @@ def test_app(make_app, sphinx_test_tempdir, rootdir):
         testroot = Path(testroot)
 
         srcdir = sphinx_test_tempdir / testroot
-        srcdir.rmtree(ignore_errors=True)
+        shutil.rmtree(srcdir, ignore_errors=True)
 
         if rootdir and not srcdir.exists():
             testroot_name = testroot.parent / ('test-' + testroot.name)
