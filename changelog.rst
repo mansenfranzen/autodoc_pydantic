@@ -1,24 +1,34 @@
 Changelog
 =========
 
-v2.0.2 - 2023-XX-YY
+v2.1.0 - 2024-01-XX
 -------------------
 
-Bugfix
-~~~~~~
-
-- `#176 <https://github.com/mansenfranzen/autodoc_pydantic/issues/176>`__ -
-  Remove ``sphinxcontrib/__init__.py` causing ``ModuleNotFoundError`` exception
-  in some environments.  This should be a namespace package per
-  `PEP 420 <https://peps.python.org/pep-0420/>`__ without ``__init_.py`` to match with
-  other extensions.
+This is a maintenance and bugfix release extending support to pydantic v2.5, 
+sphinx v7.2 and python 3.12. Python 3.7 is removed from the test matrix and 
+will be no longer supported.
 
 Testing
 ~~~~~~~
 
-- Update ``conftest`` to use ``pathlib`` instead of older Sphinx ``sphinx.testing.path`` module
-  that is being deprecated for forward-compatibility with newer Sphinx versions.
+- Add pydantic 2.2/2.3/2.4/2.5 to test matrix.
+- Add python 3.12 to test matrix.
+- Add sphinx 7.1/7.2 to test matrix.
+- Remove obsolete `skip ci` condition from github actions.
+- Update ``conftest`` to use ``pathlib`` instead of older Sphinx 
+  ``sphinx.testing.path`` module that is being deprecated for 
+  forward-compatibility with newer Sphinx versions.
 
+Bugfix
+~~~~~~
+
+- Fix incompatibity with sphinx 7.2 due to changed usage of path objects.
+  For more, see `#11606 <https://github.com/sphinx-doc/sphinx/issues/11605>`__.
+- `#176 <https://github.com/mansenfranzen/autodoc_pydantic/issues/176>`__ -
+  Remove ``sphinxcontrib/__init__.py`` causing ``ModuleNotFoundError`` 
+  exception in some environments.  This should be a namespace package per
+  `PEP 420 <https://peps.python.org/pep-0420/>`__ without ``__init_.py`` to 
+  match with other extensions.
 
 v2.0.1 - 2023-08-01
 -------------------

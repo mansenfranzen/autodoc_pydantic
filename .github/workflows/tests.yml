@@ -8,14 +8,10 @@ on:
 
 jobs:
   test-stable-versions:
-    if: "!contains(github.event.head_commit.message, 'skip ci')"
     strategy:
       fail-fast: false
       matrix:
         include:
-          - python_version: "3.7"
-            pydantic_version: "20"
-            sphinx_version: "40"
           - python_version: "3.8"
             pydantic_version: "20"
             sphinx_version: "45"
@@ -36,8 +32,19 @@ jobs:
             sphinx_version: "70"
           - python_version: "3.11"
             pydantic_version: "21"
-            sphinx_version: "70"
-
+            sphinx_version: "71"
+          - python_version: "3.11"
+            pydantic_version: "22"
+            sphinx_version: "71"
+          - python_version: "3.11"
+            pydantic_version: "23"
+            sphinx_version: "71"
+          - python_version: "3.11"
+            pydantic_version: "24"
+            sphinx_version: "72"
+          - python_version: "3.12"
+            pydantic_version: "25"
+            sphinx_version: "72"
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
@@ -53,7 +60,6 @@ jobs:
           fail_ci_if_error: true
 
   test-latest-version:
-    if: "!contains(github.event.head_commit.message, 'skip ci')"
     environment: ci
     runs-on: ubuntu-22.04
     steps:
@@ -70,7 +76,6 @@ jobs:
           fail_ci_if_error: true
 
   test-no-erdantic-version:
-    if: "!contains(github.event.head_commit.message, 'skip ci')"
     environment: ci
     runs-on: ubuntu-22.04
     steps:
@@ -82,7 +87,6 @@ jobs:
       - run: tox -e no_erdantic
 
   test-development-versions-deps:
-    if: "!contains(github.event.head_commit.message, 'skip ci')"
     environment: ci
     runs-on: ubuntu-22.04
     steps:
@@ -97,7 +101,6 @@ jobs:
       - run: echo "Done"
 
   test-linter:
-    if: "!contains(github.event.head_commit.message, 'skip ci')"
     environment: ci
     runs-on: ubuntu-22.04
     steps:
