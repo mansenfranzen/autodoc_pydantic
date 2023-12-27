@@ -31,6 +31,12 @@ Bugfix
   `PEP 420 <https://peps.python.org/pep-0420/>`__ without ``__init_.py`` to 
   match with other extensions.
 
+Internal
+~~~~~~~~
+
+- Fix deprecation warning for tuple interface of ``ObjectMember`` in 
+  ``directives/autodocumenters.py``.
+
 Contributors
 ~~~~~~~~~~~~
 
@@ -39,6 +45,11 @@ Contributors
   `#176 <https://github.com/mansenfranzen/autodoc_pydantic/issues/176>`__ and 
   `daquinteroflex <https://github.com/daquinteroflex>`__ for testing and
   providing feedback.
+- Thanks to `rafa-guedes <https://github.com/rafa-guedes>`__ for providing a PR
+  to fix a deprecation warning for tuple interface of ``ObjectMember`` in 
+  ``directives/autodocumenters.py`` 
+  `#174 <https://github.com/mansenfranzen/autodoc_pydantic/issues/174>`__ and 
+  `j-carson <https://github.com/j-carson>`__ for reporting it.
 
 v2.0.1 - 2023-08-01
 -------------------
