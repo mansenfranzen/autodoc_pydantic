@@ -2,6 +2,7 @@
 
 """
 import copy
+import shutil
 import inspect
 import logging
 from logging.handlers import MemoryHandler
@@ -142,11 +143,16 @@ def test_app(make_app, sphinx_test_tempdir, rootdir):
     def create(testroot: str,
                conf: Optional[Dict] = None,
                deactivate_all: bool = False):
+        
+        # workaround for sphinx issue #11605
+        testroot = Path(testroot)
+
         srcdir = sphinx_test_tempdir / testroot
-        srcdir.rmtree(ignore_errors=True)
+        shutil.rmtree(srcdir, ignore_errors=True)
 
         if rootdir and not srcdir.exists():
-            testroot_path = rootdir / ('test-' + testroot)
+            testroot_name = testroot.parent / ('test-' + testroot.name)
+            testroot_path = rootdir / testroot_name
             testroot_path.copytree(srcdir)
 
         kwargs = dict(srcdir=srcdir, confoverrides={})
