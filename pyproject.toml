@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "autodoc_pydantic"
-version = "2.0.1"
+version = "2.1.0"
 description = "Seamlessly integrate pydantic models in your Sphinx documentation."
 authors = ["mansenfranzen <franz.woellert@gmail.com>"]
 packages = [{ include = "sphinxcontrib" }]
@@ -20,7 +20,7 @@ classifiers = [
 include = ["sphinxcontrib/autodoc_pydantic/css/autodoc_pydantic.css"]
 
 [tool.poetry.dependencies]
-python = ">=3.7.1,<4.0.0"
+python = ">=3.8,<4.0.0"
 Sphinx = ">=4.0"
 pydantic = ">=2.0,<3.0.0"
 pydantic-settings = ">=2.0,<3.0.0"

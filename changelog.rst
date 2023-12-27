@@ -1,6 +1,56 @@
 Changelog
 =========
 
+v2.1.0 - 2024-01-XX
+-------------------
+
+This is a maintenance and bugfix release extending support to pydantic v2.5, 
+sphinx v7.2 and python 3.12 while dropping support for python 3.7 which has 
+reached EOL.
+
+Testing
+~~~~~~~
+
+- Add pydantic 2.2/2.3/2.4/2.5 to test matrix.
+- Add sphinx 7.1/7.2 to test matrix.
+- Add python 3.12 to test matrix.
+- Remove python 3.7 from test matrix.
+- Remove obsolete `skip ci` condition from github actions.
+- Update ``conftest`` to use ``pathlib`` instead of older Sphinx 
+  ``sphinx.testing.path`` module that is being deprecated for 
+  forward-compatibility with newer Sphinx versions.
+
+Bugfix
+~~~~~~
+
+- Fix incompatibity with sphinx 7.2 due to changed usage of path objects.
+  For more, see `#11606 <https://github.com/sphinx-doc/sphinx/issues/11605>`__.
+- `#176 <https://github.com/mansenfranzen/autodoc_pydantic/issues/176>`__ -
+  Remove ``sphinxcontrib/__init__.py`` causing ``ModuleNotFoundError`` 
+  exception in some environments.  This should be a namespace package per
+  `PEP 420 <https://peps.python.org/pep-0420/>`__ without ``__init_.py`` to 
+  match with other extensions.
+
+Internal
+~~~~~~~~
+
+- Fix deprecation warning for tuple interface of ``ObjectMember`` in 
+  ``directives/autodocumenters.py``.
+
+Contributors
+~~~~~~~~~~~~
+
+- Thanks to `devmonkey22 <https://github.com/devmonkey22>`__ for providing a PR
+  to solve a nasty namespace package issue 
+  `#176 <https://github.com/mansenfranzen/autodoc_pydantic/issues/176>`__ and 
+  `daquinteroflex <https://github.com/daquinteroflex>`__ for testing and
+  providing feedback.
+- Thanks to `rafa-guedes <https://github.com/rafa-guedes>`__ for providing a PR
+  to fix a deprecation warning for tuple interface of ``ObjectMember`` in 
+  ``directives/autodocumenters.py`` 
+  `#174 <https://github.com/mansenfranzen/autodoc_pydantic/issues/174>`__ and 
+  `j-carson <https://github.com/j-carson>`__ for reporting it.
+
 v2.0.1 - 2023-08-01
 -------------------
 
