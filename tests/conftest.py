@@ -145,9 +145,6 @@ def test_app(make_app, sphinx_test_tempdir, rootdir):
                conf: Optional[Dict] = None,
                deactivate_all: bool = False):
         
-        # workaround for sphinx issue #11605
-        testroot = Path(testroot)
-
         srcdir = sphinx_test_tempdir / testroot
         shutil.rmtree(srcdir, ignore_errors=True)
 
