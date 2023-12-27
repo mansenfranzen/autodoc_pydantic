@@ -7,7 +7,7 @@
 [![Coverage](https://img.shields.io/codecov/c/gh/mansenfranzen/autodoc_pydantic?style=for-the-badge)](https://app.codecov.io/gh/mansenfranzen/autodoc_pydantic)
 
 [![Downloads](https://img.shields.io/pypi/dm/autodoc_pydantic?color=fe7d37&style=for-the-badge)](https://pypistats.org/packages/autodoc-pydantic)<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-39-orange.svg?style=for-the-badge)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-40-orange.svg?style=for-the-badge)](#contributors)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 
@@ -109,6 +109,7 @@ Thanks to great open source projects [sphinx](https://www.sphinx-doc.org/en/mast
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/jerryjiahaha"><img src="https://avatars.githubusercontent.com/u/3163720?v=4?s=100" width="100px;" alt="JerryJia"/><br /><sub><b>JerryJia</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/commits?author=jerryjiahaha" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/devmonkey22"><img src="https://avatars.githubusercontent.com/u/5084545?v=4?s=100" width="100px;" alt="Mike D"/><br /><sub><b>Mike D</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/commits?author=devmonkey22" title="Code">💻</a> <a href="https://github.com/mansenfranzen/autodoc_pydantic/issues?q=author%3Adevmonkey22" title="Bug reports">🐛</a> <a href="https://github.com/mansenfranzen/autodoc_pydantic/commits?author=devmonkey22" title="Tests">⚠️</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/daquinteroflex"><img src="https://avatars.githubusercontent.com/u/149674618?v=4?s=100" width="100px;" alt="Dario Quintero (Flexcompute)"/><br /><sub><b>Dario Quintero (Flexcompute)</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/pulls?q=is%3Apr+reviewed-by%3Adaquinteroflex" title="Reviewed Pull Requests">👀</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/rafa-guedes"><img src="https://avatars.githubusercontent.com/u/7799184?v=4?s=100" width="100px;" alt="Rafael Guedes"/><br /><sub><b>Rafael Guedes</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/commits?author=rafa-guedes" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
