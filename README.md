@@ -7,7 +7,7 @@
 [![Coverage](https://img.shields.io/codecov/c/gh/mansenfranzen/autodoc_pydantic?style=for-the-badge)](https://app.codecov.io/gh/mansenfranzen/autodoc_pydantic)
 
 [![Downloads](https://img.shields.io/pypi/dm/autodoc_pydantic?color=fe7d37&style=for-the-badge)](https://pypistats.org/packages/autodoc-pydantic)<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-37-orange.svg?style=for-the-badge)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-38-orange.svg?style=for-the-badge)](#contributors)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 
@@ -107,6 +107,7 @@ Thanks to great open source projects [sphinx](https://www.sphinx-doc.org/en/mast
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/nagledb"><img src="https://avatars.githubusercontent.com/u/727435?v=4?s=100" width="100px;" alt="David B. Nagle"/><br /><sub><b>David B. Nagle</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/issues?q=author%3Anagledb" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/jerryjiahaha"><img src="https://avatars.githubusercontent.com/u/3163720?v=4?s=100" width="100px;" alt="JerryJia"/><br /><sub><b>JerryJia</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/commits?author=jerryjiahaha" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/devmonkey22"><img src="https://avatars.githubusercontent.com/u/5084545?v=4?s=100" width="100px;" alt="Mike D"/><br /><sub><b>Mike D</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/commits?author=devmonkey22" title="Code">💻</a> <a href="https://github.com/mansenfranzen/autodoc_pydantic/issues?q=author%3Adevmonkey22" title="Bug reports">🐛</a> <a href="https://github.com/mansenfranzen/autodoc_pydantic/commits?author=devmonkey22" title="Tests">⚠️</a></td>
     </tr>
   </tbody>
 </table>
