@@ -150,7 +150,8 @@ def test_app(make_app, sphinx_test_tempdir, rootdir):
         srcdir.rmtree(ignore_errors=True)
 
         if rootdir and not srcdir.exists():
-            testroot_path = rootdir / ('test-' + testroot)
+            testroot_name = testroot.parent / ('test-' + testroot.name)
+            testroot_path = rootdir / testroot_name
             testroot_path.copytree(srcdir)
 
         kwargs = dict(srcdir=srcdir, confoverrides={})
