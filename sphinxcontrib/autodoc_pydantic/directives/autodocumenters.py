@@ -133,7 +133,9 @@ class PydanticAutoDoc:
         prefiltered to exclude inherited members.
 
         """
-        return {x.__name__ for x in self._documenter.get_object_members(True)[1]}
+
+        object_members = self._documenter.get_object_members(True)[1]
+        return {x.__name__ for x in object_members}
 
     def resolve_inherited_validator_reference(self, ref: str) -> str:
         """Provide correct validator reference in case validator is inherited
