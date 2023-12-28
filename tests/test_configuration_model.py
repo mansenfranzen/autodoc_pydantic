@@ -607,6 +607,56 @@ def test_autodoc_pydantic_model_summary_list_order_bysource(autodocument):
     assert result == actual
 
 
+def test_autodoc_pydantic_model_summary_list_order_bysource_inherited(autodocument):
+    kwargs = dict(object_path='target.configuration.ModelSummaryListOrderInherited',
+                  **KWARGS)
+    enable = {"autodoc_pydantic_model_show_validator_summary": True,
+              "autodoc_pydantic_model_show_field_summary": True}
+
+    result = [
+        '',
+        '.. py:pydantic_model:: ModelSummaryListOrderInherited',
+        '   :module: target.configuration',
+        '',
+        '   ModelSummaryListOrderInherited.',
+        '',
+        '   :Fields:',
+        '      - :py:obj:`field_b (int) <target.configuration.ModelSummaryListOrderInherited.field_b>`',
+        '      - :py:obj:`field_a (int) <target.configuration.ModelSummaryListOrderInherited.field_a>`',
+        '      - :py:obj:`field_c (int) <target.configuration.ModelSummaryListOrderInherited.field_c>`',
+        '',
+        '   :Validators:',
+        '      - :py:obj:`validate_b <target.configuration.ModelSummaryListOrderInherited.validate_b>` » :py:obj:`field_b <target.configuration.ModelSummaryListOrder.field_b>`',
+        '      - :py:obj:`validate_a <target.configuration.ModelSummaryListOrderInherited.validate_a>` » :py:obj:`field_a <target.configuration.ModelSummaryListOrder.field_a>`',
+        '      - :py:obj:`validate_c <target.configuration.ModelSummaryListOrderInherited.validate_c>` » :py:obj:`field_c <target.configuration.ModelSummaryListOrder.field_c>`',
+
+        ''
+    ]
+
+    # explict global
+    actual = autodocument(
+        options_app={"autodoc_pydantic_model_summary_list_order": "bysource",
+                     **enable},
+        **kwargs)
+    assert result == actual
+
+    # explict local
+    actual = autodocument(
+        options_app=enable,
+        options_doc={"model-summary-list-order": "bysource"},
+        **kwargs)
+    assert result == actual
+
+    # explicit local overwrite global
+    actual = autodocument(
+        options_app={
+            "autodoc_pydantic_model_summary_list_order": "alphabetical",
+            **enable},
+        options_doc={"model-summary-list-order": "bysource"},
+        **kwargs)
+    assert result == actual
+
+
 def test_autodoc_pydantic_model_hide_paramlist_false(autodocument):
     kwargs = dict(object_path='target.configuration.ModelHideParamList',
                   **KWARGS)

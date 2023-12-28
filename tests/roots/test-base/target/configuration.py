@@ -83,6 +83,15 @@ class ModelSummaryListOrder(BaseModel):
     @field_validator("field_a")
     def validate_a(cls, v):
         return v
+    
+class ModelSummaryListOrderInherited(ModelSummaryListOrder):
+    """ModelSummaryListOrderInherited."""
+
+    field_c: int = 1
+
+    @field_validator("field_c")
+    def validate_c(cls, v):
+        return v
 
 
 class ModelHideParamList(BaseModel):
