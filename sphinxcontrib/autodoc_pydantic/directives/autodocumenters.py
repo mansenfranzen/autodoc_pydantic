@@ -241,20 +241,19 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         if "inherited-members" in self.pydantic._documenter.options:
             self.hide_inherited_members()
-            
+
         super().document_members(*args, **kwargs)
 
     def hide_inherited_members(self):
         """If inherited-members is set, make sure that these are excluded from
         the class documenter, too"""
-        
+
         exclude_members = self.options["exclude-members"]
-        squash_set =  self.pydantic._documenter.options['inherited-members']
+        squash_set = self.pydantic._documenter.options['inherited-members']
         for cl in self.pydantic.model.__mro__:
             if cl.__name__ in squash_set:
                 for item in dir(cl):
                     exclude_members.add(item)
-                        
 
     def hide_config_member(self):
         """Add `Config` to `exclude_members` option.
@@ -440,7 +439,7 @@ class PydanticModelDocumenter(ClassDocumenter):
         base_class_validators = self._get_base_model_validators()
         inherited_validators = self._get_inherited_validators()
         references = base_class_validators + inherited_validators
-        
+
         sort_func = self._get_reference_sort_func()
         sorted_references = sorted(references, key=sort_func)
 
@@ -488,14 +487,14 @@ class PydanticModelDocumenter(ClassDocumenter):
         """Return the validators on the model being documented"""
 
         result = []
-        
+
         base_model_fields = set(self._get_base_model_fields())
         base_object = self.object_name
         references = self.pydantic.inspect.references.mappings
 
         # The validator is considered part of the base_object if
         # the field that is being validated is on the object being
-        # documented, if the method that is doing the validating 
+        # documented, if the method that is doing the validating
         # is on that object (even if that method is validating
         # an inherited field)
         for ref in references:
@@ -506,28 +505,30 @@ class PydanticModelDocumenter(ClassDocumenter):
                 if validator_class == base_object:
                     result.append(ref)
         return result
-        
 
     def _get_inherited_validators(self) -> List[str]:
-        """Return the validators on inherited fields to be documented, if any"""
-        
-        is_inherited_enabled = "inherited-members" in self.pydantic._documenter.options
+        """Return the validators on inherited fields to be documented,
+        if any"""
+
+        is_inherited_enabled = (
+            "inherited-members" in self.pydantic._documenter.options
+        )
         if not is_inherited_enabled:
             return []
-            
-        squash_set =  self.pydantic._documenter.options['inherited-members']
+
+        squash_set = self.pydantic._documenter.options['inherited-members']
         references = self.pydantic.inspect.references.mappings
         base_object = self.object_name
         already_documented = self._get_base_model_validators()
-        
+
         result = []
         for ref in references:
             if ref not in already_documented:
                 validator_class = ref.validator_ref.split(".")[-2]
-                if (validator_class != base_object) and (validator_class not in squash_set):
+                if ((validator_class != base_object) and (
+                        validator_class not in squash_set)):
                     result.append(ref)
         return result
-        
 
     def add_field_summary(self):
         """Adds summary section describing all fields.
@@ -536,10 +537,10 @@ class PydanticModelDocumenter(ClassDocumenter):
         if not self.pydantic.inspect.fields:
             return
 
-        base_class_fields = self._get_base_model_fields() 
+        base_class_fields = self._get_base_model_fields()
         inherited_fields = self._get_inherited_fields()
         valid_fields = base_class_fields + inherited_fields
-        
+
         sorted_fields = self._sort_summary_list(valid_fields)
 
         source_name = self.get_sourcename()
@@ -562,14 +563,15 @@ class PydanticModelDocumenter(ClassDocumenter):
     def _get_inherited_fields(self) -> List[str]:
         """Return the inherited fields if inheritance is enabled"""
 
-        is_inherited_enabled = "inherited-members" in self.pydantic._documenter.options
+        is_inherited_enabled = (
+            "inherited-members" in self.pydantic._documenter.options
+        )
         if not is_inherited_enabled:
             return []
-            
+
         fields = self.pydantic.inspect.fields.names
         base_class_fields = self.pydantic.get_filtered_member_names()
         return [field for field in fields if field not in base_class_fields]
-        
 
     def _sort_summary_list(self, names: Iterable[str]) -> List[str]:
         """Sort member names according to given sort order
