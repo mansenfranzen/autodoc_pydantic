@@ -408,7 +408,7 @@ class PydanticModelDocumenter(ClassDocumenter):
         sorted_members = self._sort_summary_list(members)
         return {name: idx for idx, name in enumerate(sorted_members)}
 
-    def _get_reference_sort_func(self, references: list[ValidatorFieldMap]) -> Callable:
+    def _get_reference_sort_func(self, references: List[ValidatorFieldMap]) -> Callable:
         """Helper function to create sorting function for instances of
         `ValidatorFieldMap` which first sorts by validator name and second by
         field name while respecting `OptionsSummaryListOrder`.
