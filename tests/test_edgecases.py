@@ -384,7 +384,6 @@ def test_autodoc_pydantic_model_show_validator_summary_inherited_without_inherit
         '   ModelShowValidatorsSummaryInherited.',
         '',
         '   :Validators:',
-        '      - :py:obj:`check <target.configuration.ModelShowValidatorsSummary.check>` » :py:obj:`field <target.configuration.ModelShowValidatorsSummaryInherited.field>`',
         '      - :py:obj:`check_inherited <target.configuration.ModelShowValidatorsSummaryInherited.check_inherited>` » :py:obj:`field <target.configuration.ModelShowValidatorsSummaryInherited.field>`',
         ''
     ]

@@ -40,7 +40,7 @@ from sphinxcontrib.autodoc_pydantic.directives.options.definition import (
 )
 from sphinxcontrib.autodoc_pydantic.directives.templates import to_collapsable
 from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector, \
-    ValidatorFieldMap
+    ValidatorFieldMap, ASTERISK_FIELD_NAME
 from sphinxcontrib.autodoc_pydantic.directives.options.composites import (
     AutoDocOptions
 )
@@ -408,7 +408,7 @@ class PydanticModelDocumenter(ClassDocumenter):
         sorted_members = self._sort_summary_list(members)
         return {name: idx for idx, name in enumerate(sorted_members)}
 
-    def _get_reference_sort_func(self) -> Callable:
+    def _get_reference_sort_func(self, references: list[ValidatorFieldMap]) -> Callable:
         """Helper function to create sorting function for instances of
         `ValidatorFieldMap` which first sorts by validator name and second by
         field name while respecting `OptionsSummaryListOrder`.
@@ -417,11 +417,12 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         """
 
-        all_validators = self.pydantic.inspect.validators.names
-        all_fields = self.pydantic.inspect.fields.names
+        all_fields = [ref.field_name for ref in references]
+        all_validators = [ref.validator_name for ref in references]
+        
         idx_validators = self._get_idx_mappings(all_validators)
         idx_fields = self._get_idx_mappings(all_fields)
-
+        
         def sort_func(reference: ValidatorFieldMap):
             return (
                 idx_validators.get(reference.validator_name, -1),
@@ -440,7 +441,7 @@ class PydanticModelDocumenter(ClassDocumenter):
         inherited_validators = self._get_inherited_validators()
         references = base_class_validators + inherited_validators
 
-        sort_func = self._get_reference_sort_func()
+        sort_func = self._get_reference_sort_func(references)
         sorted_references = sorted(references, key=sort_func)
 
         return sorted_references
@@ -578,7 +579,6 @@ class PydanticModelDocumenter(ClassDocumenter):
         `OptionsSummaryListOrder`.
 
         """
-
         sort_order = self.pydantic.options.get_value(name="summary-list-order",
                                                      prefix=True,
                                                      force_availability=True)
@@ -588,16 +588,21 @@ class PydanticModelDocumenter(ClassDocumenter):
                 return name
         elif sort_order == OptionsSummaryListOrder.BYSOURCE:
             def sort_func(name: str):
+                if name in self.analyzer.tagorder:
+                    return self.analyzer.tagorder.get(name)
                 for base in self.pydantic.get_base_class_names():
                     name_with_class = f"{base}.{name}"
                     if name_with_class in self.analyzer.tagorder:
                         return self.analyzer.tagorder.get(name_with_class)
+                # a pseudo-field name used by root validators
+                if name == ASTERISK_FIELD_NAME:
+                    return -1
         else:
             raise ValueError(
                 f"Invalid value `{sort_order}` provided for "
                 f"`summary_list_order`. Valid options are: "
                 f"{OptionsSummaryListOrder.values()}")
-
+            
         return sorted(names, key=sort_func)
 
     def _get_field_summary_line(self, field_name: str) -> str:
