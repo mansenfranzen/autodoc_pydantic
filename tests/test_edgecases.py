@@ -2,6 +2,7 @@
 
 """
 import copy
+import sys
 
 import pytest
 import sphinx.errors
@@ -10,6 +11,21 @@ from sphinx.transforms.post_transforms import ReferencesResolver
 from sphinxcontrib.autodoc_pydantic import PydanticModelDocumenter
 from tests.compatibility import rst_alias_class_directive, \
     TYPEHINTS_PREFIX, TYPING_MODULE_PREFIX_V1, module_doc_string_tab
+
+@pytest.fixture
+def pre_python310(): 
+    """Python 3.10 and later lazily creates an __annotations__ object for
+    classes which do not have any type annotations.  This prevents a corner-case
+    issue in python 3.9 and earlier. There is a workaround for the issue in 
+    the python docs, but this workaround not currently implemented inside the
+    source code of sphinx itself, and it likely won't be implemented in the 
+    older versions in the tox file. If a test is sensitive to this issue, this 
+    fixture can be used to have a second acceptable answer
+
+    https://docs.python.org/3/howto/annotations.html#accessing-the-annotations-dict-of-an-object-in-python-3-9-and-older
+    """
+    return sys.version_info < (3, 10)
+
 
 
 def test_not_json_compliant(autodocument):
@@ -368,7 +384,8 @@ def test_autodoc_pydantic_model_show_validator_summary_inherited_with_inherited(
 
 
 def test_autodoc_pydantic_model_show_validator_summary_inherited_without_inherited(
-        autodocument):
+        autodocument,
+        pre_python310):
     """Ensure that references to inherited validators point to parent class
     when `inherited-members` is not given.
 
@@ -388,13 +405,30 @@ def test_autodoc_pydantic_model_show_validator_summary_inherited_without_inherit
         ''
     ]
 
+    pre_python310_result = [
+        '',
+        '.. py:pydantic_model:: ModelShowValidatorsSummaryInherited',
+        '   :module: target.configuration',
+        '',
+        '   ModelShowValidatorsSummaryInherited.',
+        '',
+        '   :Validators:',
+        '      - :py:obj:`check <target.configuration.ModelShowValidatorsSummary.check>` » :py:obj:`field <target.configuration.ModelShowValidatorsSummaryInherited.field>`',
+        '      - :py:obj:`check_inherited <target.configuration.ModelShowValidatorsSummaryInherited.check_inherited>` » :py:obj:`field <target.configuration.ModelShowValidatorsSummaryInherited.field>`',
+        ''
+    ]
+
     actual = autodocument(
         documenter='pydantic_model',
         object_path='target.configuration.ModelShowValidatorsSummaryInherited',
         options_app={"autodoc_pydantic_model_show_validator_summary": True,
                      "autodoc_pydantic_model_members": True},
         deactivate_all=True)
-    assert result == actual
+    
+    if pre_python310:
+        assert (result == actual) or (pre_python310_result == actual)
+    else:
+        assert result == actual
 
 
 def test_autodoc_pydantic_field_list_validators_inherited_with_inherited(
