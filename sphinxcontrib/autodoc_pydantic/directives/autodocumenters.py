@@ -211,6 +211,7 @@ class PydanticModelDocumenter(ClassDocumenter):
         super().__init__(*args)
         exclude_members = self.options.setdefault("exclude-members", set())
         exclude_members.add("model_fields")
+        exclude_members.add("model_computed_fields")
         exclude_members.add("model_config")
         self.pydantic = PydanticAutoDoc(self, is_child=False)
 
