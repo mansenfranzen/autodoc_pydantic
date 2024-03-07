@@ -49,6 +49,7 @@ Documentation
 
 - Add pydantic to PyPI classifiers to improve discoverability.
 - Correct erdantic installation command in users coniguration section.
+- Improve users FAQ regarding documentation of inherited members.
 
 Contributors
 ~~~~~~~~~~~~
