@@ -9,7 +9,7 @@ from sphinx.transforms.post_transforms import ReferencesResolver
 
 from sphinxcontrib.autodoc_pydantic import PydanticModelDocumenter
 from tests.compatibility import rst_alias_class_directive, \
-    TYPEHINTS_PREFIX, TYPING_MODULE_PREFIX_V1, module_doc_string_tab
+    TYPEHINTS_PREFIX, TYPING_MODULE_PREFIX_V2, module_doc_string_tab
 
 
 def test_not_json_compliant(autodocument):
@@ -589,7 +589,7 @@ def test_non_field_attributes(autodocument):
         '',
         '   .. py:attribute:: ClassAttribute.class_attribute',
         '      :module: target.edgecase_non_field_attribute',
-        f'      :type: {TYPING_MODULE_PREFIX_V1}ClassVar[str]',
+        f'      :type: {TYPING_MODULE_PREFIX_V2}ClassVar[str]',
         '      :value: None',
         '',
         '      Dummy',
@@ -604,7 +604,7 @@ def test_non_field_attributes(autodocument):
     assert result == actual
 
 
-def test_non_field_attributes(autodocument):
+def test_nested_pydantic_model_as_class_attribute(autodocument):
     """Ensure that pydantic models can be documented as class attributes.
 
     This relates to #129.

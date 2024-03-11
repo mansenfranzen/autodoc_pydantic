@@ -273,6 +273,21 @@ class SettingsSignaturePrefix(BaseSettings):
     """SettingsSignaturePrefix."""
 
 
+class SettingsHideCustomiseSources(BaseSettings):
+    """SettingsHideCustomiseSources""" 
+
+    @classmethod
+    def settings_customise_sources(
+        cls,
+        settings_cls,
+        init_settings,
+        env_settings,
+        dotenv_settings,
+        file_secret_settings,
+    ):
+        return env_settings, init_settings, file_secret_settings
+
+
 class ConfigMembers(BaseModel):
     """ConfigUndocMembers."""
 

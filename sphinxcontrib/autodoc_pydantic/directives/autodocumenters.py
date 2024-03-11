@@ -212,6 +212,7 @@ class PydanticModelDocumenter(ClassDocumenter):
         exclude_members = self.options.setdefault("exclude-members", set())
         exclude_members.add("model_fields")
         exclude_members.add("model_config")
+        exclude_members.add("model_computed_fields")
         self.pydantic = PydanticAutoDoc(self, is_child=False)
 
     def document_members(self, *args, **kwargs):
@@ -570,6 +571,10 @@ class PydanticSettingsDocumenter(PydanticModelDocumenter):
     )
 
     pyautodoc_prefix = "settings"
+
+    def __init__(self, *args: Any) -> None:
+        super().__init__(*args)
+        self.options["exclude-members"].add("settings_customise_sources")
 
     @classmethod
     def can_document_member(cls,
