@@ -604,7 +604,7 @@ def test_non_field_attributes(autodocument):
     assert result == actual
 
 
-def test_non_field_attributes(autodocument):
+def test_nested_pydantic_model_as_class_attribute(autodocument):
     """Ensure that pydantic models can be documented as class attributes.
 
     This relates to #129.
