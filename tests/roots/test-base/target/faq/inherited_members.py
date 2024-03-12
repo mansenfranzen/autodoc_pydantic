@@ -19,9 +19,20 @@ class WithoutInheritedMembers(Base):
     field_on_subclass: str
     """Subclass field"""
 
+    @field_validator("field_on_subclass")
+    def validate_field_on_subclass(cls, v):
+        """Validate field_on_subclass"""
+        return v
+
+
 
 class WithInheritedMembers(Base):
     """With `:inherited-members: BaseModel`"""
 
     field_on_subclass: str
     """Subclass field"""
+
+    @field_validator("field_on_subclass")
+    def validate_field_on_subclass(cls, v):
+        """Validate field_on_subclass"""
+        return v
