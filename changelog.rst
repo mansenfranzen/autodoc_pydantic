@@ -4,14 +4,20 @@ Changelog
 v2.1.0 - 2024-01-XX
 -------------------
 
-This is a maintenance and bugfix release extending support to pydantic v2.5, 
+This is a maintenance and bugfix release extending support to pydantic v2.6, 
 sphinx v7.2 and python 3.12 while dropping support for python 3.7 which has 
 reached EOL.
+
+Features
+~~~~~~~~
+
+- Hide ``model_computed_fields`` for pydantic models.
+- Hide ``settings_customise_sources`` for pydantic settings.
 
 Testing
 ~~~~~~~
 
-- Add pydantic 2.2/2.3/2.4/2.5 to test matrix.
+- Add pydantic 2.2/2.3/2.4/2.5/2.6 to test matrix.
 - Add sphinx 7.1/7.2 to test matrix.
 - Add python 3.12 to test matrix.
 - Remove python 3.7 from test matrix.
@@ -19,6 +25,7 @@ Testing
 - Update ``conftest`` to use ``pathlib`` instead of older Sphinx 
   ``sphinx.testing.path`` module that is being deprecated for 
   forward-compatibility with newer Sphinx versions.
+- Fix duplicated teset name ``test_non_field_attributes``.
 
 Bugfix
 ~~~~~~
@@ -42,6 +49,7 @@ Documentation
 
 - Add pydantic to PyPI classifiers to improve discoverability.
 - Correct erdantic installation command in users coniguration section.
+- Improve users FAQ regarding documentation of inherited members.
 
 Contributors
 ~~~~~~~~~~~~
@@ -59,6 +67,12 @@ Contributors
 - Thanks to `caerulescens <https://github.com/caerulescens>`__ for providing a 
   PR to add pydantic to PyPI classifiers 
   `#179 <https://github.com/mansenfranzen/autodoc_pydantic/pull/179>`__.
+- Thanks to `spacemanspiff2007 <https://github.com/spacemanspiff2007>`__ for 
+  hiding ``model_computed_fields`` and ``settings_customise_sources`` 
+  `#202 <https://github.com/mansenfranzen/autodoc_pydantic/pull/202>`__.
+- Thanks to `tony <https://github.com/tony>`__ for fixing a typo in the 
+  erdantic docs
+  `#200 <https://github.com/mansenfranzen/autodoc_pydantic/pull/200>`__.
 
 v2.0.1 - 2023-08-01
 -------------------

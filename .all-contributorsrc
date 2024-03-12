@@ -398,6 +398,25 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "tasansal",
+      "name": "Altay Sansal",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13684161?v=4",
+      "profile": "https://github.com/tasansal",
+      "contributions": [
+        "ideas"
+      ]
+    },
+    {
+      "login": "tony",
+      "name": "Tony Narlock",
+      "avatar_url": "https://avatars.githubusercontent.com/u/26336?v=4",
+      "profile": "https://www.git-pull.com",
+      "contributions": [
+        "code",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,

@@ -47,7 +47,7 @@ In contrast, it also shows how standard sphinx autodoc displays the same example
 Entity-Relationship Diagram
 ----------------------------
 
-This example shows the redered output of a pydantic model including an Entity-Relationship Diagram.
+This example shows the rendered output of a pydantic model including an Entity-Relationship Diagram.
 
 
 .. tabs::

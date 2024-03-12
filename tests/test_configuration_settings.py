@@ -1146,3 +1146,32 @@ def test_autodoc_pydantic_settings_hide_reused_validator_false(autodocument):
                      "undoc-members": None},
         **kwargs)
     assert result == actual
+
+
+def test_autodoc_pydantic_settings_hide_settings_customise_sources(autodocument):
+    """Ensure that `settings_customise_sources` is hidden if provided.
+
+    This relates to #201.
+
+    """
+
+    kwargs = dict(
+        object_path='target.configuration.SettingsHideCustomiseSources',
+        **KWARGS)
+
+    result = [
+        '', 
+        '.. py:pydantic_settings:: SettingsHideCustomiseSources', 
+        '   :module: target.configuration', 
+        '', 
+        '   SettingsHideCustomiseSources', 
+        ''
+    ]
+
+    # explict global
+    actual = autodocument(
+        options_app={"autodoc_pydantic_settings_show_validator_members": True},
+        options_doc={"members": None,
+                     "undoc-members": None},
+        **kwargs)
+    assert result == actual

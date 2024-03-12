@@ -6,7 +6,6 @@ import importlib
 from typing import Tuple, List
 import re
 
-import pydantic
 import sphinx
 from sphinx.addnodes import desc_sig_punctuation, desc_annotation, pending_xref
 
