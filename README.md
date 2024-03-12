@@ -7,7 +7,7 @@
 [![Coverage](https://img.shields.io/codecov/c/gh/mansenfranzen/autodoc_pydantic?style=for-the-badge)](https://app.codecov.io/gh/mansenfranzen/autodoc_pydantic)
 
 [![Downloads](https://img.shields.io/pypi/dm/autodoc_pydantic?color=fe7d37&style=for-the-badge)](https://pypistats.org/packages/autodoc-pydantic)<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-42-orange.svg?style=for-the-badge)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-43-orange.svg?style=for-the-badge)](#contributors)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 
@@ -112,6 +112,9 @@ Thanks to great open source projects [sphinx](https://www.sphinx-doc.org/en/mast
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/rafa-guedes"><img src="https://avatars.githubusercontent.com/u/7799184?v=4?s=100" width="100px;" alt="Rafael Guedes"/><br /><sub><b>Rafael Guedes</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/commits?author=rafa-guedes" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/caerulescens"><img src="https://avatars.githubusercontent.com/u/29284192?v=4?s=100" width="100px;" alt="Andrew Linzie"/><br /><sub><b>Andrew Linzie</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/commits?author=caerulescens" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/tasansal"><img src="https://avatars.githubusercontent.com/u/13684161?v=4?s=100" width="100px;" alt="Altay Sansal"/><br /><sub><b>Altay Sansal</b></sub></a><br /><a href="#ideas-tasansal" title="Ideas, Planning, & Feedback">🤔</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://www.git-pull.com"><img src="https://avatars.githubusercontent.com/u/26336?v=4?s=100" width="100px;" alt="Tony Narlock"/><br /><sub><b>Tony Narlock</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/commits?author=tony" title="Code">💻</a> <a href="https://github.com/mansenfranzen/autodoc_pydantic/commits?author=tony" title="Documentation">📖</a></td>
     </tr>
   </tbody>
 </table>
