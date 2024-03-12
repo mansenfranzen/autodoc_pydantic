@@ -69,6 +69,9 @@ Contributors
 - Thanks to `spacemanspiff2007 <https://github.com/spacemanspiff2007>`__ for 
   hiding ``model_computed_fields`` and ``settings_customise_sources`` 
   `#202 <https://github.com/mansenfranzen/autodoc_pydantic/pull/202>`__.
+- Thanks to `tony <https://github.com/tony>`__ for fixing a typo in the 
+  erdantic docs
+  `#200 <https://github.com/mansenfranzen/autodoc_pydantic/pull/200>`__.
 
 v2.0.1 - 2023-08-01
 -------------------
