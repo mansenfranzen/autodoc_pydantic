@@ -71,12 +71,16 @@ irrelevant members are ignored:
 
       .. code-block::
 
-         .. automodule:: target.faq.inherited_members
+         .. autopydantic_model:: target.faq.inherited_members.WithoutInheritedMembers
+
+         .. autopydantic_model:: target.faq.inherited_members.WithInheritedMembers
             :inherited-members: BaseModel
 
    .. tab:: *rendered output*
 
-      .. automodule:: target.faq.inherited_members
+      .. autopydantic_model:: target.faq.inherited_members.WithoutInheritedMembers
+         
+      .. autopydantic_model:: target.faq.inherited_members.WithInheritedMembers
          :inherited-members: BaseModel
 
 .. note::
