@@ -240,7 +240,7 @@ class PydanticModelDocumenter(ClassDocumenter):
         if self.pydantic.options.is_true("hide-reused-validator", True):
             self.hide_reused_validators()
 
-        if "inherited-members" in self.pydantic._documenter.options:
+        if self.pydantic.options.exists("inherited-members"):
             self.hide_inherited_members()
 
         super().document_members(*args, **kwargs)
