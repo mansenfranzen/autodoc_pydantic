@@ -218,6 +218,7 @@ class PydanticModelDocumenter(ClassDocumenter):
         super().__init__(*args)
         exclude_members = self.options.setdefault("exclude-members", set())
         exclude_members.add("model_fields")
+        exclude_members.add("model_config")
         exclude_members.add("model_computed_fields")
         self.pydantic = PydanticAutoDoc(self, is_child=False)
 
@@ -229,9 +230,6 @@ class PydanticModelDocumenter(ClassDocumenter):
         self.pydantic.options.set_members_all()
         if self.options.get("undoc-members") is False:
             self.options.pop("undoc-members")
-
-        if self.pydantic.options.is_false("show-config-member", True):
-            self.hide_config_member()
 
         if self.pydantic.options.is_false("show-validator-members", True):
             self.hide_validator_members()
@@ -254,13 +252,6 @@ class PydanticModelDocumenter(ClassDocumenter):
             if cl.__name__ in squash_set:
                 for item in dir(cl):
                     exclude_members.add(item)
-
-    def hide_config_member(self):
-        """Add `Config` to `exclude_members` option.
-
-        """
-
-        self.options["exclude-members"].add("model_config")
 
     def hide_validator_members(self):
         """Add validator names to `exclude_members`.
