@@ -134,7 +134,7 @@ class PydanticAutoDoc:
         else:
             return field_name
 
-    def get_filtered_member_names(self) -> Set[str]:
+    def get_non_inherited_members(self) -> Set[str]:
         """Return all member names of autodocumented object which are
         prefiltered to exclude inherited members.
 
@@ -167,10 +167,10 @@ class PydanticAutoDoc:
         base_class_names = self.get_base_class_names()
 
         is_base_class = class_name in base_class_names
-        is_inherited_enabled = "inherited-members" in self._documenter.options
+        is_inherited = self.options.exists("inherited-members")
         is_member = validator_name in self.inspect.validators.names
 
-        if is_member and is_base_class and is_inherited_enabled:
+        if is_member and is_base_class and is_inherited:
             ref_parts[-2] = self.model.__name__
             return ".".join(ref_parts)
         else:
@@ -547,9 +547,9 @@ class PydanticModelDocumenter(ClassDocumenter):
         """Returns all field names that are valid members of pydantic model.
 
         """
-        
+
         fields = self.pydantic.inspect.fields.names
-        valid_members = self.pydantic.get_filtered_member_names()
+        valid_members = self.pydantic.get_non_inherited_members()
         return [field for field in fields if field in valid_members]
 
     def _get_inherited_fields(self) -> List[str]:
@@ -559,7 +559,7 @@ class PydanticModelDocumenter(ClassDocumenter):
             return []
 
         fields = self.pydantic.inspect.fields.names
-        base_class_fields = self.pydantic.get_filtered_member_names()
+        base_class_fields = self.pydantic.get_non_inherited_members()
         return [field for field in fields if field not in base_class_fields]
 
     def _sort_summary_list(self, names: Iterable[str]) -> List[str]:
