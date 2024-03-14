@@ -152,7 +152,7 @@ class DirectiveOptions:
         """
 
         return self.get_value(name=name, prefix=prefix) is True
-    
+
     def exists(self, name: str, prefix: bool = False) -> bool:
         """Check if option with `name` is set. First, looks for explicit
         directive option values (e.g. :member-order:) which have highest
