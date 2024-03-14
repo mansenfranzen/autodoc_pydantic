@@ -80,10 +80,10 @@ Contributors
   erdantic docs
   `#200 <https://github.com/mansenfranzen/autodoc_pydantic/pull/200>`__.
 - Thanks to `j-carson <https://github.com/j-carson>`__ for providing a PR
-  fixing 
-    - a bug while sorting members `#137 <https://github.com/mansenfranzen/autodoc_pydantic/issues/137>`__.
-    - broken CI pipeline with Sphinx 4.*
-    - removing deprecation warning `#178 <https://github.com/mansenfranzen/autodoc_pydantic/issues/178>`__.
+  that: 
+  - fixes a bug while sorting members `#137 <https://github.com/mansenfranzen/autodoc_pydantic/issues/137>`__.
+  - fixes broken CI pipeline with Sphinx 4.*
+  - removing deprecation warning `#178 <https://github.com/mansenfranzen/autodoc_pydantic/issues/178>`__.
 
 v2.0.1 - 2023-08-01
 -------------------
