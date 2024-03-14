@@ -417,6 +417,15 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "huxuan",
+      "name": "Xuan (Sean) Hu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/726061?v=4",
+      "profile": "https://huxuan.org/",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
