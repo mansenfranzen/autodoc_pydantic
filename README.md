@@ -7,7 +7,7 @@
 [![Coverage](https://img.shields.io/codecov/c/gh/mansenfranzen/autodoc_pydantic?style=for-the-badge)](https://app.codecov.io/gh/mansenfranzen/autodoc_pydantic)
 
 [![Downloads](https://img.shields.io/pypi/dm/autodoc_pydantic?color=fe7d37&style=for-the-badge)](https://pypistats.org/packages/autodoc-pydantic)<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-43-orange.svg?style=for-the-badge)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-44-orange.svg?style=for-the-badge)](#contributors)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 
@@ -115,6 +115,7 @@ Thanks to great open source projects [sphinx](https://www.sphinx-doc.org/en/mast
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://www.git-pull.com"><img src="https://avatars.githubusercontent.com/u/26336?v=4?s=100" width="100px;" alt="Tony Narlock"/><br /><sub><b>Tony Narlock</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/commits?author=tony" title="Code">💻</a> <a href="https://github.com/mansenfranzen/autodoc_pydantic/commits?author=tony" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://huxuan.org/"><img src="https://avatars.githubusercontent.com/u/726061?v=4?s=100" width="100px;" alt="Xuan (Sean) Hu"/><br /><sub><b>Xuan (Sean) Hu</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/issues?q=author%3Ahuxuan" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>
