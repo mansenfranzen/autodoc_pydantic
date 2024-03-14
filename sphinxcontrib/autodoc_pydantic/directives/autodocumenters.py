@@ -500,24 +500,26 @@ class PydanticModelDocumenter(ClassDocumenter):
         """Return the validators on inherited fields to be documented,
         if any"""
 
-        is_inherited_enabled = (
-            "inherited-members" in self.pydantic._documenter.options
-        )
-        if not is_inherited_enabled:
+        if not self.pydantic.options.exists("inherited-members"):
             return []
 
-        squash_set = self.pydantic._documenter.options['inherited-members']
+        squash_set = self.options['inherited-members']
         references = self.pydantic.inspect.references.mappings
         base_object = self.object_name
         already_documented = self._get_base_model_validators()
 
         result = []
         for ref in references:
-            if ref not in already_documented:
-                validator_class = ref.validator_ref.split(".")[-2]
-                if ((validator_class != base_object) and (
-                        validator_class not in squash_set)):
-                    result.append(ref)
+            if ref in already_documented:
+                continue
+
+            validator_class = ref.validator_ref.split(".")[-2]
+            foreign_validator = validator_class != base_object
+            not_ignored = validator_class not in squash_set
+
+            if foreign_validator and not_ignored:
+                result.append(ref)
+
         return result
 
     def add_field_summary(self):
@@ -545,7 +547,7 @@ class PydanticModelDocumenter(ClassDocumenter):
         """Returns all field names that are valid members of pydantic model.
 
         """
-
+        
         fields = self.pydantic.inspect.fields.names
         valid_members = self.pydantic.get_filtered_member_names()
         return [field for field in fields if field in valid_members]
@@ -553,10 +555,7 @@ class PydanticModelDocumenter(ClassDocumenter):
     def _get_inherited_fields(self) -> List[str]:
         """Return the inherited fields if inheritance is enabled"""
 
-        is_inherited_enabled = (
-            "inherited-members" in self.pydantic._documenter.options
-        )
-        if not is_inherited_enabled:
+        if not self.pydantic.options.exists("inherited-members"):
             return []
 
         fields = self.pydantic.inspect.fields.names
