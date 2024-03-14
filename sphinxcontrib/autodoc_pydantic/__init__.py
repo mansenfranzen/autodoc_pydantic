@@ -77,9 +77,6 @@ def add_configuration_values(app: Sphinx):
     json_strategy = OptionsJsonErrorStrategy.WARN
     summary_list_order = OptionsSummaryListOrder.ALPHABETICAL
 
-    add(f'{stem}config_signature_prefix', "model", True, str)
-    add(f'{stem}config_members', True, True, bool)
-
     add(f'{stem}settings_show_json', True, True, bool)
     add(f'{stem}settings_show_json_error_strategy', json_strategy, True, str)
     add(f'{stem}settings_show_config_summary', True, True, bool)

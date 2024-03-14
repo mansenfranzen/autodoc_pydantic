@@ -17,15 +17,16 @@ Features
 Testing
 ~~~~~~~
 
-- Add pydantic 2.2/2.3/2.4/2.5/2.6 to test matrix.
-- Add sphinx 7.1/7.2 to test matrix.
-- Add python 3.12 to test matrix.
+- Add pydantic 2.2/2.3/2.4/2.5/2.6 and sphinx 7.1/7.2 and python 3.12 
+  to test matrix.
 - Remove python 3.7 from test matrix.
 - Remove obsolete `skip ci` condition from github actions.
 - Update ``conftest`` to use ``pathlib`` instead of older Sphinx 
   ``sphinx.testing.path`` module that is being deprecated for 
   forward-compatibility with newer Sphinx versions.
 - Fix duplicated teset name ``test_non_field_attributes``.
+- Add tests to cover inheritance behavior given ``inherited-members`` for 
+  field and validator members and summaries. 
 
 Bugfix
 ~~~~~~
@@ -37,12 +38,17 @@ Bugfix
   exception in some environments.  This should be a namespace package per
   `PEP 420 <https://peps.python.org/pep-0420/>`__ without ``__init_.py`` to 
   match with other extensions.
+- Removing deprecation warning ``sphinx.util.typing.stringify``.
+- Fix bug a bug while sorting members `#137 <https://github.com/mansenfranzen/autodoc_pydantic/issues/137>`__.
 
 Internal
 ~~~~~~~~
 
 - Fix deprecation warning for tuple interface of ``ObjectMember`` in 
   ``directives/autodocumenters.py``.
+- Remove obsolete configuration options which have been removed in v2. 
+- Introduce ``pydantic.options.exists`` to check for existence of sphinx 
+  options.
 
 Documentation
 ~~~~~~~~~~~~~
@@ -73,6 +79,11 @@ Contributors
 - Thanks to `tony <https://github.com/tony>`__ for fixing a typo in the 
   erdantic docs
   `#200 <https://github.com/mansenfranzen/autodoc_pydantic/pull/200>`__.
+- Thanks to `j-carson <https://github.com/j-carson>`__ for providing a PR
+  that: 
+  - fixes a bug while sorting members `#137 <https://github.com/mansenfranzen/autodoc_pydantic/issues/137>`__.
+  - fixes broken CI pipeline with Sphinx 4.*
+  - removing deprecation warning `#178 <https://github.com/mansenfranzen/autodoc_pydantic/issues/178>`__.
 
 v2.0.1 - 2023-08-01
 -------------------

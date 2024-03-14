@@ -3,6 +3,7 @@ differences between different sphinx versions.
 
 """
 import importlib
+import sys
 from typing import Tuple, List
 import re
 
@@ -169,8 +170,23 @@ def get_optional_type_expected(field_type: str):
     return field_type  # 'Optional[int]'
 
 
+def pre_python310(): 
+    """Python 3.10 and later lazily creates an __annotations__ object for
+    classes which do not have any type annotations.  This prevents a corner-case
+    issue in python 3.9 and earlier. There is a workaround for the issue in 
+    the python docs, but this workaround not currently implemented inside the
+    source code of sphinx itself, and it likely won't be implemented in the 
+    older versions in the tox file. If a test is sensitive to this issue, this 
+    fixture can be used to have a second acceptable answer
+
+    https://docs.python.org/3/howto/annotations.html#accessing-the-annotations-dict-of-an-object-in-python-3-9-and-older
+    """
+    return sys.version_info < (3, 10)
+
+
 TYPING_MODULE_PREFIX_V1 = typing_module_prefix_v1()
 TYPING_MODULE_PREFIX_V2 = typing_module_prefix_v2()
 TYPEHINTS_PREFIX = typehints_prefix()
 OPTIONAL_INT = TYPING_MODULE_PREFIX_V1 + get_optional_type_expected(
     'Optional[int]')
+PYTHON_LT_310 = pre_python310()

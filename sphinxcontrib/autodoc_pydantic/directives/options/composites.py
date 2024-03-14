@@ -112,9 +112,11 @@ class DirectiveOptions:
             return self.parent.options[name]
         elif force_availability or self.is_available(name):
             return self.get_app_cfg_by_name(name)
+        else:
+            return NONE
 
     def is_false(self, name: str, prefix: bool = False) -> bool:
-        """Get option value for given `name`. First, looks for explicit
+        """Check if option with `name` is False. First, looks for explicit
         directive option values (e.g. :member-order:) which have highest
         priority. Second, if no directive option is given, get the default
         option value provided via the app environment configuration.
@@ -133,7 +135,7 @@ class DirectiveOptions:
         return self.get_value(name=name, prefix=prefix) is False
 
     def is_true(self, name: str, prefix: bool = False) -> bool:
-        """Get option value for given `name`. First, looks for explicit
+        """Check if option with `name` is True. First, looks for explicit
         directive option values (e.g. :member-order:) which have highest
         priority. Second, if no directive option is given, get the default
         option value provided via the app environment configuration.
@@ -150,6 +152,25 @@ class DirectiveOptions:
         """
 
         return self.get_value(name=name, prefix=prefix) is True
+
+    def exists(self, name: str, prefix: bool = False) -> bool:
+        """Check if option with `name` is set. First, looks for explicit
+        directive option values (e.g. :member-order:) which have highest
+        priority. Second, if no directive option is given, get the default
+        option value provided via the app environment configuration.
+
+        Enforces result to be either True or False.
+
+        Parameters
+        ----------
+        name: str
+            Name of the option.
+        prefix: bool
+            If True, add `pyautodoc_prefix` to name.
+
+        """
+
+        return self.get_value(name=name, prefix=prefix) is not NONE
 
     def set_default_option(self, name: str):
         """Set default option value for given `name` from app environment
