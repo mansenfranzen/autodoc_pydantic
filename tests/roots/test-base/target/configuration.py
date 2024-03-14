@@ -44,6 +44,15 @@ class ModelShowValidatorsSummaryInherited(ModelShowValidatorsSummary):
     def check_inherited(cls, v) -> str:
         return v
 
+class ModelShowValidatorsSummaryInheritedWithField(ModelShowValidatorsSummary):
+    """ModelShowValidatorsSummaryInheritedWithField."""
+
+    field2: int = 2
+
+    @field_validator("field")
+    def check_inherited(cls, v) -> str:
+        return v
+
 
 class ModelShowValidatorsSummaryMultipleFields(BaseModel):
     """ModelShowValidatorsSummaryMultipleFields."""
