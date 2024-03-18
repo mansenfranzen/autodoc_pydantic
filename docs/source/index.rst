@@ -23,7 +23,8 @@ Features
 - 📋 shows summary section for model configuration, fields and validators
 - 👀 hides overloaded and redundant model class signature
 - 🔱 visualizes entity-relationship-diagrams for class hierarchies
-- 🍀 Supports `pydantic >= 1.5.0` and `sphinx >= 4.0.0`
+- 🔨 allows complete configurability on global and per-model level
+- 🍀 supports `pydantic >= 1.5.0` and `sphinx >= 4.0.0`
 
 To see those features in action, jump over to the :ref:`example <showcase>` section comparing
 the appearance of standard sphinx autodoc with **autodoc_pydantic**.
@@ -86,7 +87,7 @@ and all `contributors <https://github.com/mansenfranzen/autodoc_pydantic/tree/re
 .. |DownloadsBadge| image:: https://img.shields.io/pypi/dm/autodoc_pydantic?color=fe7d37&style=flat
 .. _DownloadsBadge: https://pypistats.org/packages/autodoc-pydantic
 
-.. |ContributersBadge| image:: https://img.shields.io/badge/all_contributors-41-orange.svg?style=flat
+.. |ContributersBadge| image:: https://img.shields.io/badge/all_contributors-47-orange.svg?style=flat
 .. _ContributersBadge: https://github.com/mansenfranzen/autodoc_pydantic/tree/refactor_inspection#acknowledgements
 
 .. |CoverageBadge| image:: https://img.shields.io/codecov/c/gh/mansenfranzen/autodoc_pydantic?style=flat
