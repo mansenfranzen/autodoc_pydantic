@@ -1,7 +1,7 @@
 ![Autodoc Pydantic](https://raw.githubusercontent.com/mansenfranzen/autodoc_pydantic/main/docs/source/material/logo_black.svg)
 
 [![PyPI version](https://img.shields.io/pypi/v/autodoc_pydantic?style=for-the-badge)](https://pypi.org/project/autodoc-pydantic/)
-![Python](https://img.shields.io/badge/python-3.7+-blue.svg?style=for-the-badge)
+![Python](https://img.shields.io/badge/python-3.8+-blue.svg?style=for-the-badge)
 
 [![Master](https://img.shields.io/github/actions/workflow/status/mansenfranzen/autodoc_pydantic/tests.yml?branch=main&style=for-the-badge)](https://github.com/mansenfranzen/autodoc_pydantic/actions/workflows/tests.yml)
 [![Coverage](https://img.shields.io/codecov/c/gh/mansenfranzen/autodoc_pydantic?style=for-the-badge)](https://app.codecov.io/gh/mansenfranzen/autodoc_pydantic)
@@ -29,7 +29,8 @@ Don't worry - just `pip install autodoc_pydantic` ☺.
 - 📋 shows summary section for model configuration, fields and validators
 - 👀 hides overloaded and redundant model class signature
 - 🔱 visualizes entity-relationship-diagrams for class hierarchies
-- 🍀 Supports `pydantic >= 1.5.0` and `sphinx >= 4.0.0`
+- 🔨 allows complete configurability on global and per-model level
+- 🍀 supports `pydantic >= 1.5.0` and `sphinx >= 4.0.0`
 
 ## Documentation
 

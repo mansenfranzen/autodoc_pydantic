@@ -1,7 +1,7 @@
 Changelog
 =========
 
-v2.1.0 - 2024-01-XX
+v2.1.0 - 2024-03-18
 -------------------
 
 This is a maintenance and bugfix release extending support to pydantic v2.6, 
