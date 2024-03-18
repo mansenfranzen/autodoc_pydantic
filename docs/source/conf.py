@@ -31,7 +31,7 @@ copyright = '2023, Franz Wöllert'
 author = 'Franz Wöllert'
 
 # The full version, including alpha/beta/rc tags
-release = '2.1.0'
+release = '2.1.0' # x-release-please-version
 
 # -- General configuration ---------------------------------------------------
 

@@ -1,0 +1,11 @@
+{
+    "release-type": "python",
+    "target-branch": "main",
+    "packages": {
+        ".": {
+            "extra-files": [
+                "docs/source/conf.py"
+            ]
+        }
+    }
+}
