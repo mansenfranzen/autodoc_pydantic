@@ -1083,41 +1083,41 @@ This is the initial of autodoc_pydantic.
 ### Added
 
 -   Autodocumenter `PydanticModelDocumenter` with configurations:
--   `model_show_json`
--   `model_show_config_member`
--   `model_show_config_summary`
--   `model_show_validator_members`
--   `model_show_validator_summary`
--   `model_hide_paramlist`
--   `model_undoc_members`
--   `model_members`
--   `model_member_order`
--   `model_signature_prefix`
+    -   `model_show_json`
+    -   `model_show_config_member`
+    -   `model_show_config_summary`
+    -   `model_show_validator_members`
+    -   `model_show_validator_summary`
+    -   `model_hide_paramlist`
+    -   `model_undoc_members`
+    -   `model_members`
+    -   `model_member_order`
+    -   `model_signature_prefix`
 -   Autodocumenter `PydanticSettingsDocumenter` with configurations:
--   `settings_show_json`
--   `settings_show_config_member`
--   `settings_show_config_summary`
--   `settings_show_validator_members`
--   `settings_show_validator_summary`
--   `settings_hide_paramlist`
--   `settings_undoc_members`
--   `settings_members`
--   `settings_member_order`
--   `settings_signature_prefix`
+    -   `settings_show_json`
+    -   `settings_show_config_member`
+    -   `settings_show_config_summary`
+    -   `settings_show_validator_members`
+    -   `settings_show_validator_summary`
+    -   `settings_hide_paramlist`
+    -   `settings_undoc_members`
+    -   `settings_members`
+    -   `settings_member_order`
+    -   `settings_signature_prefix`
 -   Autodocumenter `PydanticFieldDocumenter` with configurations:
--   `field_list_validators`
--   `field_doc_policy`
--   `field_show_constraints`
--   `field_show_alias`
--   `field_show_default`
--   `field_signature_prefix`
+    -   `field_list_validators`
+    -   `field_doc_policy`
+    -   `field_show_constraints`
+    -   `field_show_alias`
+    -   `field_show_default`
+    -   `field_signature_prefix`
 -   Autodocumenter `PydanticValidatorDocumenter` with configurations:
--   `validator_signature_prefix`
--   `validator_replace_signature`
--   `validator_list_fields`
+    -   `validator_signature_prefix`
+    -   `validator_replace_signature`
+    -   `validator_list_fields`
 -   Autodocumenter `PydanticConfigClassDocumenter` with configurations:
--   `config_signature_prefix`
--   `config_members`
+    -   `config_signature_prefix`
+    -   `config_members`
 -   Directives `PydanticModel`, `PydanticSettings`, `PydanticField`,
     `PydanticValidator`
 
