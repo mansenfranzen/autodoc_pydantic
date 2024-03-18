@@ -1,6 +1,43 @@
 {
     "release-type": "python",
     "target-branch": "main",
+    "changelog-sections": [
+        {
+            "type": "feat",
+            "section": "✨ Features",
+            "hidden": false
+        },
+        {
+            "type": "fix",
+            "section": "🐛 Bug Fixes",
+            "hidden": false
+        },
+        {
+            "type": "perf",
+            "section": "⚡ Performance Improvements",
+            "hidden": false
+        },
+        {
+            "type": "chore",
+            "section": "🤡 Other Changes",
+            "hidden": false
+        },
+        {
+            "type": "docs",
+            "section": "📖 Documentation",
+            "hidden": false
+        },
+        {
+            "type": "ci",
+            "section": "🚀 CI/CD Pipeline",
+            "hidden": false
+        },
+        {
+            "type": "tests",
+            "section": "🔧 Testing",
+            "hidden": false
+        }
+    ],
     "packages": {
         ".": {
             "extra-files": [
