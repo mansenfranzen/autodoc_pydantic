@@ -1,8 +1,6 @@
 name: Semantic Tests
 on:
   push:
-    branches:
-      - main
     branches-ignore:
       - release-please--branches--main
   pull_request:
