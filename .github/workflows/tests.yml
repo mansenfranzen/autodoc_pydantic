@@ -1,4 +1,4 @@
-name: ci
+name: Semantic Tests
 on:
   push:
     branches:
@@ -8,6 +8,7 @@ on:
 
 jobs:
   test-stable-versions:
+    environment: Tests
     strategy:
       fail-fast: false
       matrix:
@@ -57,13 +58,14 @@ jobs:
       - run: sudo apt-get install graphviz graphviz-dev
       - run: pip install tox
       - run: tox -e pydantic${{ matrix.pydantic_version }}-sphinx${{ matrix.sphinx_version }}
-      - name: Codecov
-        uses: codecov/codecov-action@v2.1.0
+      - name: Code Coverage
+        uses: codecov/codecov-action@v4
         with:
           fail_ci_if_error: true
+          token: ${{ secrets.CODACY_PROJECT_TOKEN }}
 
   test-latest-version:
-    environment: ci
+    environment: Tests
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
@@ -79,7 +81,7 @@ jobs:
           fail_ci_if_error: true
 
   test-no-erdantic-version:
-    environment: ci
+    environment: Tests
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
@@ -90,7 +92,7 @@ jobs:
       - run: tox -e no_erdantic
 
   test-development-versions-deps:
-    environment: ci
+    environment: Tests
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
@@ -104,7 +106,7 @@ jobs:
       - run: echo "Done"
 
   test-linter:
-    environment: ci
+    environment: Tests
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
