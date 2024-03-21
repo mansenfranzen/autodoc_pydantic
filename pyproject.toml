@@ -24,17 +24,24 @@ python = ">=3.8,<4.0.0"
 Sphinx = ">=4.0"
 pydantic = ">=2.0,<3.0.0"
 pydantic-settings = ">=2.0,<3.0.0"
-
 importlib-metadata = { version = ">1", markers = "python_version <= '3.8'" }
 
+# poetry dependency groups are not used on purpose because they are not natively
+# supported with tox. Hence, test/doc dependencies are managed via extras.
+# See https://github.com/orgs/python-poetry/discussions/4307
+
+# extras docs
 sphinx-rtd-theme = { version = "^1.0", optional = true }
 sphinx-tabs = { version = "^3", optional = true }
 sphinx-copybutton = { version = "^0.4", optional = true }
 sphinxcontrib-mermaid = { version = "^0.7", optional = true }
+
+# extras tests
 pytest = {version = "^7", optional = true }
 coverage = { version ="^7", optional = true }
 flake8 = { version = "^3", optional = true }
-tox = { version ="^3", optional = true }
+
+# extras erdantic
 erdantic = { version ="^0.6", optional = true }
 
 [tool.pytest.ini_options]
@@ -47,16 +54,8 @@ docs = ["sphinx-rtd-theme",
         "sphinxcontrib-mermaid"]
 
 test = ["pytest",
-        "coverage"]
-
-dev = ["pytest",
-       "coverage",
-       "sphinx-rtd-theme",
-       "sphinx-tabs",
-       "sphinx-copybutton",
-       "sphinxcontrib-mermaid",
-       "flake8",
-       "tox"]
+        "coverage",
+        "flake8"]
 
 erdantic = ["erdantic"]
 
