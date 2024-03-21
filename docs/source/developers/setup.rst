@@ -20,24 +20,13 @@ Cloning repository
    git clone https://github.com/mansenfranzen/autodoc_pydantic.git
    cd autodoc_pydantic
 
-.. note::
-
-   In June 2023, **pydantic v2** was released. This introduced backwards
-   incompatible API and behavioral changes in comparison to pydantic v1. Hence,
-   **autodoc_pydantic** required substantial adjustments, too. In order to keep
-   the codebase clean and concise, separate versions for v1 and v2 were
-   created. The v2 branch will eventually become the new `main`_ branch while
-   the code for v1 remains in the `main-1.x`_ branch.
-
-   In a nutshell, if you want to work on v1, please checkout the corresponding
-   `main-1.x`_ branch. Otherwise, refer to the `main`_ branch.
 
 Creating environment
 --------------------
 
 .. code-block:: bash
 
-   poetry install -E dev -E erdantic
+   poetry install --all-extras
 
 -----------------------
 Running & writing tests
@@ -52,14 +41,24 @@ with pytest, run ``poetry run pytest``.
 tox
 ---
 
-For more sophisticated testing, you can use tox for different test
-environments. A test environment is characterized by varying versions of
-*autodoc_pydantic*'s dependencies like pydantic, sphinx and sphinx-tabs:
+For more sophisticated testing, use `tox <https://tox.wiki/en/latest>`_ 
+for different test environments. Test environments are characterized 
+by varying versions of python and *autodoc_pydantic*'s dependencies 
+like pydantic and sphinx. This is critical for ensuring library 
+compatibility across different versions of python and pydantic and 
+sphinx.
 
-- Test a specific environment: ``poetry run tox -e py38-pydantic17-sphinx34``
-- Test the latest stable versions from pypi: ``poetry run tox -e latest``
-- Test the current developer versions from git repositories: ``poetry run tox -e development``
-- Test all available environments: ``poetry run tox`` (not recommended)
+**Usage:**
+
+First, make sure you have tox installed globally via ``pipx`` or ``pip`` 
+(see `here <https://tox.wiki/en/latest/installation.html>`_):
+
+Second, to invoke the test suite with tox, run one of the following commands:
+
+- Test a specific environment: ``tox -e py311-pydantic26-sphinx71``
+- Test the latest stable versions from pypi: ``tox -e latest``
+- Test the current developer versions from git repositories: ``tox -e development``
+- Test all available environments: ``tox`` (not recommended)
 
 Please visit the ``tox.ini`` for all available test environments.
 
@@ -73,6 +72,7 @@ Please visit the ``tox.ini`` for all available test environments.
    4. run tests within virtual environment via pytest
    5. provide test coverage report
 
+   This approach is chosen in the corresponding CI/CD pipeline.
 
 -----------------------
 Building & writing docs
