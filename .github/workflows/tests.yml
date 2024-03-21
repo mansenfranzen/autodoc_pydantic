@@ -1,11 +1,13 @@
 name: Semantic Tests
 on:
   push:
-    branches-ignore:
-      - release-please--branches--main
+    branches:
+      - '*'
+      - '!release-please*'
   pull_request:
-    branches-ignore:
-      - release-please--branches--main
+    branches:
+      - '*'
+      - '!release-please*'
   workflow_dispatch:
 
 jobs:
