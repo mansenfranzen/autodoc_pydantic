@@ -39,7 +39,7 @@ sphinxcontrib-mermaid = { version = "^0.7", optional = true }
 # extras tests
 pytest = {version = "^7", optional = true }
 coverage = { version ="^7", optional = true }
-flake8 = { version = "^3", optional = true }
+flake8 = { version = "^7.0.0", optional = true }
 
 # extras erdantic
 erdantic = { version ="^0.7.0", optional = true }
