@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "autodoc_pydantic"
-version = "2.1.0"
+version = "2.1.1"
 description = "Seamlessly integrate pydantic models in your Sphinx documentation."
 authors = ["mansenfranzen <franz.woellert@gmail.com>"]
 packages = [{ include = "sphinxcontrib" }]
