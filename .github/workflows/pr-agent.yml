@@ -12,6 +12,7 @@ jobs:
       pull-requests: write
       contents: write
     name: Run pr agent on every pull request, respond to user comments
+    if: (github.actor == 'mansenfranzen') || (github.triggering_actor == 'mansenfranzen')
     steps:
       - name: PR Agent action step
         id: pragent
