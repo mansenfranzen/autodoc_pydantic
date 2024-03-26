@@ -13,9 +13,29 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     environment: ReleasePlease
+    outputs:
+      release-created: ${{ steps.release.outputs.release_created }}
     steps:
     - uses: google-github-actions/release-please-action@v4
+      id: release
       with:
-        token: ${{ secrets.TOKEN }}
+        token: ${{ secrets.GITHUB_TOKEN }}
         config-file: release-please-config.json
         manifest-file: .release-please-manifest.json
+
+  publish-to-pypi:
+    name: Upload to PyPI
+    needs: release-please
+    environment: ReleasePlease
+    runs-on: ubuntu-latest
+    if: needs.release-please.outputs.release-created
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - uses: abatilo/actions-poetry@v3
+      - name: build
+        run: poetry build
+      - name: publish
+        run: poetry publish --username __token__ --password ${{ secrets.PYPI_TOKEN }}
