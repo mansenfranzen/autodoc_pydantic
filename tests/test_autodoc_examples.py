@@ -1,12 +1,13 @@
-"""This module contains end to end example tests.
+"""This module contains end to end example tests."""
 
-"""
 
 def test_model_plain(autodocument):
     options_app = dict(autodoc_pydantic_model_show_json=False)
-    actual = autodocument(documenter='pydantic_model',
-                          object_path='target.examples.PlainModel',
-                          options_app=options_app)
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.examples.PlainModel',
+        options_app=options_app,
+    )
 
     assert actual == [
         '',
@@ -14,16 +15,19 @@ def test_model_plain(autodocument):
         '   :module: target.examples',
         '',
         '   Model Plain.',
-        ''
+        '',
     ]
+
 
 def test_model_with_field(autodocument):
     options_app = dict(autodoc_pydantic_model_show_json=False)
     options_doc = dict(members=None)
-    actual = autodocument(documenter='pydantic_model',
-                          object_path='target.examples.ModelWithField',
-                          options_doc=options_doc,
-                          options_app=options_app)
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.examples.ModelWithField',
+        options_doc=options_doc,
+        options_app=options_app,
+    )
 
     assert actual == [
         '',
@@ -42,18 +46,22 @@ def test_model_with_field(autodocument):
         '      :value: 1',
         '',
         '      Doc field',
-        ''
+        '',
     ]
 
 
 def test_model_with_field_validator(autodocument):
-    options_app = dict(autodoc_pydantic_model_show_json=False,
-                       autodoc_pydantic_validator_list_fields=True)
+    options_app = dict(
+        autodoc_pydantic_model_show_json=False,
+        autodoc_pydantic_validator_list_fields=True,
+    )
     options_doc = dict(members=None)
-    actual = autodocument(documenter='pydantic_model',
-                          object_path='target.examples.ModelWithFieldValidator',
-                          options_doc=options_doc,
-                          options_app=options_app)
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.examples.ModelWithFieldValidator',
+        options_doc=options_doc,
+        options_app=options_app,
+    )
 
     assert actual == [
         '',
@@ -88,18 +96,22 @@ def test_model_with_field_validator(autodocument):
         '',
         '      :Validates:',
         '         - :py:obj:`field <target.examples.ModelWithFieldValidator.field>`',
-        ''
+        '',
     ]
 
 
 def test_model_with_config(autodocument):
-    options_app = dict(autodoc_pydantic_model_show_json=False,
-                       autodoc_pydantic_model_show_config_member=True)
+    options_app = dict(
+        autodoc_pydantic_model_show_json=False,
+        autodoc_pydantic_model_show_config_member=True,
+    )
     options_doc = dict(members=None)
-    actual = autodocument(documenter='pydantic_model',
-                          object_path='target.examples.ModelWithConfig',
-                          options_doc=options_doc,
-                          options_app=options_app)
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.examples.ModelWithConfig',
+        options_doc=options_doc,
+        options_app=options_app,
+    )
 
     assert actual == [
         '',
@@ -110,12 +122,14 @@ def test_model_with_config(autodocument):
         '',
         '   :Config:',
         '      - **frozen**: *bool = False*',
-        '']
+        '',
+    ]
 
 
 def test_model_plain_show_json(autodocument):
-    actual = autodocument(documenter='pydantic_model',
-                          object_path='target.examples.PlainModel')
+    actual = autodocument(
+        documenter='pydantic_model', object_path='target.examples.PlainModel'
+    )
 
     assert actual == [
         '',
@@ -143,4 +157,5 @@ def test_model_plain_show_json(autodocument):
         '',
         '      </details></p>',
         '',
-        '']
+        '',
+    ]

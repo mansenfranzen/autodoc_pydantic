@@ -1,16 +1,16 @@
-"""This module contains various utility functions.
+"""This module contains various utility functions."""
 
-"""
+from __future__ import annotations
 
 import importlib
-from types import ModuleType
-from typing import Optional
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from types import ModuleType
 
 
-def import_module(name) -> Optional[ModuleType]:
-    """Simple importer intercepting import exception.
-
-    """
+def import_module(name: str) -> ModuleType | None:
+    """Simple importer intercepting import exception."""
 
     try:
         return importlib.import_module(name)
@@ -18,43 +18,37 @@ def import_module(name) -> Optional[ModuleType]:
         return None
 
 
-def get_version(name):
-    """Get version info from standard __version__.
-
-    """
+def get_version(name: str) -> str:
+    """Get version info from standard __version__."""
 
     module = import_module(name)
     if module:
         return module.__version__
-    else:
-        return "NA"
+
+    return 'NA'
 
 
-def get_version_special(name):
-    """Get version info from version.VERSION.
-
-    """
+def get_version_special(name: str) -> str:
+    """Get version info from version.VERSION."""
 
     module = import_module(name)
     if module:
         return module.version.VERSION
-    else:
-        return "NA"
+
+    return 'NA'
 
 
-def show_versions():
-    """Print currently used versions.
+def show_versions() -> None:
+    """Print currently used versions."""
 
-    """
-
-    print(
+    print(  # noqa: T201
         f"Version info: "
         f"autodoc_pydantic: {get_version('sphinxcontrib.autodoc_pydantic')} | "
         f"pydantic: {get_version_special('pydantic')} | "
         f"sphinx: {get_version('sphinx')} | "
         f"sphinx_rtd_theme: {get_version('sphinx_rtd_theme')} | "
         f"sphinx_tabs: {get_version('sphinx_tabs')} | "
-        f"erdantic: {get_version('erdantic')}"
+        f"erdantic: {get_version('erdantic')}",
     )
 
 
@@ -77,6 +71,6 @@ class CustomEnum:
     """
 
     @classmethod
-    def values(cls):
-        attributes = {x for x in cls.__dict__ if not x.startswith("_")}
+    def values(cls) -> set[str]:
+        attributes = {x for x in cls.__dict__ if not x.startswith('_')}
         return {getattr(cls, attr) for attr in attributes}

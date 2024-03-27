@@ -10,10 +10,15 @@ from sphinxcontrib.autodoc_pydantic import (
 )
 
 
-@pytest.mark.parametrize("klass", [PydanticModelDocumenter,
-                                   PydanticSettingsDocumenter,
-                                   PydanticFieldDocumenter,
-                                   PydanticValidatorDocumenter])
+@pytest.mark.parametrize(
+    'klass',
+    [
+        PydanticModelDocumenter,
+        PydanticSettingsDocumenter,
+        PydanticFieldDocumenter,
+        PydanticValidatorDocumenter,
+    ],
+)
 def test_autosummary_fake_directive(klass):
     """Ensure that using autosummary's `FakeDirective` works with
     pydantic autodocumenters.
@@ -21,7 +26,7 @@ def test_autosummary_fake_directive(klass):
     This relates to issue #11.
     """
 
-    klass(FakeDirective(), "")
+    klass(FakeDirective(), '')
 
 
 def test_autosummary_imported_objects(parse_rst):
@@ -32,18 +37,13 @@ def test_autosummary_imported_objects(parse_rst):
     This relates to issue #11.
     """
 
-    input_rst = [
-        '.. autosummary::',
-        '',
-        '   target.AutoSummaryModel',
-        ''
-    ]
+    input_rst = ['.. autosummary::', '', '   target.AutoSummaryModel', '']
 
     nodes = parse_rst(input_rst)
     node = nodes[1][0][0][2][0][0][0][0]
 
     if sphinx.version_info >= (4, 3):
-        assert node["reftarget"] == "target.AutoSummaryModel"
-        assert node.astext() == "target.AutoSummaryModel"
+        assert node['reftarget'] == 'target.AutoSummaryModel'
+        assert node.astext() == 'target.AutoSummaryModel'
     else:
         assert node[0] == ':obj:`target.AutoSummaryModel <target.AutoSummaryModel>`'

@@ -1,6 +1,4 @@
-"""This module contains tests for pydantic validator configurations.
-
-"""
+"""This module contains tests for pydantic validator configurations."""
 
 import pytest
 from sphinx.addnodes import (
@@ -10,23 +8,28 @@ from sphinx.addnodes import (
     desc_content,
     desc_annotation,
     desc_addname,
-    index
+    index,
 )
 from sphinx.testing.util import assert_node
 
 from sphinxcontrib.autodoc_pydantic import PydanticFieldDocumenter
-from .compatibility import desc_annotation_default_value, \
-    desc_annotation_directive_prefix, convert_ellipsis_to_none, \
-    OPTIONAL_INT, TYPEHINTS_PREFIX, TYPING_MODULE_PREFIX_V1, \
-    TYPING_MODULE_PREFIX_V2
+from .compatibility import (
+    desc_annotation_default_value,
+    desc_annotation_directive_prefix,
+    convert_ellipsis_to_none,
+    OPTIONAL_INT,
+    TYPEHINTS_PREFIX,
+    TYPING_MODULE_PREFIX_V1,
+    TYPING_MODULE_PREFIX_V2,
+)
 
-KWARGS = dict(documenter=PydanticFieldDocumenter.directivetype,
-              deactivate_all=True)
+KWARGS = dict(documenter=PydanticFieldDocumenter.directivetype, deactivate_all=True)
 
 
 def test_autodoc_pydantic_field_list_validators_true(autodocument):
-    kwargs = dict(object_path='target.configuration.FieldListValidators.field',
-                  **KWARGS)
+    kwargs = dict(
+        object_path='target.configuration.FieldListValidators.field', **KWARGS
+    )
 
     result = [
         '',
@@ -38,32 +41,32 @@ def test_autodoc_pydantic_field_list_validators_true(autodocument):
         '',
         '   :Validated by:',
         '      - :py:obj:`check <target.configuration.FieldListValidators.check>`',
-        ''
+        '',
     ]
 
     # explict global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_list_validators": True},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_list_validators': True}, **kwargs
+    )
     assert result == actual
 
     # explicit local
-    actual = autodocument(
-        options_doc={"field-list-validators": True},
-        **kwargs)
+    actual = autodocument(options_doc={'field-list-validators': True}, **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_list_validators": False},
-        options_doc={"field-list-validators": True},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_list_validators': False},
+        options_doc={'field-list-validators': True},
+        **kwargs,
+    )
     assert result == actual
 
 
 def test_autodoc_pydantic_field_list_validators_false(autodocument):
-    kwargs = dict(object_path='target.configuration.FieldListValidators.field',
-                  **KWARGS)
+    kwargs = dict(
+        object_path='target.configuration.FieldListValidators.field', **KWARGS
+    )
 
     result = [
         '',
@@ -72,32 +75,30 @@ def test_autodoc_pydantic_field_list_validators_false(autodocument):
         '   :type: int',
         '',
         '   Field.',
-        ''
+        '',
     ]
 
     # explict global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_list_validators": False},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_list_validators': False}, **kwargs
+    )
     assert result == actual
 
     # explicit local
-    actual = autodocument(
-        options_doc={"field-list-validators": False},
-        **kwargs)
+    actual = autodocument(options_doc={'field-list-validators': False}, **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_list_validators": True},
-        options_doc={"field-list-validators": False},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_list_validators': True},
+        options_doc={'field-list-validators': False},
+        **kwargs,
+    )
     assert result == actual
 
 
 def test_autodoc_pydantic_field_doc_policy_docstring(autodocument):
-    kwargs = dict(object_path='target.configuration.FieldDocPolicy.field',
-                  **KWARGS)
+    kwargs = dict(object_path='target.configuration.FieldDocPolicy.field', **KWARGS)
 
     result = [
         '',
@@ -106,32 +107,30 @@ def test_autodoc_pydantic_field_doc_policy_docstring(autodocument):
         '   :type: int',
         '',
         '   Field.',
-        ''
+        '',
     ]
 
     # explict global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_doc_policy": "docstring"},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_doc_policy': 'docstring'}, **kwargs
+    )
     assert result == actual
 
     # explicit local
-    actual = autodocument(
-        options_doc={"field-doc-policy": "docstring"},
-        **kwargs)
+    actual = autodocument(options_doc={'field-doc-policy': 'docstring'}, **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_doc_policy": "both"},
-        options_doc={"field-doc-policy": "docstring"},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_doc_policy': 'both'},
+        options_doc={'field-doc-policy': 'docstring'},
+        **kwargs,
+    )
     assert result == actual
 
 
 def test_autodoc_pydantic_field_doc_policy_description(autodocument):
-    kwargs = dict(object_path='target.configuration.FieldDocPolicy.field',
-                  **KWARGS)
+    kwargs = dict(object_path='target.configuration.FieldDocPolicy.field', **KWARGS)
 
     result = [
         '',
@@ -141,32 +140,30 @@ def test_autodoc_pydantic_field_doc_policy_description(autodocument):
         '',
         '   Custom Desc.',
         '',
-        ''
+        '',
     ]
 
     # explict global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_doc_policy": "description"},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_doc_policy': 'description'}, **kwargs
+    )
     assert result == actual
 
     # explicit local
-    actual = autodocument(
-        options_doc={"field-doc-policy": "description"},
-        **kwargs)
+    actual = autodocument(options_doc={'field-doc-policy': 'description'}, **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_doc_policy": "both"},
-        options_doc={"field-doc-policy": "description"},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_doc_policy': 'both'},
+        options_doc={'field-doc-policy': 'description'},
+        **kwargs,
+    )
     assert result == actual
 
 
 def test_autodoc_pydantic_field_doc_policy_both(autodocument):
-    kwargs = dict(object_path='target.configuration.FieldDocPolicy.field',
-                  **KWARGS)
+    kwargs = dict(object_path='target.configuration.FieldDocPolicy.field', **KWARGS)
 
     result = [
         '',
@@ -178,26 +175,25 @@ def test_autodoc_pydantic_field_doc_policy_both(autodocument):
         '',
         '   Custom Desc.',
         '',
-        ''
+        '',
     ]
 
     # explict global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_doc_policy": "both"},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_doc_policy': 'both'}, **kwargs
+    )
     assert result == actual
 
     # explicit local
-    actual = autodocument(
-        options_doc={"field-doc-policy": "both"},
-        **kwargs)
+    actual = autodocument(options_doc={'field-doc-policy': 'both'}, **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_doc_policy": "docstring"},
-        options_doc={"field-doc-policy": "both"},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_doc_policy': 'docstring'},
+        options_doc={'field-doc-policy': 'both'},
+        **kwargs,
+    )
     assert result == actual
 
 
@@ -208,8 +204,8 @@ def test_autodoc_pydantic_field_show_constraints_true(autodocument):
     """
 
     kwargs = dict(
-        object_path='target.configuration.FieldShowConstraints.field',
-        **KWARGS)
+        object_path='target.configuration.FieldShowConstraints.field', **KWARGS
+    )
 
     result = [
         '',
@@ -222,113 +218,104 @@ def test_autodoc_pydantic_field_show_constraints_true(autodocument):
         '   :Constraints:',
         '      - **ge** = 0',
         '      - **le** = 100',
-        ''
+        '',
     ]
 
     # explict global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_constraints": True},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_show_constraints': True}, **kwargs
+    )
     assert result == actual
 
     # explicit local
-    actual = autodocument(
-        options_doc={"field-show-constraints": True},
-        **kwargs)
+    actual = autodocument(options_doc={'field-show-constraints': True}, **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_constraints": False},
-        options_doc={"field-show-constraints": True},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_show_constraints': False},
+        options_doc={'field-show-constraints': True},
+        **kwargs,
+    )
     assert result == actual
 
 
 CONSTRAINTS_TEST_DATA = {
-    "field_conint": {
-        "type": "int",
-        "constraints": ["**strict** = True", "**ge** = 0", "**le** = 100"]
+    'field_conint': {
+        'type': 'int',
+        'constraints': ['**strict** = True', '**ge** = 0', '**le** = 100'],
     },
-    "field_constr": {
-        "type": "str",
-        "constraints": ["**min_length** = 5", "**pattern** = [a-z]+"]
+    'field_constr': {
+        'type': 'str',
+        'constraints': ['**min_length** = 5', '**pattern** = [a-z]+'],
     },
-    "field_condate": {
-        "type": f"{TYPEHINTS_PREFIX}datetime.date",
-        "constraints": ["**strict** = True", "**gt** = 2023-08-01"]
+    'field_condate': {
+        'type': f'{TYPEHINTS_PREFIX}datetime.date',
+        'constraints': ['**strict** = True', '**gt** = 2023-08-01'],
     },
-    "field_condecimal": {
-        "type": f"{TYPEHINTS_PREFIX}decimal.Decimal",
-        "constraints": ["**max_digits** = 4", "**decimal_places** = 1"]
+    'field_condecimal': {
+        'type': f'{TYPEHINTS_PREFIX}decimal.Decimal',
+        'constraints': ['**max_digits** = 4', '**decimal_places** = 1'],
     },
-    "field_conset": {
-        "type": f"{TYPING_MODULE_PREFIX_V2}Set[int]",
-        "constraints": ["**min_length** = 3", "**max_length** = 5"]
+    'field_conset': {
+        'type': f'{TYPING_MODULE_PREFIX_V2}Set[int]',
+        'constraints': ['**min_length** = 3', '**max_length** = 5'],
     },
-    "field_conlist": {
-        "type": f"{TYPING_MODULE_PREFIX_V2}List[str]",
-        "constraints": ["**min_length** = 0", "**max_length** = 3"]
+    'field_conlist': {
+        'type': f'{TYPING_MODULE_PREFIX_V2}List[str]',
+        'constraints': ['**min_length** = 0', '**max_length** = 3'],
     },
-    "field_strict_float": {
-        "type": "float",
-        "constraints": ["**strict** = True"]
+    'field_strict_float': {'type': 'float', 'constraints': ['**strict** = True']},
+    'field_strict_bool': {'type': 'bool', 'constraints': ['**strict** = True']},
+    'field_positive_int': {'type': 'int', 'constraints': ['**gt** = 0']},
+    'uuid4': {
+        'type': f'{TYPEHINTS_PREFIX}uuid.UUID',
+        'constraints': ['**uuid_version** = 4'],
     },
-    "field_strict_bool": {
-        "type": "bool",
-        "constraints": ["**strict** = True"]
+    'file_path': {
+        'type': f'{TYPEHINTS_PREFIX}pathlib.Path',
+        'constraints': ['**path_type** = file'],
     },
-    "field_positive_int": {
-        "type": "int",
-        "constraints": ["**gt** = 0"]
-    },
-    "uuid4": {
-        "type": f"{TYPEHINTS_PREFIX}uuid.UUID",
-        "constraints": ["**uuid_version** = 4"]
-    },
-    "file_path": {
-        "type": f"{TYPEHINTS_PREFIX}pathlib.Path",
-        "constraints": ["**path_type** = file"]
-    }
 }
 
 
-@pytest.mark.parametrize("test_data",
-                         argvalues=CONSTRAINTS_TEST_DATA.items(),
-                         ids=CONSTRAINTS_TEST_DATA.keys())
-def test_autodoc_pydantic_field_show_constraints_various(autodocument,
-                                                         test_data):
+@pytest.mark.parametrize(
+    'test_data',
+    argvalues=CONSTRAINTS_TEST_DATA.items(),
+    ids=CONSTRAINTS_TEST_DATA.keys(),
+)
+def test_autodoc_pydantic_field_show_constraints_various(autodocument, test_data):
     """Ensure that constraints are properly show for specialized constraint
     types.
 
     """
 
     name, values = test_data
-    constraints = [f'      - {x}' for x in values["constraints"]] + [""]
+    constraints = [f'      - {x}' for x in values['constraints']] + ['']
 
     kwargs = dict(
         object_path=f'target.configuration.FieldShowConstraintsNativeConstraintTypes.{name}',
-        **KWARGS)
+        **KWARGS,
+    )
 
     result = [
-                 '',
-                 f'.. py:pydantic_field:: FieldShowConstraintsNativeConstraintTypes.{name}',
-                 '   :module: target.configuration',
-                 f'   :type: {values["type"]}',
-                 '',
-                 f'   {name}',
-                 '',
-                 '   :Constraints:',
-             ] + constraints
+        '',
+        f'.. py:pydantic_field:: FieldShowConstraintsNativeConstraintTypes.{name}',
+        '   :module: target.configuration',
+        f'   :type: {values["type"]}',
+        '',
+        f'   {name}',
+        '',
+        '   :Constraints:',
+    ] + constraints
 
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_constraints": True},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_show_constraints': True}, **kwargs
+    )
     assert result == actual
 
 
-def test_autodoc_pydantic_field_show_constraints_ignore_extra_kwargs(
-        autodocument):
+def test_autodoc_pydantic_field_show_constraints_ignore_extra_kwargs(autodocument):
     """Ensure that additional keyword arguments passed to pydantic `Field` are
     not listed under the field's constraint documentation section.
 
@@ -338,7 +325,8 @@ def test_autodoc_pydantic_field_show_constraints_ignore_extra_kwargs(
 
     kwargs = dict(
         object_path='target.configuration.FieldShowConstraintsIgnoreExtraKwargs.field',
-        **KWARGS)
+        **KWARGS,
+    )
 
     result = [
         '',
@@ -351,19 +339,19 @@ def test_autodoc_pydantic_field_show_constraints_ignore_extra_kwargs(
         '   :Constraints:',
         '      - **ge** = 0',
         '      - **le** = 100',
-        ''
+        '',
     ]
 
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_constraints": True},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_show_constraints': True}, **kwargs
+    )
     assert result == actual
 
 
 def test_autodoc_pydantic_field_show_constraints_false(autodocument):
     kwargs = dict(
-        object_path='target.configuration.FieldShowConstraints.field',
-        **KWARGS)
+        object_path='target.configuration.FieldShowConstraints.field', **KWARGS
+    )
 
     result = [
         '',
@@ -372,33 +360,30 @@ def test_autodoc_pydantic_field_show_constraints_false(autodocument):
         '   :type: int',
         '',
         '   Field.',
-        ''
+        '',
     ]
 
     # explict global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_constraints": False},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_show_constraints': False}, **kwargs
+    )
     assert result == actual
 
     # explicit local
-    actual = autodocument(
-        options_doc={"field-show-constraints": False},
-        **kwargs)
+    actual = autodocument(options_doc={'field-show-constraints': False}, **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_constraints": True},
-        options_doc={"field-show-constraints": False},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_show_constraints': True},
+        options_doc={'field-show-constraints': False},
+        **kwargs,
+    )
     assert result == actual
 
 
 def test_autodoc_pydantic_field_show_alias_true(autodocument):
-    kwargs = dict(
-        object_path='target.configuration.FieldShowAlias.field',
-        **KWARGS)
+    kwargs = dict(object_path='target.configuration.FieldShowAlias.field', **KWARGS)
 
     result = [
         '',
@@ -413,23 +398,20 @@ def test_autodoc_pydantic_field_show_alias_true(autodocument):
     ]
 
     # explicit local
-    actual = autodocument(
-        options_doc={"field-show-alias": True},
-        **kwargs)
+    actual = autodocument(options_doc={'field-show-alias': True}, **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_alias": False},
-        options_doc={"field-show-alias": True},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_show_alias': False},
+        options_doc={'field-show-alias': True},
+        **kwargs,
+    )
     assert result == actual
 
 
 def test_autodoc_pydantic_field_show_alias_false(autodocument):
-    kwargs = dict(
-        object_path='target.configuration.FieldShowAlias.field',
-        **KWARGS)
+    kwargs = dict(object_path='target.configuration.FieldShowAlias.field', **KWARGS)
 
     result = [
         '',
@@ -443,8 +425,8 @@ def test_autodoc_pydantic_field_show_alias_false(autodocument):
 
     # explict global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_alias": False},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_show_alias': False}, **kwargs
+    )
     assert result == actual
 
     # explicit local
@@ -459,36 +441,42 @@ def test_autodoc_pydantic_field_show_alias_false(autodocument):
         '',
     ]
 
-    actual = autodocument(
-        options_doc={"field-show-alias": False},
-        **kwargs)
+    actual = autodocument(options_doc={'field-show-alias': False}, **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_alias": True},
-        options_doc={"field-show-alias": False},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_show_alias': True},
+        options_doc={'field-show-alias': False},
+        **kwargs,
+    )
     assert result == actual
 
 
 def test_autodoc_pydantic_field_show_alias_true_directive_local(parse_rst):
-    """Tests pydantic_validator directive.
+    """Tests pydantic_validator directive."""
 
-    """
-
-    default_value = desc_annotation_default_value("1")
-    prefix = desc_annotation_directive_prefix("field")
+    default_value = desc_annotation_default_value('1')
+    prefix = desc_annotation_directive_prefix('field')
 
     output_nodes = (
         index,
-        [desc, ([desc_signature, ([desc_annotation, prefix],
-                                  [desc_addname, "FieldShowAlias."],
-                                  [desc_name, "field"],
-                                  default_value,
-                                  [desc_annotation, " (alias 'field2')"])],
-                [desc_content, ()])
-         ]
+        [
+            desc,
+            (
+                [
+                    desc_signature,
+                    (
+                        [desc_annotation, prefix],
+                        [desc_addname, 'FieldShowAlias.'],
+                        [desc_name, 'field'],
+                        default_value,
+                        [desc_annotation, " (alias 'field2')"],
+                    ),
+                ],
+                [desc_content, ()],
+            ),
+        ],
     )
 
     # explicit local
@@ -499,35 +487,41 @@ def test_autodoc_pydantic_field_show_alias_true_directive_local(parse_rst):
         '   :value: 1',
         '   :field-show-alias:',
         '   :alias: field2',
-        ''
+        '',
     ]
 
     doctree = parse_rst(input_rst)
     assert_node(doctree, output_nodes)
 
     # explicit local overwrite explict global
-    doctree = parse_rst(input_rst,
-                        conf={"autodoc_pydantic_field_show_alias": False})
+    doctree = parse_rst(input_rst, conf={'autodoc_pydantic_field_show_alias': False})
     assert_node(doctree, output_nodes)
 
 
 def test_autodoc_pydantic_field_show_alias_true_directive_global(parse_rst):
-    """Tests pydantic_validator directive.
+    """Tests pydantic_validator directive."""
 
-    """
-
-    default_value = desc_annotation_default_value("1")
-    prefix = desc_annotation_directive_prefix("field")
+    default_value = desc_annotation_default_value('1')
+    prefix = desc_annotation_directive_prefix('field')
 
     output_nodes = (
         index,
-        [desc, ([desc_signature, ([desc_annotation, prefix],
-                                  [desc_addname, "FieldShowAlias."],
-                                  [desc_name, "field"],
-                                  default_value,
-                                  [desc_annotation, " (alias 'field2')"])],
-                [desc_content, ()])
-         ]
+        [
+            desc,
+            (
+                [
+                    desc_signature,
+                    (
+                        [desc_annotation, prefix],
+                        [desc_addname, 'FieldShowAlias.'],
+                        [desc_name, 'field'],
+                        default_value,
+                        [desc_annotation, " (alias 'field2')"],
+                    ),
+                ],
+                [desc_content, ()],
+            ),
+        ],
     )
 
     # explicit local
@@ -537,31 +531,37 @@ def test_autodoc_pydantic_field_show_alias_true_directive_global(parse_rst):
         '   :module: target.configuration',
         '   :value: 1',
         '   :alias: field2',
-        ''
+        '',
     ]
 
     # explicit local overwrite explict global
-    doctree = parse_rst(input_rst,
-                        conf={"autodoc_pydantic_field_show_alias": True})
+    doctree = parse_rst(input_rst, conf={'autodoc_pydantic_field_show_alias': True})
     assert_node(doctree, output_nodes)
 
 
 def test_autodoc_pydantic_field_show_alias_false_directive(parse_rst):
-    """Tests pydantic_validator directive.
+    """Tests pydantic_validator directive."""
 
-    """
-
-    default_value = desc_annotation_default_value("1")
-    prefix = desc_annotation_directive_prefix("field")
+    default_value = desc_annotation_default_value('1')
+    prefix = desc_annotation_directive_prefix('field')
 
     output_nodes = (
         index,
-        [desc, ([desc_signature, ([desc_annotation, prefix],
-                                  [desc_addname, "FieldShowAlias."],
-                                  [desc_name, "field"],
-                                  default_value)],
-                [desc_content, ()])
-         ]
+        [
+            desc,
+            (
+                [
+                    desc_signature,
+                    (
+                        [desc_annotation, prefix],
+                        [desc_addname, 'FieldShowAlias.'],
+                        [desc_name, 'field'],
+                        default_value,
+                    ),
+                ],
+                [desc_content, ()],
+            ),
+        ],
     )
 
     # explicit local
@@ -572,22 +572,19 @@ def test_autodoc_pydantic_field_show_alias_false_directive(parse_rst):
         '   :value: 1',
         '   :alias: foobar',
         '   :field-show-alias: False',
-        ''
+        '',
     ]
 
     doctree = parse_rst(input_rst)
     assert_node(doctree, output_nodes)
 
     # explicit local overwrite explict global
-    doctree = parse_rst(input_rst,
-                        conf={"autodoc_pydantic_field_show_alias": True})
+    doctree = parse_rst(input_rst, conf={'autodoc_pydantic_field_show_alias': True})
     assert_node(doctree, output_nodes)
 
 
 def test_autodoc_pydantic_field_show_default_true(autodocument):
-    kwargs = dict(
-        object_path='target.configuration.FieldShowDefault.field',
-        **KWARGS)
+    kwargs = dict(object_path='target.configuration.FieldShowDefault.field', **KWARGS)
 
     result = [
         '',
@@ -597,33 +594,30 @@ def test_autodoc_pydantic_field_show_default_true(autodocument):
         '   :value: 1',
         '',
         '   Field.',
-        ''
+        '',
     ]
 
     # explict global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_default": True},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_show_default': True}, **kwargs
+    )
     assert result == actual
 
     # explicit local
-    actual = autodocument(
-        options_doc={"field-show-default": True},
-        **kwargs)
+    actual = autodocument(options_doc={'field-show-default': True}, **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_default": False},
-        options_doc={"field-show-default": True},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_show_default': False},
+        options_doc={'field-show-default': True},
+        **kwargs,
+    )
     assert result == actual
 
 
 def test_autodoc_pydantic_field_show_default_false(autodocument):
-    kwargs = dict(
-        object_path='target.configuration.FieldShowDefault.field',
-        **KWARGS)
+    kwargs = dict(object_path='target.configuration.FieldShowDefault.field', **KWARGS)
 
     result = [
         '',
@@ -632,43 +626,42 @@ def test_autodoc_pydantic_field_show_default_false(autodocument):
         '   :type: int',
         '',
         '   Field.',
-        ''
+        '',
     ]
 
     # explict global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_default": False},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_show_default': False}, **kwargs
+    )
     assert result == actual
 
     # explicit local
-    actual = autodocument(
-        options_doc={"field-show-default": False},
-        **kwargs)
+    actual = autodocument(options_doc={'field-show-default': False}, **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_default": True},
-        options_doc={"field-show-default": False},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_show_default': True},
+        options_doc={'field-show-default': False},
+        **kwargs,
+    )
     assert result == actual
 
 
 def test_autodoc_pydantic_field_signature_prefix(autodocument):
     kwargs = dict(
-        object_path='target.configuration.FieldSignaturePrefix.field',
-        **KWARGS)
+        object_path='target.configuration.FieldSignaturePrefix.field', **KWARGS
+    )
 
     # default
     result = [
         '',
-        ".. py:pydantic_field:: FieldSignaturePrefix.field",
+        '.. py:pydantic_field:: FieldSignaturePrefix.field',
         '   :module: target.configuration',
         '   :type: int',
         '',
         '   Field.',
-        ''
+        '',
     ]
 
     actual = autodocument(**kwargs)
@@ -677,35 +670,31 @@ def test_autodoc_pydantic_field_signature_prefix(autodocument):
     # explicit value
     result = [
         '',
-        ".. py:pydantic_field:: FieldSignaturePrefix.field",
+        '.. py:pydantic_field:: FieldSignaturePrefix.field',
         '   :module: target.configuration',
         '   :type: int',
         '   :field-signature-prefix: foobar',
         '',
         '   Field.',
-        ''
+        '',
     ]
 
-    actual = autodocument(
-        options_doc={"field-signature-prefix": "foobar"},
-        **kwargs)
+    actual = autodocument(options_doc={'field-signature-prefix': 'foobar'}, **kwargs)
     assert result == actual
 
     # explict empty
     result = [
         '',
-        ".. py:pydantic_field:: FieldSignaturePrefix.field",
+        '.. py:pydantic_field:: FieldSignaturePrefix.field',
         '   :module: target.configuration',
         '   :type: int',
         '   :field-signature-prefix: ',
         '',
         '   Field.',
-        ''
+        '',
     ]
 
-    actual = autodocument(
-        options_doc={"field-signature-prefix": ""},
-        **kwargs)
+    actual = autodocument(options_doc={'field-signature-prefix': ''}, **kwargs)
     assert result == actual
 
 
@@ -713,40 +702,39 @@ def test_autodoc_pydantic_field_signature_prefix_directive(parse_rst):
     # default
     input_rst = [
         '',
-        ".. py:pydantic_field:: FieldSignaturePrefix.field",
+        '.. py:pydantic_field:: FieldSignaturePrefix.field',
         '   :module: target.configuration',
         '',
         '   Field.',
-        ''
+        '',
     ]
 
     doctree = parse_rst(input_rst)
-    prefix = desc_annotation_directive_prefix("field")
+    prefix = desc_annotation_directive_prefix('field')
     assert_node(doctree[1][0][0], [desc_annotation, prefix])
 
     # empty
-    doctree = parse_rst(input_rst,
-                        conf={"autodoc_pydantic_field_signature_prefix": ""})
-    prefix = desc_annotation_directive_prefix("attribute")
+    doctree = parse_rst(input_rst, conf={'autodoc_pydantic_field_signature_prefix': ''})
+    prefix = desc_annotation_directive_prefix('attribute')
     assert_node(doctree[1][0][0], [desc_annotation, prefix])
 
     # custom
     input_rst = [
         '',
-        ".. py:pydantic_field:: FieldSignaturePrefix.field",
+        '.. py:pydantic_field:: FieldSignaturePrefix.field',
         '   :module: target.configuration',
         '   :field-signature-prefix: foobar',
         '',
         '   Field.',
-        ''
+        '',
     ]
 
     doctree = parse_rst(input_rst)
-    prefix = desc_annotation_directive_prefix("foobar")
+    prefix = desc_annotation_directive_prefix('foobar')
     assert_node(doctree[1][0][0], [desc_annotation, prefix])
 
 
-@pytest.mark.parametrize("field", ["field1", "field2", "field3"])
+@pytest.mark.parametrize('field', ['field1', 'field2', 'field3'])
 def test_autodoc_pydantic_field_show_required_true(field, autodocument):
     result = [
         f'',
@@ -760,33 +748,37 @@ def test_autodoc_pydantic_field_show_required_true(field, autodocument):
     ]
 
     kwargs = dict(
-        object_path=f'target.configuration.FieldShowRequired.{field}',
-        **KWARGS
+        object_path=f'target.configuration.FieldShowRequired.{field}', **KWARGS
     )
 
     # explict global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_required": True},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_show_required': True}, **kwargs
+    )
     assert result == actual
 
     # explicit local
-    actual = autodocument(options_doc={"field-show-required": True}, **kwargs)
+    actual = autodocument(options_doc={'field-show-required': True}, **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_required": False},
-        options_doc={"field-show-required": True},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_show_required': False},
+        options_doc={'field-show-required': True},
+        **kwargs,
+    )
     assert result == actual
 
 
-@pytest.mark.parametrize("expected",
-                         [("field1", OPTIONAL_INT),
-                          ("field2", OPTIONAL_INT),
-                          ("field3", "int"),
-                          ("field4", "int")])
+@pytest.mark.parametrize(
+    'expected',
+    [
+        ('field1', OPTIONAL_INT),
+        ('field2', OPTIONAL_INT),
+        ('field3', 'int'),
+        ('field4', 'int'),
+    ],
+)
 def test_autodoc_pydantic_field_show_required_true_not(expected, autodocument):
     """Ensure that fields are not incorrectly tagged as required.
 
@@ -807,37 +799,34 @@ def test_autodoc_pydantic_field_show_required_true_not(expected, autodocument):
     ]
 
     kwargs = dict(
-        object_path=f'target.configuration.FieldShowRequiredNot.{field}',
-        **KWARGS
+        object_path=f'target.configuration.FieldShowRequiredNot.{field}', **KWARGS
     )
 
     # explict global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_required": True},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_show_required': True}, **kwargs
+    )
     assert result == actual
 
     # explicit local
-    actual = autodocument(options_doc={"field-show-required": True}, **kwargs)
+    actual = autodocument(options_doc={'field-show-required': True}, **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_required": False},
-        options_doc={"field-show-required": True},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_show_required': False},
+        options_doc={'field-show-required': True},
+        **kwargs,
+    )
     assert result == actual
 
 
-@pytest.mark.parametrize("field_values", (("field1", "int"),
-                                          ("field2", "int"),
-                                          ("field3", "int"),
-                                          ("field4", OPTIONAL_INT)))
-def test_autodoc_pydantic_field_show_required_false(field_values,
-                                                    autodocument):
-    """Ensure that the required marker is not shown if deactivated.
-
-    """
+@pytest.mark.parametrize(
+    'field_values',
+    (('field1', 'int'), ('field2', 'int'), ('field3', 'int'), ('field4', OPTIONAL_INT)),
+)
+def test_autodoc_pydantic_field_show_required_false(field_values, autodocument):
+    """Ensure that the required marker is not shown if deactivated."""
     field_name, type_value = field_values
     result = [
         '',
@@ -850,34 +839,35 @@ def test_autodoc_pydantic_field_show_required_false(field_values,
     ]
 
     kwargs = dict(
-        object_path=f'target.configuration.FieldShowRequired.{field_name}',
-        **KWARGS
+        object_path=f'target.configuration.FieldShowRequired.{field_name}', **KWARGS
     )
 
     # explict global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_required": False},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_show_required': False}, **kwargs
+    )
     assert result == actual
 
     # explicit local
-    actual = autodocument(options_doc={"field-show-required": False}, **kwargs)
+    actual = autodocument(options_doc={'field-show-required': False}, **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_required": True},
-        options_doc={"field-show-required": False},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_show_required': True},
+        options_doc={'field-show-required': False},
+        **kwargs,
+    )
     assert result == actual
 
 
-@pytest.mark.parametrize("field_values", (("field1", "int"),
-                                          ("field2", "int"),
-                                          ("field3", "int"),
-                                          ("field4", OPTIONAL_INT)))
+@pytest.mark.parametrize(
+    'field_values',
+    (('field1', 'int'), ('field2', 'int'), ('field3', 'int'), ('field4', OPTIONAL_INT)),
+)
 def test_autodoc_pydantic_field_show_required_false_show_default_true(
-        field_values, autodocument):
+    field_values, autodocument
+):
     """Ensure that the required marker is not shown while the default value
     is present.
 
@@ -897,48 +887,59 @@ def test_autodoc_pydantic_field_show_required_false_show_default_true(
     ]
 
     kwargs = dict(
-        object_path=f'target.configuration.FieldShowRequired.{field_name}',
-        **KWARGS
+        object_path=f'target.configuration.FieldShowRequired.{field_name}', **KWARGS
     )
 
     # explict global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_required": False,
-                     "autodoc_pydantic_field_show_default": True},
-        **kwargs)
+        options_app={
+            'autodoc_pydantic_field_show_required': False,
+            'autodoc_pydantic_field_show_default': True,
+        },
+        **kwargs,
+    )
     assert result == convert_ellipsis_to_none(actual)
 
     # explicit local
-    actual = autodocument(options_doc={"field-show-required": False,
-                                       "field-show-default": True},
-                          **kwargs)
+    actual = autodocument(
+        options_doc={'field-show-required': False, 'field-show-default': True}, **kwargs
+    )
     assert result == convert_ellipsis_to_none(actual)
 
     # explicit local overwrite global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_required": True,
-                     "autodoc_pydantic_field_show_default": False},
-        options_doc={"field-show-required": False,
-                     "field-show-default": True},
-        **kwargs)
+        options_app={
+            'autodoc_pydantic_field_show_required': True,
+            'autodoc_pydantic_field_show_default': False,
+        },
+        options_doc={'field-show-required': False, 'field-show-default': True},
+        **kwargs,
+    )
     assert result == convert_ellipsis_to_none(actual)
 
 
 def test_autodoc_pydantic_field_show_required_true_directive(parse_rst):
-    """Tests pydantic_validator directive.
+    """Tests pydantic_validator directive."""
 
-    """
-
-    prefix = desc_annotation_directive_prefix("field")
+    prefix = desc_annotation_directive_prefix('field')
     output_nodes = (
         index,
-        [desc, ([desc_signature, ([desc_annotation, prefix],
-                                  [desc_addname, "FieldShowRequired."],
-                                  [desc_name, "field"],
-                                  [desc_annotation, " [Required]"],
-                                  [desc_annotation, " (alias 'field2')"])],
-                [desc_content, ()])
-         ]
+        [
+            desc,
+            (
+                [
+                    desc_signature,
+                    (
+                        [desc_annotation, prefix],
+                        [desc_addname, 'FieldShowRequired.'],
+                        [desc_name, 'field'],
+                        [desc_annotation, ' [Required]'],
+                        [desc_annotation, " (alias 'field2')"],
+                    ),
+                ],
+                [desc_content, ()],
+            ),
+        ],
     )
 
     # explicit local
@@ -949,32 +950,38 @@ def test_autodoc_pydantic_field_show_required_true_directive(parse_rst):
         '   :required:',
         '   :field-show-alias:',
         '   :alias: field2',
-        ''
+        '',
     ]
 
     doctree = parse_rst(input_rst)
     assert_node(doctree, output_nodes)
 
     # explicit local overwrite explict global
-    doctree = parse_rst(input_rst,
-                        conf={"autodoc_pydantic_field_show_required": False})
+    doctree = parse_rst(input_rst, conf={'autodoc_pydantic_field_show_required': False})
     assert_node(doctree, output_nodes)
 
 
 def test_autodoc_pydantic_field_show_required_false_directive(parse_rst):
-    """Tests pydantic_validator directive.
+    """Tests pydantic_validator directive."""
 
-    """
-
-    prefix = desc_annotation_directive_prefix("field")
+    prefix = desc_annotation_directive_prefix('field')
     output_nodes = (
         index,
-        [desc, ([desc_signature, ([desc_annotation, prefix],
-                                  [desc_addname, "FieldShowRequired."],
-                                  [desc_name, "field"],
-                                  [desc_annotation, " (alias 'field2')"])],
-                [desc_content, ()])
-         ]
+        [
+            desc,
+            (
+                [
+                    desc_signature,
+                    (
+                        [desc_annotation, prefix],
+                        [desc_addname, 'FieldShowRequired.'],
+                        [desc_name, 'field'],
+                        [desc_annotation, " (alias 'field2')"],
+                    ),
+                ],
+                [desc_content, ()],
+            ),
+        ],
     )
 
     # explicit local
@@ -984,28 +991,28 @@ def test_autodoc_pydantic_field_show_required_false_directive(parse_rst):
         '   :module: target.configuration',
         '   :field-show-alias:',
         '   :alias: field2',
-        ''
+        '',
     ]
 
     doctree = parse_rst(input_rst)
     assert_node(doctree, output_nodes)
 
     # explicit local overwrite explict global
-    doctree = parse_rst(input_rst,
-                        conf={"autodoc_pydantic_field_show_required": True})
+    doctree = parse_rst(input_rst, conf={'autodoc_pydantic_field_show_required': True})
     assert_node(doctree, output_nodes)
 
 
-@pytest.mark.parametrize(["field", "typ"],
-                         [("field1", OPTIONAL_INT),
-                          ("field2", OPTIONAL_INT),
-                          ("field3", "int"),
-                          ("field4", "int")])
-def test_autodoc_pydantic_field_show_optional_true_not(
-        field, typ, autodocument):
-    """Ensure that fields are not incorrectly tagged as optional.
-
-    """
+@pytest.mark.parametrize(
+    ['field', 'typ'],
+    [
+        ('field1', OPTIONAL_INT),
+        ('field2', OPTIONAL_INT),
+        ('field3', 'int'),
+        ('field4', 'int'),
+    ],
+)
+def test_autodoc_pydantic_field_show_optional_true_not(field, typ, autodocument):
+    """Ensure that fields are not incorrectly tagged as optional."""
 
     result = [
         f'',
@@ -1018,35 +1025,35 @@ def test_autodoc_pydantic_field_show_optional_true_not(
     ]
 
     kwargs = dict(
-        object_path=f'target.configuration.FieldShowOptionalNot.{field}',
-        **KWARGS
+        object_path=f'target.configuration.FieldShowOptionalNot.{field}', **KWARGS
     )
 
     # explict global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_optional": True},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_show_optional': True}, **kwargs
+    )
     assert result == actual
 
     # explicit local
-    actual = autodocument(options_doc={"field-show-optional": True}, **kwargs)
+    actual = autodocument(options_doc={'field-show-optional': True}, **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_optional": False},
-        options_doc={"field-show-optional": True},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_show_optional': False},
+        options_doc={'field-show-optional': True},
+        **kwargs,
+    )
     assert result == actual
 
 
-@pytest.mark.parametrize(["field", "typ"],
-                         [("field1", "int"),
-                          ("field2", OPTIONAL_INT)])
+@pytest.mark.parametrize(
+    ['field', 'typ'], [('field1', 'int'), ('field2', OPTIONAL_INT)]
+)
 def test_autodoc_pydantic_field_show_optional_true(field, typ, autodocument):
     kwargs = dict(
-        object_path=f'target.configuration.FieldShowOptional.{field}',
-        **KWARGS)
+        object_path=f'target.configuration.FieldShowOptional.{field}', **KWARGS
+    )
 
     result = [
         '',
@@ -1061,31 +1068,30 @@ def test_autodoc_pydantic_field_show_optional_true(field, typ, autodocument):
 
     # explict global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_optional": True},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_show_optional': True}, **kwargs
+    )
     assert result == actual
 
     # explicit local
-    actual = autodocument(
-        options_doc={"field-show-optional": True},
-        **kwargs)
+    actual = autodocument(options_doc={'field-show-optional': True}, **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_optional": False},
-        options_doc={"field-show-optional": True},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_show_optional': False},
+        options_doc={'field-show-optional': True},
+        **kwargs,
+    )
     assert result == actual
 
 
-@pytest.mark.parametrize(["field", "typ"],
-                         [("field1", "int"),
-                          ("field2", OPTIONAL_INT)])
+@pytest.mark.parametrize(
+    ['field', 'typ'], [('field1', 'int'), ('field2', OPTIONAL_INT)]
+)
 def test_autodoc_pydantic_field_show_optional_false(field, typ, autodocument):
     kwargs = dict(
-        object_path=f'target.configuration.FieldShowOptional.{field}',
-        **KWARGS)
+        object_path=f'target.configuration.FieldShowOptional.{field}', **KWARGS
+    )
 
     result = [
         '',
@@ -1099,35 +1105,43 @@ def test_autodoc_pydantic_field_show_optional_false(field, typ, autodocument):
 
     # explict global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_optional": False},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_show_optional': False}, **kwargs
+    )
     assert result == actual
 
     # explicit local
-    actual = autodocument(
-        options_doc={"field-show-optional": False},
-        **kwargs)
+    actual = autodocument(options_doc={'field-show-optional': False}, **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_show_optional": True},
-        options_doc={"field-show-optional": False},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_show_optional': True},
+        options_doc={'field-show-optional': False},
+        **kwargs,
+    )
     assert result == actual
 
 
-@pytest.mark.parametrize("field", ["field1", "field2"])
+@pytest.mark.parametrize('field', ['field1', 'field2'])
 def test_autodoc_pydantic_field_show_optional_true_directive(field, parse_rst):
-    prefix = desc_annotation_directive_prefix("field")
+    prefix = desc_annotation_directive_prefix('field')
     output_nodes = (
         index,
-        [desc, ([desc_signature, ([desc_annotation, prefix],
-                                  [desc_addname, "FieldShowOptional."],
-                                  [desc_name, field],
-                                  [desc_annotation, " [Optional]"])],
-                [desc_content, ()])
-         ]
+        [
+            desc,
+            (
+                [
+                    desc_signature,
+                    (
+                        [desc_annotation, prefix],
+                        [desc_addname, 'FieldShowOptional.'],
+                        [desc_name, field],
+                        [desc_annotation, ' [Optional]'],
+                    ),
+                ],
+                [desc_content, ()],
+            ),
+        ],
     )
 
     # explicit local
@@ -1136,22 +1150,21 @@ def test_autodoc_pydantic_field_show_optional_true_directive(field, parse_rst):
         f'.. py:pydantic_field:: FieldShowOptional.{field}',
         '   :module: target.configuration',
         '   :optional:',
-        ''
+        '',
     ]
 
     doctree = parse_rst(input_rst)
     assert_node(doctree, output_nodes)
 
     # explicit local overwrite explict global
-    doctree = parse_rst(input_rst,
-                        conf={"autodoc_pydantic_field_show_optional": False})
+    doctree = parse_rst(input_rst, conf={'autodoc_pydantic_field_show_optional': False})
     assert_node(doctree, output_nodes)
 
 
 def test_autodoc_pydantic_field_swap_name_and_alias_with_alias(autodocument):
     kwargs = dict(
-        object_path=f'target.configuration.FieldSwapNameAndAlias.field1',
-        **KWARGS)
+        object_path=f'target.configuration.FieldSwapNameAndAlias.field1', **KWARGS
+    )
 
     result = [
         '',
@@ -1168,32 +1181,44 @@ def test_autodoc_pydantic_field_swap_name_and_alias_with_alias(autodocument):
 
     # explicit local
     actual = autodocument(
-        options_doc={"field-swap-name-and-alias": True,
-                     "field-show-alias": True},
-        **kwargs)
+        options_doc={'field-swap-name-and-alias': True, 'field-show-alias': True},
+        **kwargs,
+    )
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_swap_name_and_alias": False,
-                     "autodoc_pydantic_field_show_alias": False},
-        options_doc={"field-swap-name-and-alias": True,
-                     "field-show-alias": True},
-        **kwargs)
+        options_app={
+            'autodoc_pydantic_field_swap_name_and_alias': False,
+            'autodoc_pydantic_field_show_alias': False,
+        },
+        options_doc={'field-swap-name-and-alias': True, 'field-show-alias': True},
+        **kwargs,
+    )
     assert result == actual
 
 
 def test_autodoc_pydantic_field_swap_name_and_alias_with_alias_directive_local(
-        parse_rst):
-    prefix = desc_annotation_directive_prefix("field")
+    parse_rst,
+):
+    prefix = desc_annotation_directive_prefix('field')
     output_nodes = (
         index,
-        [desc, ([desc_signature, ([desc_annotation, prefix],
-                                  [desc_addname, "FieldSwapNameAndAlias."],
-                                  [desc_name, "field 1 alias"],
-                                  [desc_annotation, " (name 'field1')"])],
-                [desc_content, ()])
-         ]
+        [
+            desc,
+            (
+                [
+                    desc_signature,
+                    (
+                        [desc_annotation, prefix],
+                        [desc_addname, 'FieldSwapNameAndAlias.'],
+                        [desc_name, 'field 1 alias'],
+                        [desc_annotation, " (name 'field1')"],
+                    ),
+                ],
+                [desc_content, ()],
+            ),
+        ],
     )
 
     # explicit local
@@ -1204,7 +1229,7 @@ def test_autodoc_pydantic_field_swap_name_and_alias_with_alias_directive_local(
         '   :field-swap-name-and-alias:',
         '   :field-show-alias:',
         '   :alias: field 1 alias',
-        ''
+        '',
     ]
 
     doctree = parse_rst(input_rst)
@@ -1212,22 +1237,32 @@ def test_autodoc_pydantic_field_swap_name_and_alias_with_alias_directive_local(
 
     # explicit local overwrite explict global
     doctree = parse_rst(
-        input_rst,
-        conf={"autodoc_pydantic_field_swap_name_and_alias": False})
+        input_rst, conf={'autodoc_pydantic_field_swap_name_and_alias': False}
+    )
     assert_node(doctree, output_nodes)
 
 
 def test_autodoc_pydantic_field_swap_name_and_alias_with_alias_directive_global(
-        parse_rst):
-    prefix = desc_annotation_directive_prefix("field")
+    parse_rst,
+):
+    prefix = desc_annotation_directive_prefix('field')
     output_nodes = (
         index,
-        [desc, ([desc_signature, ([desc_annotation, prefix],
-                                  [desc_addname, "FieldSwapNameAndAlias."],
-                                  [desc_name, "field 1 alias"],
-                                  [desc_annotation, " (name 'field1')"])],
-                [desc_content, ()])
-         ]
+        [
+            desc,
+            (
+                [
+                    desc_signature,
+                    (
+                        [desc_annotation, prefix],
+                        [desc_addname, 'FieldSwapNameAndAlias.'],
+                        [desc_name, 'field 1 alias'],
+                        [desc_annotation, " (name 'field1')"],
+                    ),
+                ],
+                [desc_content, ()],
+            ),
+        ],
     )
 
     # explicit local
@@ -1236,21 +1271,24 @@ def test_autodoc_pydantic_field_swap_name_and_alias_with_alias_directive_global(
         '.. py:pydantic_field:: FieldSwapNameAndAlias.field1',
         '   :module: target.configuration',
         '   :alias: field 1 alias',
-        ''
+        '',
     ]
 
     # explicit local overwrite explict global
     doctree = parse_rst(
         input_rst,
-        conf={"autodoc_pydantic_field_swap_name_and_alias": True,
-              "autodoc_pydantic_field_show_alias": True})
+        conf={
+            'autodoc_pydantic_field_swap_name_and_alias': True,
+            'autodoc_pydantic_field_show_alias': True,
+        },
+    )
     assert_node(doctree, output_nodes)
 
 
 def test_autodoc_pydantic_field_swap_name_and_alias_true(autodocument):
     kwargs = dict(
-        object_path=f'target.configuration.FieldSwapNameAndAlias.field1',
-        **KWARGS)
+        object_path=f'target.configuration.FieldSwapNameAndAlias.field1', **KWARGS
+    )
 
     result = [
         '',
@@ -1265,23 +1303,22 @@ def test_autodoc_pydantic_field_swap_name_and_alias_true(autodocument):
     ]
 
     # explicit local
-    actual = autodocument(
-        options_doc={"field-swap-name-and-alias": True},
-        **kwargs)
+    actual = autodocument(options_doc={'field-swap-name-and-alias': True}, **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_swap_name_and_alias": False},
-        options_doc={"field-swap-name-and-alias": True},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_swap_name_and_alias': False},
+        options_doc={'field-swap-name-and-alias': True},
+        **kwargs,
+    )
     assert result == actual
 
 
 def test_autodoc_pydantic_field_swap_name_and_alias_false(autodocument):
     kwargs = dict(
-        object_path=f'target.configuration.FieldSwapNameAndAlias.field1',
-        **KWARGS)
+        object_path=f'target.configuration.FieldSwapNameAndAlias.field1', **KWARGS
+    )
 
     result = [
         '',
@@ -1295,29 +1332,36 @@ def test_autodoc_pydantic_field_swap_name_and_alias_false(autodocument):
     ]
 
     # explicit local
-    actual = autodocument(
-        options_doc={"field-swap-name-and-alias": False},
-        **kwargs)
+    actual = autodocument(options_doc={'field-swap-name-and-alias': False}, **kwargs)
     assert result == actual
 
     # explicit local overwrite global
     actual = autodocument(
-        options_app={"autodoc_pydantic_field_swap_name_and_alias": True},
-        options_doc={"field-swap-name-and-alias": False},
-        **kwargs)
+        options_app={'autodoc_pydantic_field_swap_name_and_alias': True},
+        options_doc={'field-swap-name-and-alias': False},
+        **kwargs,
+    )
     assert result == actual
 
 
-def test_autodoc_pydantic_field_swap_name_and_alias_true_directive_local(
-        parse_rst):
-    prefix = desc_annotation_directive_prefix("field")
+def test_autodoc_pydantic_field_swap_name_and_alias_true_directive_local(parse_rst):
+    prefix = desc_annotation_directive_prefix('field')
     output_nodes = (
         index,
-        [desc, ([desc_signature, ([desc_annotation, prefix],
-                                  [desc_addname, "FieldSwapNameAndAlias."],
-                                  [desc_name, "field 1 alias"])],
-                [desc_content, ()])
-         ]
+        [
+            desc,
+            (
+                [
+                    desc_signature,
+                    (
+                        [desc_annotation, prefix],
+                        [desc_addname, 'FieldSwapNameAndAlias.'],
+                        [desc_name, 'field 1 alias'],
+                    ),
+                ],
+                [desc_content, ()],
+            ),
+        ],
     )
 
     # explicit local
@@ -1328,7 +1372,7 @@ def test_autodoc_pydantic_field_swap_name_and_alias_true_directive_local(
         '   :field-swap-name-and-alias:',
         '   :field-show-alias: False',
         '   :alias: field 1 alias',
-        ''
+        '',
     ]
 
     doctree = parse_rst(input_rst)
@@ -1336,21 +1380,29 @@ def test_autodoc_pydantic_field_swap_name_and_alias_true_directive_local(
 
     # explicit local overwrite explict global
     doctree = parse_rst(
-        input_rst,
-        conf={"autodoc_pydantic_field_swap_name_and_alias": False})
+        input_rst, conf={'autodoc_pydantic_field_swap_name_and_alias': False}
+    )
     assert_node(doctree, output_nodes)
 
 
-def test_autodoc_pydantic_field_swap_name_and_alias_false_directive_local(
-        parse_rst):
-    prefix = desc_annotation_directive_prefix("field")
+def test_autodoc_pydantic_field_swap_name_and_alias_false_directive_local(parse_rst):
+    prefix = desc_annotation_directive_prefix('field')
     output_nodes = (
         index,
-        [desc, ([desc_signature, ([desc_annotation, prefix],
-                                  [desc_addname, "FieldSwapNameAndAlias."],
-                                  [desc_name, "field1"])],
-                [desc_content, ()])
-         ]
+        [
+            desc,
+            (
+                [
+                    desc_signature,
+                    (
+                        [desc_annotation, prefix],
+                        [desc_addname, 'FieldSwapNameAndAlias.'],
+                        [desc_name, 'field1'],
+                    ),
+                ],
+                [desc_content, ()],
+            ),
+        ],
     )
 
     # explicit local
@@ -1361,7 +1413,7 @@ def test_autodoc_pydantic_field_swap_name_and_alias_false_directive_local(
         '   :field-swap-name-and-alias: False',
         '   :field-show-alias: False',
         '   :alias: field 1 alias',
-        ''
+        '',
     ]
 
     doctree = parse_rst(input_rst)
@@ -1369,21 +1421,29 @@ def test_autodoc_pydantic_field_swap_name_and_alias_false_directive_local(
 
     # explicit local overwrite explict global
     doctree = parse_rst(
-        input_rst,
-        conf={"autodoc_pydantic_field_swap_name_and_alias": True})
+        input_rst, conf={'autodoc_pydantic_field_swap_name_and_alias': True}
+    )
     assert_node(doctree, output_nodes)
 
 
-def test_autodoc_pydantic_field_swap_name_and_alias_true_directive_global(
-        parse_rst):
-    prefix = desc_annotation_directive_prefix("field")
+def test_autodoc_pydantic_field_swap_name_and_alias_true_directive_global(parse_rst):
+    prefix = desc_annotation_directive_prefix('field')
     output_nodes = (
         index,
-        [desc, ([desc_signature, ([desc_annotation, prefix],
-                                  [desc_addname, "FieldSwapNameAndAlias."],
-                                  [desc_name, "field 1 alias"])],
-                [desc_content, ()])
-         ]
+        [
+            desc,
+            (
+                [
+                    desc_signature,
+                    (
+                        [desc_annotation, prefix],
+                        [desc_addname, 'FieldSwapNameAndAlias.'],
+                        [desc_name, 'field 1 alias'],
+                    ),
+                ],
+                [desc_content, ()],
+            ),
+        ],
     )
 
     # explicit local
@@ -1392,11 +1452,14 @@ def test_autodoc_pydantic_field_swap_name_and_alias_true_directive_global(
         '.. py:pydantic_field:: FieldSwapNameAndAlias.field1',
         '   :module: target.configuration',
         '   :alias: field 1 alias',
-        ''
+        '',
     ]
 
     doctree = parse_rst(
         input_rst,
-        conf={"autodoc_pydantic_field_swap_name_and_alias": True,
-              "autodoc_pydantic_field_show_alias": False})
+        conf={
+            'autodoc_pydantic_field_swap_name_and_alias': True,
+            'autodoc_pydantic_field_show_alias': False,
+        },
+    )
     assert_node(doctree, output_nodes)

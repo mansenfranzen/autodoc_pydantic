@@ -6,9 +6,7 @@ class Custom:
 
 
 class NonSerializable(BaseModel):
-    """NonSerializable
-
-    """
+    """NonSerializable"""
 
     field: Custom
     """Field"""

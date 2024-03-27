@@ -12,4 +12,3 @@ class SettingOne(BaseModel):
 
     normalize_name = field_validator('name')(validation)
     """Reused validator class method."""
-

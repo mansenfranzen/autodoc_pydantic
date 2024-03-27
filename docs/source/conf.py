@@ -16,9 +16,7 @@ from pathlib import Path
 
 path = Path(__file__)
 path_autodoc_pydantic = path.parents[2]
-path_examples = path.parents[2].joinpath("tests",
-                                         "roots",
-                                         "test-base")
+path_examples = path.parents[2].joinpath('tests', 'roots', 'test-base')
 
 sys.path.insert(0, str(path.parent))
 sys.path.insert(0, str(path_examples))
@@ -31,7 +29,7 @@ copyright = '2023, Franz Wöllert'
 author = 'Franz Wöllert'
 
 # The full version, including alpha/beta/rc tags
-release = '2.1.0' # x-release-please-version
+release = '2.1.0'  # x-release-please-version
 
 # -- General configuration ---------------------------------------------------
 
@@ -39,17 +37,17 @@ release = '2.1.0' # x-release-please-version
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "sphinx_rtd_theme",
-    "sphinx.ext.napoleon",
-    "sphinx.ext.autodoc",
-    "sphinx.ext.autosummary",
-    "sphinx.ext.graphviz",
-    "sphinx_tabs.tabs",
-    "sphinx_copybutton",
-    "sphinxcontrib.autodoc_pydantic",
-    "sphinxcontrib.mermaid",
-    "sphinx.ext.viewcode",
-    "extensions"
+    'sphinx_rtd_theme',
+    'sphinx.ext.napoleon',
+    'sphinx.ext.autodoc',
+    'sphinx.ext.autosummary',
+    'sphinx.ext.graphviz',
+    'sphinx_tabs.tabs',
+    'sphinx_copybutton',
+    'sphinxcontrib.autodoc_pydantic',
+    'sphinxcontrib.mermaid',
+    'sphinx.ext.viewcode',
+    'extensions',
 ]
 
 autosummary_generate = True
@@ -67,12 +65,9 @@ exclude_patterns = []
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "sphinx_rtd_theme"
-html_logo = "material/logo_white.svg"
-html_theme_options = {
-    'logo_only': True,
-    'display_version': True
-}
+html_theme = 'sphinx_rtd_theme'
+html_logo = 'material/logo_white.svg'
+html_theme_options = {'logo_only': True, 'display_version': True}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -81,8 +76,8 @@ html_theme_options = {
 
 add_module_names = False
 
-mermaid_version = ""
-html_static_path = ["_static"]
+mermaid_version = ''
+html_static_path = ['_static']
 html_js_files = ['mermaid.min.js']
 html_css_files = ['custom.css']
 

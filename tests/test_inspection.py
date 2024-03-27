@@ -1,6 +1,5 @@
-"""This module contains tests regarding the `inspection` module.
+"""This module contains tests regarding the `inspection` module."""
 
-"""
 from typing import TypeVar, Union
 
 try:
@@ -11,11 +10,10 @@ except ImportError:
 import pytest
 from pydantic import BaseModel, ConfigDict
 
-from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector, \
-    StaticInspector
+from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector, StaticInspector
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope='session')
 def serializable():
     class Serializable(BaseModel):
         field_one: str
@@ -23,17 +21,17 @@ def serializable():
     return ModelInspector(Serializable)
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope='session')
 def serializable_mix():
     class Custom:
         def __init__(self):
-            self.field = "foobar"
+            self.field = 'foobar'
 
-    new_type = TypeVar("Dummy")
+    new_type = TypeVar('Dummy')
 
     class NonSerializable(BaseModel):
         model_config = ConfigDict(arbitrary_types_allowed=True)
-        field_1: str = "foo"
+        field_1: str = 'foo'
         field_2: object
         field_3: str = object()
         field_4: Custom = Custom()
@@ -43,54 +41,52 @@ def serializable_mix():
     return ModelInspector(NonSerializable)
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope='session')
 def serializable_forward_ref():
     Foo = ForwardRef('Foo')
 
     class Foo(BaseModel):
         a: int = 123
         b: Foo = None
-        c: "Foo" = None
+        c: 'Foo' = None
 
     return ModelInspector(Foo)
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope='session')
 def serializable_forward_ref_union():
     Foo = ForwardRef('Foo')
 
     class Foo(BaseModel):
         a: int = 123
         b: Union[Foo, int] = 2
-        c: Union["Foo", str] = "foobar"
+        c: Union['Foo', str] = 'foobar'
 
     return ModelInspector(Foo)
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope='session')
 def serializable_self_reference():
     class Foo(BaseModel):
         a: int = 123
-        c: "Foo" = None
+        c: 'Foo' = None
 
     return ModelInspector(Foo)
 
 
 @pytest.mark.parametrize(
-    "field_test",
+    'field_test',
     [
-        ("field_1", True),
-        ("field_2", True),
-        ("field_3", True),
-        ("field_4", False),
-        ("field_5", True),
-        ("field_6", True),
+        ('field_1', True),
+        ('field_2', True),
+        ('field_3', True),
+        ('field_4', False),
+        ('field_5', True),
+        ('field_6', True),
     ],
 )
 def test_is_serializable(serializable_mix, field_test):
-    """Test different scenarios of serializable and non-serializable fields.
-
-    """
+    """Test different scenarios of serializable and non-serializable fields."""
 
     field_name, test_result = field_test
     result = serializable_mix.fields.is_json_serializable(field_name)
@@ -128,14 +124,14 @@ def test_is_serializable_self_reference(serializable_self_reference):
 def test_find_non_json_serializable_fields(serializable, serializable_mix):
     assert serializable.fields.non_json_serializable == []
 
-    non_serial_fields = ["field_4"]
+    non_serial_fields = ['field_4']
     assert serializable_mix.fields.non_json_serializable == non_serial_fields
 
 
 def test_get_safe_schema_json_serializable(serializable):
     json_result = serializable.schema.sanitized
 
-    assert "field_one" in json_result["properties"]
+    assert 'field_one' in json_result['properties']
 
 
 def test_get_safe_schema_json_non_serializable(serializable_mix):
@@ -143,14 +139,13 @@ def test_get_safe_schema_json_non_serializable(serializable_mix):
     invalid_fields = serializable_mix.fields.non_json_serializable
 
     for invalid_field in invalid_fields:
-        assert "type" not in json_result["properties"][invalid_field]
+        assert 'type' not in json_result['properties'][invalid_field]
 
 
 def test_is_pydantic_model_true():
     """Test is_pydantic_model with a simple subclass of BaseModel"""
 
-    class IsAModel(BaseModel):
-        ...
+    class IsAModel(BaseModel): ...
 
     assert StaticInspector.is_pydantic_model(IsAModel)
 
@@ -159,11 +154,10 @@ def test_is_pydantic_model_false():
     """Test is_pydantic_model with items that are not
     a subclass of BaseModel"""
 
-    class IsNotAModel:
-        ...
+    class IsNotAModel: ...
 
     assert not StaticInspector.is_pydantic_model(IsNotAModel)
-    assert not StaticInspector.is_pydantic_model("NotEvenAClass")
+    assert not StaticInspector.is_pydantic_model('NotEvenAClass')
 
 
 def test_is_pydantic_model_edge_case():

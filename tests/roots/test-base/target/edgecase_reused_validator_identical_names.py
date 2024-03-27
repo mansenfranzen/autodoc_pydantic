@@ -12,4 +12,3 @@ class ModelOne(BaseModel):
 
     validation = field_validator('name')(validation)
     """Reused validator class method."""
-

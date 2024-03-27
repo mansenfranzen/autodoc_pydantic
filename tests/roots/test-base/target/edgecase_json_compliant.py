@@ -2,7 +2,7 @@ from pydantic import BaseModel, ConfigDict
 
 
 class NoJsonSerializer:
-    foo = "bar"
+    foo = 'bar'
 
 
 class NotJsonCompliant(BaseModel):

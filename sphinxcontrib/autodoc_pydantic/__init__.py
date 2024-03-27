@@ -1,48 +1,46 @@
-"""Contains the extension setup.
-
-"""
+"""Contains the extension setup."""
 
 from pathlib import Path
-from typing import Dict, Any
+from typing import Any, Dict
 
 try:
     from importlib.metadata import version
 except ModuleNotFoundError:
     from importlib_metadata import version
 
-from sphinx.domains import ObjType
 from sphinx.application import Sphinx
+from sphinx.domains import ObjType
 
 from sphinxcontrib.autodoc_pydantic.directives.autodocumenters import (
-    PydanticValidatorDocumenter,
-    PydanticModelDocumenter,
     PydanticFieldDocumenter,
-    PydanticSettingsDocumenter
+    PydanticModelDocumenter,
+    PydanticSettingsDocumenter,
+    PydanticValidatorDocumenter,
 )
-from sphinxcontrib.autodoc_pydantic.directives.options.enums import \
-    OptionsJsonErrorStrategy, OptionsFieldDocPolicy, OptionsSummaryListOrder
-
 from sphinxcontrib.autodoc_pydantic.directives.directives import (
     PydanticField,
-    PydanticValidator,
     PydanticModel,
-    PydanticSettings
+    PydanticSettings,
+    PydanticValidator,
+)
+from sphinxcontrib.autodoc_pydantic.directives.options.enums import (
+    OptionsFieldDocPolicy,
+    OptionsJsonErrorStrategy,
+    OptionsSummaryListOrder,
 )
 
-__version__ = version("autodoc_pydantic")
+__version__ = version('autodoc_pydantic')
 
 from sphinxcontrib.autodoc_pydantic.events import add_fallback_css_class
 
 
 def add_css_file(app: Sphinx, exception: Exception):
-    """Adds custom css to HTML output.
+    """Adds custom css to HTML output."""
 
-    """
-
-    filename = "autodoc_pydantic.css"
-    static_path = (Path(app.outdir) / "_static").absolute()
+    filename = 'autodoc_pydantic.css'
+    static_path = (Path(app.outdir) / '_static').absolute()
     static_path.mkdir(exist_ok=True, parents=True)
-    path_css = Path(__file__).parent.joinpath("css", filename)
+    path_css = Path(__file__).parent.joinpath('css', filename)
 
     if not (static_path / filename).exists():
         content = path_css.read_text()
@@ -55,24 +53,22 @@ def add_domain_object_types(app: Sphinx):
 
     """
 
-    object_types = app.registry.domain_object_types.setdefault("py", {})
+    object_types = app.registry.domain_object_types.setdefault('py', {})
 
     obj_types_mapping = {
-        ("field", "validator", "config"): ("obj", "any"),
-        ("model", "settings"): ("obj", "any", "class")
+        ('field', 'validator', 'config'): ('obj', 'any'),
+        ('model', 'settings'): ('obj', 'any', 'class'),
     }
 
     for obj_types, roles in obj_types_mapping.items():
         for obj_type in obj_types:
-            object_types[f"pydantic_{obj_type}"] = ObjType(obj_type, *roles)
+            object_types[f'pydantic_{obj_type}'] = ObjType(obj_type, *roles)
 
 
 def add_configuration_values(app: Sphinx):
-    """Adds all configuration values to sphinx application.
+    """Adds all configuration values to sphinx application."""
 
-    """
-
-    stem = "autodoc_pydantic_"
+    stem = 'autodoc_pydantic_'
     add = app.add_config_value
     json_strategy = OptionsJsonErrorStrategy.WARN
     summary_list_order = OptionsSummaryListOrder.ALPHABETICAL
@@ -89,7 +85,7 @@ def add_configuration_values(app: Sphinx):
     add(f'{stem}settings_undoc_members', True, True, bool)
     add(f'{stem}settings_members', True, True, bool)
     add(f'{stem}settings_member_order', 'groupwise', True, str)
-    add(f'{stem}settings_signature_prefix', "pydantic settings", True, str)
+    add(f'{stem}settings_signature_prefix', 'pydantic settings', True, str)
 
     add(f'{stem}model_show_json', True, True, bool)
     add(f'{stem}model_show_json_error_strategy', json_strategy, True, str)
@@ -103,11 +99,11 @@ def add_configuration_values(app: Sphinx):
     add(f'{stem}model_undoc_members', True, True, bool)
     add(f'{stem}model_members', True, True, bool)
     add(f'{stem}model_member_order', 'groupwise', True, str)
-    add(f'{stem}model_signature_prefix', "pydantic model", True, str)
+    add(f'{stem}model_signature_prefix', 'pydantic model', True, str)
     add(f'{stem}model_erdantic_figure', False, True, bool)
     add(f'{stem}model_erdantic_figure_collapsed', True, True, bool)
 
-    add(f'{stem}validator_signature_prefix', "validator", True, str)
+    add(f'{stem}validator_signature_prefix', 'validator', True, str)
     add(f'{stem}validator_replace_signature', True, True, bool)
     add(f'{stem}validator_list_fields', False, True, bool)
 
@@ -119,7 +115,7 @@ def add_configuration_values(app: Sphinx):
     add(f'{stem}field_show_required', True, True, bool)
     add(f'{stem}field_show_optional', True, True, bool)
     add(f'{stem}field_swap_name_and_alias', False, True, bool)
-    add(f'{stem}field_signature_prefix', "field", True, str)
+    add(f'{stem}field_signature_prefix', 'field', True, str)
 
     add(f'{stem}add_fallback_css_class', True, True, bool)
 
@@ -130,10 +126,10 @@ def add_directives_and_autodocumenters(app: Sphinx):
 
     """
 
-    app.add_directive_to_domain("py", "pydantic_field", PydanticField)
-    app.add_directive_to_domain("py", "pydantic_model", PydanticModel)
-    app.add_directive_to_domain("py", "pydantic_settings", PydanticSettings)
-    app.add_directive_to_domain("py", "pydantic_validator", PydanticValidator)
+    app.add_directive_to_domain('py', 'pydantic_field', PydanticField)
+    app.add_directive_to_domain('py', 'pydantic_model', PydanticModel)
+    app.add_directive_to_domain('py', 'pydantic_settings', PydanticSettings)
+    app.add_directive_to_domain('py', 'pydantic_validator', PydanticValidator)
 
     app.setup_extension('sphinx.ext.autodoc')
     app.add_autodocumenter(PydanticFieldDocumenter)
@@ -148,8 +144,8 @@ def setup(app: Sphinx) -> Dict[str, Any]:
     add_configuration_values(app)
     add_directives_and_autodocumenters(app)
     add_domain_object_types(app)
-    app.add_css_file("autodoc_pydantic.css")
-    app.connect("build-finished", add_css_file)
+    app.add_css_file('autodoc_pydantic.css')
+    app.connect('build-finished', add_css_file)
 
     return {
         'version': __version__,

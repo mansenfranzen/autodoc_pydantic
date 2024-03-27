@@ -1,8 +1,6 @@
-"""This module contains reST templates used by autodocumenters and directives.
+"""This module contains reST templates used by autodocumenters and directives."""
 
-"""
 from typing import List
-
 
 TPL_COLLAPSE = """
 .. raw:: html
@@ -33,10 +31,10 @@ def to_collapsable(lines: List[str], title, css_class) -> List[str]:
 
     """
 
-    lines = "\n".join(lines)
+    lines = '\n'.join(lines)
     lines = TPL_COLLAPSE.format(
         lines=lines,
         summary=title,
-        details_class=css_class
+        details_class=css_class,
     )
-    return lines.split("\n")
+    return lines.split('\n')

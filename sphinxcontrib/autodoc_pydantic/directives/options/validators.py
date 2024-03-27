@@ -1,6 +1,6 @@
 """This module contains custom directive option validator functions."""
 
-from typing import Any, Union, List, Set, Callable
+from typing import Any, Callable, List, Set, Union
 
 from sphinx.ext.autodoc import ALL
 
@@ -13,9 +13,9 @@ def option_members(arg: Any) -> Union[object, List[str]]:
 
     if isinstance(arg, str):
         sanitized = arg.lower()
-        if sanitized == "true":
+        if sanitized == 'true':
             return ALL
-        elif sanitized == "false":
+        elif sanitized == 'false':
             return None
 
     if arg in (None, True):
@@ -34,7 +34,7 @@ def option_one_of_factory(choices: Set[Any]) -> Callable:
 
     def option_func(value: Any):
         if value not in choices:
-            raise ValueError(f"Option value has to be on of {choices}")
+            raise ValueError(f'Option value has to be on of {choices}')
         return value
 
     return option_func
@@ -54,21 +54,21 @@ def option_default_true(arg: Any) -> bool:
 
     sanitized = arg.strip().lower()
 
-    if sanitized == "true":
+    if sanitized == 'true':
         return True
-    elif sanitized == "false":
+    elif sanitized == 'false':
         return False
     else:
-        raise ValueError(f"Directive option argument '{arg}' is not valid. "
-                         f"Valid arguments are 'true' or 'false'.")
+        raise ValueError(
+            f"Directive option argument '{arg}' is not valid. "
+            f"Valid arguments are 'true' or 'false'."
+        )
 
 
 def option_list_like(arg: Any) -> Set[str]:
-    """Option validator used to define a set of items.
-
-    """
+    """Option validator used to define a set of items."""
 
     if not arg:
         return set()
     else:
-        return {x.strip() for x in arg.split(",")}
+        return {x.strip() for x in arg.split(',')}

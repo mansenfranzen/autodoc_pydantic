@@ -3,8 +3,9 @@ autodocumenters and directives. They mainly intend to encapsulate the
 management of directive options.
 
 """
+
 import functools
-from typing import Any, Union, Set, Optional
+from typing import Any, Optional, Set, Union
 
 from docutils.parsers.rst import Directive
 from sphinx.ext.autodoc import ALL, Documenter, Options
@@ -34,11 +35,9 @@ class DirectiveOptions:
         self.add_default_options()
 
     def add_default_options(self):
-        """Adds all default options.
+        """Adds all default options."""
 
-        """
-
-        options = getattr(self.parent, "pyautodoc_set_default_option", [])
+        options = getattr(self.parent, 'pyautodoc_set_default_option', [])
         for option in options:
             self.set_default_option(option)
 
@@ -59,9 +58,9 @@ class DirectiveOptions:
 
         """
 
-        sanitized = name.replace("-", "_")
+        sanitized = name.replace('-', '_')
 
-        return f"autodoc_pydantic_{sanitized}"
+        return f'autodoc_pydantic_{sanitized}'
 
     def is_available(self, name: str) -> bool:
         """Configurations may be disabled for documentation purposes. If the
@@ -70,7 +69,7 @@ class DirectiveOptions:
 
         """
 
-        available = self.parent.options.get("__doc_disable_except__")
+        available = self.parent.options.get('__doc_disable_except__')
         if available is None:
             return True
         else:
@@ -85,9 +84,9 @@ class DirectiveOptions:
         config_name = self.determine_app_cfg_name(name)
         return getattr(self.parent.env.config, config_name, NONE)
 
-    def get_value(self, name: str,
-                  prefix: bool = False,
-                  force_availability: bool = False) -> Any:
+    def get_value(
+        self, name: str, prefix: bool = False, force_availability: bool = False
+    ) -> Any:
         """Get option value for given `name`. First, looks for explicit
         directive option values (e.g. :member-order:) which have highest
         priority. Second, if no directive option is given, get the default
@@ -106,7 +105,7 @@ class DirectiveOptions:
         """
 
         if prefix:
-            name = f"{self.parent.pyautodoc_prefix}-{name}"
+            name = f'{self.parent.pyautodoc_prefix}-{name}'
 
         if name in self.parent.options:
             return self.parent.options[name]
@@ -193,11 +192,11 @@ class DirectiveOptions:
 
         """
 
-        option = self.parent.options.get("members", NONE)
+        option = self.parent.options.get('members', NONE)
         if option is None or option is False:
-            self.parent.options["members"] = []
-        elif self.get_app_cfg_by_name("members"):
-            self.parent.options["members"] = ALL
+            self.parent.options['members'] = []
+        elif self.get_app_cfg_by_name('members'):
+            self.parent.options['members'] = ALL
 
 
 class AutoDocOptions(DirectiveOptions):
@@ -223,9 +222,9 @@ class AutoDocOptions(DirectiveOptions):
         """
 
         if not self._configuration_names:
-            prefix = "autodoc_pydantic_"
+            prefix = 'autodoc_pydantic_'
             self._configuration_names = {
-                config.name.replace(prefix, "")
+                config.name.replace(prefix, '')
                 for config in self.parent.env.config
                 if config.name.startswith(prefix)
             }
@@ -253,26 +252,24 @@ class AutoDocOptions(DirectiveOptions):
 
         """
 
-        sanitized = name.replace("-", "_")
+        sanitized = name.replace('-', '_')
 
-        prefix = self.parent.objtype.split("_")[-1]
+        prefix = self.parent.objtype.split('_')[-1]
         is_not_prefixed = prefix not in sanitized
         is_not_existing = sanitized not in self.configuration_names
 
         if is_not_prefixed and is_not_existing:
-            sanitized = f"{prefix}_{sanitized}"
+            sanitized = f'{prefix}_{sanitized}'
 
-        return f"autodoc_pydantic_{sanitized}"
+        return f'autodoc_pydantic_{sanitized}'
 
     def add_pass_through_to_directive(self):
-        """Intercepts documenters `add_directive_header` and adds pass through.
-
-        """
+        """Intercepts documenters `add_directive_header` and adds pass through."""
 
         func = self.parent.add_directive_header
 
-        pass_through = ["__doc_disable_except__"]
-        specific = getattr(self.parent, "pyautodoc_pass_to_directive", [])
+        pass_through = ['__doc_disable_except__']
+        specific = getattr(self.parent, 'pyautodoc_pass_to_directive', [])
         pass_through.extend(specific)
 
         @functools.wraps(func)
@@ -286,15 +283,13 @@ class AutoDocOptions(DirectiveOptions):
         self.parent.add_directive_header = wrapped
 
     def pass_option_to_directive(self, name: str):
-        """Pass an autodoc option through to the generated directive.
-
-        """
+        """Pass an autodoc option through to the generated directive."""
 
         if name in self.parent.options:
             source_name = self.parent.get_sourcename()
             value = self.parent.options[name]
 
-            if isinstance("value", set):
-                value = ", ".join(value)
+            if isinstance('value', set):
+                value = ', '.join(value)
 
-            self.parent.add_line(f"   :{name}: {value}", source_name)
+            self.parent.add_line(f'   :{name}: {value}', source_name)

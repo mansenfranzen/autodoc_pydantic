@@ -1,6 +1,5 @@
-"""Pytest configuration which is partially borrowed from sphinx conftest.py.
+"""Pytest configuration which is partially borrowed from sphinx conftest.py."""
 
-"""
 import copy
 import shutil
 import inspect
@@ -20,50 +19,42 @@ from sphinx.cmd import build
 
 from sphinx.testing.restructuredtext import parse
 from sphinx.util.docutils import LoggingReporter
-from sphinx.ext.autodoc.directive import (
-    process_documenter_options,
-    DocumenterBridge
-)
+from sphinx.ext.autodoc.directive import process_documenter_options, DocumenterBridge
 
 pytest_plugins = 'sphinx.testing.fixtures'
 
 CONF_DEACTIVATE = {
-    "autodoc_pydantic_config_undoc_members": False,
-    "autodoc_pydantic_config_members": False,
-
-    "autodoc_pydantic_model_show_json": False,
-    "autodoc_pydantic_model_show_config_member": False,
-    "autodoc_pydantic_model_show_config_summary": False,
-    "autodoc_pydantic_model_show_validator_members": False,
-    "autodoc_pydantic_model_show_validator_summary": False,
-    "autodoc_pydantic_model_show_field_summary": False,
-    "autodoc_pydantic_model_hide_paramlist": True,
-    "autodoc_pydantic_model_hide_reused_validator": False,
-    "autodoc_pydantic_model_undoc_members": False,
-    "autodoc_pydantic_model_members": False,
-
-    "autodoc_pydantic_settings_show_json": False,
-    "autodoc_pydantic_settings_show_config_member": False,
-    "autodoc_pydantic_settings_show_config_summary": False,
-    "autodoc_pydantic_settings_show_validator_members": False,
-    "autodoc_pydantic_settings_show_validator_summary": False,
-    "autodoc_pydantic_settings_show_field_summary": False,
-    "autodoc_pydantic_settings_hide_paramlist": True,
-    "autodoc_pydantic_settings_hide_reused_validator": False,
-    "autodoc_pydantic_settings_undoc_members": False,
-    "autodoc_pydantic_settings_members": False,
-
-    "autodoc_pydantic_validator_replace_signature": True,
-    "autodoc_pydantic_validator_list_fields": False,
-
-    "autodoc_pydantic_field_list_validators": False,
-    "autodoc_pydantic_field_show_constraints": False,
-    "autodoc_pydantic_field_show_alias": False,
-    "autodoc_pydantic_field_show_required": False,
-    "autodoc_pydantic_field_show_optional": False,
-    "autodoc_pydantic_field_show_default": False,
-    "autodoc_pydantic_field_swap_name_and_alias": False
-
+    'autodoc_pydantic_config_undoc_members': False,
+    'autodoc_pydantic_config_members': False,
+    'autodoc_pydantic_model_show_json': False,
+    'autodoc_pydantic_model_show_config_member': False,
+    'autodoc_pydantic_model_show_config_summary': False,
+    'autodoc_pydantic_model_show_validator_members': False,
+    'autodoc_pydantic_model_show_validator_summary': False,
+    'autodoc_pydantic_model_show_field_summary': False,
+    'autodoc_pydantic_model_hide_paramlist': True,
+    'autodoc_pydantic_model_hide_reused_validator': False,
+    'autodoc_pydantic_model_undoc_members': False,
+    'autodoc_pydantic_model_members': False,
+    'autodoc_pydantic_settings_show_json': False,
+    'autodoc_pydantic_settings_show_config_member': False,
+    'autodoc_pydantic_settings_show_config_summary': False,
+    'autodoc_pydantic_settings_show_validator_members': False,
+    'autodoc_pydantic_settings_show_validator_summary': False,
+    'autodoc_pydantic_settings_show_field_summary': False,
+    'autodoc_pydantic_settings_hide_paramlist': True,
+    'autodoc_pydantic_settings_hide_reused_validator': False,
+    'autodoc_pydantic_settings_undoc_members': False,
+    'autodoc_pydantic_settings_members': False,
+    'autodoc_pydantic_validator_replace_signature': True,
+    'autodoc_pydantic_validator_list_fields': False,
+    'autodoc_pydantic_field_list_validators': False,
+    'autodoc_pydantic_field_show_constraints': False,
+    'autodoc_pydantic_field_show_alias': False,
+    'autodoc_pydantic_field_show_required': False,
+    'autodoc_pydantic_field_show_optional': False,
+    'autodoc_pydantic_field_show_default': False,
+    'autodoc_pydantic_field_swap_name_and_alias': False,
 }
 
 
@@ -74,17 +65,14 @@ def rootdir() -> Path:
 
 @pytest.fixture(scope='session')
 def docdir() -> Path:
-    """Provides path to actual sphinx documentation of autodoc_pydantic.
+    """Provides path to actual sphinx documentation of autodoc_pydantic."""
 
-    """
-
-    return Path(__file__).parents[1].joinpath("docs", "source")
+    return Path(__file__).parents[1].joinpath('docs', 'source')
 
 
-def do_autodoc(app: Sphinx,
-               documenter: str,
-               object_path: str,
-               options_doc: Optional[Dict] = None) -> List[str]:
+def do_autodoc(
+    app: Sphinx, documenter: str, object_path: str, options_doc: Optional[Dict] = None
+) -> List[str]:
     """Run auto `documenter` for given object referenced by `object_path`
     within provided sphinx `app`. Optionally override app and documenter
     settings.
@@ -127,7 +115,7 @@ def do_autodoc(app: Sphinx,
     return list(bridge.result)
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope='function')
 def test_app(make_app, sphinx_test_tempdir, rootdir):
     """Create callable which returns a fresh sphinx test application. The test
     application is faster than using a production application (like `prod_app`
@@ -141,10 +129,9 @@ def test_app(make_app, sphinx_test_tempdir, rootdir):
 
     """
 
-    def create(testroot: str,
-               conf: Optional[Dict] = None,
-               deactivate_all: bool = False):
-        
+    def create(
+        testroot: str, conf: Optional[Dict] = None, deactivate_all: bool = False
+    ):
         srcdir = sphinx_test_tempdir / testroot
         shutil.rmtree(srcdir, ignore_errors=True)
 
@@ -155,12 +142,12 @@ def test_app(make_app, sphinx_test_tempdir, rootdir):
         kwargs = dict(srcdir=srcdir, confoverrides={})
 
         if deactivate_all:
-            kwargs["confoverrides"].update(CONF_DEACTIVATE)
+            kwargs['confoverrides'].update(CONF_DEACTIVATE)
 
         if conf:
-            kwargs["confoverrides"].update(conf)
+            kwargs['confoverrides'].update(conf)
 
-        return make_app("html", **kwargs)
+        return make_app('html', **kwargs)
 
     return create
 
@@ -192,25 +179,27 @@ def autodocument(test_app):
 
     """
 
-    def _auto(documenter: str,
-              object_path: str,
-              options_doc: Optional[Dict] = None,
-              options_app: Optional[Dict] = None,
-              testroot: str = "base",
-              deactivate_all: bool = False):
-        app = test_app(testroot,
-                       conf=options_app,
-                       deactivate_all=deactivate_all)
+    def _auto(
+        documenter: str,
+        object_path: str,
+        options_doc: Optional[Dict] = None,
+        options_app: Optional[Dict] = None,
+        testroot: str = 'base',
+        deactivate_all: bool = False,
+    ):
+        app = test_app(testroot, conf=options_app, deactivate_all=deactivate_all)
 
-        return do_autodoc(app=app,
-                          documenter=documenter,
-                          object_path=object_path,
-                          options_doc=options_doc)
+        return do_autodoc(
+            app=app,
+            documenter=documenter,
+            object_path=object_path,
+            options_doc=options_doc,
+        )
 
     return _auto
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope='function')
 def parse_rst(test_app):
     """Main fixture to test generated doctree/docutil nodes from given
     reStructuredText.
@@ -220,21 +209,21 @@ def parse_rst(test_app):
 
     """
 
-    def _parse(text: List[str],
-               testroot: str = "base",
-               conf: Optional[Dict] = None,
-               deactivate_all: bool = False):
-        text = "\n".join(text)
-        app = test_app(testroot,
-                       conf=conf,
-                       deactivate_all=deactivate_all)
+    def _parse(
+        text: List[str],
+        testroot: str = 'base',
+        conf: Optional[Dict] = None,
+        deactivate_all: bool = False,
+    ):
+        text = '\n'.join(text)
+        app = test_app(testroot, conf=conf, deactivate_all=deactivate_all)
 
         return parse(app=app, text=text)
 
     return _parse
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope='function')
 def log_capturer(monkeypatch):
     """Provides a context manager to intercept all log messages emitted under
     the sphinx namespace for given log level. The returned value is the buffer
@@ -268,11 +257,11 @@ def log_capturer(monkeypatch):
         def __enter__(self):
             def mock_logging(*args, **kwargs):
                 result = setup(*args, **kwargs)
-                logger = logging.getLogger("sphinx")
+                logger = logging.getLogger('sphinx')
                 logger.addHandler(self.handler)
                 return result
 
-            monkeypatch.setattr(sphinx.util.logging, "setup", mock_logging)
+            monkeypatch.setattr(sphinx.util.logging, 'setup', mock_logging)
             return self.handler.buffer
 
         def __exit__(self, type, value, traceback):
@@ -283,9 +272,7 @@ def log_capturer(monkeypatch):
 
 
 class SphinxResult(BaseModel):
-    """Container for the result of a sphinx run.
-
-    """
+    """Container for the result of a sphinx run."""
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
     app: Optional[application.Sphinx] = None
@@ -312,8 +299,9 @@ def combine_sphinx_init_arguments(args: List, kwargs: Dict) -> Dict:
     return result
 
 
-def create_sphinx_app_mockup(sphinx_result: SphinxResult,
-                             confoverrides: Optional[Dict]) -> Callable:
+def create_sphinx_app_mockup(
+    sphinx_result: SphinxResult, confoverrides: Optional[Dict]
+) -> Callable:
     """Generates a mockup for `sphinx.application.Sphinx` while capturing it
     via changing `sphinx_result` in place and modifying `confoverrides`.
 
@@ -323,10 +311,10 @@ def create_sphinx_app_mockup(sphinx_result: SphinxResult,
         safe_kwargs = combine_sphinx_init_arguments(args, kwargs)
 
         if confoverrides:
-            if "confoverrides" in safe_kwargs:
-                safe_kwargs["confoverrides"].update(confoverrides)
+            if 'confoverrides' in safe_kwargs:
+                safe_kwargs['confoverrides'].update(confoverrides)
             else:
-                safe_kwargs["confoverrides"] = confoverrides
+                safe_kwargs['confoverrides'] = confoverrides
 
         app = application.Sphinx(**safe_kwargs)
         sphinx_result.app = app
@@ -335,7 +323,7 @@ def create_sphinx_app_mockup(sphinx_result: SphinxResult,
     return capture_sphinx_app
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope='function')
 def prod_app(tmpdir, monkeypatch) -> Callable:
     """Execute production sphinx app via main cmd entry point for given source
     directory. It returns a `SphinxResult` which allows inspection of the
@@ -355,23 +343,25 @@ def prod_app(tmpdir, monkeypatch) -> Callable:
 
     """
 
-    def run(source_dir: Union[Path, str],
-            docnames: Optional[List[str]] = None,
-            confoverrides: Optional[Dict] = None) -> SphinxResult:
+    def run(
+        source_dir: Union[Path, str],
+        docnames: Optional[List[str]] = None,
+        confoverrides: Optional[Dict] = None,
+    ) -> SphinxResult:
         sphinx_result = SphinxResult()
         capture_sphinx_app = create_sphinx_app_mockup(
-            sphinx_result=sphinx_result,
-            confoverrides=confoverrides
+            sphinx_result=sphinx_result, confoverrides=confoverrides
         )
 
         with monkeypatch.context() as m:
-            m.setattr(build, "Sphinx", capture_sphinx_app)
-            sphinx_result.return_code = build.build_main([str(source_dir),
-                                                          str(tmpdir)])
+            m.setattr(build, 'Sphinx', capture_sphinx_app)
+            sphinx_result.return_code = build.build_main([str(source_dir), str(tmpdir)])
 
         if docnames:
-            doctree = {docname: sphinx_result.app.env.get_doctree(docname)
-                       for docname in docnames}
+            doctree = {
+                docname: sphinx_result.app.env.get_doctree(docname)
+                for docname in docnames
+            }
             sphinx_result.doctree = doctree
 
         return sphinx_result
