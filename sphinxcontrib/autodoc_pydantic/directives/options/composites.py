@@ -4,13 +4,17 @@ management of directive options.
 
 """
 
-import functools
-from typing import Any, Optional, Set, Union
+from __future__ import annotations
 
-from docutils.parsers.rst import Directive
+import functools
+from typing import TYPE_CHECKING, Any
+
 from sphinx.ext.autodoc import ALL, Documenter, Options
 
 from sphinxcontrib.autodoc_pydantic.directives.utility import NONE
+
+if TYPE_CHECKING:
+    from docutils.parsers.rst import Directive
 
 
 class DirectiveOptions:
@@ -29,12 +33,12 @@ class DirectiveOptions:
 
     """
 
-    def __init__(self, parent: Union[Documenter, Directive]):
+    def __init__(self, parent: Documenter | Directive) -> None:
         self.parent = parent
         self.parent.options = Options(self.parent.options)
         self.add_default_options()
 
-    def add_default_options(self):
+    def add_default_options(self) -> None:
         """Adds all default options."""
 
         options = getattr(self.parent, 'pyautodoc_set_default_option', [])
@@ -72,10 +76,10 @@ class DirectiveOptions:
         available = self.parent.options.get('__doc_disable_except__')
         if available is None:
             return True
-        else:
-            return name in available
 
-    def get_app_cfg_by_name(self, name: str) -> Any:
+        return name in available
+
+    def get_app_cfg_by_name(self, name: str) -> Any:  # noqa: ANN401
         """Get configuration value from app environment configuration.
         If `name` does not exist, return NONE.
 
@@ -85,8 +89,11 @@ class DirectiveOptions:
         return getattr(self.parent.env.config, config_name, NONE)
 
     def get_value(
-        self, name: str, prefix: bool = False, force_availability: bool = False
-    ) -> Any:
+        self,
+        name: str,
+        prefix: bool = False,  # noqa: FBT001, FBT002
+        force_availability: bool = False,  # noqa: FBT001, FBT002
+    ) -> Any:  # noqa: ANN401
         """Get option value for given `name`. First, looks for explicit
         directive option values (e.g. :member-order:) which have highest
         priority. Second, if no directive option is given, get the default
@@ -109,12 +116,13 @@ class DirectiveOptions:
 
         if name in self.parent.options:
             return self.parent.options[name]
-        elif force_availability or self.is_available(name):
-            return self.get_app_cfg_by_name(name)
-        else:
-            return NONE
 
-    def is_false(self, name: str, prefix: bool = False) -> bool:
+        if force_availability or self.is_available(name):
+            return self.get_app_cfg_by_name(name)
+
+        return NONE
+
+    def is_false(self, name: str, prefix: bool = False) -> bool:  # noqa: FBT001, FBT002
         """Check if option with `name` is False. First, looks for explicit
         directive option values (e.g. :member-order:) which have highest
         priority. Second, if no directive option is given, get the default
@@ -133,7 +141,7 @@ class DirectiveOptions:
 
         return self.get_value(name=name, prefix=prefix) is False
 
-    def is_true(self, name: str, prefix: bool = False) -> bool:
+    def is_true(self, name: str, prefix: bool = False) -> bool:  # noqa: FBT001, FBT002
         """Check if option with `name` is True. First, looks for explicit
         directive option values (e.g. :member-order:) which have highest
         priority. Second, if no directive option is given, get the default
@@ -152,7 +160,7 @@ class DirectiveOptions:
 
         return self.get_value(name=name, prefix=prefix) is True
 
-    def exists(self, name: str, prefix: bool = False) -> bool:
+    def exists(self, name: str, prefix: bool = False) -> bool:  # noqa: FBT001, FBT002
         """Check if option with `name` is set. First, looks for explicit
         directive option values (e.g. :member-order:) which have highest
         priority. Second, if no directive option is given, get the default
@@ -171,7 +179,7 @@ class DirectiveOptions:
 
         return self.get_value(name=name, prefix=prefix) is not NONE
 
-    def set_default_option(self, name: str):
+    def set_default_option(self, name: str) -> None:
         """Set default option value for given `name` from app environment
         configuration if an explicit directive option was not provided.
 
@@ -185,7 +193,7 @@ class DirectiveOptions:
         if (name not in self.parent.options) and (self.is_available(name)):
             self.parent.options[name] = self.get_app_cfg_by_name(name)
 
-    def set_members_all(self):
+    def set_members_all(self) -> None:
         """Specifically sets the :members: option to ALL if activated via
         app environment settings and not deactivated locally by directive
         option.
@@ -205,13 +213,13 @@ class AutoDocOptions(DirectiveOptions):
 
     """
 
-    def __init__(self, *args):
-        self._configuration_names: Optional[Set[str]] = None
+    def __init__(self, *args) -> None:  # noqa: ANN002
+        self._configuration_names: set[str] | None = None
         super().__init__(*args)
         self.add_pass_through_to_directive()
 
     @property
-    def configuration_names(self) -> Set[str]:
+    def configuration_names(self) -> set[str]:
         """Returns all configuration names that exist for `autodoc_pydantic`.
 
         This is used by :obj:`determine_app_cfg_name` to identify
@@ -263,7 +271,7 @@ class AutoDocOptions(DirectiveOptions):
 
         return f'autodoc_pydantic_{sanitized}'
 
-    def add_pass_through_to_directive(self):
+    def add_pass_through_to_directive(self) -> None:
         """Intercepts documenters `add_directive_header` and adds pass through."""
 
         func = self.parent.add_directive_header
@@ -273,7 +281,7 @@ class AutoDocOptions(DirectiveOptions):
         pass_through.extend(specific)
 
         @functools.wraps(func)
-        def wrapped(*args, **kwargs):
+        def wrapped(*args, **kwargs):  # noqa: ANN002, ANN003, ANN202
             result = func(*args, **kwargs)
             for option in pass_through:
                 self.pass_option_to_directive(option)
@@ -282,7 +290,7 @@ class AutoDocOptions(DirectiveOptions):
 
         self.parent.add_directive_header = wrapped
 
-    def pass_option_to_directive(self, name: str):
+    def pass_option_to_directive(self, name: str) -> None:
         """Pass an autodoc option through to the generated directive."""
 
         if name in self.parent.options:

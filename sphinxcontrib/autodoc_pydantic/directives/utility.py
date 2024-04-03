@@ -3,12 +3,16 @@ autodocumenters and directives.
 
 """
 
+from __future__ import annotations
+
 import re
-from typing import List
+from typing import TYPE_CHECKING
 
 from docutils.nodes import emphasis
 from sphinx.addnodes import pending_xref
-from sphinx.environment import BuildEnvironment
+
+if TYPE_CHECKING:
+    from sphinx.environment import BuildEnvironment
 
 REGEX_TYPE_ANNOT = re.compile(
     r'\s+:type:\s([a-zA-Z1-9\._\[]+\]?)\[([a-zA-Z1-9\._\[\]]+)\]'
@@ -22,7 +26,7 @@ class NullType:
 
     """
 
-    def __bool__(self):
+    def __bool__(self) -> bool:
         return False
 
 
@@ -40,12 +44,12 @@ def create_field_href(name: str, ref: str, env: BuildEnvironment) -> pending_xre
     }
 
     refnode = pending_xref(name, **options)
-    classes = ['xref', 'py', '%s-%s' % ('py', 'obj')]
+    classes = ['xref', 'py', 'py-obj']
     refnode += emphasis(name, name, classes=classes)
     return refnode
 
 
-def remove_node_by_tagname(nodes: List, tagname: str):
+def remove_node_by_tagname(nodes: list, tagname: str) -> None:
     """Removes node from list of `nodes` with given `tagname` in place."""
 
     for remove in [node for node in nodes if node.tagname == tagname]:

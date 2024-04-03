@@ -10,8 +10,11 @@ OBJTYPES_CSS_FALLBACKS = {
 
 
 def add_fallback_css_class(
-    app: Sphinx, domain: str, objtype: str, contentnode: desc_content
-):
+    app: Sphinx,
+    domain: str,  # noqa: ARG001
+    objtype: str,
+    contentnode: desc_content,
+) -> None:
     """Used as `object-description-transform` sphinx event to add default css
     classes to autodoc_pydantic's custom auto-documenter.
 

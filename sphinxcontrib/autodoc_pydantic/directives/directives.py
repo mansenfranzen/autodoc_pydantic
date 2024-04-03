@@ -1,6 +1,8 @@
 """This module contains **autodoc_pydantic**'s directives."""
 
-from typing import List, Tuple, Union
+from __future__ import annotations
+
+from typing import Tuple
 
 import sphinx
 from docutils.nodes import Text
@@ -30,11 +32,11 @@ class PydanticDirectiveBase:
     config_name: str
     default_prefix: str
 
-    def __init__(self, *args):
+    def __init__(self, *args) -> None:  # noqa: ANN002
         super().__init__(*args)
         self.pyautodoc = DirectiveOptions(self)
 
-    def get_signature_prefix(self, sig: str) -> Union[str, List[Text]]:
+    def get_signature_prefix(self, *_) -> str | list[Text]:  # noqa: ANN002
         """Overwrite original signature prefix with custom pydantic ones."""
 
         config_name = f'{self.config_name}-signature-prefix'
@@ -46,8 +48,8 @@ class PydanticDirectiveBase:
             from sphinx.addnodes import desc_sig_space
 
             return [Text(value), desc_sig_space()]
-        else:
-            return f'{value} '
+
+        return f'{value} '
 
 
 class PydanticModel(PydanticDirectiveBase, PyClasslike):
@@ -107,19 +109,19 @@ class PydanticField(PydanticDirectiveBase, PyAttribute):
 
         return py_sig_re.match(sig).groups()[1]
 
-    def add_required(self, signode: desc_signature):
+    def add_required(self, signode: desc_signature) -> None:
         """Add `[Required]` if directive option `required` is set."""
 
         if self.options.get('required'):
             signode += desc_annotation('', ' [Required]')
 
-    def add_optional(self, signode: desc_signature):
+    def add_optional(self, signode: desc_signature) -> None:
         """Add `[Optional]` if directive option `optional` is set."""
 
         if self.options.get('optional'):
             signode += desc_annotation('', ' [Optional]')
 
-    def add_alias_or_name(self, sig: str, signode: desc_signature):
+    def add_alias_or_name(self, sig: str, signode: desc_signature) -> None:
         """Add alias or name to signature.
 
         Alias is added if `show-alias` is enabled. Name is added if both
@@ -130,17 +132,18 @@ class PydanticField(PydanticDirectiveBase, PyAttribute):
         if not self.pyautodoc.get_value('field-show-alias'):
             return
 
-        elif self.pyautodoc.is_true('field-swap-name-and-alias'):
+        if self.pyautodoc.is_true('field-swap-name-and-alias'):
             prefix = 'name'
             value = self.get_field_name(sig)
-
         else:
             prefix = 'alias'
             value = self.options.get('alias')
 
         signode += desc_annotation('', f" ({prefix} '{value}')")
 
-    def _find_desc_name_node(self, sig: str, signode: desc_signature) -> desc_name:
+    def _find_desc_name_node(
+        self, sig: str, signode: desc_signature
+    ) -> desc_name | None:
         """Return `desc_name` node  from `signode` that contains the field
         name. This is used to replace the name with the alias.
 
@@ -155,7 +158,9 @@ class PydanticField(PydanticDirectiveBase, PyAttribute):
             if has_correct_text and is_desc_name:
                 return node
 
-    def swap_name_and_alias(self, sig: str, signode: desc_signature):
+        return None
+
+    def swap_name_and_alias(self, sig: str, signode: desc_signature) -> None:
         """Replaces name with alias if `swap-name-and-alias` is enabled.
 
         Requires to replace existing `addnodes.desc_name` because name node is
@@ -225,7 +230,7 @@ class PydanticValidator(PydanticDirectiveBase, PyMethod):
 
         return create_field_href(name=name, ref=mapping.field_ref, env=self.env)
 
-    def replace_return_node(self, signode: desc_signature):
+    def replace_return_node(self, signode: desc_signature) -> None:
         """Replaces the return node with references to validated fields."""
 
         remove_node_by_tagname(signode.children, 'desc_parameterlist')

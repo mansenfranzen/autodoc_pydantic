@@ -1,6 +1,6 @@
 """This module contains reST templates used by autodocumenters and directives."""
 
-from typing import List
+from __future__ import annotations
 
 TPL_COLLAPSE = """
 .. raw:: html
@@ -17,7 +17,7 @@ TPL_COLLAPSE = """
 """
 
 
-def to_collapsable(lines: List[str], title, css_class) -> List[str]:
+def to_collapsable(lines: list[str], title: str, css_class: str) -> list[str]:
     """Place given lines into a collapsable HTML block.
 
     Parameters

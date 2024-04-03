@@ -1,14 +1,15 @@
 """Contains the extension setup."""
 
+from __future__ import annotations
+
 from pathlib import Path
-from typing import Any, Dict
+from typing import TYPE_CHECKING, Any
 
 try:
     from importlib.metadata import version
 except ModuleNotFoundError:
     from importlib_metadata import version
 
-from sphinx.application import Sphinx
 from sphinx.domains import ObjType
 
 from sphinxcontrib.autodoc_pydantic.directives.autodocumenters import (
@@ -28,13 +29,15 @@ from sphinxcontrib.autodoc_pydantic.directives.options.enums import (
     OptionsJsonErrorStrategy,
     OptionsSummaryListOrder,
 )
+from sphinxcontrib.autodoc_pydantic.events import add_fallback_css_class
 
 __version__ = version('autodoc_pydantic')
 
-from sphinxcontrib.autodoc_pydantic.events import add_fallback_css_class
+if TYPE_CHECKING:
+    from sphinx.application import Sphinx
 
 
-def add_css_file(app: Sphinx, exception: Exception):
+def add_css_file(app: Sphinx, *_) -> None:  # noqa: ANN002
     """Adds custom css to HTML output."""
 
     filename = 'autodoc_pydantic.css'
@@ -47,7 +50,7 @@ def add_css_file(app: Sphinx, exception: Exception):
         (static_path / filename).write_text(content)
 
 
-def add_domain_object_types(app: Sphinx):
+def add_domain_object_types(app: Sphinx) -> None:
     """Hack to add object types to already instantiated python domain since
     `add_object_type` currently only works for std domain.
 
@@ -65,7 +68,7 @@ def add_domain_object_types(app: Sphinx):
             object_types[f'pydantic_{obj_type}'] = ObjType(obj_type, *roles)
 
 
-def add_configuration_values(app: Sphinx):
+def add_configuration_values(app: Sphinx) -> None:
     """Adds all configuration values to sphinx application."""
 
     stem = 'autodoc_pydantic_'
@@ -73,6 +76,7 @@ def add_configuration_values(app: Sphinx):
     json_strategy = OptionsJsonErrorStrategy.WARN
     summary_list_order = OptionsSummaryListOrder.ALPHABETICAL
 
+    # ruff: noqa: FBT003
     add(f'{stem}settings_show_json', True, True, bool)
     add(f'{stem}settings_show_json_error_strategy', json_strategy, True, str)
     add(f'{stem}settings_show_config_summary', True, True, bool)
@@ -120,7 +124,7 @@ def add_configuration_values(app: Sphinx):
     add(f'{stem}add_fallback_css_class', True, True, bool)
 
 
-def add_directives_and_autodocumenters(app: Sphinx):
+def add_directives_and_autodocumenters(app: Sphinx) -> None:
     """Adds custom pydantic directives and autodocumenters to sphinx
     application.
 
@@ -140,7 +144,7 @@ def add_directives_and_autodocumenters(app: Sphinx):
     app.connect('object-description-transform', add_fallback_css_class)
 
 
-def setup(app: Sphinx) -> Dict[str, Any]:
+def setup(app: Sphinx) -> dict[str, Any]:
     add_configuration_values(app)
     add_directives_and_autodocumenters(app)
     add_domain_object_types(app)

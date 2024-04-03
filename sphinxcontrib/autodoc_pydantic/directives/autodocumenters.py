@@ -1,10 +1,11 @@
 """This module contains **autodoc_pydantic**'s autodocumenters."""
 
+from __future__ import annotations
+
 import json
-from typing import Any, Callable, Dict, Iterable, List, Optional, Set
+from typing import TYPE_CHECKING, Any, Callable, ClassVar, Iterable
 
 import sphinx
-from docutils.statemachine import StringList
 from pydantic import BaseModel
 from pydantic_settings import BaseSettings
 from sphinx.ext.autodoc import (
@@ -52,6 +53,10 @@ try:
 except ImportError:
     erd = None
 
+if TYPE_CHECKING:
+    from docutils.statemachine import StringList
+    from pydantic import BaseModel
+
 
 class PydanticAutoDoc:
     """Composite to provide single namespace to access all **autodoc_pydantic**
@@ -59,12 +64,12 @@ class PydanticAutoDoc:
 
     """
 
-    def __init__(self, documenter: Documenter, is_child: bool):
+    def __init__(self, documenter: Documenter, is_child: bool) -> None:  # noqa: FBT001
         self._documenter = documenter
         self._is_child = is_child
-        self._inspect: Optional[ModelInspector] = None
+        self._inspect: ModelInspector | None = None
         self._options = AutoDocOptions(self._documenter)
-        self._model: Optional[BaseModel] = None
+        self._model: BaseModel | None = None
 
     @property
     def model(self) -> BaseModel:
@@ -115,15 +120,12 @@ class PydanticAutoDoc:
         if self._inspect:
             return self._inspect
 
-        if self._is_child:
-            obj = self._documenter.parent
-        else:
-            obj = self._documenter.object
+        obj = self._documenter.parent if self._is_child else self._documenter.object
 
         self._inspect = ModelInspector(obj)
         return self._inspect
 
-    def get_field_name_or_alias(self, field_name: str):
+    def get_field_name_or_alias(self, field_name: str) -> str:
         """If `field-swap-name-and-alias` is enabled, provide alias (if
         present) for given field.
 
@@ -131,18 +133,18 @@ class PydanticAutoDoc:
 
         if self.options.is_true('field-swap-name-and-alias'):
             return self.inspect.fields.get_alias_or_name(field_name)
-        else:
-            return field_name
 
-    def get_non_inherited_members(self) -> Set[str]:
+        return field_name
+
+    def get_non_inherited_members(self) -> set[str]:
         """Return all member names of autodocumented object which are
         prefiltered to exclude inherited members.
 
         """
-        object_members = self._documenter.get_object_members(True)[1]
+        object_members = self._documenter.get_object_members(want_all=True)[1]
         return {x.__name__ for x in object_members}
 
-    def get_base_class_names(self) -> List[str]:
+    def get_base_class_names(self) -> list[str]:
         return [x.__name__ for x in self.model.__mro__]
 
     def resolve_inherited_validator_reference(self, ref: str) -> str:
@@ -173,8 +175,7 @@ class PydanticAutoDoc:
         if is_member and is_base_class and is_inherited:
             ref_parts[-2] = self.model.__name__
             return '.'.join(ref_parts)
-        else:
-            return ref
+        return ref
 
 
 class PydanticModelDocumenter(ClassDocumenter):
@@ -197,7 +198,11 @@ class PydanticModelDocumenter(ClassDocumenter):
 
     @classmethod
     def can_document_member(
-        cls, member: Any, membername: str, isattr: bool, parent: Any
+        cls,
+        member: Any,  # noqa: ANN401
+        membername: str,
+        isattr: bool,  # noqa: FBT001
+        parent: Any,  # noqa: ANN401
     ) -> bool:
         """Filter only pydantic models."""
 
@@ -205,7 +210,7 @@ class PydanticModelDocumenter(ClassDocumenter):
         is_model = ModelInspector.static.is_pydantic_model(member)
         return is_val and is_model
 
-    def __init__(self, *args: Any) -> None:
+    def __init__(self, *args) -> None:  # noqa: ANN002
         super().__init__(*args)
         exclude_members = self.options.setdefault('exclude-members', set())
         exclude_members.add('model_fields')
@@ -213,17 +218,17 @@ class PydanticModelDocumenter(ClassDocumenter):
         exclude_members.add('model_computed_fields')
         self.pydantic = PydanticAutoDoc(self, is_child=False)
 
-    def document_members(self, *args, **kwargs):
+    def document_members(self, *args, **kwargs) -> None:  # noqa: ANN002, ANN003
         """Modify member options before starting to document members."""
 
         self.pydantic.options.set_members_all()
         if self.options.get('undoc-members') is False:
             self.options.pop('undoc-members')
 
-        if self.pydantic.options.is_false('show-validator-members', True):
+        if self.pydantic.options.is_false('show-validator-members', prefix=True):
             self.hide_validator_members()
 
-        if self.pydantic.options.is_true('hide-reused-validator', True):
+        if self.pydantic.options.is_true('hide-reused-validator', prefix=True):
             self.hide_reused_validators()
 
         if self.pydantic.options.exists('inherited-members'):
@@ -231,24 +236,24 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         super().document_members(*args, **kwargs)
 
-    def hide_inherited_members(self):
+    def hide_inherited_members(self) -> None:
         """If inherited-members is set, make sure that these are excluded from
         the class documenter, too"""
 
         exclude_members = self.options['exclude-members']
-        squash_set = self.pydantic._documenter.options['inherited-members']
+        squash_set = self.options['inherited-members']
         for cl in self.pydantic.model.__mro__:
             if cl.__name__ in squash_set:
                 for item in dir(cl):
                     exclude_members.add(item)
 
-    def hide_validator_members(self):
+    def hide_validator_members(self) -> None:
         """Add validator names to `exclude_members`."""
         validators = self.pydantic.inspect.validators.names
         exclude_members = self.options['exclude-members']
         exclude_members.update(validators)
 
-    def hide_reused_validators(self):
+    def hide_reused_validators(self) -> None:
         """Add reused validators to `exclude_members` option."""
 
         validators = self.pydantic.inspect.validators
@@ -256,18 +261,18 @@ class PydanticModelDocumenter(ClassDocumenter):
         exclude_members = self.options['exclude-members']
         exclude_members.update(reused_validators)
 
-    def format_signature(self, **kwargs) -> str:
+    def format_signature(self, **kwargs) -> str:  # noqa: ANN003
         """If parameter list is to be hidden, return only empty signature."""
 
-        if self.pydantic.options.is_true('hide-paramlist', True):
+        if self.pydantic.options.is_true('hide-paramlist', prefix=True):
             return ''
-        else:
-            return super().format_signature(**kwargs)
+
+        return super().format_signature(**kwargs)
 
     def add_content(
         self,
-        more_content: Optional[StringList],
-        **kwargs,
+        more_content: StringList | None,
+        **kwargs,  # noqa: ANN003
     ) -> None:
         """Delegate additional content creation."""
         super().add_content(more_content, **kwargs)
@@ -276,22 +281,22 @@ class PydanticModelDocumenter(ClassDocumenter):
         if self.doc_as_attr:
             return
 
-        if self.pydantic.options.is_true('erdantic-figure', True):
+        if self.pydantic.options.is_true('erdantic-figure', prefix=True):
             self.add_erdantic_figure()
 
-        if self.pydantic.options.is_true('show-json', True):
+        if self.pydantic.options.is_true('show-json', prefix=True):
             self.add_collapsable_schema()
 
-        if self.pydantic.options.is_true('show-config-summary', True):
+        if self.pydantic.options.is_true('show-config-summary', prefix=True):
             self.add_config_summary()
 
-        if self.pydantic.options.is_true('show-field-summary', True):
+        if self.pydantic.options.is_true('show-field-summary', prefix=True):
             self.add_field_summary()
 
-        if self.pydantic.options.is_true('show-validator-summary', True):
+        if self.pydantic.options.is_true('show-validator-summary', prefix=True):
             self.add_validators_summary()
 
-    def add_collapsable_schema(self):
+    def add_collapsable_schema(self) -> None:
         """Adds collapse code block containing JSON schema."""
 
         non_serializable = self.pydantic.inspect.fields.non_json_serializable
@@ -311,10 +316,11 @@ class PydanticModelDocumenter(ClassDocumenter):
             elif strategy == OptionsJsonErrorStrategy.RAISE:
                 raise sphinx.errors.ExtensionError(error_msg)
             elif strategy != OptionsJsonErrorStrategy.COERCE:
-                raise sphinx.errors.ExtensionError(
+                error_msg = (
                     f"Invalid option provided for 'show-json-error-strategy'. "
-                    f'Allowed values are f{OptionsJsonErrorStrategy.values()}',
+                    f'Allowed values are f{OptionsJsonErrorStrategy.values()}'
                 )
+                raise sphinx.errors.ExtensionError(error_msg)
 
         schema = self.pydantic.inspect.schema.sanitized
         schema_rest = self._convert_json_schema_to_rest(schema)
@@ -322,7 +328,7 @@ class PydanticModelDocumenter(ClassDocumenter):
         for line in schema_rest:
             self.add_line(line, source_name)
 
-    def add_erdantic_figure(self):
+    def add_erdantic_figure(self) -> None:
         """Adds an erdantic entity relation diagram to the doc of an
         pydantic model.
 
@@ -341,9 +347,9 @@ class PydanticModelDocumenter(ClassDocumenter):
         # Graphviz [DOT language](https://graphviz.org/doc/info/lang.html)
         figure_dot = erd.to_dot(self.object).replace('\t', '   ').split('\n')
         lines_dot = ['   ' + line for line in figure_dot]
-        lines = ['.. graphviz::', ''] + lines_dot + ['']
+        lines = ['.. graphviz::', '', *lines_dot, '']
 
-        if self.pydantic.options.is_true('erdantic-figure-collapsed', True):
+        if self.pydantic.options.is_true('erdantic-figure-collapsed', prefix=True):
             lines = to_collapsable(
                 lines,
                 'Show Entity Relationship Diagram',
@@ -352,7 +358,7 @@ class PydanticModelDocumenter(ClassDocumenter):
         for line in lines:
             self.add_line(line, source_name)
 
-    def add_config_summary(self):
+    def add_config_summary(self) -> None:
         """Adds summary section describing the model configuration."""
 
         if not self.pydantic.inspect.config.is_configured:
@@ -367,7 +373,7 @@ class PydanticModelDocumenter(ClassDocumenter):
             self.add_line(line, source_name)
         self.add_line('', source_name)
 
-    def _get_idx_mappings(self, members: Iterable[str]) -> Dict[str, int]:
+    def _get_idx_mappings(self, members: Iterable[str]) -> dict[str, int]:
         """Get index positions for given members while respecting
         `OptionsSummaryListOrder`.
 
@@ -376,7 +382,7 @@ class PydanticModelDocumenter(ClassDocumenter):
         sorted_members = self._sort_summary_list(members)
         return {name: idx for idx, name in enumerate(sorted_members)}
 
-    def _get_reference_sort_func(self, references: List[ValidatorFieldMap]) -> Callable:
+    def _get_reference_sort_func(self, references: list[ValidatorFieldMap]) -> Callable:
         """Helper function to create sorting function for instances of
         `ValidatorFieldMap` which first sorts by validator name and second by
         field name while respecting `OptionsSummaryListOrder`.
@@ -391,7 +397,7 @@ class PydanticModelDocumenter(ClassDocumenter):
         idx_validators = self._get_idx_mappings(all_validators)
         idx_fields = self._get_idx_mappings(all_fields)
 
-        def sort_func(reference: ValidatorFieldMap):
+        def sort_func(reference: ValidatorFieldMap) -> tuple[int, int]:
             return (
                 idx_validators.get(reference.validator_name, -1),
                 idx_fields.get(reference.field_name, -1),
@@ -399,7 +405,7 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         return sort_func
 
-    def _get_validator_summary_references(self) -> List[ValidatorFieldMap]:
+    def _get_validator_summary_references(self) -> list[ValidatorFieldMap]:
         """Filter and sort validator-field mappings for validator summary
         section.
 
@@ -410,9 +416,7 @@ class PydanticModelDocumenter(ClassDocumenter):
         references = base_class_validators + inherited_validators
 
         sort_func = self._get_reference_sort_func(references)
-        sorted_references = sorted(references, key=sort_func)
-
-        return sorted_references
+        return sorted(references, key=sort_func)
 
     def _build_validator_summary_rest_line(self, reference: ValidatorFieldMap) -> str:
         """Generates reST line for validator-field mapping with references for
@@ -432,7 +436,7 @@ class PydanticModelDocumenter(ClassDocumenter):
             f':py:obj:`{name} <{reference.field_ref}>`'
         )
 
-    def add_validators_summary(self):
+    def add_validators_summary(self) -> None:
         """Adds summary section describing all validators with corresponding
         fields.
 
@@ -451,7 +455,7 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         self.add_line('', source_name)
 
-    def _get_base_model_validators(self) -> List[str]:
+    def _get_base_model_validators(self) -> list[str]:
         """Return the validators on the model being documented"""
 
         result = []
@@ -474,7 +478,7 @@ class PydanticModelDocumenter(ClassDocumenter):
                     result.append(ref)
         return result
 
-    def _get_inherited_validators(self) -> List[str]:
+    def _get_inherited_validators(self) -> list[str]:
         """Return the validators on inherited fields to be documented,
         if any"""
 
@@ -500,7 +504,7 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         return result
 
-    def add_field_summary(self):
+    def add_field_summary(self) -> None:
         """Adds summary section describing all fields."""
         if not self.pydantic.inspect.fields:
             return
@@ -519,14 +523,14 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         self.add_line('', source_name)
 
-    def _get_base_model_fields(self) -> List[str]:
+    def _get_base_model_fields(self) -> list[str]:
         """Returns all field names that are valid members of pydantic model."""
 
         fields = self.pydantic.inspect.fields.names
         valid_members = self.pydantic.get_non_inherited_members()
         return [field for field in fields if field in valid_members]
 
-    def _get_inherited_fields(self) -> List[str]:
+    def _get_inherited_fields(self) -> list[str]:
         """Return the inherited fields if inheritance is enabled"""
 
         if not self.pydantic.options.exists('inherited-members'):
@@ -536,7 +540,7 @@ class PydanticModelDocumenter(ClassDocumenter):
         base_class_fields = self.pydantic.get_non_inherited_members()
         return [field for field in fields if field not in base_class_fields]
 
-    def _sort_summary_list(self, names: Iterable[str]) -> List[str]:
+    def _sort_summary_list(self, names: Iterable[str]) -> list[str]:
         """Sort member names according to given sort order
         `OptionsSummaryListOrder`.
 
@@ -547,11 +551,11 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         if sort_order == OptionsSummaryListOrder.ALPHABETICAL:
 
-            def sort_func(name: str):
+            def sort_func(name: str) -> str:
                 return name
         elif sort_order == OptionsSummaryListOrder.BYSOURCE:
 
-            def sort_func(name: str):
+            def sort_func(name: str) -> int:
                 if name in self.analyzer.tagorder:
                     return self.analyzer.tagorder.get(name)
                 for base in self.pydantic.get_base_class_names():
@@ -561,12 +565,17 @@ class PydanticModelDocumenter(ClassDocumenter):
                 # a pseudo-field name used by root validators
                 if name == ASTERISK_FIELD_NAME:
                     return -1
+
+                # catch cases where field is not found in tagorder
+                msg = f'Field {name} in {self.object_name} not found in tagorder'
+                raise ValueError(msg)
         else:
-            raise ValueError(
+            msg = (
                 f'Invalid value `{sort_order}` provided for '
                 f'`summary_list_order`. Valid options are: '
                 f'{OptionsSummaryListOrder.values()}'
             )
+            raise ValueError(msg)
 
         return sorted(names, key=sort_func)
 
@@ -590,17 +599,16 @@ class PydanticModelDocumenter(ClassDocumenter):
         return stringify_annotation(annotations.get(field_name, ''))
 
     @staticmethod
-    def _convert_json_schema_to_rest(schema: Dict) -> List[str]:
+    def _convert_json_schema_to_rest(schema: dict) -> list[str]:
         """Convert model's schema dict into reST."""
         schema = json.dumps(schema, default=str, indent=3)
         lines = [f'   {line}' for line in schema.split('\n')]
-        lines = ['.. code-block:: json', ''] + lines
-        lines = to_collapsable(
+        lines = ['.. code-block:: json', '', *lines]
+        return to_collapsable(
             lines,
             'Show JSON schema',
             'autodoc_pydantic_collapsable_json',
         )
-        return lines
 
 
 class PydanticSettingsDocumenter(PydanticModelDocumenter):
@@ -622,21 +630,25 @@ class PydanticSettingsDocumenter(PydanticModelDocumenter):
 
     pyautodoc_prefix = 'settings'
 
-    def __init__(self, *args: Any) -> None:
+    def __init__(self, *args) -> None:  # noqa: ANN002
         super().__init__(*args)
         self.options['exclude-members'].add('settings_customise_sources')
 
     @classmethod
     def can_document_member(
-        cls, member: Any, membername: str, isattr: bool, parent: Any
+        cls,
+        member: Any,  # noqa: ANN401
+        membername: str,
+        isattr: bool,  # noqa: FBT001
+        parent: Any,  # noqa: ANN401
     ) -> bool:
         """Filter only pydantic models."""
 
         is_val = super().can_document_member(member, membername, isattr, parent)
         if is_val:
             return issubclass(member, BaseSettings)
-        else:
-            return False
+
+        return False
 
 
 class PydanticFieldDocumenter(AttributeDocumenter):
@@ -645,7 +657,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
     objtype = 'pydantic_field'
     directivetype = 'pydantic_field'
     priority = 10 + AttributeDocumenter.priority
-    option_spec = dict(AttributeDocumenter.option_spec)
+    option_spec: ClassVar[dict] = dict(AttributeDocumenter.option_spec)
     option_spec.update(OPTIONS_FIELD)
     member_order = 0
 
@@ -655,13 +667,17 @@ class PydanticFieldDocumenter(AttributeDocumenter):
         'field-swap-name-and-alias',
     )
 
-    def __init__(self, *args):
+    def __init__(self, *args) -> None:  # noqa: ANN002
         super().__init__(*args)
         self.pydantic = PydanticAutoDoc(self, is_child=True)
 
     @classmethod
     def can_document_member(
-        cls, member: Any, membername: str, isattr: bool, parent: Any
+        cls,
+        member: Any,  # noqa: ANN401
+        membername: str,
+        isattr: bool,  # noqa: FBT001
+        parent: Any,  # noqa: ANN401
     ) -> bool:
         """Filter only pydantic fields."""
 
@@ -720,7 +736,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
 
         return f'   :value: {value}'
 
-    def add_default_value_or_marker(self):
+    def add_default_value_or_marker(self) -> None:
         """Adds default value or a marker for field being required or optional."""
 
         sourcename = self.get_sourcename()
@@ -735,7 +751,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
         elif show_default:
             self.add_line(self.get_default_value(), sourcename)
 
-    def add_alias(self):
+    def add_alias(self) -> None:
         """Adds alias directive option."""
 
         field_name = self.pydantic_field_name
@@ -752,8 +768,8 @@ class PydanticFieldDocumenter(AttributeDocumenter):
 
     def add_content(
         self,
-        more_content: Optional[StringList],
-        **kwargs,
+        more_content: StringList | None,
+        **kwargs,  # noqa: ANN003
     ) -> None:
         """Delegate additional content creation."""
 
@@ -777,7 +793,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
         if self.pydantic.options.is_true('field-list-validators'):
             self.add_validators()
 
-    def add_constraints(self):
+    def add_constraints(self) -> None:
         """Adds section showing all defined constraints."""
 
         field_name = self.pydantic_field_name
@@ -792,7 +808,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
 
             self.add_line('', source_name)
 
-    def add_description(self):
+    def add_description(self) -> None:
         """Adds description from schema if present."""
 
         field_name = self.pydantic_field_name
@@ -809,7 +825,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
             self.add_line(line, source_name)
         self.add_line('', source_name)
 
-    def add_validators(self):
+    def add_validators(self) -> None:
         """Add section with all validators that process this field."""
 
         field_name = self.pydantic_field_name
@@ -856,13 +872,17 @@ class PydanticValidatorDocumenter(MethodDocumenter):
         'field-swap-name-and-alias',
     )
 
-    def __init__(self, *args: Any) -> None:
+    def __init__(self, *args: Any) -> None:  # noqa: ANN401
         super().__init__(*args)
         self.pydantic = PydanticAutoDoc(self, is_child=True)
 
     @classmethod
     def can_document_member(
-        cls, member: Any, membername: str, isattr: bool, parent: Any
+        cls,
+        member: Any,  # noqa: ANN401
+        membername: str,
+        isattr: bool,  # noqa: FBT001
+        parent: Any,  # noqa: ANN401
     ) -> bool:
         """Filter only pydantic validators."""
 
@@ -872,18 +892,18 @@ class PydanticValidatorDocumenter(MethodDocumenter):
         )
         return is_val and is_validator
 
-    def format_args(self, **kwargs: Any) -> str:
+    def format_args(self, **kwargs: Any) -> str:  # noqa: ANN401
         """Return empty arguments if validator should be replaced."""
 
         if self.pydantic.options.is_true('validator-replace-signature'):
             return ''
-        else:
-            return super().format_args(**kwargs)
+
+        return super().format_args(**kwargs)
 
     def add_content(
         self,
-        more_content: Optional[StringList],
-        **kwargs,
+        more_content: StringList | None,
+        **kwargs,  # noqa: ANN003
     ) -> None:
         """Optionally show validator content."""
 
@@ -892,13 +912,13 @@ class PydanticValidatorDocumenter(MethodDocumenter):
         if self.pydantic.options.is_true('validator-list-fields'):
             self.add_field_list()
 
-    def _build_field_list_rest_line(self, reference: ValidatorFieldMap):
+    def _build_field_list_rest_line(self, reference: ValidatorFieldMap) -> str:
         """Generates reST line for field reference for field list section."""
 
         name = self.pydantic.get_field_name_or_alias(reference.field_name)
         return f'   - :py:obj:' f'`{name} ' f'<{reference.field_ref}>`'
 
-    def add_field_list(self):
+    def add_field_list(self) -> None:
         """Adds a field list with all fields that are validated by this
         validator.
 
