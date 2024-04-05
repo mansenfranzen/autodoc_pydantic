@@ -121,4 +121,4 @@ jobs:
         with:
           python-version: '3.x'
       - run: pip install tox
-      - run: tox -e linter
+      - run: tox -e formatter
