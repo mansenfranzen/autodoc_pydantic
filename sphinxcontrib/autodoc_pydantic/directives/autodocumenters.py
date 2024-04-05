@@ -569,15 +569,15 @@ class PydanticModelDocumenter(ClassDocumenter):
                 # catch cases where field is not found in tagorder
                 msg = f'Field {name} in {self.object_name} not found in tagorder'
                 raise ValueError(msg)
-        else:
-            msg = (
-                f'Invalid value `{sort_order}` provided for '
-                f'`summary_list_order`. Valid options are: '
-                f'{OptionsSummaryListOrder.values()}'
-            )
-            raise ValueError(msg)
 
-        return sorted(names, key=sort_func)
+        try:
+            return sorted(names, key=sort_func)
+        except TypeError as e:
+            msg = (
+                f'Uncaught exception while sorting fields for model'
+                f'{self.object_name} with sort order {sort_order}.'
+            )
+            raise ValueError(msg).with_traceback(e.__traceback__) from e
 
     def _get_field_summary_line(self, field_name: str) -> str:
         """Get reST for field summary for given `member_name`."""
