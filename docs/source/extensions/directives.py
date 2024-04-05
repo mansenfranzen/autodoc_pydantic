@@ -16,8 +16,11 @@ from sphinx.ext.autodoc.directive import DummyOptionSpec
 from sphinx.util.docutils import SphinxDirective
 
 from docs.source.extensions.helper import generate_nodes, parse_options
-from docs.source.extensions.templates import CONFIG_DESC_TAB_TPL, \
-    CONFIG_DESC_TPL, VERSION_TEMPLATE
+from docs.source.extensions.templates import (
+    CONFIG_DESC_TAB_TPL,
+    CONFIG_DESC_TPL,
+    VERSION_TEMPLATE,
+)
 
 
 class DocumenterConfigToc(SphinxDirective):
@@ -37,38 +40,31 @@ class DocumenterConfigToc(SphinxDirective):
     def run(self) -> List[Node]:
         name = self.arguments[0]
         startswith = f'autodoc_pydantic_{name}_'
-        configs = [x for x in self.env.config.values.keys()
-                   if x.startswith(startswith)]
+        configs = [x for x in self.env.config.values.keys() if x.startswith(startswith)]
 
-        content = [":Options:"] + [self.create_link(x) for x in configs]
+        content = [':Options:'] + [self.create_link(x) for x in configs]
         content = StringList(content)
 
         return generate_nodes(self.state, content)
 
     def sanitize(self, option: str) -> str:
-        """Helper function to sanitize option name.
-
-        """
+        """Helper function to sanitize option name."""
 
         name = self.arguments[0]
-        prefix = "autodoc_pydantic_"
-        special = {f"{name}-undoc-members",
-                   f"{name}-members",
-                   f"{name}-member-order"}
+        prefix = 'autodoc_pydantic_'
+        special = {f'{name}-undoc-members', f'{name}-members', f'{name}-member-order'}
 
-        replaced = option.replace(prefix, "").replace("_", "-")
+        replaced = option.replace(prefix, '').replace('_', '-')
         if replaced in special:
-            replaced = replaced.replace(f"{name}-", "")
+            replaced = replaced.replace(f'{name}-', '')
 
-        return f":{replaced}:"
+        return f':{replaced}:'
 
     def create_link(self, option: str) -> str:
-        """Creates reST reference for given option to configuration section.
-
-        """
+        """Creates reST reference for given option to configuration section."""
 
         label = self.sanitize(option)
-        return f"   - :ref:`{label} <{option}>`"
+        return f'   - :ref:`{label} <{option}>`'
 
 
 class ConfigDescription(SphinxDirective):
@@ -145,14 +141,13 @@ class ConfigDescription(SphinxDirective):
 
         """
 
-        values = self.options["values"].split(",")
+        values = self.options['values'].split(',')
         stripped = [x.strip() for x in values]
 
-        if "*" not in self.options["values"]:
-            stripped[0] = stripped[0] + "*"
+        if '*' not in self.options['values']:
+            stripped[0] = stripped[0] + '*'
 
-        return [(x.replace("*", ""), x.replace("*", " (default)"))
-                for x in stripped]
+        return [(x.replace('*', ''), x.replace('*', ' (default)')) for x in stripped]
 
     def process_enable(self) -> str:
         """Parse the list of additional options which need to be enabled to
@@ -160,16 +155,14 @@ class ConfigDescription(SphinxDirective):
 
         """
 
-        enable = self.options.get("enable", "")
+        enable = self.options.get('enable', '')
         if enable:
             enable = parse_options(enable)
 
         return enable
 
     def process_tabs(self):
-        """Create the tab content.
-
-        """
+        """Create the tab content."""
 
         enable = self.process_enable()
 
@@ -178,44 +171,40 @@ class ConfigDescription(SphinxDirective):
             tab_rst = CONFIG_DESC_TAB_TPL.format(
                 value=value,
                 value_label=label,
-                path=self.options["path"],
-                directive_option=self.options["directive_option"],
+                path=self.options['path'],
+                directive_option=self.options['directive_option'],
                 enable=enable,
-                directive=self.arguments[0]
+                directive=self.arguments[0],
             )
             tabs.append(tab_rst)
 
-        return "\n".join(tabs)
+        return '\n'.join(tabs)
 
     def process_title(self) -> str:
-        """Generate title.
+        """Generate title."""
 
-        """
-
-        title = self.options["title"]
-        return title + "\n" + ("-" * len(title))
+        title = self.options['title']
+        return title + '\n' + ('-' * len(title))
 
     def run(self) -> List[Node]:
-        """Generate reST.
-
-        """
+        """Generate reST."""
 
         tabs = self.process_tabs()
         title = self.process_title()
-        version = self.options.get("version") or "0.1.0"
-        path = self.options.get("example_path") or self.options["path"]
+        version = self.options.get('version') or '0.1.0'
+        path = self.options.get('example_path') or self.options['path']
 
         content = CONFIG_DESC_TPL.format(
             title=title,
-            description="\n".join(self.content),
+            description='\n'.join(self.content),
             tabs=tabs,
             example_path=path,
-            confpy=self.options["confpy"],
-            directive_option=self.options["directive_option"],
-            version=version
+            confpy=self.options['confpy'],
+            directive_option=self.options['directive_option'],
+            version=version,
         )
 
-        content = StringList(content.split("\n"))
+        content = StringList(content.split('\n'))
         return generate_nodes(self.state, content)
 
 
@@ -229,7 +218,7 @@ class AutoCodeBlock(CodeBlock):
     required_arguments = 1
 
     option_spec = CodeBlock.option_spec.copy()
-    option_spec.update({"language": directives.unchanged})
+    option_spec.update({'language': directives.unchanged})
 
     def run(self) -> List[Node]:
         """Modify content and argument to make it work with parent class without
@@ -238,7 +227,7 @@ class AutoCodeBlock(CodeBlock):
         """
 
         self.content = self.get_source_code(self.arguments[0])
-        self.arguments[0] = self.options.get("language") or "python"
+        self.arguments[0] = self.options.get('language') or 'python'
 
         return super().run()
 
@@ -252,24 +241,20 @@ class AutoCodeBlock(CodeBlock):
 
         obj = pydoc.locate(objpath)
         lines = inspect.getsourcelines(obj)[0]
-        return [line.replace("\n", "") for line in lines]
+        return [line.replace('\n', '') for line in lines]
 
 
 class ShowVersions(SphinxDirective):
-    """Generates documentation section describing configuration parameters.
-
-    """
+    """Generates documentation section describing configuration parameters."""
 
     has_content = False
     required_arguments = 0
     optional_arguments = 0
 
     def run(self) -> List[Node]:
-        """Generate reST.
+        """Generate reST."""
 
-        """
-
-        mermaid = self.env.app.extensions["sphinxcontrib.mermaid"].version
+        mermaid = self.env.app.extensions['sphinxcontrib.mermaid'].version
 
         content = VERSION_TEMPLATE.format(
             sphinx=sphinx.__version__,
@@ -277,8 +262,8 @@ class ShowVersions(SphinxDirective):
             sphinx_rtd_theme=sphinx_rtd_theme.__version__,
             sphinx_tabs=sphinx_tabs.__version__,
             sphinx_copybutton=sphinx_copybutton.__version__,
-            sphinxcontrib_mermaid=mermaid
+            sphinxcontrib_mermaid=mermaid,
         )
 
-        content = StringList(content.split("\n"))
+        content = StringList(content.split('\n'))
         return generate_nodes(self.state, content)

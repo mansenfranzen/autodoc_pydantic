@@ -10,7 +10,7 @@ class Model(BaseModel):
     field2: str
     """Field2 Doc String"""
 
-    @field_validator("field")
+    @field_validator('field')
     def validate(cls, v):
         """Dummy validator"""
         return v

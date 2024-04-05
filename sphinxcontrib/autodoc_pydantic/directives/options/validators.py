@@ -1,11 +1,13 @@
 """This module contains custom directive option validator functions."""
 
-from typing import Any, Union, List, Set, Callable
+from __future__ import annotations
+
+from typing import Any, Callable
 
 from sphinx.ext.autodoc import ALL
 
 
-def option_members(arg: Any) -> Union[object, List[str]]:
+def option_members(arg: Any) -> list[str] | Any:  # noqa: ANN401
     """Option validator function used to convert the ``:members:`` option for
     auto directives.
 
@@ -13,34 +15,35 @@ def option_members(arg: Any) -> Union[object, List[str]]:
 
     if isinstance(arg, str):
         sanitized = arg.lower()
-        if sanitized == "true":
+        if sanitized == 'true':
             return ALL
-        elif sanitized == "false":
+        if sanitized == 'false':
             return None
 
     if arg in (None, True):
         return ALL
-    elif arg is False:
+    if arg is False:
         return None
-    else:
-        return [x.strip() for x in arg.split(',') if x.strip()]
+
+    return [x.strip() for x in arg.split(',') if x.strip()]
 
 
-def option_one_of_factory(choices: Set[Any]) -> Callable:
+def option_one_of_factory(choices: set[Any]) -> Callable:
     """Option validator factory to create a option validation function which
     allows only one value of given set of provided `choices`.
 
     """
 
-    def option_func(value: Any):
+    def option_func(value: str) -> str:
         if value not in choices:
-            raise ValueError(f"Option value has to be on of {choices}")
+            err = f'Option value {value} has to be on of {choices}'
+            raise ValueError(err)
         return value
 
     return option_func
 
 
-def option_default_true(arg: Any) -> bool:
+def option_default_true(arg: str | None) -> bool:
     """Option validator used to define boolean options with default to True if
     no argument is passed.
 
@@ -53,22 +56,22 @@ def option_default_true(arg: Any) -> bool:
         return True
 
     sanitized = arg.strip().lower()
-
-    if sanitized == "true":
+    if sanitized == 'true':
         return True
-    elif sanitized == "false":
+    if sanitized == 'false':
         return False
-    else:
-        raise ValueError(f"Directive option argument '{arg}' is not valid. "
-                         f"Valid arguments are 'true' or 'false'.")
+
+    err = (
+        f"Directive option argument '{arg}' is not valid. "
+        f"Valid arguments are 'true' or 'false'."
+    )
+    raise ValueError(err)
 
 
-def option_list_like(arg: Any) -> Set[str]:
-    """Option validator used to define a set of items.
-
-    """
+def option_list_like(arg: str | None) -> set[str]:
+    """Option validator used to define a set of items."""
 
     if not arg:
         return set()
-    else:
-        return {x.strip() for x in arg.split(",")}
+
+    return {x.strip() for x in arg.split(',')}

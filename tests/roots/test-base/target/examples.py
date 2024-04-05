@@ -4,6 +4,7 @@ from pydantic import BaseModel, field_validator, Field, ConfigDict
 class PlainModel(BaseModel):
     """Model Plain."""
 
+
 class ModelWithField(BaseModel):
     """Model With Field."""
 
@@ -17,7 +18,7 @@ class ModelWithFieldValidator(BaseModel):
     field: int = 1
     """Doc field"""
 
-    @field_validator("field")
+    @field_validator('field')
     def is_integer(cls, v):
         """Doc validator."""
         return v
@@ -33,5 +34,5 @@ class ModelWithConfig(BaseModel):
 class ModelWithAlias(BaseModel):
     """Model with Alias."""
 
-    field: int = Field(5, alias="aliased")
+    field: int = Field(5, alias='aliased')
     """FooBar."""

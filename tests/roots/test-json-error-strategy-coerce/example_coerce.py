@@ -6,9 +6,7 @@ class CustomCoerce:
 
 
 class NonSerializableCoerce(BaseModel):
-    """NonSerializable
-
-    """
+    """NonSerializable"""
 
     test_me: CustomCoerce
     """Field"""

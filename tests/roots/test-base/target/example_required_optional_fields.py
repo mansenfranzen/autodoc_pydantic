@@ -4,9 +4,7 @@ from pydantic import BaseModel, Field
 
 
 class RequiredOptionalField(BaseModel):
-    """Outlines different representations of required/optional fields.
-
-    """
+    """Outlines different representations of required/optional fields."""
 
     required_standard: int
     """No default value given:

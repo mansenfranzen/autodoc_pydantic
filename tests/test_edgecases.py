@@ -8,17 +8,22 @@ import sphinx.errors
 from sphinx.transforms.post_transforms import ReferencesResolver
 
 from sphinxcontrib.autodoc_pydantic import PydanticModelDocumenter
-from tests.compatibility import rst_alias_class_directive, \
-    TYPEHINTS_PREFIX, TYPING_MODULE_PREFIX_V2, module_doc_string_tab, \
-    PYTHON_LT_310
+from tests.compatibility import (
+    rst_alias_class_directive,
+    TYPEHINTS_PREFIX,
+    TYPING_MODULE_PREFIX_V2,
+    module_doc_string_tab,
+    PYTHON_LT_310,
+)
 
 
 def test_not_json_compliant(autodocument):
     actual = autodocument(
         documenter='pydantic_model',
         object_path='target.edgecase_json_compliant.NotJsonCompliant',
-        options_doc={"model-show-json": True},
-        deactivate_all=True)
+        options_doc={'model-show-json': True},
+        deactivate_all=True,
+    )
 
     assert actual == [
         '',
@@ -48,7 +53,7 @@ def test_not_json_compliant(autodocument):
         '',
         '      </details></p>',
         '',
-        ''
+        '',
     ]
 
 
@@ -59,33 +64,34 @@ def test_current_module_model(parse_rst):
 
     """
 
-    input_rst = ['.. py:currentmodule:: target.example_model',
-                 '',
-                 '.. autopydantic_model:: ExampleSettings',
-                 '   :model-show-json: True',
-                 '   :model-show-config-member: False',
-                 '   :model-show-config-summary: True',
-                 '   :model-show-validator-members: False',
-                 '   :model-show-validator-summary: False',
-                 '   :model-hide-paramlist: True',
-                 '   :undoc-members: True',
-                 '   :members: True',
-                 '   :member-order: alphabetical',
-                 '   :model-signature-prefix: pydantic_model',
-                 '   :field-list-validators: True',
-                 '   :field-doc-policy: both',
-                 '   :field-show-constraints: True',
-                 '   :field-show-alias: True',
-                 '   :field-show-default: True',
-                 '   :field-signature-prefix: field',
-                 '   :validator-signature-prefix: validator',
-                 '   :validator-replace-signature: True',
-                 '   :validator-list-fields: True',
-                 '   :config-signature-prefix: config',
-                 '']
+    input_rst = [
+        '.. py:currentmodule:: target.example_model',
+        '',
+        '.. autopydantic_model:: ExampleSettings',
+        '   :model-show-json: True',
+        '   :model-show-config-member: False',
+        '   :model-show-config-summary: True',
+        '   :model-show-validator-members: False',
+        '   :model-show-validator-summary: False',
+        '   :model-hide-paramlist: True',
+        '   :undoc-members: True',
+        '   :members: True',
+        '   :member-order: alphabetical',
+        '   :model-signature-prefix: pydantic_model',
+        '   :field-list-validators: True',
+        '   :field-doc-policy: both',
+        '   :field-show-constraints: True',
+        '   :field-show-alias: True',
+        '   :field-show-default: True',
+        '   :field-signature-prefix: field',
+        '   :validator-signature-prefix: validator',
+        '   :validator-replace-signature: True',
+        '   :validator-list-fields: True',
+        '   :config-signature-prefix: config',
+        '',
+    ]
 
-    parse_rst(input_rst,
-              conf={"extensions": ["sphinxcontrib.autodoc_pydantic"]})
+    parse_rst(input_rst, conf={'extensions': ['sphinxcontrib.autodoc_pydantic']})
 
 
 def test_current_module_settings(parse_rst):
@@ -95,33 +101,34 @@ def test_current_module_settings(parse_rst):
 
     """
 
-    input_rst = ['.. py:currentmodule:: target.example_setting',
-                 '',
-                 '.. autopydantic_settings:: ExampleSettings',
-                 '   :settings-show-json: True',
-                 '   :settings-show-config-member: False',
-                 '   :settings-show-config-summary: True',
-                 '   :settings-show-validator-members: False',
-                 '   :settings-show-validator-summary: False',
-                 '   :settings-hide-paramlist: True',
-                 '   :undoc-members: True',
-                 '   :members: True',
-                 '   :member-order: alphabetical',
-                 '   :settings-signature-prefix: pydantic_settings',
-                 '   :field-list-validators: True',
-                 '   :field-doc-policy: both',
-                 '   :field-show-constraints: True',
-                 '   :field-show-alias: True',
-                 '   :field-show-default: True',
-                 '   :field-signature-prefix: field',
-                 '   :validator-signature-prefix: validator',
-                 '   :validator-replace-signature: True',
-                 '   :validator-list-fields: True',
-                 '   :config-signature-prefix: config',
-                 '']
+    input_rst = [
+        '.. py:currentmodule:: target.example_setting',
+        '',
+        '.. autopydantic_settings:: ExampleSettings',
+        '   :settings-show-json: True',
+        '   :settings-show-config-member: False',
+        '   :settings-show-config-summary: True',
+        '   :settings-show-validator-members: False',
+        '   :settings-show-validator-summary: False',
+        '   :settings-hide-paramlist: True',
+        '   :undoc-members: True',
+        '   :members: True',
+        '   :member-order: alphabetical',
+        '   :settings-signature-prefix: pydantic_settings',
+        '   :field-list-validators: True',
+        '   :field-doc-policy: both',
+        '   :field-show-constraints: True',
+        '   :field-show-alias: True',
+        '   :field-show-default: True',
+        '   :field-signature-prefix: field',
+        '   :validator-signature-prefix: validator',
+        '   :validator-replace-signature: True',
+        '   :validator-list-fields: True',
+        '   :config-signature-prefix: config',
+        '',
+    ]
 
-    parse_rst(input_rst,
-              conf={"extensions": ["sphinxcontrib.autodoc_pydantic"]})
+    parse_rst(input_rst, conf={'extensions': ['sphinxcontrib.autodoc_pydantic']})
 
 
 def test_any_reference(test_app, monkeypatch):
@@ -140,12 +147,12 @@ def test_any_reference(test_app, monkeypatch):
         return func(self, refdoc, typ, target, node, domain)
 
     with monkeypatch.context() as ctx:
-        ctx.setattr(ReferencesResolver, "warn_missing_reference", mock)
-        app = test_app("edgecase-any-reference")
+        ctx.setattr(ReferencesResolver, 'warn_missing_reference', mock)
+        app = test_app('edgecase-any-reference')
         app.build()
 
-    assert "does.not.exist" in failed_targets
-    assert "target.example_setting.ExampleSettings" not in failed_targets
+    assert 'does.not.exist' in failed_targets
+    assert 'target.example_setting.ExampleSettings' not in failed_targets
 
 
 def test_autodoc_member_order(autodocument):
@@ -158,9 +165,10 @@ def test_autodoc_member_order(autodocument):
     actual = autodocument(
         documenter='module',
         object_path='target.edgecase_member_order',
-        options_app={"autodoc_member_order": "bysource"},
-        options_doc={"members": None},
-        deactivate_all=True)
+        options_app={'autodoc_member_order': 'bysource'},
+        options_doc={'members': None},
+        deactivate_all=True,
+    )
 
     assert actual == [
         '',
@@ -191,7 +199,8 @@ def test_autodoc_member_order(autodocument):
         '   :module: target.edgecase_member_order',
         '',
         '   Class B',
-        '']
+        '',
+    ]
 
 
 def test_typed_field_reference(test_app, monkeypatch):
@@ -210,8 +219,8 @@ def test_typed_field_reference(test_app, monkeypatch):
         return func(self, refdoc, typ, target, node, domain)
 
     with monkeypatch.context() as ctx:
-        ctx.setattr(ReferencesResolver, "warn_missing_reference", mock)
-        app = test_app("edgecase-typed-field-reference")
+        ctx.setattr(ReferencesResolver, 'warn_missing_reference', mock)
+        app = test_app('edgecase-typed-field-reference')
         app.build()
 
 
@@ -224,8 +233,8 @@ def test_json_error_strategy_raise(test_app):
     """
 
     with pytest.raises(sphinx.errors.ExtensionError):
-        conf = {"autodoc_pydantic_model_show_json_error_strategy": "raise"}
-        app = test_app("json-error-strategy", conf=conf)
+        conf = {'autodoc_pydantic_model_show_json_error_strategy': 'raise'}
+        app = test_app('json-error-strategy', conf=conf)
         app.build()
 
 
@@ -237,10 +246,10 @@ def test_json_error_strategy_coerce(test_app, log_capturer):
 
     """
 
-    conf = {"autodoc_pydantic_model_show_json_error_strategy": "coerce"}
+    conf = {'autodoc_pydantic_model_show_json_error_strategy': 'coerce'}
 
     with log_capturer() as logs:
-        app = test_app("json-error-strategy-coerce", conf=conf)
+        app = test_app('json-error-strategy-coerce', conf=conf)
         app.build()
 
     message = (
@@ -260,10 +269,10 @@ def test_json_error_strategy_warn(test_app, log_capturer):
 
     """
 
-    conf = {"autodoc_pydantic_model_show_json_error_strategy": "warn"}
+    conf = {'autodoc_pydantic_model_show_json_error_strategy': 'warn'}
 
     with log_capturer() as logs:
-        app = test_app("json-error-strategy", conf=conf)
+        app = test_app('json-error-strategy', conf=conf)
         app.build()
 
     message = (
@@ -293,14 +302,15 @@ def test_autodoc_pydantic_model_show_field_summary_not_inherited(autodocument):
         '',
         '   :Fields:',
         '      - :py:obj:`field3 (int) <target.configuration.ModelShowFieldSummaryInherited.field3>`',
-        ''
+        '',
     ]
 
     actual = autodocument(
         documenter='pydantic_model',
         object_path='target.configuration.ModelShowFieldSummaryInherited',
-        options_app={"autodoc_pydantic_model_show_field_summary": True},
-        deactivate_all=True)
+        options_app={'autodoc_pydantic_model_show_field_summary': True},
+        deactivate_all=True,
+    )
     assert result == actual
 
 
@@ -323,21 +333,25 @@ def test_autodoc_pydantic_model_show_field_summary_inherited(autodocument):
         '      - :py:obj:`field1 (int) <target.configuration.ModelShowFieldSummaryInherited.field1>`',
         '      - :py:obj:`field2 (str) <target.configuration.ModelShowFieldSummaryInherited.field2>`',
         '      - :py:obj:`field3 (int) <target.configuration.ModelShowFieldSummaryInherited.field3>`',
-        ''
+        '',
     ]
 
     actual = autodocument(
         documenter='pydantic_model',
         object_path='target.configuration.ModelShowFieldSummaryInherited',
-        options_app={"autodoc_pydantic_model_show_field_summary": True,
-                     "autodoc_pydantic_model_members": True},
-        options_doc={"inherited-members": "BaseModel"},
-        deactivate_all=True)
+        options_app={
+            'autodoc_pydantic_model_show_field_summary': True,
+            'autodoc_pydantic_model_members': True,
+        },
+        options_doc={'inherited-members': 'BaseModel'},
+        deactivate_all=True,
+    )
     assert result == actual
 
 
 def test_autodoc_pydantic_model_show_validator_summary_inherited_with_inherited(
-        autodocument):
+    autodocument,
+):
     """Ensure that references to inherited validators point to child class
     when `inherited-members` is given.
 
@@ -355,24 +369,27 @@ def test_autodoc_pydantic_model_show_validator_summary_inherited_with_inherited(
         '   :Validators:',
         '      - :py:obj:`check <target.configuration.ModelShowValidatorsSummaryInherited.check>` » :py:obj:`field <target.configuration.ModelShowValidatorsSummaryInherited.field>`',
         '      - :py:obj:`check_inherited <target.configuration.ModelShowValidatorsSummaryInherited.check_inherited>` » :py:obj:`field <target.configuration.ModelShowValidatorsSummaryInherited.field>`',
-        ''
+        '',
     ]
 
     actual = autodocument(
         documenter='pydantic_model',
         object_path='target.configuration.ModelShowValidatorsSummaryInherited',
-        options_app={"autodoc_pydantic_model_show_validator_summary": True,
-                     "autodoc_pydantic_model_members": True},
-        options_doc={"inherited-members": "BaseModel"},
-        deactivate_all=True)
+        options_app={
+            'autodoc_pydantic_model_show_validator_summary': True,
+            'autodoc_pydantic_model_members': True,
+        },
+        options_doc={'inherited-members': 'BaseModel'},
+        deactivate_all=True,
+    )
     assert result == actual
 
 
 def test_autodoc_pydantic_model_show_validator_summary_inherited_without_inherited_no_field(
-        autodocument
-        ):
-    """Special edge case where inherited class without fields shows parent 
-    fields/validator even though `inherited-members` is not activated. 
+    autodocument,
+):
+    """Special edge case where inherited class without fields shows parent
+    fields/validator even though `inherited-members` is not activated.
     This only occurs for python < 3.10.
 
     Relates to #122.
@@ -388,7 +405,7 @@ def test_autodoc_pydantic_model_show_validator_summary_inherited_without_inherit
         '',
         '   :Validators:',
         '      - :py:obj:`check_inherited <target.configuration.ModelShowValidatorsSummaryInherited.check_inherited>` » :py:obj:`field <target.configuration.ModelShowValidatorsSummaryInherited.field>`',
-        ''
+        '',
     ]
 
     result_python_lt_310 = [
@@ -401,16 +418,19 @@ def test_autodoc_pydantic_model_show_validator_summary_inherited_without_inherit
         '   :Validators:',
         '      - :py:obj:`check <target.configuration.ModelShowValidatorsSummary.check>` » :py:obj:`field <target.configuration.ModelShowValidatorsSummaryInherited.field>`',
         '      - :py:obj:`check_inherited <target.configuration.ModelShowValidatorsSummaryInherited.check_inherited>` » :py:obj:`field <target.configuration.ModelShowValidatorsSummaryInherited.field>`',
-        ''
+        '',
     ]
 
     actual = autodocument(
         documenter='pydantic_model',
         object_path='target.configuration.ModelShowValidatorsSummaryInherited',
-        options_app={"autodoc_pydantic_model_show_validator_summary": True,
-                     "autodoc_pydantic_model_members": True},
-        deactivate_all=True)
-    
+        options_app={
+            'autodoc_pydantic_model_show_validator_summary': True,
+            'autodoc_pydantic_model_members': True,
+        },
+        deactivate_all=True,
+    )
+
     if PYTHON_LT_310:
         assert result_python_lt_310 == actual
     else:
@@ -418,8 +438,8 @@ def test_autodoc_pydantic_model_show_validator_summary_inherited_without_inherit
 
 
 def test_autodoc_pydantic_model_show_validator_summary_inherited_without_inherited_with_field(
-        autodocument
-        ):
+    autodocument,
+):
     """Ensure that references to inherited validators point to parent class
     when `inherited-members` is not given.
 
@@ -436,21 +456,23 @@ def test_autodoc_pydantic_model_show_validator_summary_inherited_without_inherit
         '',
         '   :Validators:',
         '      - :py:obj:`check_inherited <target.configuration.ModelShowValidatorsSummaryInheritedWithField.check_inherited>` » :py:obj:`field <target.configuration.ModelShowValidatorsSummaryInheritedWithField.field>`',
-        ''
+        '',
     ]
 
     actual = autodocument(
         documenter='pydantic_model',
         object_path='target.configuration.ModelShowValidatorsSummaryInheritedWithField',
-        options_app={"autodoc_pydantic_model_show_validator_summary": True,
-                     "autodoc_pydantic_model_members": True},
-        deactivate_all=True)
-    
+        options_app={
+            'autodoc_pydantic_model_show_validator_summary': True,
+            'autodoc_pydantic_model_members': True,
+        },
+        deactivate_all=True,
+    )
+
     assert result == actual
 
 
-def test_autodoc_pydantic_field_list_validators_inherited_with_inherited(
-        autodocument):
+def test_autodoc_pydantic_field_list_validators_inherited_with_inherited(autodocument):
     """Ensure that references to inherited validators point to child class
     when `inherited-members` is given.
 
@@ -475,22 +497,26 @@ def test_autodoc_pydantic_field_list_validators_inherited_with_inherited(
         '      :Validated by:',
         '         - :py:obj:`check <target.configuration.FieldListValidatorsInherited.check>`',
         '         - :py:obj:`check_inherited <target.configuration.FieldListValidatorsInherited.check_inherited>`',
-        ''
+        '',
     ]
 
     actual = autodocument(
         documenter='pydantic_model',
         object_path='target.configuration.FieldListValidatorsInherited',
-        options_app={"autodoc_pydantic_field_list_validators": True,
-                     "autodoc_pydantic_model_members": True,
-                     "autodoc_pydantic_model_undoc_members": True},
-        options_doc={"inherited-members": "BaseModel"},
-        deactivate_all=True)
+        options_app={
+            'autodoc_pydantic_field_list_validators': True,
+            'autodoc_pydantic_model_members': True,
+            'autodoc_pydantic_model_undoc_members': True,
+        },
+        options_doc={'inherited-members': 'BaseModel'},
+        deactivate_all=True,
+    )
     assert result == actual
 
 
 def test_autodoc_pydantic_field_list_validators_inherited_without_inherited(
-        autodocument):
+    autodocument,
+):
     """Ensure that references to inherited validators point to parent class
     when `inherited-members` is not given.
 
@@ -515,16 +541,19 @@ def test_autodoc_pydantic_field_list_validators_inherited_without_inherited(
         '      :Validated by:',
         '         - :py:obj:`check <target.configuration.FieldListValidators.check>`',
         '         - :py:obj:`check_inherited <target.configuration.FieldListValidatorsInherited.check_inherited>`',
-        ''
+        '',
     ]
 
     actual = autodocument(
         documenter='pydantic_model',
         object_path='target.configuration.FieldListValidatorsInherited',
-        options_app={"autodoc_pydantic_field_list_validators": True,
-                     "autodoc_pydantic_model_members": True,
-                     "autodoc_pydantic_model_undoc_members": True},
-        deactivate_all=True)
+        options_app={
+            'autodoc_pydantic_field_list_validators': True,
+            'autodoc_pydantic_model_members': True,
+            'autodoc_pydantic_model_undoc_members': True,
+        },
+        deactivate_all=True,
+    )
     assert result == actual
 
 
@@ -540,8 +569,9 @@ def test_model_as_attr(autodocument):
     actual = autodocument(
         documenter='class',
         object_path='target.edgecase_model_as_attr.Container',
-        options_doc={"members": "TEST_MODEL"},
-        deactivate_all=False)
+        options_doc={'members': 'TEST_MODEL'},
+        deactivate_all=False,
+    )
 
     rst_class = rst_alias_class_directive()
 
@@ -556,7 +586,7 @@ def test_model_as_attr(autodocument):
         '   .. py:attribute:: Container.TEST_MODEL',
         '      :module: target.edgecase_model_as_attr',
         '',
-        f'      alias of {rst_class}`{TYPEHINTS_PREFIX}target.edgecase_model_as_attr.Model`'
+        f'      alias of {rst_class}`{TYPEHINTS_PREFIX}target.edgecase_model_as_attr.Model`',
     ]
 
 
@@ -572,9 +602,10 @@ def test_model_as_attr_sort_order_bysource_exception(autodocument):
     autodocument(
         documenter='class',
         object_path='target.edgecase_model_as_attr.Container',
-        options_doc={"members": "TEST_MODEL"},
-        options_app={"autodoc_pydantic_model_summary_list_order": "bysource"},
-        deactivate_all=False)
+        options_doc={'members': 'TEST_MODEL'},
+        options_app={'autodoc_pydantic_model_summary_list_order': 'bysource'},
+        deactivate_all=False,
+    )
 
 
 def test_field_description_correct_rst_rendering(autodocument):
@@ -608,15 +639,18 @@ def test_field_description_correct_rst_rendering(autodocument):
         '',
         '      :fieldlist: item',
         '',
-        ''
+        '',
     ]
 
     actual = autodocument(
         documenter='pydantic_model',
         object_path='target.edgecase_field_doc_render_rst.FieldDocRender',
-        options_app={"autodoc_pydantic_model_members": True,
-                     "autodoc_pydantic_model_undoc_members": True},
-        deactivate_all=True)
+        options_app={
+            'autodoc_pydantic_model_members': True,
+            'autodoc_pydantic_model_undoc_members': True,
+        },
+        deactivate_all=True,
+    )
     assert result == actual
 
 
@@ -636,21 +670,21 @@ def test_non_field_attributes(autodocument):
         '   FooBar.',
         '',
         '',
-        '',
-        '',
         '   .. py:attribute:: ClassAttribute.class_attribute',
         '      :module: target.edgecase_non_field_attribute',
         f'      :type: {TYPING_MODULE_PREFIX_V2}ClassVar[str]',
         '      :value: None',
         '',
         '      Dummy',
-        '']
+        '',
+    ]
 
     actual = autodocument(
         documenter='pydantic_model',
         object_path='target.edgecase_non_field_attribute.ClassAttribute',
-        options_app={"autodoc_pydantic_model_show_json": False},
-        deactivate_all=False)
+        options_app={'autodoc_pydantic_model_show_json': False},
+        deactivate_all=False,
+    )
 
     assert result == actual
 
@@ -684,21 +718,23 @@ def test_nested_pydantic_model_as_class_attribute(autodocument):
         '         :classmethod:',
         '',
         '         Foo',
-        ''
+        '',
     ]
 
     actual = autodocument(
         documenter='module',
         object_path='target.edgecase_model_as_attribute',
-        options_doc={"members": None},
-        options_app={"autodoc_pydantic_model_show_validator_members": True},
-        deactivate_all=True)
+        options_doc={'members': None},
+        options_app={'autodoc_pydantic_model_show_validator_members': True},
+        deactivate_all=True,
+    )
 
     assert result == actual
 
 
 def test_autodoc_pydantic_model_hide_reused_validator_true_identical_names(
-        autodocument):
+    autodocument,
+):
     """Ensure that class attributes of reused validators are hidden and the
     actual validator reference point to the correct function when the function
     name is identical to validator/method name.
@@ -710,7 +746,7 @@ def test_autodoc_pydantic_model_hide_reused_validator_true_identical_names(
     kwargs = dict(
         object_path='target.edgecase_reused_validator_identical_names.ModelOne',
         documenter=PydanticModelDocumenter.objtype,
-        deactivate_all=True
+        deactivate_all=True,
     )
 
     result = [
@@ -730,38 +766,50 @@ def test_autodoc_pydantic_model_hide_reused_validator_true_identical_names(
         '',
         '      :Validated by:',
         '         - :py:obj:`validation <target.edgecase_reused_validator_identical_names.validation>`',
-        ''
+        '',
     ]
 
     # explict global
     actual = autodocument(
-        options_app={"autodoc_pydantic_model_hide_reused_validator": True,
-                     "autodoc_pydantic_model_show_validator_summary": True,
-                     "autodoc_pydantic_field_list_validators": True},
-        options_doc={"members": None,
-                     "undoc-members": None},
-        **kwargs)
+        options_app={
+            'autodoc_pydantic_model_hide_reused_validator': True,
+            'autodoc_pydantic_model_show_validator_summary': True,
+            'autodoc_pydantic_field_list_validators': True,
+        },
+        options_doc={'members': None, 'undoc-members': None},
+        **kwargs,
+    )
     assert result == actual
 
     # explict local
     actual = autodocument(
-        options_doc={"model-hide-reused-validator": True,
-                     "members": None,
-                     "undoc-members": None},
-        options_app={"autodoc_pydantic_model_show_validator_summary": True,
-                     "autodoc_pydantic_field_list_validators": True},
-        **kwargs)
+        options_doc={
+            'model-hide-reused-validator': True,
+            'members': None,
+            'undoc-members': None,
+        },
+        options_app={
+            'autodoc_pydantic_model_show_validator_summary': True,
+            'autodoc_pydantic_field_list_validators': True,
+        },
+        **kwargs,
+    )
     assert result == actual
 
     # explict global
     actual = autodocument(
-        options_app={"autodoc_pydantic_model_hide_reused_validator": False,
-                     "autodoc_pydantic_model_show_validator_summary": True,
-                     "autodoc_pydantic_field_list_validators": True},
-        options_doc={"model-hide-reused-validator": True,
-                     "members": None,
-                     "undoc-members": None},
-        **kwargs)
+        options_app={
+            'autodoc_pydantic_model_hide_reused_validator': False,
+            'autodoc_pydantic_model_show_validator_summary': True,
+            'autodoc_pydantic_field_list_validators': True,
+        },
+        options_doc={
+            'model-hide-reused-validator': True,
+            'members': None,
+            'undoc-members': None,
+        },
+        **kwargs,
+    )
     assert result == actual
 
 
@@ -774,65 +822,65 @@ def test_autodoc_pydantic_model_inherited_members_enabled_without_base_model(
     """
 
     kwargs = dict(
-        object_path="target.edgecase_inherited_members.enabled_without_base_model.Child",
+        object_path='target.edgecase_inherited_members.enabled_without_base_model.Child',
         documenter=PydanticModelDocumenter.objtype,
         deactivate_all=True,
     )
 
     result = [
-        "",
-        ".. py:pydantic_model:: Child",
-        "   :module: target.edgecase_inherited_members.enabled_without_base_model",
-        "",
-        "   Child",
-        "",
-        "   :Fields:",
-        "      - :py:obj:`field_on_child (str) <target.edgecase_inherited_members.enabled_without_base_model.Child.field_on_child>`",
-        "      - :py:obj:`field_on_parent (str) <target.edgecase_inherited_members.enabled_without_base_model.Child.field_on_parent>`",
-        "",
-        "   :Validators:",
-        "      - :py:obj:`validate_field_on_child <target.edgecase_inherited_members.enabled_without_base_model.Child.validate_field_on_child>` » :py:obj:`field_on_child <target.edgecase_inherited_members.enabled_without_base_model.Child.field_on_child>`",
-        "      - :py:obj:`validate_field_on_parent <target.edgecase_inherited_members.enabled_without_base_model.Child.validate_field_on_parent>` » :py:obj:`field_on_parent <target.edgecase_inherited_members.enabled_without_base_model.Child.field_on_parent>`",
-        "",
-        "",
-        "   .. py:pydantic_field:: Child.field_on_child",
-        "      :module: target.edgecase_inherited_members.enabled_without_base_model",
-        "      :type: str",
-        "",
-        "      field_on_child",
-        "",
-        "",
-        "   .. py:pydantic_field:: Child.field_on_parent",
-        "      :module: target.edgecase_inherited_members.enabled_without_base_model",
-        "      :type: str",
-        "",
-        "      field_on_parent",
-        "",
-        "",
-        "   .. py:pydantic_validator:: Child.validate_field_on_child",
-        "      :module: target.edgecase_inherited_members.enabled_without_base_model",
-        "      :classmethod:",
-        "",
-        "      Validate field_on_child",
-        "",
-        "",
-        "   .. py:pydantic_validator:: Child.validate_field_on_parent",
-        "      :module: target.edgecase_inherited_members.enabled_without_base_model",
-        "      :classmethod:",
-        "",
-        "      Validate field_on_parent",
-        "",
+        '',
+        '.. py:pydantic_model:: Child',
+        '   :module: target.edgecase_inherited_members.enabled_without_base_model',
+        '',
+        '   Child',
+        '',
+        '   :Fields:',
+        '      - :py:obj:`field_on_child (str) <target.edgecase_inherited_members.enabled_without_base_model.Child.field_on_child>`',
+        '      - :py:obj:`field_on_parent (str) <target.edgecase_inherited_members.enabled_without_base_model.Child.field_on_parent>`',
+        '',
+        '   :Validators:',
+        '      - :py:obj:`validate_field_on_child <target.edgecase_inherited_members.enabled_without_base_model.Child.validate_field_on_child>` » :py:obj:`field_on_child <target.edgecase_inherited_members.enabled_without_base_model.Child.field_on_child>`',
+        '      - :py:obj:`validate_field_on_parent <target.edgecase_inherited_members.enabled_without_base_model.Child.validate_field_on_parent>` » :py:obj:`field_on_parent <target.edgecase_inherited_members.enabled_without_base_model.Child.field_on_parent>`',
+        '',
+        '',
+        '   .. py:pydantic_field:: Child.field_on_child',
+        '      :module: target.edgecase_inherited_members.enabled_without_base_model',
+        '      :type: str',
+        '',
+        '      field_on_child',
+        '',
+        '',
+        '   .. py:pydantic_field:: Child.field_on_parent',
+        '      :module: target.edgecase_inherited_members.enabled_without_base_model',
+        '      :type: str',
+        '',
+        '      field_on_parent',
+        '',
+        '',
+        '   .. py:pydantic_validator:: Child.validate_field_on_child',
+        '      :module: target.edgecase_inherited_members.enabled_without_base_model',
+        '      :classmethod:',
+        '',
+        '      Validate field_on_child',
+        '',
+        '',
+        '   .. py:pydantic_validator:: Child.validate_field_on_parent',
+        '      :module: target.edgecase_inherited_members.enabled_without_base_model',
+        '      :classmethod:',
+        '',
+        '      Validate field_on_parent',
+        '',
     ]
 
     actual = autodocument(
         options_app={
-            "autodoc_pydantic_model_show_validator_members": True,
-            "autodoc_pydantic_model_show_validator_summary": True,
-            "autodoc_pydantic_model_show_field_summary": True,
+            'autodoc_pydantic_model_show_validator_members': True,
+            'autodoc_pydantic_model_show_validator_summary': True,
+            'autodoc_pydantic_model_show_field_summary': True,
         },
         options_doc={
-            "members": None,
-            "inherited-members": "BaseModel",
+            'members': None,
+            'inherited-members': 'BaseModel',
         },
         **kwargs,
     )
@@ -846,43 +894,43 @@ def test_autodoc_pydantic_model_inherited_members_disabled(autodocument):
     """
 
     result = [
-        "",
-        ".. py:pydantic_model:: Child",
-        "   :module: target.edgecase_inherited_members.disabled",
-        "",
-        "   Child",
-        "",
-        "   :Fields:",
-        "      - :py:obj:`field_on_child (str) <target.edgecase_inherited_members.disabled.Child.field_on_child>`",
-        "",
-        "   :Validators:",
-        "      - :py:obj:`validate_field_on_child <target.edgecase_inherited_members.disabled.Child.validate_field_on_child>` » :py:obj:`field_on_child <target.edgecase_inherited_members.disabled.Child.field_on_child>`",
-        "",
-        "",
-        "   .. py:pydantic_field:: Child.field_on_child",
-        "      :module: target.edgecase_inherited_members.disabled",
-        "      :type: str",
-        "",
-        "      field_on_child",
-        "",
-        "",
-        "   .. py:pydantic_validator:: Child.validate_field_on_child",
-        "      :module: target.edgecase_inherited_members.disabled",
-        "      :classmethod:",
-        "",
-        "      Validate field_on_child",
-        "",
+        '',
+        '.. py:pydantic_model:: Child',
+        '   :module: target.edgecase_inherited_members.disabled',
+        '',
+        '   Child',
+        '',
+        '   :Fields:',
+        '      - :py:obj:`field_on_child (str) <target.edgecase_inherited_members.disabled.Child.field_on_child>`',
+        '',
+        '   :Validators:',
+        '      - :py:obj:`validate_field_on_child <target.edgecase_inherited_members.disabled.Child.validate_field_on_child>` » :py:obj:`field_on_child <target.edgecase_inherited_members.disabled.Child.field_on_child>`',
+        '',
+        '',
+        '   .. py:pydantic_field:: Child.field_on_child',
+        '      :module: target.edgecase_inherited_members.disabled',
+        '      :type: str',
+        '',
+        '      field_on_child',
+        '',
+        '',
+        '   .. py:pydantic_validator:: Child.validate_field_on_child',
+        '      :module: target.edgecase_inherited_members.disabled',
+        '      :classmethod:',
+        '',
+        '      Validate field_on_child',
+        '',
     ]
 
     actual = autodocument(
         options_app={
-            "autodoc_pydantic_model_show_validator_members": True,
-            "autodoc_pydantic_model_show_validator_summary": True,
-            "autodoc_pydantic_model_show_field_summary": True,
-            "autodoc_pydantic_model_members": True,
+            'autodoc_pydantic_model_show_validator_members': True,
+            'autodoc_pydantic_model_show_validator_summary': True,
+            'autodoc_pydantic_model_show_field_summary': True,
+            'autodoc_pydantic_model_members': True,
         },
         deactivate_all=True,
-        object_path="target.edgecase_inherited_members.disabled.Child",
+        object_path='target.edgecase_inherited_members.disabled.Child',
         documenter=PydanticModelDocumenter.objtype,
     )
 
@@ -897,52 +945,52 @@ def test_autodoc_pydantic_model_inherited_members_disabled_with_overwrite(autodo
     """
 
     result = [
-        "",
-        ".. py:pydantic_model:: ChildWithOverwrite",
-        "   :module: target.edgecase_inherited_members.disabled_with_overwrite",
-        "",
-        "   ChildWithOverwrite",
-        "",
-        "   :Fields:",
-        "      - :py:obj:`field_on_child (str) <target.edgecase_inherited_members.disabled_with_overwrite.ChildWithOverwrite.field_on_child>`",
-        "      - :py:obj:`field_on_parent (str) <target.edgecase_inherited_members.disabled_with_overwrite.ChildWithOverwrite.field_on_parent>`",
-        "",
-        "   :Validators:",
-        "      - :py:obj:`validate_field_on_child <target.edgecase_inherited_members.disabled_with_overwrite.ChildWithOverwrite.validate_field_on_child>` » :py:obj:`field_on_child <target.edgecase_inherited_members.disabled_with_overwrite.ChildWithOverwrite.field_on_child>`",
-        "      - :py:obj:`validate_field_on_parent <target.edgecase_inherited_members.disabled_with_overwrite.Parent.validate_field_on_parent>` » :py:obj:`field_on_parent <target.edgecase_inherited_members.disabled_with_overwrite.ChildWithOverwrite.field_on_parent>`",
-        "",
-        "",
-        "   .. py:pydantic_field:: ChildWithOverwrite.field_on_child",
-        "      :module: target.edgecase_inherited_members.disabled_with_overwrite",
-        "      :type: str",
-        "",
-        "      field_on_child",
-        "",
-        "",
-        "   .. py:pydantic_field:: ChildWithOverwrite.field_on_parent",
-        "      :module: target.edgecase_inherited_members.disabled_with_overwrite",
-        "      :type: str",
-        "",
-        "      overwritten field_on_parent",
-        "",
-        "",
-        "   .. py:pydantic_validator:: ChildWithOverwrite.validate_field_on_child",
-        "      :module: target.edgecase_inherited_members.disabled_with_overwrite",
-        "      :classmethod:",
-        "",
-        "      Validate field_on_child",
-        "",
+        '',
+        '.. py:pydantic_model:: ChildWithOverwrite',
+        '   :module: target.edgecase_inherited_members.disabled_with_overwrite',
+        '',
+        '   ChildWithOverwrite',
+        '',
+        '   :Fields:',
+        '      - :py:obj:`field_on_child (str) <target.edgecase_inherited_members.disabled_with_overwrite.ChildWithOverwrite.field_on_child>`',
+        '      - :py:obj:`field_on_parent (str) <target.edgecase_inherited_members.disabled_with_overwrite.ChildWithOverwrite.field_on_parent>`',
+        '',
+        '   :Validators:',
+        '      - :py:obj:`validate_field_on_child <target.edgecase_inherited_members.disabled_with_overwrite.ChildWithOverwrite.validate_field_on_child>` » :py:obj:`field_on_child <target.edgecase_inherited_members.disabled_with_overwrite.ChildWithOverwrite.field_on_child>`',
+        '      - :py:obj:`validate_field_on_parent <target.edgecase_inherited_members.disabled_with_overwrite.Parent.validate_field_on_parent>` » :py:obj:`field_on_parent <target.edgecase_inherited_members.disabled_with_overwrite.ChildWithOverwrite.field_on_parent>`',
+        '',
+        '',
+        '   .. py:pydantic_field:: ChildWithOverwrite.field_on_child',
+        '      :module: target.edgecase_inherited_members.disabled_with_overwrite',
+        '      :type: str',
+        '',
+        '      field_on_child',
+        '',
+        '',
+        '   .. py:pydantic_field:: ChildWithOverwrite.field_on_parent',
+        '      :module: target.edgecase_inherited_members.disabled_with_overwrite',
+        '      :type: str',
+        '',
+        '      overwritten field_on_parent',
+        '',
+        '',
+        '   .. py:pydantic_validator:: ChildWithOverwrite.validate_field_on_child',
+        '      :module: target.edgecase_inherited_members.disabled_with_overwrite',
+        '      :classmethod:',
+        '',
+        '      Validate field_on_child',
+        '',
     ]
 
     actual = autodocument(
         options_app={
-            "autodoc_pydantic_model_show_validator_members": True,
-            "autodoc_pydantic_model_show_validator_summary": True,
-            "autodoc_pydantic_model_show_field_summary": True,
-            "autodoc_pydantic_model_members": True,
+            'autodoc_pydantic_model_show_validator_members': True,
+            'autodoc_pydantic_model_show_validator_summary': True,
+            'autodoc_pydantic_model_show_field_summary': True,
+            'autodoc_pydantic_model_members': True,
         },
         deactivate_all=True,
-        object_path="target.edgecase_inherited_members.disabled_with_overwrite.ChildWithOverwrite",
+        object_path='target.edgecase_inherited_members.disabled_with_overwrite.ChildWithOverwrite',
         documenter=PydanticModelDocumenter.objtype,
     )
 
@@ -960,112 +1008,112 @@ def test_autodoc_module_inherited_members_disabled_with_overwrite(autodocument):
     """
 
     kwargs = dict(
-        object_path="target.edgecase_inherited_members.disabled_with_overwrite_module",
-        documenter="module",
+        object_path='target.edgecase_inherited_members.disabled_with_overwrite_module',
+        documenter='module',
         deactivate_all=True,
     )
 
     result = [
-        "",
-        ".. py:module:: target.edgecase_inherited_members.disabled_with_overwrite_module",
-        "",
-        "",
-        ".. py:pydantic_model:: Child",
-        "   :module: target.edgecase_inherited_members.disabled_with_overwrite_module",
-        "",
-        "   Child",
-        "",
-        "   :Fields:",
-        "      - :py:obj:`field_on_child (str) <target.edgecase_inherited_members.disabled_with_overwrite_module.Child.field_on_child>`",
-        "",
-        "   :Validators:",
-        "      - :py:obj:`validate_field_on_child <target.edgecase_inherited_members.disabled_with_overwrite_module.Child.validate_field_on_child>` » :py:obj:`field_on_child <target.edgecase_inherited_members.disabled_with_overwrite_module.Child.field_on_child>`",
-        "",
-        "",
-        "   .. py:pydantic_field:: Child.field_on_child",
-        "      :module: target.edgecase_inherited_members.disabled_with_overwrite_module",
-        "      :type: str",
-        "",
-        "      field_on_child",
-        "",
-        "",
-        "   .. py:pydantic_validator:: Child.validate_field_on_child",
-        "      :module: target.edgecase_inherited_members.disabled_with_overwrite_module",
-        "      :classmethod:",
-        "",
-        "      Validate field_on_child",
-        "",
-        "",
-        ".. py:pydantic_model:: ChildWithOverwrite",
-        "   :module: target.edgecase_inherited_members.disabled_with_overwrite_module",
-        "",
-        "   ChildWithOverwrite",
-        "",
-        "   :Fields:",
-        "      - :py:obj:`field_on_child (str) <target.edgecase_inherited_members.disabled_with_overwrite_module.ChildWithOverwrite.field_on_child>`",
-        "      - :py:obj:`field_on_parent (str) <target.edgecase_inherited_members.disabled_with_overwrite_module.ChildWithOverwrite.field_on_parent>`",
-        "",
-        "   :Validators:",
-        "      - :py:obj:`validate_field_on_child <target.edgecase_inherited_members.disabled_with_overwrite_module.ChildWithOverwrite.validate_field_on_child>` » :py:obj:`field_on_child <target.edgecase_inherited_members.disabled_with_overwrite_module.ChildWithOverwrite.field_on_child>`",
-        "      - :py:obj:`validate_field_on_parent <target.edgecase_inherited_members.disabled_with_overwrite_module.Parent.validate_field_on_parent>` » :py:obj:`field_on_parent <target.edgecase_inherited_members.disabled_with_overwrite_module.ChildWithOverwrite.field_on_parent>`",
-        "",
-        "",
-        "   .. py:pydantic_field:: ChildWithOverwrite.field_on_child",
-        "      :module: target.edgecase_inherited_members.disabled_with_overwrite_module",
-        "      :type: str",
-        "",
-        "      field_on_child",
-        "",
-        "",
-        "   .. py:pydantic_field:: ChildWithOverwrite.field_on_parent",
-        "      :module: target.edgecase_inherited_members.disabled_with_overwrite_module",
-        "      :type: str",
-        "",
-        "      overwritten field_on_parent",
-        "",
-        "",
-        "   .. py:pydantic_validator:: ChildWithOverwrite.validate_field_on_child",
-        "      :module: target.edgecase_inherited_members.disabled_with_overwrite_module",
-        "      :classmethod:",
-        "",
-        "      Validate field_on_child",
-        "",
-        "",
-        ".. py:pydantic_model:: Parent",
-        "   :module: target.edgecase_inherited_members.disabled_with_overwrite_module",
-        "",
-        "   Base",
-        "",
-        "   :Fields:",
-        "      - :py:obj:`field_on_parent (str) <target.edgecase_inherited_members.disabled_with_overwrite_module.Parent.field_on_parent>`",
-        "",
-        "   :Validators:",
-        "      - :py:obj:`validate_field_on_parent <target.edgecase_inherited_members.disabled_with_overwrite_module.Parent.validate_field_on_parent>` » :py:obj:`field_on_parent <target.edgecase_inherited_members.disabled_with_overwrite_module.Parent.field_on_parent>`",
-        "",
-        "",
-        "   .. py:pydantic_field:: Parent.field_on_parent",
-        "      :module: target.edgecase_inherited_members.disabled_with_overwrite_module",
-        "      :type: str",
-        "",
-        "      field_on_parent",
-        "",
-        "",
-        "   .. py:pydantic_validator:: Parent.validate_field_on_parent",
-        "      :module: target.edgecase_inherited_members.disabled_with_overwrite_module",
-        "      :classmethod:",
-        "",
-        "      Validate field_on_parent",
-        "",
+        '',
+        '.. py:module:: target.edgecase_inherited_members.disabled_with_overwrite_module',
+        '',
+        '',
+        '.. py:pydantic_model:: Child',
+        '   :module: target.edgecase_inherited_members.disabled_with_overwrite_module',
+        '',
+        '   Child',
+        '',
+        '   :Fields:',
+        '      - :py:obj:`field_on_child (str) <target.edgecase_inherited_members.disabled_with_overwrite_module.Child.field_on_child>`',
+        '',
+        '   :Validators:',
+        '      - :py:obj:`validate_field_on_child <target.edgecase_inherited_members.disabled_with_overwrite_module.Child.validate_field_on_child>` » :py:obj:`field_on_child <target.edgecase_inherited_members.disabled_with_overwrite_module.Child.field_on_child>`',
+        '',
+        '',
+        '   .. py:pydantic_field:: Child.field_on_child',
+        '      :module: target.edgecase_inherited_members.disabled_with_overwrite_module',
+        '      :type: str',
+        '',
+        '      field_on_child',
+        '',
+        '',
+        '   .. py:pydantic_validator:: Child.validate_field_on_child',
+        '      :module: target.edgecase_inherited_members.disabled_with_overwrite_module',
+        '      :classmethod:',
+        '',
+        '      Validate field_on_child',
+        '',
+        '',
+        '.. py:pydantic_model:: ChildWithOverwrite',
+        '   :module: target.edgecase_inherited_members.disabled_with_overwrite_module',
+        '',
+        '   ChildWithOverwrite',
+        '',
+        '   :Fields:',
+        '      - :py:obj:`field_on_child (str) <target.edgecase_inherited_members.disabled_with_overwrite_module.ChildWithOverwrite.field_on_child>`',
+        '      - :py:obj:`field_on_parent (str) <target.edgecase_inherited_members.disabled_with_overwrite_module.ChildWithOverwrite.field_on_parent>`',
+        '',
+        '   :Validators:',
+        '      - :py:obj:`validate_field_on_child <target.edgecase_inherited_members.disabled_with_overwrite_module.ChildWithOverwrite.validate_field_on_child>` » :py:obj:`field_on_child <target.edgecase_inherited_members.disabled_with_overwrite_module.ChildWithOverwrite.field_on_child>`',
+        '      - :py:obj:`validate_field_on_parent <target.edgecase_inherited_members.disabled_with_overwrite_module.Parent.validate_field_on_parent>` » :py:obj:`field_on_parent <target.edgecase_inherited_members.disabled_with_overwrite_module.ChildWithOverwrite.field_on_parent>`',
+        '',
+        '',
+        '   .. py:pydantic_field:: ChildWithOverwrite.field_on_child',
+        '      :module: target.edgecase_inherited_members.disabled_with_overwrite_module',
+        '      :type: str',
+        '',
+        '      field_on_child',
+        '',
+        '',
+        '   .. py:pydantic_field:: ChildWithOverwrite.field_on_parent',
+        '      :module: target.edgecase_inherited_members.disabled_with_overwrite_module',
+        '      :type: str',
+        '',
+        '      overwritten field_on_parent',
+        '',
+        '',
+        '   .. py:pydantic_validator:: ChildWithOverwrite.validate_field_on_child',
+        '      :module: target.edgecase_inherited_members.disabled_with_overwrite_module',
+        '      :classmethod:',
+        '',
+        '      Validate field_on_child',
+        '',
+        '',
+        '.. py:pydantic_model:: Parent',
+        '   :module: target.edgecase_inherited_members.disabled_with_overwrite_module',
+        '',
+        '   Base',
+        '',
+        '   :Fields:',
+        '      - :py:obj:`field_on_parent (str) <target.edgecase_inherited_members.disabled_with_overwrite_module.Parent.field_on_parent>`',
+        '',
+        '   :Validators:',
+        '      - :py:obj:`validate_field_on_parent <target.edgecase_inherited_members.disabled_with_overwrite_module.Parent.validate_field_on_parent>` » :py:obj:`field_on_parent <target.edgecase_inherited_members.disabled_with_overwrite_module.Parent.field_on_parent>`',
+        '',
+        '',
+        '   .. py:pydantic_field:: Parent.field_on_parent',
+        '      :module: target.edgecase_inherited_members.disabled_with_overwrite_module',
+        '      :type: str',
+        '',
+        '      field_on_parent',
+        '',
+        '',
+        '   .. py:pydantic_validator:: Parent.validate_field_on_parent',
+        '      :module: target.edgecase_inherited_members.disabled_with_overwrite_module',
+        '      :classmethod:',
+        '',
+        '      Validate field_on_parent',
+        '',
     ]
 
     actual = autodocument(
         options_app={
-            "autodoc_pydantic_model_show_validator_members": True,
-            "autodoc_pydantic_model_show_validator_summary": True,
-            "autodoc_pydantic_model_show_field_summary": True,
+            'autodoc_pydantic_model_show_validator_members': True,
+            'autodoc_pydantic_model_show_validator_summary': True,
+            'autodoc_pydantic_model_show_field_summary': True,
         },
         options_doc={
-            "members": None,
+            'members': None,
         },
         **kwargs,
     )

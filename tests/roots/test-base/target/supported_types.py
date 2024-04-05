@@ -16,4 +16,3 @@ class ToolEnum(IntEnum):
 class CookingModel(BaseModel):
     fruit: FruitEnum = FruitEnum.pear
     tool: ToolEnum = ToolEnum.spanner
-

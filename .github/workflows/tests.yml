@@ -1,13 +1,7 @@
 name: Semantic Tests
 on:
   push:
-    branches:
-      - '*'
-      - '!release-please*'
   pull_request:
-    branches:
-      - '*'
-      - '!release-please*'
   workflow_dispatch:
 
 jobs:
@@ -97,7 +91,6 @@ jobs:
       - run: tox -e no_erdantic
 
   test-development-versions-deps:
-    environment: Tests
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
@@ -110,8 +103,7 @@ jobs:
         continue-on-error: true
       - run: echo "Done"
 
-  test-linter:
-    environment: Tests
+  linter:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
@@ -120,3 +112,13 @@ jobs:
           python-version: '3.x'
       - run: pip install tox
       - run: tox -e linter
+
+  formatter:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - run: pip install tox
+      - run: tox -e formatter

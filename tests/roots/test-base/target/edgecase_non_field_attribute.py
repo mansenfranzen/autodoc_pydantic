@@ -3,9 +3,7 @@ from typing import ClassVar
 
 
 class ClassAttribute(BaseModel):
-    """FooBar.
-
-    """
+    """FooBar."""
 
     class_attribute: ClassVar[str] = None
     """Dummy"""

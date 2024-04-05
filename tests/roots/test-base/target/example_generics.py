@@ -7,12 +7,14 @@ DataT = TypeVar('DataT')
 
 class Error(BaseModel):
     """HTTP error representation."""
+
     code: int
     message: str
 
 
 class DataModel(BaseModel):
     """Payload representation."""
+
     numbers: List[int]
     people: List[str]
 
