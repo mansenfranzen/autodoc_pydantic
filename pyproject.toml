@@ -35,6 +35,7 @@ sphinx-rtd-theme = { version = "^2.0.0", optional = true }
 sphinx-tabs = { version = "^3", optional = true }
 sphinx-copybutton = { version = "^0.5.0", optional = true }
 sphinxcontrib-mermaid = { version = "^0.9.0", optional = true }
+myst-parser = {version = "^2.0", optional = true }
 
 # extras tests
 pytest = {version = "^8.0.0", optional = true }
@@ -50,7 +51,8 @@ erdantic = { version ="^0.7.0", optional = true }
 docs = ["sphinx-rtd-theme",
         "sphinx-tabs",
         "sphinx-copybutton",
-        "sphinxcontrib-mermaid"]
+        "sphinxcontrib-mermaid",
+        "myst-parser"]
 
 test = ["pytest",
         "coverage"]

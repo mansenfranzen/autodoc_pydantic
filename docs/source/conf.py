@@ -48,6 +48,7 @@ extensions = [
     'sphinxcontrib.mermaid',
     'sphinx.ext.viewcode',
     'extensions',
+    'myst_parser',
 ]
 
 autosummary_generate = True
