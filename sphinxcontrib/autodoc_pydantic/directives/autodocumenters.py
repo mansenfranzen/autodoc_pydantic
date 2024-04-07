@@ -574,8 +574,8 @@ class PydanticModelDocumenter(ClassDocumenter):
             return sorted(names, key=sort_func)
         except TypeError as e:
             msg = (
-                f'Uncaught exception while sorting fields for model'
-                f'{self.object_name} with sort order {sort_order}.'
+                f'Uncaught exception while sorting fields for model '
+                f'{self.name} with sort order {sort_order}.'
             )
             raise ValueError(msg).with_traceback(e.__traceback__) from e
 
