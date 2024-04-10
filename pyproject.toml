@@ -45,7 +45,7 @@ coverage = { version ="^7", optional = true }
 ruff = { version = "^0.3", optional = true }
 
 # extras erdantic
-erdantic = { version ="^0.7.0", optional = true }
+erdantic = { version ="^1.0.0", optional = true }
 
 [tool.poetry.extras]
 docs = ["sphinx-rtd-theme",
