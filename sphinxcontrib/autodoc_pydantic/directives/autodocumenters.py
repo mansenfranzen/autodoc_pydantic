@@ -345,7 +345,11 @@ class PydanticModelDocumenter(ClassDocumenter):
             raise RuntimeError(error_msg)
 
         # Graphviz [DOT language](https://graphviz.org/doc/info/lang.html)
-        figure_dot = erd.to_dot(self.object).replace('\t', '   ').split('\n')
+        figure_dot = (
+            erd.to_dot(self.object, graph_attr={'label': ''})
+            .replace('\t', '   ')
+            .split('\n')
+        )
         lines_dot = ['   ' + line for line in figure_dot]
         lines = ['.. graphviz::', '', *lines_dot, '']
 

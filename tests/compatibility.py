@@ -12,15 +12,6 @@ import sphinx
 from sphinx.addnodes import desc_sig_punctuation, desc_annotation, pending_xref
 
 
-def package_is_missing(package_name):
-    """Check if a Python package is not available"""
-    try:
-        importlib.import_module(package_name)
-        return False
-    except ImportError:
-        return True
-
-
 def desc_annotation_default_value(value: str):
     """Provides compatibility abstraction for `desc_annotation` for default
     values for sphinx version smaller and greater equal sphinx 4.3.
