@@ -9,7 +9,7 @@ name: Publish
 jobs:
   publish:
     name: Upload to PyPI
-    environment: Publish
+    environment: ReleasePlease
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

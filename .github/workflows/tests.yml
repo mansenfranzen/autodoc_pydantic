@@ -56,6 +56,7 @@ jobs:
           - python_version: "3.11"
             pydantic_version: "110"
             sphinx_version: "72"
+    environment: Tests
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
@@ -71,7 +72,7 @@ jobs:
           fail_ci_if_error: true
 
   test-latest-version:
-    environment: ci
+    environment: Tests
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
@@ -87,7 +88,6 @@ jobs:
           fail_ci_if_error: true
 
   test-special-version:
-    environment: ci
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
@@ -98,7 +98,6 @@ jobs:
       - run: tox -e no_erdantic
 
   test-development-versions-deps:
-    environment: ci
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
@@ -112,7 +111,6 @@ jobs:
       - run: echo "Done"
 
   test-linter:
-    environment: ci
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v2
