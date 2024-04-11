@@ -54,7 +54,7 @@ This example shows the rendered output of a pydantic model including an Entity-R
 
    .. tab:: *rendered output*
 
-      .. autopydantic_model:: target.example_generics.Response
+      .. autopydantic_model:: target.example_erdantic.Order
          :noindex:
          :model-erdantic-figure: True
          :model-erdantic-figure-collapsed: False
@@ -63,13 +63,13 @@ This example shows the rendered output of a pydantic model including an Entity-R
 
       .. code-block::
 
-         .. autopydantic_model:: target.example_generics.Response
+         .. autopydantic_model:: target.example_erdantic.Order
             :model-erdantic-figure: True
             :model-erdantic-figure-collapsed: False
 
    .. tab:: python
 
-      .. autocodeblock:: target.example_generics
+      .. autocodeblock:: target.example_erdantic
 
 
 -----------
