@@ -98,7 +98,7 @@ def test_autodoc_pydantic_model_show_json_false(autodocument):
 
 
 def test_autodoc_pydantic_model_erdantic_figure_true(autodocument):
-    pytest.importorskip("erdantic", minversion="1.0", reason='erdantic missing')
+    pytest.importorskip('erdantic', minversion='1.0', reason='erdantic missing')
 
     kwargs = dict(object_path='target.configuration.ModelErdanticFigure', **KWARGS)
 
@@ -167,7 +167,7 @@ def test_autodoc_pydantic_model_erdantic_figure_true(autodocument):
 
 
 def test_autodoc_pydantic_model_erdantic_figure_collapsed_false(autodocument):
-    pytest.importorskip("erdantic", minversion="1.0", reason='erdantic missing')
+    pytest.importorskip('erdantic', minversion='1.0', reason='erdantic missing')
 
     kwargs = dict(object_path='target.configuration.ModelErdanticFigure', **KWARGS)
 
@@ -238,8 +238,8 @@ def test_autodoc_pydantic_model_erdantic_figure_collapsed_false(autodocument):
 
 
 def test_autodoc_pydantic_model_erdantic_figure_false(autodocument):
-    pytest.importorskip("erdantic", minversion="1.0", reason='erdantic missing')
-    
+    pytest.importorskip('erdantic', minversion='1.0', reason='erdantic missing')
+
     kwargs = dict(object_path='target.configuration.ModelErdanticFigure', **KWARGS)
 
     result = [
