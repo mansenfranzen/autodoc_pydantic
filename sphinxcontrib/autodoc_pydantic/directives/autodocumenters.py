@@ -3,42 +3,39 @@
 """
 
 import json
-from typing import Any, Optional, Dict, List, Iterable, Callable, Set
+from typing import Any, Callable, Dict, Iterable, List, Optional, Set
 
 import sphinx
 from docutils.statemachine import StringList
-from pydantic import BaseSettings, BaseModel
+from pydantic import BaseModel, BaseSettings
 from sphinx.ext.autodoc import (
-    MethodDocumenter,
-    ClassDocumenter,
     AttributeDocumenter,
-    Documenter
+    ClassDocumenter,
+    Documenter,
+    MethodDocumenter,
 )
 from sphinx.util.docstrings import prepare_docstring
-
 from sphinx.util.inspect import object_description
 from sphinx.util.typing import get_type_hints, stringify
 
-from sphinxcontrib.autodoc_pydantic.directives.options.enums import (
-    OptionsJsonErrorStrategy,
-    OptionsFieldDocPolicy,
-    OptionsSummaryListOrder
-)
+from sphinxcontrib.autodoc_pydantic.directives.options.composites import AutoDocOptions
 from sphinxcontrib.autodoc_pydantic.directives.options.definition import (
+    OPTIONS_CONFIG,
+    OPTIONS_FIELD,
+    OPTIONS_MERGED,
     OPTIONS_MODEL,
     OPTIONS_SETTINGS,
-    OPTIONS_FIELD,
     OPTIONS_VALIDATOR,
-    OPTIONS_CONFIG,
-    OPTIONS_MERGED
+)
+from sphinxcontrib.autodoc_pydantic.directives.options.enums import (
+    OptionsFieldDocPolicy,
+    OptionsJsonErrorStrategy,
+    OptionsSummaryListOrder,
 )
 from sphinxcontrib.autodoc_pydantic.directives.templates import to_collapsable
-from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector, \
-    ValidatorFieldMap
-from sphinxcontrib.autodoc_pydantic.directives.options.composites import (
-    AutoDocOptions
-)
 from sphinxcontrib.autodoc_pydantic.directives.utility import NONE
+from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector, ValidatorFieldMap
+
 try:
     import erdantic as erd
 except ImportError:
@@ -132,7 +129,10 @@ class PydanticAutoDoc:
 
         """
 
-        return {x[0] for x in self._documenter.get_object_members(True)[1]}
+        return {
+            object_member.__name__
+            for object_member in self._documenter.get_object_members(True)[1]
+        }
 
     def resolve_inherited_validator_reference(self, ref: str) -> str:
         """Provide correct validator reference in case validator is inherited
