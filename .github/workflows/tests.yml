@@ -96,6 +96,7 @@ jobs:
         uses: ./.github/actions/invoke-tox
         with:
           tox-environment: development
+          install-graphviz: true
           continue-on-error: true
 
   linter:
