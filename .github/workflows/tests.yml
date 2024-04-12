@@ -1,4 +1,4 @@
-name: ci
+name: Tests
 on:
   push:
     branches:
@@ -7,43 +7,30 @@ on:
 
 jobs:
   test-stable-versions:
-    if: "!contains(github.event.head_commit.message, 'skip ci')"
     strategy:
       fail-fast: false
       matrix:
         include:
-          - python_version: 3.7
-            pydantic_version: "16"
-            sphinx_version: "34"
           - python_version: 3.8
             pydantic_version: "17"
-            sphinx_version: "35"
-          - python_version: 3.9
-            pydantic_version: "18"
-            sphinx_version: "35"
+            sphinx_version: "40"
           - python_version: 3.9
             pydantic_version: "18"
             sphinx_version: "40"
           - python_version: 3.9
             pydantic_version: "18"
-            sphinx_version: "41"
+            sphinx_version: "40"
           - python_version: 3.9
             pydantic_version: "18"
-            sphinx_version: "42"
+            sphinx_version: "45"
           - python_version: 3.9
             pydantic_version: "18"
-            sphinx_version: "43"
+            sphinx_version: "45"
+          - python_version: 3.9
+            pydantic_version: "18"
+            sphinx_version: "45"
           - python_version: "3.10"
             pydantic_version: "18"
-            sphinx_version: "43"
-          - python_version: "3.10"
-            pydantic_version: "19"
-            sphinx_version: "43"
-          - python_version: "3.10"
-            pydantic_version: "19"
-            sphinx_version: "44"
-          - python_version: "3.10"
-            pydantic_version: "19"
             sphinx_version: "45"
           - python_version: "3.10"
             pydantic_version: "19"
@@ -66,56 +53,57 @@ jobs:
           - python_version: "3.10"
             pydantic_version: "110"
             sphinx_version: "70"
+          - python_version: "3.11"
+            pydantic_version: "110"
+            sphinx_version: "72"
+    environment: Tests
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python_version }}
       - run: sudo apt-get install graphviz graphviz-dev
       - run: pip install tox
       - run: tox -e pydantic${{ matrix.pydantic_version }}-sphinx${{ matrix.sphinx_version }}
-      - name: Codecov
-        uses: codecov/codecov-action@v2.1.0
+      - name: Code Coverage
+        uses: codecov/codecov-action@v4
         with:
           fail_ci_if_error: true
+          token: ${{ secrets.CODACY_PROJECT_TOKEN }}
 
   test-latest-version:
-    if: "!contains(github.event.head_commit.message, 'skip ci')"
-    environment: ci
+    environment: Tests
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.x'
       - run: sudo apt-get install graphviz graphviz-dev
       - run: pip install tox
       - run: tox -e latest
-      - name: Codecov
-        uses: codecov/codecov-action@v2.1.0
+      - name: Code Coverage
+        uses: codecov/codecov-action@v4
         with:
           fail_ci_if_error: true
+          token: ${{ secrets.CODACY_PROJECT_TOKEN }}
 
   test-special-version:
-    if: "!contains(github.event.head_commit.message, 'skip ci')"
-    environment: ci
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.x'
       - run: pip install tox
       - run: tox -e no_erdantic
 
   test-development-versions-deps:
-    if: "!contains(github.event.head_commit.message, 'skip ci')"
-    environment: ci
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.x'
       - run: sudo apt-get install graphviz graphviz-dev
@@ -125,12 +113,10 @@ jobs:
       - run: echo "Done"
 
   test-linter:
-    if: "!contains(github.event.head_commit.message, 'skip ci')"
-    environment: ci
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.x'
       - run: pip install tox
