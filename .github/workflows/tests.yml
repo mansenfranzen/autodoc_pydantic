@@ -49,76 +49,74 @@ jobs:
             sphinx_version: "72"
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Test Environment and Run Tox
+        uses: ./.github/actions/invoke-tox
         with:
           python-version: ${{ matrix.python_version }}
-      - run: sudo apt-get install graphviz graphviz-dev
-      - run: pip install tox
-      - run: tox -e pydantic${{ matrix.pydantic_version }}-sphinx${{ matrix.sphinx_version }}
-      - name: Code Coverage
-        uses: codecov/codecov-action@v4
-        with:
-          fail_ci_if_error: true
-          token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          tox-environment: pydantic${{ matrix.pydantic_version }}-sphinx${{ matrix.sphinx_version }}
+          install-graphviz: true
+          codacy: ${{ secrets.CODACY_PROJECT_TOKEN }}
 
   test-latest-version:
     environment: Tests
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Test Environment and Run Tox
+        uses: ./.github/actions/invoke-tox
         with:
-          python-version: '3.x'
-      - run: sudo apt-get install graphviz graphviz-dev
-      - run: pip install tox
-      - run: tox -e latest
-      - name: Code Coverage
-        uses: codecov/codecov-action@v4
-        with:
-          fail_ci_if_error: true
-          token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          tox-environment: latest
+          install-graphviz: true
+          codacy: ${{ secrets.CODACY_PROJECT_TOKEN }}
 
   test-no-erdantic-version:
     environment: Tests
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Test Environment and Run Tox
+        uses: ./.github/actions/invoke-tox
         with:
-          python-version: '3.x'
-      - run: pip install tox
-      - run: tox -e no_erdantic
+          tox-environment: no_erdantic
 
   test-development-versions-deps:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Test Environment and Run Tox
+        uses: ./.github/actions/invoke-tox
         with:
-          python-version: '3.x'
-      - run: sudo apt-get install graphviz graphviz-dev
-      - run: pip install tox
-      - run: tox -e development
+          tox-environment: development
+          install-graphviz: true
         continue-on-error: true
-      - run: echo "Done"
 
   linter:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Test Environment and Run Tox
+        uses: ./.github/actions/invoke-tox
         with:
-          python-version: '3.x'
-      - run: pip install tox
-      - run: tox -e linter
+          tox-environment: linter
 
   formatter:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Test Environment and Run Tox
+        uses: ./.github/actions/invoke-tox
         with:
-          python-version: '3.x'
-      - run: pip install tox
-      - run: tox -e formatter
+          tox-environment: formatter

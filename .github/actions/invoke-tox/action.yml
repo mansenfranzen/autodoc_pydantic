@@ -1,0 +1,55 @@
+name: 'Setup Test Environment'
+description: 'Common setup for testing workflows'
+inputs:
+
+  python-version:
+    description: 'Define the Python version to use'
+    required: false
+    default: '3.x'
+
+  install-graphviz:
+    description: 'Install graphviz and graphviz-dev'
+    required: false
+    default: 'false'
+
+  tox-environment:
+    description: 'Tox environment to run'
+    required: true
+
+  codacy:
+    description: 'Enable code coverage by providing Codacy token'
+    required: false
+  
+outputs:
+  random-number:
+    description: "Random number"
+    value: ${{ steps.random-number-generator.outputs.random-number }}
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ inputs.python-version }}
+
+    - name: Install Graphviz
+      if: ${{ inputs.install-graphviz == 'true' }}
+      run: sudo apt-get install graphviz graphviz-dev
+      shell: bash
+
+    - name: Install Tox
+      run: pip install tox
+      shell: bash
+
+    - name: Invoke Tox
+      run: tox -e ${{ inputs.tox-environment }}
+      shell: bash
+
+    - name: Code Coverage
+      if: ${{ inputs.codacy}}
+      uses: codecov/codecov-action@v4
+      with:
+        fail_ci_if_error: true
+        token: ${{ inputs.codacy}}
+
+
