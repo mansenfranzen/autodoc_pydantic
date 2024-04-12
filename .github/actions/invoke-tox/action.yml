@@ -4,7 +4,8 @@ inputs:
 
   python-version:
     description: 'Define the Python version to use'
-    required: true
+    required: false
+    default: '3.x'
 
   install-graphviz:
     description: 'Install graphviz and graphviz-dev'
