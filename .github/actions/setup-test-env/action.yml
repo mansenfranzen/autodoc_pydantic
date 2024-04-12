@@ -9,7 +9,7 @@ inputs:
   install-graphviz:
     description: 'Install graphviz and graphviz-dev'
     required: false
-    default: false
+    default: 'false'
 
   tox-environment:
     description: 'Tox environment to run'
@@ -18,7 +18,7 @@ inputs:
   continue-on-error:
     description: 'Continue on error'
     required: false
-    default: false
+    default: 'false'
 
   codacy:
     description: 'Enable code coverage by providing Codacy token'
@@ -37,7 +37,7 @@ runs:
         python-version: ${{ inputs.python-version }}
 
     - name: Install Graphviz
-      if: ${{ inputs.install-graphviz == true }}
+      if: ${{ inputs.install-graphviz == 'true' }}
       run: sudo apt-get install graphviz graphviz-dev
       shell: bash
 
