@@ -1,6 +1,34 @@
 Changelog
 =========
 
+v1.9.1 - 2024-04-12
+-------------------
+
+This is a maintanance release supporting newest sphinx releases
+and fixing broken CI pipeline. This release officially drops support
+for python 3.7 at least in the CI pipeline.
+
+Internal
+~~~~~~~~
+
+- Resolve deprecation warning from sphinx regarding tuple interface
+
+Bugfix
+~~~~~~
+- Fix breaking ``Path`` changes in Sphinx 7.2 with in ``conftest.py``
+
+Testing
+~~~~~~~
+
+- Pin transitive dependencies to avoid breaking changes in Sphinx < 5
+
+Contributors
+~~~~~~~~~~~~
+
+- Many thanks to `exs-dwoodward <https://github.com/exs-dwoodward>`__ 
+  for resolving a deprecation warning
+  `#247 <https://github.com/mansenfranzen/autodoc_pydantic/pull/247>`__.
+
 v1.9.0 - 2023-06-08
 -------------------
 
