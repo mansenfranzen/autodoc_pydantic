@@ -8,7 +8,8 @@ inputs:
 
   install-graphviz:
     description: 'Install graphviz and graphviz-dev'
-    required: true
+    required: false
+    default: false
 
   tox-environment:
     description: 'Tox environment to run'
@@ -16,11 +17,12 @@ inputs:
 
   continue-on-error:
     description: 'Continue on error'
-    required: true
+    required: false
+    default: false
 
-  code-coverage:
-    description: 'Enable code coverage'
-    required: true
+  codacy:
+    description: 'Enable code coverage by providing Codacy token'
+    required: false
   
 outputs:
   random-number:
@@ -49,10 +51,10 @@ runs:
       continue-on-error: ${{ inputs.continue-on-error }}
 
     - name: Code Coverage
-      if: ${{ inputs.code-coverage == true }}
+      if: ${{ inputs.codacy}}
       uses: codecov/codecov-action@v4
       with:
         fail_ci_if_error: true
-        token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+        token: ${{ inputs.codacy}}
 
 

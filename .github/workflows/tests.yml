@@ -51,15 +51,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        
+
       - name: Setup Test Environment
         uses: ./.github/actions/setup-test-env
         with:
           python-version: ${{ matrix.python_version }}
           tox-environment: pydantic${{ matrix.pydantic_version }}-sphinx${{ matrix.sphinx_version }}
           install-graphviz: true
-          continue-on-error: false
-          code-coverage: true
+          codacy: ${{ secrets.CODACY_PROJECT_TOKEN }}
+
 
   test-latest-version:
     environment: Tests
