@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  test-stable-versions:
+  test-stable:
     environment: Tests
     strategy:
       fail-fast: false
@@ -47,6 +47,9 @@ jobs:
           - python_version: "3.12"
             pydantic_version: "26"
             sphinx_version: "72"
+          - python_version: "3.12"
+            pydantic_version: "27"
+            sphinx_version: "72"
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
@@ -60,7 +63,7 @@ jobs:
           install-graphviz: true
           codacy: ${{ secrets.CODACY_PROJECT_TOKEN }}
 
-  test-latest-version:
+  test-latest:
     environment: Tests
     runs-on: ubuntu-22.04
     steps:
@@ -74,7 +77,7 @@ jobs:
           install-graphviz: true
           codacy: ${{ secrets.CODACY_PROJECT_TOKEN }}
 
-  test-no-erdantic-version:
+  test-no-erdantic:
     environment: Tests
     runs-on: ubuntu-22.04
     steps:
@@ -86,7 +89,7 @@ jobs:
         with:
           tox-environment: no_erdantic
 
-  test-development-versions-deps:
+  test-development:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
