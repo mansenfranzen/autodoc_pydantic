@@ -6,6 +6,7 @@ import inspect
 import logging
 from logging.handlers import MemoryHandler
 from pathlib import Path
+import shutil
 from typing import Optional, Dict, List, Callable, Union, Any
 from unittest.mock import Mock
 
@@ -143,11 +144,11 @@ def test_app(make_app, sphinx_test_tempdir, rootdir):
                conf: Optional[Dict] = None,
                deactivate_all: bool = False):
         srcdir = sphinx_test_tempdir / testroot
-        srcdir.rmtree(ignore_errors=True)
+        shutil.rmtree(srcdir, ignore_errors=True)
 
         if rootdir and not srcdir.exists():
             testroot_path = rootdir / ('test-' + testroot)
-            testroot_path.copytree(srcdir)
+            shutil.copytree(testroot_path, srcdir)
 
         kwargs = dict(srcdir=srcdir, confoverrides={})
 
