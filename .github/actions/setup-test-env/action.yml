@@ -37,12 +37,15 @@ runs:
     - name: Install Graphviz
       if: ${{ inputs.install-graphviz == true }}
       run: sudo apt-get install graphviz graphviz-dev
+      shell: bash
 
     - name: Install Tox
       run: pip install tox
+      shell: bash
 
     - name: Invoke Tox
       run: tox -e ${{ inputs.tox-environment }}
+      shell: bash
       continue-on-error: ${{ inputs.continue-on-error }}
 
     - name: Code Coverage
