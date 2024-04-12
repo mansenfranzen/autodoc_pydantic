@@ -16,11 +16,6 @@ inputs:
     description: 'Tox environment to run'
     required: true
 
-  continue-on-error:
-    description: 'Continue on error'
-    required: false
-    default: 'false'
-
   codacy:
     description: 'Enable code coverage by providing Codacy token'
     required: false
@@ -49,7 +44,6 @@ runs:
     - name: Invoke Tox
       run: tox -e ${{ inputs.tox-environment }}
       shell: bash
-      continue-on-error: ${{ inputs.continue-on-error }}
 
     - name: Code Coverage
       if: ${{ inputs.codacy}}

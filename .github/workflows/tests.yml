@@ -97,7 +97,7 @@ jobs:
         with:
           tox-environment: development
           install-graphviz: true
-          continue-on-error: true
+        continue-on-error: true
 
   linter:
     runs-on: ubuntu-22.04
