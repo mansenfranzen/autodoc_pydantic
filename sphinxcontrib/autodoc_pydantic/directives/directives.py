@@ -26,7 +26,7 @@ from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector, ValidatorF
 TUPLE_STR = Tuple[str, str]
 
 
-class PydanticDirectiveBase:
+class PydanticDirectiveMixin:
     """Base class for pydantic directive providing common functionality."""
 
     config_name: str
@@ -52,7 +52,7 @@ class PydanticDirectiveBase:
         return f'{value} '
 
 
-class PydanticModel(PydanticDirectiveBase, PyClasslike):
+class PydanticModel(PydanticDirectiveMixin, PyClasslike):
     """Specialized directive for pydantic models."""
 
     option_spec = PyClasslike.option_spec.copy()
@@ -67,7 +67,7 @@ class PydanticModel(PydanticDirectiveBase, PyClasslike):
     default_prefix = 'class'
 
 
-class PydanticSettings(PydanticDirectiveBase, PyClasslike):
+class PydanticSettings(PydanticDirectiveMixin, PyClasslike):
     """Specialized directive for pydantic settings."""
 
     option_spec = PyClasslike.option_spec.copy()
@@ -82,7 +82,7 @@ class PydanticSettings(PydanticDirectiveBase, PyClasslike):
     default_prefix = 'class'
 
 
-class PydanticField(PydanticDirectiveBase, PyAttribute):
+class PydanticField(PydanticDirectiveMixin, PyAttribute):
     """Specialized directive for pydantic fields."""
 
     option_spec = PyAttribute.option_spec.copy()
@@ -199,7 +199,7 @@ class PydanticField(PydanticDirectiveBase, PyAttribute):
         return fullname, prefix
 
 
-class PydanticValidator(PydanticDirectiveBase, PyMethod):
+class PydanticValidator(PydanticDirectiveMixin, PyMethod):
     """Specialized directive for pydantic validators."""
 
     option_spec = PyMethod.option_spec.copy()
