@@ -13,9 +13,6 @@ from sphinx.ext.autodoc import ALL, Documenter, Options
 
 from sphinxcontrib.autodoc_pydantic.directives.utility import NONE
 
-if TYPE_CHECKING:
-    from docutils.parsers.rst import Directive
-
 
 class DirectiveOptions:
     """Composite class providing methods to manage getting and setting
@@ -33,7 +30,7 @@ class DirectiveOptions:
 
     """
 
-    def __init__(self, parent: Documenter | Directive) -> None:
+    def __init__(self, parent: Documenter | Any) -> None:  # noqa: ANN401
         self.parent = parent
         self.parent.options = Options(self.parent.options)
         self.add_default_options()
@@ -45,8 +42,7 @@ class DirectiveOptions:
         for option in options:
             self.set_default_option(option)
 
-    @staticmethod
-    def determine_app_cfg_name(name: str) -> str:
+    def determine_app_cfg_name(self, name: str) -> str:
         """Provide full app environment configuration name for given option
         name while converting "-" to "_".
 

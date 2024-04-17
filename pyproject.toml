@@ -41,6 +41,11 @@ myst-parser = {version = "^2.0", optional = true }
 pytest = {version = "^8.0.0", optional = true }
 coverage = { version ="^7", optional = true }
 
+# extras type checking
+mypy = { version  = "^1.9", optional = true }
+types-docutils = { version = "^0.20", optional = true }
+typing-extensions = { version = "^4.11", markers = "python_version <= '3.9'", optional = true }
+
 # extras linting/formatting
 ruff = { version = "^0.3", optional = true }
 
@@ -58,6 +63,10 @@ test = ["pytest",
         "coverage"]
 
 linting = ["ruff"]
+
+type_checking = ["mypy",
+                 "types-docutils",
+                 "typing-extensions"]
 
 erdantic = ["erdantic"]
 

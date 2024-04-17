@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, Any
 try:
     from importlib.metadata import version
 except ModuleNotFoundError:
-    from importlib_metadata import version
+    from importlib_metadata import version  # type: ignore[no-redef,import-not-found]
 
 from sphinx.domains import ObjType
 

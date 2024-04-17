@@ -1,5 +1,9 @@
 """This module contains the autodocumenter's option definitions."""
 
+from __future__ import annotations
+
+from typing import Callable
+
 from docutils.parsers.rst.directives import unchanged
 
 from sphinxcontrib.autodoc_pydantic.directives.options.enums import (
@@ -14,7 +18,7 @@ from sphinxcontrib.autodoc_pydantic.directives.options.validators import (
     option_one_of_factory,
 )
 
-OPTIONS_FIELD = {
+OPTIONS_FIELD: dict[str, Callable] = {
     'field-show-default': option_default_true,
     'field-show-required': option_default_true,
     'field-show-optional': option_default_true,
@@ -28,7 +32,7 @@ OPTIONS_FIELD = {
 }
 """Represents added directive options for :class:`PydanticFieldDocumenter`."""
 
-OPTIONS_VALIDATOR = {
+OPTIONS_VALIDATOR: dict[str, Callable] = {
     'validator-replace-signature': option_default_true,
     'validator-list-fields': option_default_true,
     'validator-signature-prefix': unchanged,
@@ -38,9 +42,9 @@ OPTIONS_VALIDATOR = {
 """Represents added directive options for :class:`PydanticValidatorDocumenter`.
 """
 
-OPTIONS_MERGED = {**OPTIONS_FIELD, **OPTIONS_VALIDATOR}
+OPTIONS_MERGED: dict[str, Callable] = {**OPTIONS_FIELD, **OPTIONS_VALIDATOR}
 
-OPTIONS_MODEL = {
+OPTIONS_MODEL: dict[str, Callable] = {
     'model-show-json': option_default_true,
     'model-show-json-error-strategy': option_one_of_factory(
         OptionsJsonErrorStrategy.values(),
@@ -64,7 +68,7 @@ OPTIONS_MODEL = {
 }
 """Represents added directive options for :class:`PydanticModelDocumenter`."""
 
-OPTIONS_SETTINGS = {
+OPTIONS_SETTINGS: dict[str, Callable] = {
     'settings-show-json': option_default_true,
     'settings-show-json-error-strategy': option_one_of_factory(
         OptionsJsonErrorStrategy.values(),

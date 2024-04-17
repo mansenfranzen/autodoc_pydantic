@@ -11,7 +11,7 @@ import itertools
 import pydoc
 import warnings
 from collections import defaultdict
-from typing import TYPE_CHECKING, Any, Callable, NamedTuple, TypeVar
+from typing import TYPE_CHECKING, Any, Callable, NamedTuple, TypeGuard, TypeVar
 
 from pydantic import BaseModel, ConfigDict, PydanticInvalidForJsonSchema, create_model
 from pydantic_settings import BaseSettings
@@ -273,7 +273,7 @@ class ConfigInspector(BaseInspectionComposite):
         super().__init__(parent)
         self.items = self._get_values_per_type()
 
-    def _get_values_per_type(self) -> dict[str, str]:
+    def _get_values_per_type(self) -> dict[str, Any]:
         """Get the configuration values from any pydantic model.
 
         Behavior of configuration values varies between `BaseModel` and
@@ -285,14 +285,15 @@ class ConfigInspector(BaseInspectionComposite):
 
         """
 
-        values = self.model.model_config
+        cfg = self.model.model_config
 
         if issubclass(self.model, BaseSettings):
             default = tuple(BaseSettings.model_config.items())
-            available = tuple(values.items())
-
+            available = tuple(cfg.items())
             result = [given for given in available if given not in default]
             values = dict(result)
+        else:
+            values = dict(cfg)
 
         return values
 
@@ -394,14 +395,14 @@ class SchemaInspector(BaseInspectionComposite):
         reordered_schema.update(schema)
         return reordered_schema
 
-    def create_sanitized_model(self) -> BaseModel:
+    def create_sanitized_model(self) -> type[BaseModel]:
         """Generates a new pydantic model from the original one while
         substituting invalid fields with typevars.
 
         """
 
         invalid_fields = self._parent.fields.non_json_serializable
-        new = {name: (TypeVar(name), None) for name in invalid_fields}
+        new: dict[str, Any] = {name: (TypeVar(name), None) for name in invalid_fields}
         return create_model(self.model.__name__, __base__=self.model, **new)
 
 
@@ -409,7 +410,7 @@ class StaticInspector:
     """Namespace under `ModelInspector` for static methods."""
 
     @staticmethod
-    def is_pydantic_model(obj: Any) -> bool:  # noqa: ANN401
+    def is_pydantic_model(obj: Any) -> TypeGuard[type[BaseModel]]:  # noqa: ANN401
         """Determine if object is a valid pydantic model."""
 
         try:
@@ -463,17 +464,17 @@ class ModelInspector:
 
         """
 
-        mapping = defaultdict(list)
+        mapping: dict[str, list[Any]] = defaultdict(list)
         decorators = self.model.__pydantic_decorators__
 
         # field validators
-        for validator in decorators.field_validators.values():
-            for field in validator.info.fields:
-                mapping[field].append(ValidatorAdapter(func=validator.func))
+        for field_validator in decorators.field_validators.values():
+            for field in field_validator.info.fields:
+                mapping[field].append(ValidatorAdapter(func=field_validator.func))
 
         # model validators
-        for validator in decorators.model_validators.values():
-            mapping['*'].append(ValidatorAdapter(func=validator.func))
+        for model_validator in decorators.model_validators.values():
+            mapping['*'].append(ValidatorAdapter(func=model_validator.func))
 
         return mapping
 
