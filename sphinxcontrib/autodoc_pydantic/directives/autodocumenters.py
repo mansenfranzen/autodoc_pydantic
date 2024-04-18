@@ -22,7 +22,9 @@ try:
     from sphinx.util.typing import stringify_annotation
 except ImportError:
     # fall back to older name for older versions of Sphinx
-    from sphinx.util.typing import stringify as stringify_annotation # type: ignore[no-redef]
+    from sphinx.util.typing import (  # type: ignore[no-redef]
+        stringify as stringify_annotation,
+    )
 
 from sphinxcontrib.autodoc_pydantic.directives.options.composites import AutoDocOptions
 from sphinxcontrib.autodoc_pydantic.directives.options.definition import (
@@ -137,7 +139,7 @@ class PydanticAutoDoc:
 
         """
         object_members = self._documenter.get_object_members(want_all=True)[1]
-        return {x.__name__ for x in object_members} # type: ignore[union-attr]
+        return {x.__name__ for x in object_members}  # type: ignore[union-attr]
 
     def get_base_class_names(self) -> list[str]:
         return [x.__name__ for x in self.model.__mro__]
@@ -542,6 +544,22 @@ class PydanticModelDocumenter(ClassDocumenter):
         base_class_fields = self.pydantic.get_non_inherited_members()
         return [field for field in fields if field not in base_class_fields]
 
+    def _get_tagorder(self, name: str) -> int | None:
+        """Get tagorder for given `name`."""
+
+        if name in self.analyzer.tagorder:
+            return self.analyzer.tagorder.get(name)
+
+        for base in self.pydantic.get_base_class_names():
+            name_with_class = f'{base}.{name}'
+            if name_with_class in self.analyzer.tagorder:
+                return self.analyzer.tagorder.get(name_with_class)
+
+        if name == ASTERISK_FIELD_NAME:
+            return -1
+
+        return None
+
     def _sort_summary_list(self, names: Iterable[str]) -> list[str]:
         """Sort member names according to given sort order
         `OptionsSummaryListOrder`.
@@ -558,22 +576,7 @@ class PydanticModelDocumenter(ClassDocumenter):
         elif sort_order == OptionsSummaryListOrder.BYSOURCE:
 
             def sort_func(name: str) -> int:  # type: ignore[misc]
-                tagorder = None
-
-                if name in self.analyzer.tagorder:
-                    tagorder = self.analyzer.tagorder.get(name)
-
-                # check base classes
-                elif self.pydantic.get_base_class_names():
-                    for base in self.pydantic.get_base_class_names():
-                        name_with_class = f'{base}.{name}'
-                        if name_with_class in self.analyzer.tagorder:
-                            tagorder = self.analyzer.tagorder.get(name_with_class)
-                            break
-
-                # a pseudo-field name used by root validators
-                elif name == ASTERISK_FIELD_NAME:
-                    tagorder = -1
+                tagorder = self._get_tagorder(name)
 
                 # catch cases where field is not found in tagorder
                 if tagorder is None:

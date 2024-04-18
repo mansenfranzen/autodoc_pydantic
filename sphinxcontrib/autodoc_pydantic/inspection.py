@@ -11,7 +11,12 @@ import itertools
 import pydoc
 import warnings
 from collections import defaultdict
-from typing import TYPE_CHECKING, Any, Callable, NamedTuple, TypeGuard, TypeVar
+from typing import TYPE_CHECKING, Any, Callable, NamedTuple, TypeVar
+
+try:
+    from typing import TypeGuard
+except ImportError:
+    from typing_extensions import TypeGuard
 
 from pydantic import BaseModel, ConfigDict, PydanticInvalidForJsonSchema, create_model
 from pydantic_settings import BaseSettings

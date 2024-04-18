@@ -7,9 +7,9 @@ management of directive options.
 from __future__ import annotations
 
 import functools
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
-from sphinx.ext.autodoc import ALL, Documenter, Options
+from sphinx.ext.autodoc import ALL, Options
 
 from sphinxcontrib.autodoc_pydantic.directives.utility import NONE
 
@@ -30,7 +30,7 @@ class DirectiveOptions:
 
     """
 
-    def __init__(self, parent: Documenter | Any) -> None:  # noqa: ANN401
+    def __init__(self, parent: Any) -> None:  # noqa: ANN401
         self.parent = parent
         self.parent.options = Options(self.parent.options)
         self.add_default_options()
@@ -284,7 +284,8 @@ class AutoDocOptions(DirectiveOptions):
 
             return result
 
-        self.parent.add_directive_header = wrapped
+        # see https://github.com/python/mypy/issues/2427
+        self.parent.add_directive_header = wrapped  # type: ignore[method-assign]
 
     def pass_option_to_directive(self, name: str) -> None:
         """Pass an autodoc option through to the generated directive."""

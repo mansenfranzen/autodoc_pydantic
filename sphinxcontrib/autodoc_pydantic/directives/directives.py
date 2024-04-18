@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, ClassVar, Tuple
+from typing import TYPE_CHECKING, Tuple
 
 import sphinx
 from docutils.nodes import Node, Text
@@ -48,17 +48,17 @@ class PydanticDirectiveMixin:
 
         # account for changed signature in sphinx 4.3, see #62
         if sphinx.version_info < (4, 3):
-            return f'{value} ' # type: ignore[return-value]
+            return f'{value} '  # type: ignore[return-value]
 
         from sphinx.addnodes import desc_sig_space
-        return [Text(value), desc_sig_space()]
 
+        return [Text(value), desc_sig_space()]
 
 
 class PydanticModel(PydanticDirectiveMixin, PyClasslike):
     """Specialized directive for pydantic models."""
 
-    option_spec: OptionSpec = PyClasslike.option_spec.copy() # type: ignore[misc]
+    option_spec: OptionSpec = PyClasslike.option_spec.copy()  # type: ignore[misc]
     option_spec.update(
         {
             '__doc_disable_except__': option_list_like,
@@ -73,7 +73,7 @@ class PydanticModel(PydanticDirectiveMixin, PyClasslike):
 class PydanticSettings(PydanticDirectiveMixin, PyClasslike):
     """Specialized directive for pydantic settings."""
 
-    option_spec: OptionSpec = PyClasslike.option_spec.copy() # type: ignore[misc]
+    option_spec: OptionSpec = PyClasslike.option_spec.copy()  # type: ignore[misc]
     option_spec.update(
         {
             '__doc_disable_except__': option_list_like,
@@ -88,7 +88,7 @@ class PydanticSettings(PydanticDirectiveMixin, PyClasslike):
 class PydanticField(PydanticDirectiveMixin, PyAttribute):
     """Specialized directive for pydantic fields."""
 
-    option_spec: OptionSpec = PyAttribute.option_spec.copy() # type: ignore[misc]
+    option_spec: OptionSpec = PyAttribute.option_spec.copy()  # type: ignore[misc]
     option_spec.update(
         {
             'alias': unchanged,
@@ -149,9 +149,7 @@ class PydanticField(PydanticDirectiveMixin, PyAttribute):
 
         signode += desc_annotation('', f" ({prefix} '{value}')")
 
-    def _find_desc_name_node(
-        self, sig: str, signode: desc_signature
-    ) -> Node | None:
+    def _find_desc_name_node(self, sig: str, signode: desc_signature) -> Node | None:
         """Return `desc_name` node  from `signode` that contains the field
         name. This is used to replace the name with the alias.
 
@@ -209,7 +207,7 @@ class PydanticField(PydanticDirectiveMixin, PyAttribute):
 class PydanticValidator(PydanticDirectiveMixin, PyMethod):
     """Specialized directive for pydantic validators."""
 
-    option_spec: OptionSpec = PyMethod.option_spec.copy() # type: ignore[misc]
+    option_spec: OptionSpec = PyMethod.option_spec.copy()  # type: ignore[misc]
     option_spec.update(
         {
             'validator-replace-signature': option_default_true,
