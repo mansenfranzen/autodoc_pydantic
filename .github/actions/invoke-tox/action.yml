@@ -42,7 +42,9 @@ runs:
       shell: bash
 
     - name: Invoke Tox
-      run: tox -e ${{ inputs.tox-environment }}
+      run: |
+        TOX_ENV_WITHOUT_DOTS=$(echo ${{ inputs.tox-environment }} | sed 's/\.//g')
+        tox -e $TOX_ENV_WITHOUT_DOTS
       shell: bash
 
     - name: Code Coverage

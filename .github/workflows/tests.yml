@@ -59,7 +59,7 @@ jobs:
         uses: ./.github/actions/invoke-tox
         with:
           python-version: ${{ matrix.python_version }}
-          tox-environment: pydantic${{ matrix.pydantic_version }}-sphinx${{ matrix.sphinx_version }}
+          tox-environment: py${{ matrix.python_version }}-pydantic${{ matrix.pydantic_version }}-sphinx${{ matrix.sphinx_version }}
           install-graphviz: true
           codacy: ${{ secrets.CODACY_PROJECT_TOKEN }}
 
