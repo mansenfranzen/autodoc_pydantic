@@ -134,3 +134,4 @@ jobs:
         uses: ./.github/actions/invoke-tox
         with:
           tox-environment: type-checker
+          install-graphviz: true
