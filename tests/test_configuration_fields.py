@@ -3,24 +3,27 @@
 import pytest
 from sphinx.addnodes import (
     desc,
-    desc_signature,
-    desc_name,
-    desc_content,
-    desc_annotation,
     desc_addname,
+    desc_annotation,
+    desc_content,
+    desc_name,
+    desc_signature,
     index,
 )
 from sphinx.testing.util import assert_node
 
-from sphinxcontrib.autodoc_pydantic import PydanticFieldDocumenter
+from sphinxcontrib.autodoc_pydantic.directives.autodocumenters import (
+    PydanticFieldDocumenter,
+)
+
 from .compatibility import (
-    desc_annotation_default_value,
-    desc_annotation_directive_prefix,
-    convert_ellipsis_to_none,
     OPTIONAL_INT,
     TYPEHINTS_PREFIX,
     TYPING_MODULE_PREFIX_V1,
     TYPING_MODULE_PREFIX_V2,
+    convert_ellipsis_to_none,
+    desc_annotation_default_value,
+    desc_annotation_directive_prefix,
 )
 
 KWARGS = dict(documenter=PydanticFieldDocumenter.directivetype, deactivate_all=True)

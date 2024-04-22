@@ -15,7 +15,9 @@ from sphinx.addnodes import (
     index,
 )
 from sphinx.testing.util import assert_node
-from sphinxcontrib.autodoc_pydantic import PydanticValidatorDocumenter
+from sphinxcontrib.autodoc_pydantic.directives.autodocumenters import (
+    PydanticValidatorDocumenter,
+)
 from .compatibility import desc_annotation_directive_prefix
 
 KWARGS = dict(documenter=PydanticValidatorDocumenter.objtype, deactivate_all=True)

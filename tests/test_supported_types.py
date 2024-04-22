@@ -1,6 +1,8 @@
 import pytest
 
-from sphinxcontrib.autodoc_pydantic import PydanticModelDocumenter
+from sphinxcontrib.autodoc_pydantic.directives.autodocumenters import (
+    PydanticModelDocumenter,
+)
 
 
 @pytest.mark.parametrize('model_name', argvalues=['CookingModel'])
