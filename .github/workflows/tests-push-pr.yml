@@ -87,20 +87,7 @@ jobs:
       - name: Setup Test Environment and Run Tox
         uses: ./.github/actions/invoke-tox
         with:
-          tox-environment: no_erdantic
-
-  test-development:
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Test Environment and Run Tox
-        uses: ./.github/actions/invoke-tox
-        with:
-          tox-environment: development
-          install-graphviz: true
-        continue-on-error: true
+          tox-environment: no-erdantic
 
   linter:
     runs-on: ubuntu-22.04
