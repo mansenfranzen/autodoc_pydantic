@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import json
-from typing import TYPE_CHECKING, Any, Callable, Iterable
+from typing import TYPE_CHECKING, Any, Callable, ClassVar, Iterable
 
 import sphinx
 from pydantic import BaseModel
@@ -547,6 +547,9 @@ class PydanticModelDocumenter(ClassDocumenter):
     def _get_tagorder(self, name: str) -> int | None:
         """Get tagorder for given `name`."""
 
+        if self.analyzer is None:
+            return None
+
         if name in self.analyzer.tagorder:
             return self.analyzer.tagorder.get(name)
 
@@ -672,7 +675,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
     objtype = 'pydantic_field'
     directivetype = 'pydantic_field'
     priority = 10 + AttributeDocumenter.priority
-    option_spec: OptionSpec = dict(AttributeDocumenter.option_spec)  # noqa: RUF012
+    option_spec: ClassVar[OptionSpec] = dict(AttributeDocumenter.option_spec)
     option_spec.update(OPTIONS_FIELD)
     member_order = 0
 
@@ -907,7 +910,7 @@ class PydanticValidatorDocumenter(MethodDocumenter):
         )
         return is_val and is_validator
 
-    def format_args(self, **kwargs: Any) -> str | None:  # noqa: ANN401
+    def format_args(self, **kwargs: Any) -> str:  # noqa: ANN401
         """Return empty arguments if validator should be replaced."""
 
         if self.pydantic.options.is_true('validator-replace-signature'):
