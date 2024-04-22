@@ -2,10 +2,10 @@ import pytest
 import sphinx
 from sphinx.ext.autosummary import FakeDirective
 
-from sphinxcontrib.autodoc_pydantic import (
+from sphinxcontrib.autodoc_pydantic.directives.autodocumenters import (
+    PydanticFieldDocumenter,
     PydanticModelDocumenter,
     PydanticSettingsDocumenter,
-    PydanticFieldDocumenter,
     PydanticValidatorDocumenter,
 )
 

@@ -1,19 +1,20 @@
 """This module contains tests for edgecases."""
 
 import copy
-import sys
 
 import pytest
 import sphinx.errors
 from sphinx.transforms.post_transforms import ReferencesResolver
 
-from sphinxcontrib.autodoc_pydantic import PydanticModelDocumenter
+from sphinxcontrib.autodoc_pydantic.directives.autodocumenters import (
+    PydanticModelDocumenter,
+)
 from tests.compatibility import (
-    rst_alias_class_directive,
+    PYTHON_LT_310,
     TYPEHINTS_PREFIX,
     TYPING_MODULE_PREFIX_V2,
     module_doc_string_tab,
-    PYTHON_LT_310,
+    rst_alias_class_directive,
 )
 
 

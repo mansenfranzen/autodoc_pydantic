@@ -4,7 +4,10 @@ import pytest
 from sphinx.addnodes import desc_annotation
 from sphinx.testing.util import assert_node
 
-from sphinxcontrib.autodoc_pydantic import PydanticModelDocumenter
+from sphinxcontrib.autodoc_pydantic.directives.autodocumenters import (
+    PydanticModelDocumenter,
+)
+
 from .compatibility import desc_annotation_directive_prefix
 
 KWARGS = dict(documenter=PydanticModelDocumenter.objtype, deactivate_all=True)
