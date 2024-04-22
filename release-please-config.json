@@ -55,11 +55,6 @@
             "hidden": false
         },
         {
-            "type": "internal",
-            "hidden": false,
-            "section": "🏠 Internal Changes"
-        },
-        {
             "type": "deps",
             "hidden": false,
             "section": "⬆️ Dependency Updates"
@@ -73,6 +68,11 @@
             "type": "breaking",
             "hidden": false,
             "section": "💥 Breaking Changes"
+        },
+        {
+            "type": "contributors",
+            "hidden": false,
+            "section": "👥 Contributors"
         }
     ],
     "packages": {
