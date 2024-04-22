@@ -59,7 +59,7 @@ jobs:
         uses: ./.github/actions/invoke-tox
         with:
           python-version: ${{ matrix.python_version }}
-          tox-environment: pydantic${{ matrix.pydantic_version }}-sphinx${{ matrix.sphinx_version }}
+          tox-environment: py${{ matrix.python_version }}-pydantic${{ matrix.pydantic_version }}-sphinx${{ matrix.sphinx_version }}
           install-graphviz: true
           codacy: ${{ secrets.CODACY_PROJECT_TOKEN }}
 
@@ -123,3 +123,15 @@ jobs:
         uses: ./.github/actions/invoke-tox
         with:
           tox-environment: formatter
+
+  type-checker:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Test Environment and Run Tox
+        uses: ./.github/actions/invoke-tox
+        with:
+          tox-environment: type-checker
+          install-graphviz: true

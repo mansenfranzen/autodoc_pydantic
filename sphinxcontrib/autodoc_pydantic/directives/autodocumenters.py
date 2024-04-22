@@ -16,13 +16,15 @@ from sphinx.ext.autodoc import (
 )
 from sphinx.util.docstrings import prepare_docstring
 from sphinx.util.inspect import object_description
-from sphinx.util.typing import get_type_hints
+from sphinx.util.typing import OptionSpec, get_type_hints
 
 try:
     from sphinx.util.typing import stringify_annotation
 except ImportError:
     # fall back to older name for older versions of Sphinx
-    from sphinx.util.typing import stringify as stringify_annotation
+    from sphinx.util.typing import (  # type: ignore[no-redef]
+        stringify as stringify_annotation,
+    )
 
 from sphinxcontrib.autodoc_pydantic.directives.options.composites import AutoDocOptions
 from sphinxcontrib.autodoc_pydantic.directives.options.definition import (
@@ -48,11 +50,6 @@ from sphinxcontrib.autodoc_pydantic.inspection import (
     ValidatorFieldMap,
 )
 
-try:
-    import erdantic as erd
-except ImportError:
-    erd = None
-
 if TYPE_CHECKING:
     from docutils.statemachine import StringList
     from pydantic import BaseModel
@@ -69,16 +66,16 @@ class PydanticAutoDoc:
         self._is_child = is_child
         self._inspect: ModelInspector | None = None
         self._options = AutoDocOptions(self._documenter)
-        self._model: BaseModel | None = None
+        self._model: type[BaseModel] | None = None
 
     @property
-    def model(self) -> BaseModel:
+    def model(self) -> type[BaseModel]:
         """Lazily load pydantic model after initialization. For more, please
         read `inspect` doc string.
 
         """
 
-        if self._model:
+        if self._model is not None:
             return self._model
 
         if self._is_child:
@@ -142,7 +139,7 @@ class PydanticAutoDoc:
 
         """
         object_members = self._documenter.get_object_members(want_all=True)[1]
-        return {x.__name__ for x in object_members}
+        return {x.__name__ for x in object_members}  # type: ignore[union-attr]
 
     def get_base_class_names(self) -> list[str]:
         return [x.__name__ for x in self.model.__mro__]
@@ -333,8 +330,10 @@ class PydanticModelDocumenter(ClassDocumenter):
         pydantic model.
 
         """
-        source_name = self.get_sourcename()
-        if erd is None:
+
+        try:
+            import erdantic as erd
+        except ImportError as e:
             error_msg = (
                 'erdantic is not installed, you need to install it before '
                 'creating an Entity Relationship Diagram for '
@@ -342,8 +341,9 @@ class PydanticModelDocumenter(ClassDocumenter):
                 'https://autodoc-pydantic.readthedocs.io/'
                 'en/stable/users/installation.html'
             )
-            raise RuntimeError(error_msg)
+            raise ImportError(error_msg) from e
 
+        source_name = self.get_sourcename()
         # Graphviz [DOT language](https://graphviz.org/doc/info/lang.html)
         figure_dot = (
             erd.to_dot(self.object, graph_attr={'label': ''})
@@ -459,7 +459,7 @@ class PydanticModelDocumenter(ClassDocumenter):
 
         self.add_line('', source_name)
 
-    def _get_base_model_validators(self) -> list[str]:
+    def _get_base_model_validators(self) -> list[ValidatorFieldMap]:
         """Return the validators on the model being documented"""
 
         result = []
@@ -482,7 +482,7 @@ class PydanticModelDocumenter(ClassDocumenter):
                     result.append(ref)
         return result
 
-    def _get_inherited_validators(self) -> list[str]:
+    def _get_inherited_validators(self) -> list[ValidatorFieldMap]:
         """Return the validators on inherited fields to be documented,
         if any"""
 
@@ -544,6 +544,25 @@ class PydanticModelDocumenter(ClassDocumenter):
         base_class_fields = self.pydantic.get_non_inherited_members()
         return [field for field in fields if field not in base_class_fields]
 
+    def _get_tagorder(self, name: str) -> int | None:
+        """Get tagorder for given `name`."""
+
+        if self.analyzer is None:
+            return None
+
+        if name in self.analyzer.tagorder:
+            return self.analyzer.tagorder.get(name)
+
+        for base in self.pydantic.get_base_class_names():
+            name_with_class = f'{base}.{name}'
+            if name_with_class in self.analyzer.tagorder:
+                return self.analyzer.tagorder.get(name_with_class)
+
+        if name == ASTERISK_FIELD_NAME:
+            return -1
+
+        return None
+
     def _sort_summary_list(self, names: Iterable[str]) -> list[str]:
         """Sort member names according to given sort order
         `OptionsSummaryListOrder`.
@@ -559,20 +578,15 @@ class PydanticModelDocumenter(ClassDocumenter):
                 return name
         elif sort_order == OptionsSummaryListOrder.BYSOURCE:
 
-            def sort_func(name: str) -> int:
-                if name in self.analyzer.tagorder:
-                    return self.analyzer.tagorder.get(name)
-                for base in self.pydantic.get_base_class_names():
-                    name_with_class = f'{base}.{name}'
-                    if name_with_class in self.analyzer.tagorder:
-                        return self.analyzer.tagorder.get(name_with_class)
-                # a pseudo-field name used by root validators
-                if name == ASTERISK_FIELD_NAME:
-                    return -1
+            def sort_func(name: str) -> int:  # type: ignore[misc]
+                tagorder = self._get_tagorder(name)
 
                 # catch cases where field is not found in tagorder
-                msg = f'Field {name} in {self.object_name} not found in tagorder'
-                raise ValueError(msg)
+                if tagorder is None:
+                    msg = f'Field {name} in {self.object_name} not found in tagorder'
+                    raise ValueError(msg)
+
+                return tagorder
 
         try:
             return sorted(names, key=sort_func)
@@ -605,8 +619,8 @@ class PydanticModelDocumenter(ClassDocumenter):
     @staticmethod
     def _convert_json_schema_to_rest(schema: dict) -> list[str]:
         """Convert model's schema dict into reST."""
-        schema = json.dumps(schema, default=str, indent=3)
-        lines = [f'   {line}' for line in schema.split('\n')]
+        schema_str = json.dumps(schema, default=str, indent=3)
+        lines = [f'   {line}' for line in schema_str.split('\n')]
         lines = ['.. code-block:: json', '', *lines]
         return to_collapsable(
             lines,
@@ -661,7 +675,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
     objtype = 'pydantic_field'
     directivetype = 'pydantic_field'
     priority = 10 + AttributeDocumenter.priority
-    option_spec: ClassVar[dict] = dict(AttributeDocumenter.option_spec)
+    option_spec: ClassVar[OptionSpec] = dict(AttributeDocumenter.option_spec)
     option_spec.update(OPTIONS_FIELD)
     member_order = 0
 

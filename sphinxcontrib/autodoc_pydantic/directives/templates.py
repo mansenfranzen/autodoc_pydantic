@@ -31,10 +31,10 @@ def to_collapsable(lines: list[str], title: str, css_class: str) -> list[str]:
 
     """
 
-    lines = '\n'.join(lines)
-    lines = TPL_COLLAPSE.format(
-        lines=lines,
+    lines_joined = '\n'.join(lines)
+    lines_formatted = TPL_COLLAPSE.format(
+        lines=lines_joined,
         summary=title,
         details_class=css_class,
     )
-    return lines.split('\n')
+    return lines_formatted.split('\n')

@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
-from typing import Tuple
+from typing import TYPE_CHECKING, Tuple
 
 import sphinx
-from docutils.nodes import Text
+from docutils.nodes import Node, Text
 from docutils.parsers.rst.directives import unchanged
 from sphinx.addnodes import desc_annotation, desc_name, desc_signature, pending_xref
 from sphinx.domains.python import PyAttribute, PyClasslike, PyMethod, py_sig_re
@@ -23,10 +23,13 @@ from sphinxcontrib.autodoc_pydantic.directives.utility import (
 )
 from sphinxcontrib.autodoc_pydantic.inspection import ModelInspector, ValidatorFieldMap
 
+if TYPE_CHECKING:
+    from sphinx.util.typing import OptionSpec
+
 TUPLE_STR = Tuple[str, str]
 
 
-class PydanticDirectiveBase:
+class PydanticDirectiveMixin:
     """Base class for pydantic directive providing common functionality."""
 
     config_name: str
@@ -36,7 +39,7 @@ class PydanticDirectiveBase:
         super().__init__(*args)
         self.pyautodoc = DirectiveOptions(self)
 
-    def get_signature_prefix(self, *_) -> str | list[Text]:  # noqa: ANN002
+    def get_signature_prefix(self, *_) -> list[Node]:  # noqa: ANN002
         """Overwrite original signature prefix with custom pydantic ones."""
 
         config_name = f'{self.config_name}-signature-prefix'
@@ -44,18 +47,18 @@ class PydanticDirectiveBase:
         value = prefix or self.default_prefix
 
         # account for changed signature in sphinx 4.3, see #62
-        if sphinx.version_info >= (4, 3):
-            from sphinx.addnodes import desc_sig_space
+        if sphinx.version_info < (4, 3):
+            return f'{value} '  # type: ignore[return-value]
 
-            return [Text(value), desc_sig_space()]
+        from sphinx.addnodes import desc_sig_space
 
-        return f'{value} '
+        return [Text(value), desc_sig_space()]
 
 
-class PydanticModel(PydanticDirectiveBase, PyClasslike):
+class PydanticModel(PydanticDirectiveMixin, PyClasslike):
     """Specialized directive for pydantic models."""
 
-    option_spec = PyClasslike.option_spec.copy()
+    option_spec: OptionSpec = PyClasslike.option_spec.copy()  # type: ignore[misc]
     option_spec.update(
         {
             '__doc_disable_except__': option_list_like,
@@ -67,10 +70,10 @@ class PydanticModel(PydanticDirectiveBase, PyClasslike):
     default_prefix = 'class'
 
 
-class PydanticSettings(PydanticDirectiveBase, PyClasslike):
+class PydanticSettings(PydanticDirectiveMixin, PyClasslike):
     """Specialized directive for pydantic settings."""
 
-    option_spec = PyClasslike.option_spec.copy()
+    option_spec: OptionSpec = PyClasslike.option_spec.copy()  # type: ignore[misc]
     option_spec.update(
         {
             '__doc_disable_except__': option_list_like,
@@ -82,10 +85,10 @@ class PydanticSettings(PydanticDirectiveBase, PyClasslike):
     default_prefix = 'class'
 
 
-class PydanticField(PydanticDirectiveBase, PyAttribute):
+class PydanticField(PydanticDirectiveMixin, PyAttribute):
     """Specialized directive for pydantic fields."""
 
-    option_spec = PyAttribute.option_spec.copy()
+    option_spec: OptionSpec = PyAttribute.option_spec.copy()  # type: ignore[misc]
     option_spec.update(
         {
             'alias': unchanged,
@@ -107,7 +110,12 @@ class PydanticField(PydanticDirectiveBase, PyAttribute):
 
         """
 
-        return py_sig_re.match(sig).groups()[1]
+        result = py_sig_re.match(sig)
+        if not result:
+            msg = f'Cannot find field name in signature: {sig} for {self.name}'
+            raise ValueError(msg)
+
+        return result.groups()[1]
 
     def add_required(self, signode: desc_signature) -> None:
         """Add `[Required]` if directive option `required` is set."""
@@ -137,13 +145,11 @@ class PydanticField(PydanticDirectiveBase, PyAttribute):
             value = self.get_field_name(sig)
         else:
             prefix = 'alias'
-            value = self.options.get('alias')
+            value = self.options.get('alias', '')
 
         signode += desc_annotation('', f" ({prefix} '{value}')")
 
-    def _find_desc_name_node(
-        self, sig: str, signode: desc_signature
-    ) -> desc_name | None:
+    def _find_desc_name_node(self, sig: str, signode: desc_signature) -> Node | None:
         """Return `desc_name` node  from `signode` that contains the field
         name. This is used to replace the name with the alias.
 
@@ -154,7 +160,6 @@ class PydanticField(PydanticDirectiveBase, PyAttribute):
         for node in signode.children:
             has_correct_text = node.astext() == name
             is_desc_name = isinstance(node, desc_name)
-
             if has_correct_text and is_desc_name:
                 return node
 
@@ -181,9 +186,9 @@ class PydanticField(PydanticDirectiveBase, PyAttribute):
                 location='autodoc_pydantic',
             )
         else:
-            text_node = Text(self.options.get('alias'))
+            text_node = Text(self.options.get('alias', ''))
             text_node.parent = name_node
-            name_node.children[0] = text_node
+            name_node.children = [text_node]
 
     def handle_signature(self, sig: str, signode: desc_signature) -> TUPLE_STR:
         """Optionally call add alias method."""
@@ -199,10 +204,10 @@ class PydanticField(PydanticDirectiveBase, PyAttribute):
         return fullname, prefix
 
 
-class PydanticValidator(PydanticDirectiveBase, PyMethod):
+class PydanticValidator(PydanticDirectiveMixin, PyMethod):
     """Specialized directive for pydantic validators."""
 
-    option_spec = PyMethod.option_spec.copy()
+    option_spec: OptionSpec = PyMethod.option_spec.copy()  # type: ignore[misc]
     option_spec.update(
         {
             'validator-replace-signature': option_default_true,

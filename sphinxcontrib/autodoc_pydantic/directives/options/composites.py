@@ -7,14 +7,11 @@ management of directive options.
 from __future__ import annotations
 
 import functools
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
-from sphinx.ext.autodoc import ALL, Documenter, Options
+from sphinx.ext.autodoc import ALL, Options
 
 from sphinxcontrib.autodoc_pydantic.directives.utility import NONE
-
-if TYPE_CHECKING:
-    from docutils.parsers.rst import Directive
 
 
 class DirectiveOptions:
@@ -33,7 +30,7 @@ class DirectiveOptions:
 
     """
 
-    def __init__(self, parent: Documenter | Directive) -> None:
+    def __init__(self, parent: Any) -> None:  # noqa: ANN401
         self.parent = parent
         self.parent.options = Options(self.parent.options)
         self.add_default_options()
@@ -45,8 +42,7 @@ class DirectiveOptions:
         for option in options:
             self.set_default_option(option)
 
-    @staticmethod
-    def determine_app_cfg_name(name: str) -> str:
+    def determine_app_cfg_name(self, name: str) -> str:
         """Provide full app environment configuration name for given option
         name while converting "-" to "_".
 
@@ -288,7 +284,8 @@ class AutoDocOptions(DirectiveOptions):
 
             return result
 
-        self.parent.add_directive_header = wrapped
+        # see https://github.com/python/mypy/issues/2427
+        self.parent.add_directive_header = wrapped  # type: ignore[method-assign]
 
     def pass_option_to_directive(self, name: str) -> None:
         """Pass an autodoc option through to the generated directive."""
