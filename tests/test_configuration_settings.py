@@ -5,7 +5,9 @@ from typing import List
 from sphinx.addnodes import desc_annotation
 from sphinx.testing.util import assert_node
 
-from sphinxcontrib.autodoc_pydantic.directives.autodocumenters import PydanticSettingsDocumenter
+from sphinxcontrib.autodoc_pydantic.directives.autodocumenters import (
+    PydanticSettingsDocumenter,
+)
 from .compatibility import desc_annotation_directive_prefix
 
 KWARGS = dict(documenter=PydanticSettingsDocumenter.objtype, deactivate_all=True)
