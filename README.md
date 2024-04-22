@@ -7,7 +7,7 @@
 [![Coverage](https://img.shields.io/codecov/c/gh/mansenfranzen/autodoc_pydantic?style=for-the-badge)](https://app.codecov.io/gh/mansenfranzen/autodoc_pydantic)
 
 [![Downloads](https://img.shields.io/pypi/dm/autodoc_pydantic?color=fe7d37&style=for-the-badge)](https://pypistats.org/packages/autodoc-pydantic)<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-48-orange.svg?style=for-the-badge)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-49-orange.svg?style=for-the-badge)](#contributors)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 
@@ -121,6 +121,7 @@ Thanks to great open source projects [sphinx](https://www.sphinx-doc.org/en/mast
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/morcef"><img src="https://avatars.githubusercontent.com/u/15701746?v=4?s=100" width="100px;" alt="morcef"/><br /><sub><b>morcef</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/issues?q=author%3Amorcef" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/alejandro-yousef"><img src="https://avatars.githubusercontent.com/u/93203189?v=4?s=100" width="100px;" alt="alejandro-yousef"/><br /><sub><b>alejandro-yousef</b></sub></a><br /><a href="#ideas-alejandro-yousef" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/exs-dwoodward"><img src="https://avatars.githubusercontent.com/u/166007669?v=4?s=100" width="100px;" alt="exs-dwoodward"/><br /><sub><b>exs-dwoodward</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/commits?author=exs-dwoodward" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://www.leahwasser.com"><img src="https://avatars.githubusercontent.com/u/7649194?v=4?s=100" width="100px;" alt="Leah Wasser"/><br /><sub><b>Leah Wasser</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/issues?q=author%3Alwasser" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>
