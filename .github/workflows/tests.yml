@@ -49,7 +49,7 @@ jobs:
             sphinx_version: "72"
           - python_version: "3.12"
             pydantic_version: "27"
-            sphinx_version: "72"
+            sphinx_version: "73"
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
