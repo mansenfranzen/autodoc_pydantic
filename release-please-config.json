@@ -38,6 +38,41 @@
             "type": "tests",
             "section": "🔧 Testing",
             "hidden": false
+        },
+        {
+            "type": "style",
+            "section": "💅 Code Style",
+            "hidden": false
+        },
+        {
+            "type": "refactor",
+            "section": "🔨 Refactoring",
+            "hidden": false
+        },
+        {
+            "type": "revert",
+            "section": "⏪ Reverts",
+            "hidden": false
+        },
+        {
+            "type": "internal",
+            "hidden": false,
+            "section": "🏠 Internal Changes"
+        },
+        {
+            "type": "deps",
+            "hidden": false,
+            "section": "⬆️ Dependency Updates"
+        },
+        {
+            "type": "security",
+            "hidden": false,
+            "section": "🔒 Security Fixes"
+        },
+        {
+            "type": "breaking",
+            "hidden": false,
+            "section": "💥 Breaking Changes"
         }
     ],
     "packages": {
