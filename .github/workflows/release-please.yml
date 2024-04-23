@@ -1,4 +1,4 @@
-name: Release
+name: "RELEASE: Changelog Update, Tagging, and PyPI Upload" 
 
 on:
   push:

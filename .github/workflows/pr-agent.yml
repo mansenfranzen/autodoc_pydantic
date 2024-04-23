@@ -1,4 +1,4 @@
-name: PR Agent
+name: "AGENT: Pull request and issue AI agent"
 
 on:
   pull_request:

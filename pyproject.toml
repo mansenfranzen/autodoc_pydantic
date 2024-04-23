@@ -50,6 +50,9 @@ typing-extensions = { version = "^4.11", markers = "python_version <= '3.9'", op
 # extras linting/formatting
 ruff = { version = "^0.4.0", optional = true }
 
+# extras security
+pip-audit = { version = "^2.7.2", optional = true }
+
 # extras erdantic
 erdantic = { version ="<2.0", optional = true }
 
@@ -69,6 +72,8 @@ linting = ["ruff"]
 type_checking = ["mypy",
                  "types-docutils",
                  "typing-extensions"]
+
+security = ["pip-audit"]
 
 erdantic = ["erdantic"]
 
