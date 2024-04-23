@@ -44,7 +44,7 @@ defusedxml = { version = ">=0.7.1", optional = true }
 
 # extras type checking
 mypy = { version  = "^1.9", optional = true }
-types-docutils = { version = "^0.20", optional = true }
+types-docutils = { version = ">=0.20,<0.22", optional = true }
 typing-extensions = { version = "^4.11", markers = "python_version <= '3.9'", optional = true }
 
 # extras linting/formatting
