@@ -134,6 +134,7 @@ def test_get_safe_schema_json_serializable(serializable):
     assert 'field_one' in json_result['properties']
 
 
+@pytest.mark.filterwarnings('ignore::pydantic.json_schema.PydanticJsonSchemaWarning')
 def test_get_safe_schema_json_non_serializable(serializable_mix):
     json_result = serializable_mix.schema.sanitized
     invalid_fields = serializable_mix.fields.non_json_serializable
