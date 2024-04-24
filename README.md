@@ -1,19 +1,17 @@
 ![Autodoc Pydantic](https://raw.githubusercontent.com/mansenfranzen/autodoc_pydantic/main/docs/source/material/logo_black.svg)
 
-![PyPI - Version](https://img.shields.io/pypi/v/autodoc_pydantic?style=for-the-badge&logo=python&logoColor=white&link=https%3A%2F%2Fpypi.org%2Fproject%2Fautodoc_pydantic%2F)
-![Python](https://img.shields.io/badge/python-3.8+-blue.svg?style=for-the-badge&logo=python&logoColor=white)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/autodoc_pydantic?style=for-the-badge&logo=python&logoColor=white&color=blue&link=https%3A%2F%2Fwww.pepy.tech%2Fprojects%2Fautodoc_pydantic)
+[![PyPI - Version](https://img.shields.io/pypi/v/autodoc_pydantic?style=for-the-badge&logo=python&logoColor=white)](https://pypi.org/project/autodoc_pydantic/)
+[![Python](https://img.shields.io/badge/python-3.8+-blue.svg?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/autodoc_pydantic?style=for-the-badge&logo=python&logoColor=white&color=blue)](https://pypistats.org/packages/autodoc-pydantic)
 
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/mansenfranzen/autodoc_pydantic/tests-push-pr.yml?style=for-the-badge&logo=github)](https://github.com/mansenfranzen/autodoc_pydantic/actions)
+[![Codecov](https://img.shields.io/codecov/c/gh/mansenfranzen/autodoc_pydantic?style=for-the-badge&logo=codecov)](https://app.codecov.io/gh/mansenfranzen/autodoc_pydantic)
+[![Read the Docs (stable)](https://img.shields.io/readthedocs/autodoc_pydantic/stable?style=for-the-badge&logo=sphinx&label=Docs%20stable)](https://autodoc-pydantic.readthedocs.io/en/stable/)
 
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/mansenfranzen/autodoc_pydantic/tests-push-pr.yml?style=for-the-badge&logo=github&link=https%3A%2F%2Fgithub.com%2Fmansenfranzen%2Fautodoc_pydantic%2Factions)
-![Codecov](https://img.shields.io/codecov/c/gh/mansenfranzen/autodoc_pydantic?style=for-the-badge&logo=codecov&link=https%3A%2F%2Fapp.codecov.io%2Fgh%2Fmansenfranzen%2Fautodoc_pydantic)
-![Read the Docs (stable)](https://img.shields.io/readthedocs/autodoc_pydantic/stable?style=for-the-badge&logo=sphinx&label=Docs%20stable&link=https%3A%2F%2Fautodoc-pydantic.readthedocs.io%2Fen%2Fstable%2F)
-
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-![GitHub License](https://img.shields.io/github/license/mansenfranzen/autodoc_pydantic?style=for-the-badge&color=orange&logo=semanticscholar&logoColor=white)
-![linting - ruff](https://img.shields.io/badge/Linting-orange?style=for-the-badge&logo=ruff&logoColor=white&label=ruff&link=https%3A%2F%2Fgithub.com%2Fastral-sh%2Fruff)
-[![types - Mypy](https://img.shields.io/badge/types-Mypy-orange.svg?style=for-the-badge&logo=python&logoColor=white)](https://github.com/python/mypy)
-[![All Contributors](https://img.shields.io/badge/all_contributors-49-orange.svg?style=for-the-badge&logo=iconify&logoColor=white)](#contributors)
+[![GitHub License](https://img.shields.io/github/license/mansenfranzen/autodoc_pydantic?style=for-the-badge&color=orange&logo=semanticscholar&logoColor=white)](https://github.com/mansenfranzen/autodoc_pydantic/blob/main/LICENSE)
+[![linting - ruff](https://img.shields.io/badge/Linting-orange?style=for-the-badge&logo=ruff&logoColor=white&label=ruff)](https://github.com/astral-sh/ruff)
+[![types - Mypy](https://img.shields.io/badge/types-Mypy-orange.svg?style=for-the-badge&logo=python&logoColor=white)](https://github.com/python/mypy)<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-49-orange.svg?style=for-the-badge&logo=iconify&logoColor=white)](https://github.com/mansenfranzen/autodoc_pydantic/tree/main?tab=readme-ov-file#acknowledgements)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 
@@ -25,7 +23,7 @@ does not integrate too well with pydantic models 😕.
 
 Don't worry - just `pip install autodoc_pydantic` ☺.
 
-## Features
+# 🌟 Features
 
 - 💬 provides default values, alias and constraints for model fields
 - 🔗 adds hyperlinks between validators and corresponding fields
@@ -38,7 +36,7 @@ Don't worry - just `pip install autodoc_pydantic` ☺.
 - 🔨 allows complete configurability on global and per-model level
 - 🍀 supports `pydantic >= 1.5.0` and `sphinx >= 4.0.0`
 
-## 📄 Documentation
+# 📄 Documentation
 
 | Section                         | Description                           |
 |-----------------------------------------|-----------------------------------------|
@@ -46,11 +44,11 @@ Don't worry - just `pip install autodoc_pydantic` ☺.
 | [🛠️ Installation](https://autodoc-pydantic.readthedocs.io/en/stable/users/installation.html)      | Setup and installation procedures.      |
 | [🔧 Configuration](https://autodoc-pydantic.readthedocs.io/en/stable/users/configuration.html)    | System or application settings.         |
 | [💡 Usage](https://autodoc-pydantic.readthedocs.io/en/stable/users/usage.html)                     | How to use the application or tool.     |
-| [🌐 Examples](https://autodoc-pydantic.readthedocs.io/en/stable/users/examples.html)              | Code and usage examples.                |
+| [🌐 Examples](https://autodoc-pydantic.readthedocs.io/en/stable/users/examples.html)              | Showcase and usage examples.                |
 | [👨‍💻 Developer Guide](https://autodoc-pydantic.readthedocs.io/en/stable/developers/setup.html) | In-depth guide for developers.          |
 
 
-## Acknowledgements
+# 🙏 Acknowledgements
 
 Thanks to great open source projects [sphinx](https://www.sphinx-doc.org/en/master/),
 [pydantic](https://pydantic-docs.helpmanual.io/) and
