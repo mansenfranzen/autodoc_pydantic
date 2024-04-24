@@ -316,14 +316,6 @@ class SettingsHideCustomiseSources(BaseSettings):
         return env_settings, init_settings, file_secret_settings
 
 
-class ConfigMembers(BaseModel):
-    """ConfigUndocMembers."""
-
-    class Config:
-        frozen = False
-        title = 'FooBar'
-
-
 class ConfigSignaturePrefix(BaseModel):
     """ConfigSignaturePrefix."""
 
@@ -482,7 +474,7 @@ class FieldShowConstraintsNativeConstraintTypes(BaseModel):
 class FieldShowConstraintsIgnoreExtraKwargs(BaseModel):
     """FieldShowConstraints."""
 
-    field: int = Field(1, ge=0, le=100, non_existing_kwarg=1)
+    field: int = Field(1, ge=0, le=100, json_schema_extra=dict(on_existing_kwarg=1))
     """Field."""
 
 
