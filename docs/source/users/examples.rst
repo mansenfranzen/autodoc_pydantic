@@ -20,11 +20,11 @@ In contrast, it also shows how standard sphinx autodoc displays the same example
 
 .. tabs::
 
-   .. tab:: *rendered output pydantic*
+   .. tab:: *output autodoc_pydantic*
 
       .. autopydantic_settings:: target.example_setting.ExampleSettings
 
-   .. tab:: *rendered output sphinx*
+   .. tab:: *output default sphinx*
 
       .. autopydantic_settings:: target.example_setting.ExampleSettings
          :members:
@@ -118,7 +118,7 @@ concepts such as model validators, required/optional fields or generic models.
 Model validators
 ----------------
 
-This example highlights how ``model validators <https://docs.pydantic.dev/latest/usage/validators/#model-validators>`_
+This example highlights how `model validators <https://docs.pydantic.dev/latest/usage/validators/#model-validators>`_
 (``@model_validator`` or ``@field_validator('*')``) are represented. Since they
 validate all fields, their corresponding field reference is replaced with a
 simple ``all fields`` marker which hyperlinks to the related model itself.
