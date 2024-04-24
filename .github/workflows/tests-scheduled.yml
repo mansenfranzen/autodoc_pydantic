@@ -35,7 +35,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        scan: ["lib", "app"]
+        scan: ["lib", "dev"]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
