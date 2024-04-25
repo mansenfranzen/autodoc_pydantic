@@ -800,9 +800,12 @@ class PydanticFieldDocumenter(AttributeDocumenter):
             OptionsFieldDocPolicy.DESCRIPTION,
         )
 
-        has_description = bool(self._get_field_description())
-        identical_doc = has_description == self._get_pydantic_sanitized_doc_string()
+        description = self._get_field_description()
+        has_description = bool(description)
+
+        identical_doc = description == self._get_pydantic_sanitized_doc_string()
         is_duplicated = identical_doc and self.needs_doc_string
+
         return is_enabled and has_description and not is_duplicated
 
     def add_content(
