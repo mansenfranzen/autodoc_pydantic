@@ -3,13 +3,14 @@ differences between different sphinx versions.
 
 """
 
-import importlib
-import sys
-from typing import Tuple, List
 import re
+import sys
+from typing import List, Tuple
 
+import pydantic
 import sphinx
-from sphinx.addnodes import desc_sig_punctuation, desc_annotation, pending_xref
+from packaging.version import Version
+from sphinx.addnodes import desc_annotation, desc_sig_punctuation, pending_xref
 
 
 def desc_annotation_default_value(value: str):
@@ -177,8 +178,15 @@ def pre_python310():
     return sys.version_info < (3, 10)
 
 
+def pydantic_ge_27():
+    """Determine if pydantic version is greater equals 2.7."""
+
+    return Version(pydantic.__version__) >= Version('2.7')
+
+
 TYPING_MODULE_PREFIX_V1 = typing_module_prefix_v1()
 TYPING_MODULE_PREFIX_V2 = typing_module_prefix_v2()
 TYPEHINTS_PREFIX = typehints_prefix()
 OPTIONAL_INT = TYPING_MODULE_PREFIX_V1 + get_optional_type_expected('Optional[int]')
 PYTHON_LT_310 = pre_python310()
+PYDANTIC_GE_27 = pydantic_ge_27()

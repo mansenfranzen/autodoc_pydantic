@@ -18,6 +18,7 @@ from sphinxcontrib.autodoc_pydantic.directives.autodocumenters import (
 
 from .compatibility import (
     OPTIONAL_INT,
+    PYDANTIC_GE_27,
     TYPEHINTS_PREFIX,
     TYPING_MODULE_PREFIX_V1,
     TYPING_MODULE_PREFIX_V2,
@@ -216,6 +217,8 @@ def test_autodoc_pydantic_field_doc_policy_attribute_doc_string(autodocument):
         '',
     ]
 
+    result_description = result if PYDANTIC_GE_27 else result[:-4]
+
     # explict global
     actual = autodocument(
         options_app={'autodoc_pydantic_field_doc_policy': 'docstring'}, **kwargs
@@ -226,7 +229,7 @@ def test_autodoc_pydantic_field_doc_policy_attribute_doc_string(autodocument):
     actual = autodocument(
         options_app={'autodoc_pydantic_field_doc_policy': 'description'}, **kwargs
     )
-    assert result == actual
+    assert result_description == actual
 
     # explict global
     actual = autodocument(
@@ -240,14 +243,16 @@ def test_autodoc_pydantic_field_doc_policy_attribute_doc_string(autodocument):
 
     # explicit local
     actual = autodocument(options_doc={'field-doc-policy': 'description'}, **kwargs)
-    assert result == actual
+    assert result_description == actual
 
     # explicit local
     actual = autodocument(options_doc={'field-doc-policy': 'both'}, **kwargs)
     assert result == actual
 
 
-def test_autodoc_pydantic_field_doc_policy_attribute_doc_string_docstring(autodocument):
+def test_autodoc_pydantic_field_doc_policy_use_attribute_docstring_docstring(
+    autodocument,
+):
     kwargs = dict(
         object_path='target.configuration.FieldDocPolicyUseAttributeDocstringsDocString.field',
         **KWARGS,
@@ -284,7 +289,7 @@ def test_autodoc_pydantic_field_doc_policy_attribute_doc_string_docstring(autodo
     assert result == actual
 
 
-def test_autodoc_pydantic_field_doc_policy_attribute_doc_string_description(
+def test_autodoc_pydantic_field_doc_policy_use_attribute_docstring_both(
     autodocument,
 ):
     kwargs = dict(
@@ -325,7 +330,9 @@ def test_autodoc_pydantic_field_doc_policy_attribute_doc_string_description(
     assert result == actual
 
 
-def test_autodoc_pydantic_field_doc_policy_attribute_doc_string_both(autodocument):
+def test_autodoc_pydantic_field_doc_policy_use_attribute_docstring_description(
+    autodocument,
+):
     kwargs = dict(
         object_path='target.configuration.FieldDocPolicyUseAttributeDocstringsDocString.field',
         **KWARGS,
