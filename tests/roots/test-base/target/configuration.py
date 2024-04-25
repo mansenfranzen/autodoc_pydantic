@@ -427,6 +427,32 @@ class FieldDocPolicy(BaseModel):
     """Field."""
 
 
+class FieldDocPolicyUseAttributeDocstrings(BaseModel):
+    """FieldDocPolicy."""
+
+    field: int = Field(1)
+    """Field Description is fetched from doc string.
+
+    Contains multiline doc string."""
+
+    model_config = ConfigDict(
+        use_attribute_docstrings=True,
+    )
+
+
+class FieldDocPolicyUseAttributeDocstringsDocString(BaseModel):
+    """FieldDocPolicy."""
+
+    field: int = Field(1, description='Custom Desc.')
+    """Field Description is fetched from doc string.
+
+    Contains multiline doc string."""
+
+    model_config = ConfigDict(
+        use_attribute_docstrings=True,
+    )
+
+
 class FieldShowConstraints(BaseModel):
     """FieldShowConstraints."""
 

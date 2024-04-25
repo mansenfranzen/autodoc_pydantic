@@ -41,7 +41,6 @@ from sphinxcontrib.autodoc_pydantic.directives.options.enums import (
 )
 from sphinxcontrib.autodoc_pydantic.directives.templates import to_collapsable
 from sphinxcontrib.autodoc_pydantic.directives.utility import (
-    NONE,
     intercept_type_annotations_py_gt_39,
 )
 from sphinxcontrib.autodoc_pydantic.inspection import (
@@ -784,6 +783,28 @@ class PydanticFieldDocumenter(AttributeDocumenter):
             sourcename = self.get_sourcename()
             self.add_line(f'   :alias: {field.alias}', sourcename)
 
+    @property
+    def needs_doc_string(self) -> bool:
+        """Indicate if docstring from attribute should be added to field."""
+
+        doc_policy = self.pydantic.options.get_value('field-doc-policy')
+        return doc_policy != OptionsFieldDocPolicy.DESCRIPTION
+
+    @property
+    def needs_description(self) -> bool:
+        """Indicate if pydantic field description should be added to field."""
+
+        doc_policy = self.pydantic.options.get_value('field-doc-policy')
+        is_enabled = doc_policy in (
+            OptionsFieldDocPolicy.BOTH,
+            OptionsFieldDocPolicy.DESCRIPTION,
+        )
+
+        has_description = bool(self._get_field_description())
+        identical_doc = has_description == self._get_pydantic_sanitized_doc_string()
+        is_duplicated = identical_doc and self.needs_doc_string
+        return is_enabled and has_description and not is_duplicated
+
     def add_content(
         self,
         more_content: StringList | None,
@@ -791,18 +812,9 @@ class PydanticFieldDocumenter(AttributeDocumenter):
     ) -> None:
         """Delegate additional content creation."""
 
-        doc_policy = self.pydantic.options.get_value('field-doc-policy')
-        if doc_policy in (
-            OptionsFieldDocPolicy.DOCSTRING,
-            OptionsFieldDocPolicy.BOTH,
-            None,
-            NONE,
-        ):
+        if self.needs_doc_string:
             super().add_content(more_content, **kwargs)
-        if doc_policy in (
-            OptionsFieldDocPolicy.BOTH,
-            OptionsFieldDocPolicy.DESCRIPTION,
-        ):
+        if self.needs_description:
             self.add_description()
 
         if self.pydantic.options.is_true('field-show-constraints'):
@@ -826,22 +838,39 @@ class PydanticFieldDocumenter(AttributeDocumenter):
 
             self.add_line('', source_name)
 
-    def add_description(self) -> None:
-        """Adds description from schema if present."""
+    def _get_field_description(self) -> str:
+        """Get field description from schema if present."""
 
         field_name = self.pydantic_field_name
         func = self.pydantic.inspect.fields.get_property_from_field_info
-        description = func(field_name, 'description')
+        return func(field_name, 'description')
 
-        if not description:
-            return
+    def _get_pydantic_sanitized_doc_string(self) -> str:
+        """Helper to get sanitized docstring for pydantic field that
+        uses same formatting as pydantic's method to extract the doc
+        string for automated field description provisioning.
+
+        """
+
+        docstrings = self.get_doc()
+        if not docstrings:
+            return ''
+
+        docstring = docstrings[0]  # first element is always the docstring
+        without_last = docstring[:-1]  # last element is always empty
+        substitute_linebreaks = ['\n\n' if x == '' else x for x in without_last]
+        return ''.join(substitute_linebreaks)
+
+    def add_description(self) -> None:
+        """Adds description from schema if present."""
+
+        description = self._get_field_description()
 
         tabsize = self.directive.state.document.settings.tab_width
         lines = prepare_docstring(description, tabsize=tabsize)
         source_name = self.get_sourcename()
         for line in lines:
             self.add_line(line, source_name)
-        self.add_line('', source_name)
 
     def add_validators(self) -> None:
         """Add section with all validators that process this field."""
