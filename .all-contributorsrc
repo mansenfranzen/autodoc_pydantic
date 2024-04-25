@@ -471,6 +471,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "Galarzaa90",
+      "name": "Allan Galarza",
+      "avatar_url": "https://avatars.githubusercontent.com/u/12865379?v=4",
+      "profile": "https://galarzaa.com",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,

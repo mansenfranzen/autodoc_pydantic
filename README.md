@@ -11,7 +11,7 @@
 [![GitHub License](https://img.shields.io/github/license/mansenfranzen/autodoc_pydantic?style=for-the-badge&color=orange&logo=semanticscholar&logoColor=white)](https://github.com/mansenfranzen/autodoc_pydantic/blob/main/LICENSE)
 [![linting - ruff](https://img.shields.io/badge/Linting-orange?style=for-the-badge&logo=ruff&logoColor=white&label=ruff)](https://github.com/astral-sh/ruff)
 [![types - Mypy](https://img.shields.io/badge/types-Mypy-orange.svg?style=for-the-badge&logo=python&logoColor=white)](https://github.com/python/mypy)<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-49-orange.svg?style=for-the-badge&logo=iconify&logoColor=white)](https://github.com/mansenfranzen/autodoc_pydantic/tree/main?tab=readme-ov-file#acknowledgements)
+[![All Contributors](https://img.shields.io/badge/all_contributors-50-orange.svg?style=for-the-badge)](#contributors)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 
@@ -121,6 +121,9 @@ Thanks to great open source projects [sphinx](https://www.sphinx-doc.org/en/mast
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/alejandro-yousef"><img src="https://avatars.githubusercontent.com/u/93203189?v=4?s=100" width="100px;" alt="alejandro-yousef"/><br /><sub><b>alejandro-yousef</b></sub></a><br /><a href="#ideas-alejandro-yousef" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/exs-dwoodward"><img src="https://avatars.githubusercontent.com/u/166007669?v=4?s=100" width="100px;" alt="exs-dwoodward"/><br /><sub><b>exs-dwoodward</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/commits?author=exs-dwoodward" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://www.leahwasser.com"><img src="https://avatars.githubusercontent.com/u/7649194?v=4?s=100" width="100px;" alt="Leah Wasser"/><br /><sub><b>Leah Wasser</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/issues?q=author%3Alwasser" title="Bug reports">🐛</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://galarzaa.com"><img src="https://avatars.githubusercontent.com/u/12865379?v=4?s=100" width="100px;" alt="Allan Galarza"/><br /><sub><b>Allan Galarza</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/issues?q=author%3AGalarzaa90" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>
