@@ -460,12 +460,23 @@ Fields
    :enable: members
    :values: docstring, description, both*
 
-   Define what content is displayed in the main field docstring. The following
-   values are possible:
+   This configuration determines what information appears in the documentation for each field in a model. You can select from the following options:
 
-   - **docstring** shows the exact docstring of the python attribute.
-   - **description** displays the information provided via the pydantic field's description.
-   - **both** will output the attribute's docstring together with the pydantic field's description.
+   **Available values:**
+
+   - ``docstring``: Displays the original docstring from the Python attribute.
+   - ``description``: Shows the description provided in the Pydantic model field.
+   - ``both``: Includes both the attribute's docstring and the Pydantic field's description in the documentation.
+
+   .. hint::
+
+      As of Pydantic version 2.7, you can enable the model configuration setting 
+      `use_attribute_docstrings <https://docs.pydantic.dev/latest/api/config/#pydantic.config.ConfigDict.use_attribute_docstrings>`_. 
+      When enabled, Pydantic will use the attribute's docstring as the field's description 
+      by default, unless a specific description is provided. To avoid 
+      redundancy in documentation, especially when using the ``both`` option, 
+      **autodoc_pydantic** automatically checks for and removes any duplicate docstrings, 
+      ensuring your documentation remains clear and concise.
 
 
 .. config_description:: autopydantic_model
