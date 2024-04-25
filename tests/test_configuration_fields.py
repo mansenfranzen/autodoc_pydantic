@@ -18,6 +18,7 @@ from sphinxcontrib.autodoc_pydantic.directives.autodocumenters import (
 
 from .compatibility import (
     OPTIONAL_INT,
+    PYDANTIC_GE_27,
     TYPEHINTS_PREFIX,
     TYPING_MODULE_PREFIX_V1,
     TYPING_MODULE_PREFIX_V2,
@@ -143,7 +144,6 @@ def test_autodoc_pydantic_field_doc_policy_description(autodocument):
         '',
         '   Custom Desc.',
         '',
-        '',
     ]
 
     # explict global
@@ -178,7 +178,6 @@ def test_autodoc_pydantic_field_doc_policy_both(autodocument):
         '',
         '   Custom Desc.',
         '',
-        '',
     ]
 
     # explict global
@@ -195,6 +194,174 @@ def test_autodoc_pydantic_field_doc_policy_both(autodocument):
     actual = autodocument(
         options_app={'autodoc_pydantic_field_doc_policy': 'docstring'},
         options_doc={'field-doc-policy': 'both'},
+        **kwargs,
+    )
+    assert result == actual
+
+
+def test_autodoc_pydantic_field_doc_policy_attribute_doc_string(autodocument):
+    kwargs = dict(
+        object_path='target.configuration.FieldDocPolicyUseAttributeDocstrings.field',
+        **KWARGS,
+    )
+
+    result = [
+        '',
+        '.. py:pydantic_field:: FieldDocPolicyUseAttributeDocstrings.field',
+        '   :module: target.configuration',
+        '   :type: int',
+        '',
+        '   Field Description is fetched from doc string.',
+        '',
+        '   Contains multiline doc string.',
+        '',
+    ]
+
+    result_description = result if PYDANTIC_GE_27 else result[:-4]
+
+    # explict global
+    actual = autodocument(
+        options_app={'autodoc_pydantic_field_doc_policy': 'docstring'}, **kwargs
+    )
+    assert result == actual
+
+    # explict global
+    actual = autodocument(
+        options_app={'autodoc_pydantic_field_doc_policy': 'description'}, **kwargs
+    )
+    assert result_description == actual
+
+    # explict global
+    actual = autodocument(
+        options_app={'autodoc_pydantic_field_doc_policy': 'both'}, **kwargs
+    )
+    assert result == actual
+
+    # explicit local
+    actual = autodocument(options_doc={'field-doc-policy': 'docstring'}, **kwargs)
+    assert result == actual
+
+    # explicit local
+    actual = autodocument(options_doc={'field-doc-policy': 'description'}, **kwargs)
+    assert result_description == actual
+
+    # explicit local
+    actual = autodocument(options_doc={'field-doc-policy': 'both'}, **kwargs)
+    assert result == actual
+
+
+def test_autodoc_pydantic_field_doc_policy_use_attribute_docstring_docstring(
+    autodocument,
+):
+    kwargs = dict(
+        object_path='target.configuration.FieldDocPolicyUseAttributeDocstringsDocString.field',
+        **KWARGS,
+    )
+
+    result = [
+        '',
+        '.. py:pydantic_field:: FieldDocPolicyUseAttributeDocstringsDocString.field',
+        '   :module: target.configuration',
+        '   :type: int',
+        '',
+        '   Field Description is fetched from doc string.',
+        '',
+        '   Contains multiline doc string.',
+        '',
+    ]
+
+    # explict global
+    actual = autodocument(
+        options_app={'autodoc_pydantic_field_doc_policy': 'docstring'}, **kwargs
+    )
+    assert result == actual
+
+    # explicit local
+    actual = autodocument(options_doc={'field-doc-policy': 'docstring'}, **kwargs)
+    assert result == actual
+
+    # explicit local overwrite global
+    actual = autodocument(
+        options_app={'autodoc_pydantic_field_doc_policy': 'both'},
+        options_doc={'field-doc-policy': 'docstring'},
+        **kwargs,
+    )
+    assert result == actual
+
+
+def test_autodoc_pydantic_field_doc_policy_use_attribute_docstring_both(
+    autodocument,
+):
+    kwargs = dict(
+        object_path='target.configuration.FieldDocPolicyUseAttributeDocstringsDocString.field',
+        **KWARGS,
+    )
+
+    result = [
+        '',
+        '.. py:pydantic_field:: FieldDocPolicyUseAttributeDocstringsDocString.field',
+        '   :module: target.configuration',
+        '   :type: int',
+        '',
+        '   Field Description is fetched from doc string.',
+        '',
+        '   Contains multiline doc string.',
+        '',
+        '   Custom Desc.',
+        '',
+    ]
+
+    # explict global
+    actual = autodocument(
+        options_app={'autodoc_pydantic_field_doc_policy': 'both'}, **kwargs
+    )
+    assert result == actual
+
+    # explicit local
+    actual = autodocument(options_doc={'field-doc-policy': 'both'}, **kwargs)
+    assert result == actual
+
+    # explicit local overwrite global
+    actual = autodocument(
+        options_app={'autodoc_pydantic_field_doc_policy': 'description'},
+        options_doc={'field-doc-policy': 'both'},
+        **kwargs,
+    )
+    assert result == actual
+
+
+def test_autodoc_pydantic_field_doc_policy_use_attribute_docstring_description(
+    autodocument,
+):
+    kwargs = dict(
+        object_path='target.configuration.FieldDocPolicyUseAttributeDocstringsDocString.field',
+        **KWARGS,
+    )
+
+    result = [
+        '',
+        '.. py:pydantic_field:: FieldDocPolicyUseAttributeDocstringsDocString.field',
+        '   :module: target.configuration',
+        '   :type: int',
+        '',
+        '   Custom Desc.',
+        '',
+    ]
+
+    # explict global
+    actual = autodocument(
+        options_app={'autodoc_pydantic_field_doc_policy': 'description'}, **kwargs
+    )
+    assert result == actual
+
+    # explicit local
+    actual = autodocument(options_doc={'field-doc-policy': 'description'}, **kwargs)
+    assert result == actual
+
+    # explicit local overwrite global
+    actual = autodocument(
+        options_app={'autodoc_pydantic_field_doc_policy': 'both'},
+        options_doc={'field-doc-policy': 'description'},
         **kwargs,
     )
     assert result == actual

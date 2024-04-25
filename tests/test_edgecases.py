@@ -640,7 +640,6 @@ def test_field_description_correct_rst_rendering(autodocument):
         '',
         '      :fieldlist: item',
         '',
-        '',
     ]
 
     actual = autodocument(
