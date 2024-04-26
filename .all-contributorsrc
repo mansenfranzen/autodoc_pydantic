@@ -507,6 +507,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "annerademacher",
+      "name": "Anne Rademacher",
+      "avatar_url": "https://avatars.githubusercontent.com/u/49472656?v=4",
+      "profile": "https://github.com/AnneRademacher",
+      "contributions": [
+        "financial"
+      ]
     }
   ],
   "contributorsPerLine": 7,
