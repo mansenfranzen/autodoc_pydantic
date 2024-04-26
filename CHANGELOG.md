@@ -1,5 +1,112 @@
 # Changelog
 
+## [2.2.0](https://github.com/mansenfranzen/autodoc_pydantic/compare/v2.1.0...v2.2.0) (2024-04-26)
+
+
+### ✨ Features
+
+* Allow empty strings for directive prefixes ([#285](https://github.com/mansenfranzen/autodoc_pydantic/issues/285)) ([be21d37](https://github.com/mansenfranzen/autodoc_pydantic/commit/be21d377d085bde35ac608e68d79b1fe3d70ddf0))
+* Remove duplicated docs strings when `use_attribute_docstrings` is used in `pydantic &gt;= 2.7` ([#276](https://github.com/mansenfranzen/autodoc_pydantic/issues/276)) ([0ddb12f](https://github.com/mansenfranzen/autodoc_pydantic/commit/0ddb12ff0ad98ae79116dc1701e2700685a1a568))
+
+
+### 🐛 Bug Fixes
+
+* **deps:** update dependency erdantic to &lt;v2 ([#246](https://github.com/mansenfranzen/autodoc_pydantic/issues/246)) ([3c8daa8](https://github.com/mansenfranzen/autodoc_pydantic/commit/3c8daa8cdb5c4c643dbcea62ee7aa02982006a65))
+* **deps:** update dependency erdantic to ^0.7.0 ([#226](https://github.com/mansenfranzen/autodoc_pydantic/issues/226)) ([0909963](https://github.com/mansenfranzen/autodoc_pydantic/commit/09099635fdbd0675cf4f3a3e4da7db1b3a3fe2eb))
+* **deps:** update dependency flake8 to v7 ([#233](https://github.com/mansenfranzen/autodoc_pydantic/issues/233)) ([c270e8a](https://github.com/mansenfranzen/autodoc_pydantic/commit/c270e8ae447f9c65659f1d718c458f768c91be6b))
+* **deps:** update dependency pytest to v8 ([#234](https://github.com/mansenfranzen/autodoc_pydantic/issues/234)) ([8b330af](https://github.com/mansenfranzen/autodoc_pydantic/commit/8b330af0905ea91439a0ed0ff23d8512eb1445b6))
+* **deps:** update dependency sphinx-copybutton to ^0.5.0 ([#227](https://github.com/mansenfranzen/autodoc_pydantic/issues/227)) ([7ada937](https://github.com/mansenfranzen/autodoc_pydantic/commit/7ada937a62da35f7715edf3b5e2a441075cc6457))
+* **deps:** update dependency sphinx-rtd-theme to v2 ([#235](https://github.com/mansenfranzen/autodoc_pydantic/issues/235)) ([f43cfa9](https://github.com/mansenfranzen/autodoc_pydantic/commit/f43cfa914a9eb7d74ea66c588f124c3aed3a315f))
+* **deps:** update dependency sphinxcontrib-mermaid to ^0.9.0 ([#229](https://github.com/mansenfranzen/autodoc_pydantic/issues/229)) ([984ce05](https://github.com/mansenfranzen/autodoc_pydantic/commit/984ce051e3dba7f2ecf267662ecb8cfdd4411ae3))
+* Improve error message for `_sort_summary_list` failures ([#243](https://github.com/mansenfranzen/autodoc_pydantic/issues/243)) ([87923a1](https://github.com/mansenfranzen/autodoc_pydantic/commit/87923a128d32343a6291d29c996a413994ede89c))
+* Test please-release ([d4595bf](https://github.com/mansenfranzen/autodoc_pydantic/commit/d4595bf403ce0f85a23572397c0f12bffb68f3ef))
+* Use more precise `name` instead of `object_name` for `_sort_summary_list` error msg ([#244](https://github.com/mansenfranzen/autodoc_pydantic/issues/244)) ([42bdd4b](https://github.com/mansenfranzen/autodoc_pydantic/commit/42bdd4bd2788b0a2eb2f932847355a153ce7ebd8))
+
+
+### ⛏ Other Changes
+
+* Add `changelog-sections` to please-release ([#218](https://github.com/mansenfranzen/autodoc_pydantic/issues/218)) ([5355f98](https://github.com/mansenfranzen/autodoc_pydantic/commit/5355f98d77c5b0fe94358f4109d22d89a1eaedf2))
+* Add `refactor` and more categories to release-please configuration. ([#258](https://github.com/mansenfranzen/autodoc_pydantic/issues/258)) ([71e1c60](https://github.com/mansenfranzen/autodoc_pydantic/commit/71e1c605be3d05aabb739d7c36d6a201ba57e465))
+* Add Coduim PR Agent Workflow ([#236](https://github.com/mansenfranzen/autodoc_pydantic/issues/236)) ([38f9e16](https://github.com/mansenfranzen/autodoc_pydantic/commit/38f9e16525904223be867d6799a880e9aae16d95))
+* Configure Renovate ([#225](https://github.com/mansenfranzen/autodoc_pydantic/issues/225)) ([efc2f9a](https://github.com/mansenfranzen/autodoc_pydantic/commit/efc2f9aefec73d6f6cfa8fe521e8eca4406fc148))
+* Deactivate dependency dashboard ([#238](https://github.com/mansenfranzen/autodoc_pydantic/issues/238)) ([11afaf3](https://github.com/mansenfranzen/autodoc_pydantic/commit/11afaf39160d1ad628b08dc3fc1024af6c396235))
+* **deps:** update abatilo/actions-poetry action to v3 ([#230](https://github.com/mansenfranzen/autodoc_pydantic/issues/230)) ([be248a4](https://github.com/mansenfranzen/autodoc_pydantic/commit/be248a466885393c9e1420ecff60b64ce9132d0c))
+* **deps:** update actions/checkout action to v4 ([#231](https://github.com/mansenfranzen/autodoc_pydantic/issues/231)) ([5774bdf](https://github.com/mansenfranzen/autodoc_pydantic/commit/5774bdf6340500a362709afdf8814efcfaea4d6a))
+* **deps:** update actions/setup-python action to v5 ([#232](https://github.com/mansenfranzen/autodoc_pydantic/issues/232)) ([2bc973b](https://github.com/mansenfranzen/autodoc_pydantic/commit/2bc973b9704b2dab6c9122eee15930a4f7deecce))
+* fix link in all-contributors bot ([#281](https://github.com/mansenfranzen/autodoc_pydantic/issues/281)) ([8261254](https://github.com/mansenfranzen/autodoc_pydantic/commit/8261254f868ae68149aa86433b4d0f69a01ad80c))
+* improve changelog ([b22840f](https://github.com/mansenfranzen/autodoc_pydantic/commit/b22840f1095cf82256a56d9fb2f27bd1710dae6c))
+* Remove `dev` extras and `tox` from pyproject.toml ([204f246](https://github.com/mansenfranzen/autodoc_pydantic/commit/204f24669d643505edb7be4acf07a856948e5027))
+* Remove dependabot in favor for Mend's renovate ([#267](https://github.com/mansenfranzen/autodoc_pydantic/issues/267)) ([9726cc5](https://github.com/mansenfranzen/autodoc_pydantic/commit/9726cc56e37f0659d33840aec1337fe00e1d39a8))
+* Revert all-contributors commit type ([#282](https://github.com/mansenfranzen/autodoc_pydantic/issues/282)) [skip ci] ([c4c8fe7](https://github.com/mansenfranzen/autodoc_pydantic/commit/c4c8fe7c05fcc5044eac841efdb9720488b195f9))
+* Use ruff for linting and formatting ([#242](https://github.com/mansenfranzen/autodoc_pydantic/issues/242)) ([461be30](https://github.com/mansenfranzen/autodoc_pydantic/commit/461be30c98424f561a7c7d5d8a5ff275a18fad7a))
+
+
+### 📖 Documentation
+
+* add exs-dwoodward as a contributor for code ([#250](https://github.com/mansenfranzen/autodoc_pydantic/issues/250)) ([532b54f](https://github.com/mansenfranzen/autodoc_pydantic/commit/532b54fbcdb409b8cb0b46b6db361db779610602))
+* Add hint mentioning that pydantic directive prefixes allow empty strings ([be21d37](https://github.com/mansenfranzen/autodoc_pydantic/commit/be21d377d085bde35ac608e68d79b1fe3d70ddf0))
+* Add missing erdantic version number ([#224](https://github.com/mansenfranzen/autodoc_pydantic/issues/224)) ([4c9c6b2](https://github.com/mansenfranzen/autodoc_pydantic/commit/4c9c6b2031734ace78b8fe61db26b940ebd89160))
+* Fix broken link in example section ([40b5b22](https://github.com/mansenfranzen/autodoc_pydantic/commit/40b5b22119b0e83ef9d2d861ddc37cde9e835740))
+* Improve `README.md` with update badges and remove animated gif comparison examples ([40b5b22](https://github.com/mansenfranzen/autodoc_pydantic/commit/40b5b22119b0e83ef9d2d861ddc37cde9e835740))
+* improve erdantic example ([3c8daa8](https://github.com/mansenfranzen/autodoc_pydantic/commit/3c8daa8cdb5c4c643dbcea62ee7aa02982006a65))
+* Recommend globally installed tox instead of poetry installed tox ([#223](https://github.com/mansenfranzen/autodoc_pydantic/issues/223)) ([204f246](https://github.com/mansenfranzen/autodoc_pydantic/commit/204f24669d643505edb7be4acf07a856948e5027))
+* Remove pydantic v1/v2 branch note from developer setup guide ([204f246](https://github.com/mansenfranzen/autodoc_pydantic/commit/204f24669d643505edb7be4acf07a856948e5027))
+* Replace Sphinx `index.rst` with repo's `README.md` ([#270](https://github.com/mansenfranzen/autodoc_pydantic/issues/270)) ([40b5b22](https://github.com/mansenfranzen/autodoc_pydantic/commit/40b5b22119b0e83ef9d2d861ddc37cde9e835740))
+* Use `myst_parser` to include `CHANGELOG.md` instead of rst ([#245](https://github.com/mansenfranzen/autodoc_pydantic/issues/245)) ([e6fe9e1](https://github.com/mansenfranzen/autodoc_pydantic/commit/e6fe9e1f59ff9d6758cebdb1a4f0aa17be15fb49))
+
+
+### 🚀 CI/CD Pipeline
+
+* Add `pip-audit` security scanner ([#268](https://github.com/mansenfranzen/autodoc_pydantic/issues/268)) ([0be2710](https://github.com/mansenfranzen/autodoc_pydantic/commit/0be2710fccf05907489d2f5d9961e09081469733))
+* Add daily scheduled GH workflow with test for pre-release versions ([#265](https://github.com/mansenfranzen/autodoc_pydantic/issues/265)) ([a4c5140](https://github.com/mansenfranzen/autodoc_pydantic/commit/a4c514027be956ad2a29e35ef8ae88c3a82ed758))
+* Add dependabot configuration ([#248](https://github.com/mansenfranzen/autodoc_pydantic/issues/248)) ([dc0a81d](https://github.com/mansenfranzen/autodoc_pydantic/commit/dc0a81d9cecd74a13befed4b1f7ed5808bec992c))
+* Add explicit `pydantic_settings` versions to prevent unwanted pydantic version upgrades in CI matrix ([#263](https://github.com/mansenfranzen/autodoc_pydantic/issues/263)) ([2c5c4d5](https://github.com/mansenfranzen/autodoc_pydantic/commit/2c5c4d53d07472f8c15050aa3ff348e09dfcda10))
+* Add pydantic 2.7 to test matrix ([#253](https://github.com/mansenfranzen/autodoc_pydantic/issues/253)) ([afdec96](https://github.com/mansenfranzen/autodoc_pydantic/commit/afdec966659d994c585d8a7f0df27b7eb4212813))
+* fix broken tox environment naming convention preventing correct version selection ([134c3cb](https://github.com/mansenfranzen/autodoc_pydantic/commit/134c3cb00ec961e3294fb2b81c690e84a7a8202f))
+* Fix incorrect tox env name for security scans ([#271](https://github.com/mansenfranzen/autodoc_pydantic/issues/271)) ([bcb9ee0](https://github.com/mansenfranzen/autodoc_pydantic/commit/bcb9ee09784a61e44d7f50b8009e19306e2db37d))
+* Ignore release-please branches for CI tests ([#221](https://github.com/mansenfranzen/autodoc_pydantic/issues/221)) ([5f4c0dc](https://github.com/mansenfranzen/autodoc_pydantic/commit/5f4c0dc46f55c9935e2de6645a93738f14b094a1))
+* Integrate `mypy` type checking ([#259](https://github.com/mansenfranzen/autodoc_pydantic/issues/259)) ([134c3cb](https://github.com/mansenfranzen/autodoc_pydantic/commit/134c3cb00ec961e3294fb2b81c690e84a7a8202f))
+* Move publish step into release-please workflow ([#237](https://github.com/mansenfranzen/autodoc_pydantic/issues/237)) ([0864395](https://github.com/mansenfranzen/autodoc_pydantic/commit/0864395bf15750e5a514a7feac7b1c65f8875a5c))
+* Protect workflows via CODEOWNERS and explicit user matching ([#240](https://github.com/mansenfranzen/autodoc_pydantic/issues/240)) ([c07d1f2](https://github.com/mansenfranzen/autodoc_pydantic/commit/c07d1f2223897d2fa5983423bbe73ac73a624fee))
+* Refactor CI with resusable, custom GitHub Action ([#252](https://github.com/mansenfranzen/autodoc_pydantic/issues/252)) ([0d582c7](https://github.com/mansenfranzen/autodoc_pydantic/commit/0d582c7bdd08425c6a267fc06c0cdac58b8fab2d))
+* Replace flake8 with ruff for linting/formatting ([461be30](https://github.com/mansenfranzen/autodoc_pydantic/commit/461be30c98424f561a7c7d5d8a5ff275a18fad7a))
+* Streamline GH workflow names ([0be2710](https://github.com/mansenfranzen/autodoc_pydantic/commit/0be2710fccf05907489d2f5d9961e09081469733))
+* Support pydantic 2.7 and sphinx 7.3 ([#261](https://github.com/mansenfranzen/autodoc_pydantic/issues/261)) ([a797a77](https://github.com/mansenfranzen/autodoc_pydantic/commit/a797a771bdc1bc5c8b7e9a345ea34b6156a610ef))
+* Update codcov GH action to newest version ([#219](https://github.com/mansenfranzen/autodoc_pydantic/issues/219)) ([b129602](https://github.com/mansenfranzen/autodoc_pydantic/commit/b1296028cc98f9b630c163e1483eed01d6011077))
+* Update GH Actions to newest Versions ([#222](https://github.com/mansenfranzen/autodoc_pydantic/issues/222)) ([5a21c2a](https://github.com/mansenfranzen/autodoc_pydantic/commit/5a21c2a2211153d0b914b47d3fa4213741d1e9d5))
+
+
+### 🔧 Testing
+
+* Fix warnings due to deprecated test examples ([#273](https://github.com/mansenfranzen/autodoc_pydantic/issues/273)) ([65ed9cc](https://github.com/mansenfranzen/autodoc_pydantic/commit/65ed9cc4479992fc01681dc6a18727cc93154bb3))
+* remove `package_is_missing` ([3c8daa8](https://github.com/mansenfranzen/autodoc_pydantic/commit/3c8daa8cdb5c4c643dbcea62ee7aa02982006a65))
+* Remove obsolete test classes ([65ed9cc](https://github.com/mansenfranzen/autodoc_pydantic/commit/65ed9cc4479992fc01681dc6a18727cc93154bb3))
+* simplify erdantic tests ([3c8daa8](https://github.com/mansenfranzen/autodoc_pydantic/commit/3c8daa8cdb5c4c643dbcea62ee7aa02982006a65))
+
+
+### 🔨 Refactoring
+
+* Move extension setup logic into seperate `application` module ([#264](https://github.com/mansenfranzen/autodoc_pydantic/issues/264)) ([e8f7f06](https://github.com/mansenfranzen/autodoc_pydantic/commit/e8f7f062bd8a1a5499dd9ec487700ea17c9d97b6))
+* rename `PydanticDirectiveBase` to `PydanticDirectiveMixin` for better clarity ([134c3cb](https://github.com/mansenfranzen/autodoc_pydantic/commit/134c3cb00ec961e3294fb2b81c690e84a7a8202f))
+* restructure sphinx app cfg values in `__init__` ([134c3cb](https://github.com/mansenfranzen/autodoc_pydantic/commit/134c3cb00ec961e3294fb2b81c690e84a7a8202f))
+
+
+### ⬆️ Dependency Updates
+
+* update dependency myst-parser to v3 ([#269](https://github.com/mansenfranzen/autodoc_pydantic/issues/269)) ([4c3e61f](https://github.com/mansenfranzen/autodoc_pydantic/commit/4c3e61f8ac9de9bb1337bd2c14301f5c8ae103e7))
+* update dependency ruff to ^0.4.0 ([#256](https://github.com/mansenfranzen/autodoc_pydantic/issues/256)) ([4eb1629](https://github.com/mansenfranzen/autodoc_pydantic/commit/4eb162960bf25285fbe858dfbb45f05638bf99b3))
+
+
+### 👥 Contributors
+
+* add annerademacher as a contributor for financial ([#284](https://github.com/mansenfranzen/autodoc_pydantic/issues/284)) ([80cf3e9](https://github.com/mansenfranzen/autodoc_pydantic/commit/80cf3e9d6f9c363c4eadf53104c4480e932ba7fa))
+* add azmeuk as a contributor for bug ([#286](https://github.com/mansenfranzen/autodoc_pydantic/issues/286)) ([36056f7](https://github.com/mansenfranzen/autodoc_pydantic/commit/36056f793d5729974872034c3bda5b7e346e0b14))
+* add bruno-f-cruz as a contributor for bug ([#280](https://github.com/mansenfranzen/autodoc_pydantic/issues/280)) ([47e98df](https://github.com/mansenfranzen/autodoc_pydantic/commit/47e98dffce7373ac2e7ad48c6f1ae38f6455c6de))
+* add Carson-Shaar as a contributor for bug ([#278](https://github.com/mansenfranzen/autodoc_pydantic/issues/278)) [skip ci] ([bc4cdb6](https://github.com/mansenfranzen/autodoc_pydantic/commit/bc4cdb6a96587100ee9dd35b15732b1025f693e3))
+* add Galarzaa90 as a contributor for bug ([#277](https://github.com/mansenfranzen/autodoc_pydantic/issues/277)) ([15cead4](https://github.com/mansenfranzen/autodoc_pydantic/commit/15cead49f007b6200bf671ce0f6b5b2a5427924c))
+* add ITProKyle as a contributor for bug ([#279](https://github.com/mansenfranzen/autodoc_pydantic/issues/279)) [skip ci] ([2a899f1](https://github.com/mansenfranzen/autodoc_pydantic/commit/2a899f132a4204cb2c22b2be74f937a5e07f6fd3))
+* add lwasser as a contributor for bug ([#262](https://github.com/mansenfranzen/autodoc_pydantic/issues/262)) ([83d2b94](https://github.com/mansenfranzen/autodoc_pydantic/commit/83d2b948e4c2b8437720ff64666e06763ac854a7))
+
 ## v2.1.0 - 2024-03-18
 
 This is a maintenance and bugfix release extending support to pydantic
