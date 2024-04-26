@@ -3,7 +3,7 @@
     "README.md"
   ],
   "imageSize": 100,
-  "badgeTemplate": "[![All Contributors](https://img.shields.io/badge/all_contributors-<%= contributors.length %>-orange.svg?style=for-the-badge)](#contributors)",
+  "badgeTemplate": "[![All Contributors](https://img.shields.io/badge/all_contributors-<%= contributors.length %>-orange.svg?style=for-the-badge)](https://github.com/mansenfranzen/autodoc_pydantic?tab=readme-ov-file#-acknowledgements)",
   "commit": false,
   "contributors": [
     {
@@ -516,5 +516,5 @@
   "repoHost": "https://github.com",
   "skipCi": true,
   "commitConvention": "angular",
-  "commitType": "docs"
+  "commitType": "contributors"
 }
