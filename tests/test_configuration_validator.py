@@ -451,7 +451,7 @@ def test_autodoc_pydantic_validator_signature_prefix_directive(parse_rst):
     doctree = parse_rst(
         input_rst, conf={'autodoc_pydantic_validator_signature_prefix': ''}
     )
-    assert_node(doctree[1][0][0], [desc_addname, "ValidatorSignaturePrefix."])
+    assert_node(doctree[1][0][0], [desc_addname, 'ValidatorSignaturePrefix.'])
 
     # custom
     input_rst = [

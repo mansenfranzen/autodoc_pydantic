@@ -1005,10 +1005,10 @@ def test_autodoc_pydantic_settings_signature_prefix(autodocument, parse_rst):
     actual = autodocument(options_doc={'settings-signature-prefix': ''}, **kwargs)
     assert result == actual
 
-
     """Tests pydantic_settings directive."""
-def test_autodoc_pydantic_settings_signature_prefix_directive(parse_rst):
 
+
+def test_autodoc_pydantic_settings_signature_prefix_directive(parse_rst):
     # default
     input_rst = [
         '',
@@ -1027,7 +1027,7 @@ def test_autodoc_pydantic_settings_signature_prefix_directive(parse_rst):
     doctree = parse_rst(
         input_rst, conf={'autodoc_pydantic_settings_signature_prefix': ''}
     )
-    assert_node(doctree[1][0][0], [desc_addname, "target.configuration."])
+    assert_node(doctree[1][0][0], [desc_addname, 'target.configuration.'])
 
     # custom
     input_rst = [

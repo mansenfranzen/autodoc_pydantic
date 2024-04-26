@@ -1271,7 +1271,7 @@ def test_autodoc_pydantic_model_signature_prefix_directive(parse_rst):
 
     # empty
     doctree = parse_rst(input_rst, conf={'autodoc_pydantic_model_signature_prefix': ''})
-    assert_node(doctree[1][0][0], [desc_addname, "target.configuration."])
+    assert_node(doctree[1][0][0], [desc_addname, 'target.configuration.'])
 
     # custom
     input_rst = [

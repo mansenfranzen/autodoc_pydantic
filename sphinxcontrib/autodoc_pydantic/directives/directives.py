@@ -53,6 +53,7 @@ class PydanticDirectiveMixin:
             return f'{prefix} '  # type: ignore[return-value]
 
         from sphinx.addnodes import desc_sig_space
+
         return [Text(prefix), desc_sig_space()]
 
 
