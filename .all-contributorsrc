@@ -489,6 +489,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "ITProKyle",
+      "name": "Kyle Finley",
+      "avatar_url": "https://avatars.githubusercontent.com/u/23145462?v=4",
+      "profile": "https://linktr.ee/kyle.finley",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
