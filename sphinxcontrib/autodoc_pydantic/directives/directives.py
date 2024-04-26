@@ -33,7 +33,6 @@ class PydanticDirectiveMixin:
     """Base class for pydantic directive providing common functionality."""
 
     config_name: str
-    default_prefix: str
 
     def __init__(self, *args) -> None:  # noqa: ANN002
         super().__init__(*args)
@@ -44,15 +43,18 @@ class PydanticDirectiveMixin:
 
         config_name = f'{self.config_name}-signature-prefix'
         prefix = self.pyautodoc.get_value(config_name)
-        value = prefix or self.default_prefix
+
+        # empty prefix should not add any nodes
+        if prefix == '':
+            return []
 
         # account for changed signature in sphinx 4.3, see #62
         if sphinx.version_info < (4, 3):
-            return f'{value} '  # type: ignore[return-value]
+            return f'{prefix} '  # type: ignore[return-value]
 
         from sphinx.addnodes import desc_sig_space
 
-        return [Text(value), desc_sig_space()]
+        return [Text(prefix), desc_sig_space()]
 
 
 class PydanticModel(PydanticDirectiveMixin, PyClasslike):
@@ -67,7 +69,6 @@ class PydanticModel(PydanticDirectiveMixin, PyClasslike):
     )
 
     config_name = 'model'
-    default_prefix = 'class'
 
 
 class PydanticSettings(PydanticDirectiveMixin, PyClasslike):
@@ -82,7 +83,6 @@ class PydanticSettings(PydanticDirectiveMixin, PyClasslike):
     )
 
     config_name = 'settings'
-    default_prefix = 'class'
 
 
 class PydanticField(PydanticDirectiveMixin, PyAttribute):
@@ -102,7 +102,6 @@ class PydanticField(PydanticDirectiveMixin, PyAttribute):
     )
 
     config_name = 'field'
-    default_prefix = 'attribute'
 
     def get_field_name(self, sig: str) -> str:
         """Get field name from signature. Borrows implementation from
@@ -218,7 +217,6 @@ class PydanticValidator(PydanticDirectiveMixin, PyMethod):
     )
 
     config_name = 'validator'
-    default_prefix = 'classmethod'
 
     def get_field_href_from_mapping(
         self, inspector: ModelInspector, mapping: ValidatorFieldMap

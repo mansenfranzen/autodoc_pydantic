@@ -2,12 +2,13 @@
 
 from typing import List
 
-from sphinx.addnodes import desc_annotation
+from sphinx.addnodes import desc_addname, desc_annotation
 from sphinx.testing.util import assert_node
 
 from sphinxcontrib.autodoc_pydantic.directives.autodocumenters import (
     PydanticSettingsDocumenter,
 )
+
 from .compatibility import desc_annotation_directive_prefix
 
 KWARGS = dict(documenter=PydanticSettingsDocumenter.objtype, deactivate_all=True)
@@ -1004,10 +1005,10 @@ def test_autodoc_pydantic_settings_signature_prefix(autodocument, parse_rst):
     actual = autodocument(options_doc={'settings-signature-prefix': ''}, **kwargs)
     assert result == actual
 
-
-def test_autodoc_pydantic_settings_signature_prefix_directive(parse_rst):
     """Tests pydantic_settings directive."""
 
+
+def test_autodoc_pydantic_settings_signature_prefix_directive(parse_rst):
     # default
     input_rst = [
         '',
@@ -1026,8 +1027,7 @@ def test_autodoc_pydantic_settings_signature_prefix_directive(parse_rst):
     doctree = parse_rst(
         input_rst, conf={'autodoc_pydantic_settings_signature_prefix': ''}
     )
-    prefix = desc_annotation_directive_prefix('class')
-    assert_node(doctree[1][0][0], [desc_annotation, prefix])
+    assert_node(doctree[1][0][0], [desc_addname, 'target.configuration.'])
 
     # custom
     input_rst = [

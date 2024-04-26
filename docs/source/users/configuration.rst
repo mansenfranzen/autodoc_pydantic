@@ -178,7 +178,13 @@ Contains all modifications for pydantic `BaseModel`.
    :directive_option: model-signature-prefix
    :values: pydantic model, class, foobar
 
-   Define the signature prefix for pydantic models.
+   Define the signature prefix for pydantic model. This is especially useful
+   when you want to distinguish pydantic models from other classes.
+
+   .. hint::
+
+      An empty string is also a valid value. This will remove the prefix
+      completely.
 
 
 .. config_description:: autopydantic_model
@@ -395,7 +401,13 @@ Contains all modifications for pydantic `BaseSettings`.
    :directive_option: settings-signature-prefix
    :values: pydantic settings, class, foobar
 
-   Define the signature prefix for pydantic settings.
+   Define the signature prefix for pydantic settings. This is especially useful
+   when you want to distinguish pydantic settings from other classes.
+
+   .. hint::
+
+      An empty string is also a valid value. This will remove the prefix
+      completely.
 
 
 .. config_description:: autopydantic_settings
@@ -575,7 +587,13 @@ Fields
    :enable: members, field-doc-policy=docstring
    :values: field, attribute, foobar
 
-   Define the signature prefix for pydantic field.
+   Define the signature prefix for pydantic fields. This is especially useful
+   when you want to distinguish pydantic fields from other attributes.
+
+   .. hint::
+
+      An empty string is also a valid value. This will remove the prefix
+      completely.
 
 
 ----------
@@ -621,7 +639,13 @@ Validators
    :enable: members, model-show-validator-members, undoc-members
    :values: validator, classmethod, foobar
 
-   Define the signature prefix for pydantic validator.
+   Define the signature prefix for pydantic validators. This is especially useful
+   when you want to distinguish pydantic validators from other attributes. 
+
+   .. hint::
+
+      An empty string is also a valid value. This will remove the prefix
+      completely.
 
 
 -------

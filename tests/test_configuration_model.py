@@ -1,7 +1,7 @@
 """This module contains tests for pydantic model configurations."""
 
 import pytest
-from sphinx.addnodes import desc_annotation
+from sphinx.addnodes import desc_annotation, desc_addname
 from sphinx.testing.util import assert_node
 
 from sphinxcontrib.autodoc_pydantic.directives.autodocumenters import (
@@ -1271,8 +1271,7 @@ def test_autodoc_pydantic_model_signature_prefix_directive(parse_rst):
 
     # empty
     doctree = parse_rst(input_rst, conf={'autodoc_pydantic_model_signature_prefix': ''})
-    prefix = desc_annotation_directive_prefix('class')
-    assert_node(doctree[1][0][0], [desc_annotation, prefix])
+    assert_node(doctree[1][0][0], [desc_addname, 'target.configuration.'])
 
     # custom
     input_rst = [
