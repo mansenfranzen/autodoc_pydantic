@@ -516,5 +516,5 @@
   "repoHost": "https://github.com",
   "skipCi": true,
   "commitConvention": "angular",
-  "commitType": "contributors"
+  "commitType": "docs"
 }
