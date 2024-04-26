@@ -1,23 +1,25 @@
 """This module contains tests for pydantic validator configurations."""
 
 from docutils.nodes import (
-    paragraph,
     emphasis,
+    paragraph,
 )
 from sphinx.addnodes import (
     desc,
-    desc_signature,
-    desc_name,
-    desc_content,
-    desc_annotation,
     desc_addname,
-    pending_xref,
+    desc_annotation,
+    desc_content,
+    desc_name,
+    desc_signature,
     index,
+    pending_xref,
 )
 from sphinx.testing.util import assert_node
+
 from sphinxcontrib.autodoc_pydantic.directives.autodocumenters import (
     PydanticValidatorDocumenter,
 )
+
 from .compatibility import desc_annotation_directive_prefix
 
 KWARGS = dict(documenter=PydanticValidatorDocumenter.objtype, deactivate_all=True)
@@ -449,8 +451,7 @@ def test_autodoc_pydantic_validator_signature_prefix_directive(parse_rst):
     doctree = parse_rst(
         input_rst, conf={'autodoc_pydantic_validator_signature_prefix': ''}
     )
-    prefix = desc_annotation_directive_prefix('classmethod')
-    assert_node(doctree[1][0][0], [desc_annotation, prefix])
+    assert_node(doctree[1][0][0], [desc_addname, "ValidatorSignaturePrefix."])
 
     # custom
     input_rst = [

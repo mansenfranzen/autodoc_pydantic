@@ -885,8 +885,7 @@ def test_autodoc_pydantic_field_signature_prefix_directive(parse_rst):
 
     # empty
     doctree = parse_rst(input_rst, conf={'autodoc_pydantic_field_signature_prefix': ''})
-    prefix = desc_annotation_directive_prefix('attribute')
-    assert_node(doctree[1][0][0], [desc_annotation, prefix])
+    assert_node(doctree[1][0][0], [desc_addname, "FieldSignaturePrefix."])
 
     # custom
     input_rst = [
