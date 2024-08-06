@@ -21,6 +21,10 @@ class AutoModuleSettings(BaseSettings):
         default=5, ge=0, le=100, description='Shows constraints within doc string.'
     )
 
+    field_with_examples: int = Field(0, examples=[123, 546, 789])
+    """Shows examples within doc string."""
+
+
     @field_validator('field_with_validator_and_alias', 'field_plain_with_validator')
     def check_max_length_ten(cls, v):
         """Show corresponding field with link/anchor."""

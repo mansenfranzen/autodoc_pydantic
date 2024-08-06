@@ -826,6 +826,24 @@ class PydanticFieldDocumenter(AttributeDocumenter):
         if self.pydantic.options.is_true('field-list-validators'):
             self.add_validators()
 
+        if self.pydantic.options.is_true('field-show-examples'):
+            self.add_examples()
+
+    def add_examples(self) -> None:
+        """Add section showing all defined examples for field."""
+
+        field_name = self.pydantic_field_name
+        examples = self.pydantic.inspect.fields.get_examples(field_name)
+
+        if examples:
+            source_name = self.get_sourcename()
+            self.add_line(':Examples:', source_name)
+            for value in examples:
+                line = f'   - {value}'
+                self.add_line(line, source_name)
+
+            self.add_line('', source_name)
+
     def add_constraints(self) -> None:
         """Adds section showing all defined constraints."""
 
