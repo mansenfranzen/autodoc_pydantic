@@ -164,6 +164,17 @@ class FieldInspector(BaseInspectionComposite):
             if getattr(meta, key) is not None
         }
 
+    def has_examples(self, field_name:str) -> bool:
+        """Check if examples are provided in field info."""
+
+        return self.get_property_from_field_info(field_name, "examples") is not None
+
+    def get_examples(self, field_name: str) -> list[Any]:
+        """Get examples for given `field_name`."""
+        
+        if self.has_examples(field_name):
+            return self.get_property_from_field_info(field_name, 'examples')
+
     def is_required(self, field_name: str) -> bool:
         """Check if a given pydantic field is required/mandatory. Returns True,
         if a value for this field needs to provided upon model creation.

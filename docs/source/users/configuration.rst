@@ -503,6 +503,17 @@ Fields
 
 
 .. config_description:: autopydantic_model
+   :title: Show Examples
+   :path: target.configuration.FieldShowExamples
+   :confpy: autodoc_pydantic_field_show_examples
+   :directive_option: field-show-examples
+   :enable: members, field-doc-policy=docstring
+   :values: True, False
+
+   Displays all examples that are associated with the given pydantic field.
+
+
+.. config_description:: autopydantic_model
    :title: Show Alias
    :path: target.configuration.FieldShowAlias
    :confpy: autodoc_pydantic_field_show_alias

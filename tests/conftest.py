@@ -50,6 +50,7 @@ CONF_DEACTIVATE = {
     'autodoc_pydantic_validator_list_fields': False,
     'autodoc_pydantic_field_list_validators': False,
     'autodoc_pydantic_field_show_constraints': False,
+    'autodoc_pydantic_field_show_examples': False,
     'autodoc_pydantic_field_show_alias': False,
     'autodoc_pydantic_field_show_required': False,
     'autodoc_pydantic_field_show_optional': False,
