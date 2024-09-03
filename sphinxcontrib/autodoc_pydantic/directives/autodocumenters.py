@@ -582,8 +582,7 @@ class PydanticModelDocumenter(ClassDocumenter):
 
                 # catch cases where field is not found in tagorder
                 if tagorder is None:
-                    msg = f'Field {name} in {self.object_name} not found in tagorder'
-                    raise ValueError(msg)
+                    return max(self.analyzer.tagorder.values()) + 1
 
                 return tagorder
 

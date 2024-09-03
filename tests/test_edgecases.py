@@ -156,6 +156,46 @@ def test_any_reference(test_app, monkeypatch):
     assert 'target.example_setting.ExampleSettings' not in failed_targets
 
 
+def test_programmatic_order(autodocument):
+    """Ensure that programmatically generated fields are added last"""
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.edgecase_programmatically_added_fields.DataclassWithAddedField',
+        options_app={
+            'autodoc_pydantic_model_show_json': False,
+            'autodoc_pydantic_model_summary_list_order': 'bysource',
+        }
+    )
+
+    assert actual == [
+        '',
+        '.. py:pydantic_model:: DataclassWithAddedField',
+        '   :module: target.edgecase_programmatically_added_fields',
+        '',
+        '   Dataclass with added field',
+        '',
+        '   :Fields:',
+        '      - :py:obj:`field (str) <target.edgecase_programmatically_added_fields.DataclassWithAddedField.field>`',
+        '      - :py:obj:`type (str) <target.edgecase_programmatically_added_fields.DataclassWithAddedField.type>`',
+        '',
+        '',
+        '   .. py:pydantic_field:: DataclassWithAddedField.field',
+        '      :module: target.edgecase_programmatically_added_fields',
+        '      :type: str',
+        '      :required:',
+        '',
+        '      The field',
+        '',
+        '',
+        '   .. py:pydantic_field:: DataclassWithAddedField.type',
+        '      :module: target.edgecase_programmatically_added_fields',
+        '      :type: str',
+        "      :value: 'DataclassWithAddedField'",
+        '',
+        '      The type of the class',
+        '',
+    ]
+
 def test_autodoc_member_order(autodocument):
     """Ensure that member order does not change when pydantic models are used.
 
