@@ -1,4 +1,5 @@
 from pydantic import BaseModel, field_validator, Field, ConfigDict
+from pydantic.dataclasses import dataclass
 
 
 class PlainModel(BaseModel):
@@ -10,6 +11,12 @@ class ModelWithField(BaseModel):
 
     field: int = 1
     """Doc field"""
+
+
+@dataclass
+class DataclassWithField:
+    """Dataclass With Field."""
+    field: int = Field(5, description="The Field")
 
 
 class ModelWithFieldValidator(BaseModel):

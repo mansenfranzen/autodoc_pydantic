@@ -300,3 +300,30 @@ and the
    .. tab:: python
 
       .. autocodeblock:: target.example_reused_validators
+
+
+.. _example_dataclasses:
+
+--------------------
+Pydantic Dataclasses
+--------------------
+
+Pydantic dataclasses are also supported
+
+.. tabs::
+
+   .. tab:: *rendered output*
+
+      .. automodule:: target.example_dataclasses
+         :members:
+
+   .. tab:: reST
+
+      .. code-block::
+
+         .. automodule:: target.example_dataclasses
+            :members:
+
+   .. tab:: python
+
+      .. autocodeblock:: target.example_dataclasses

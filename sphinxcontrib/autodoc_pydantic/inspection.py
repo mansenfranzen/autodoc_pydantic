@@ -18,7 +18,16 @@ try:
 except ImportError:
     from typing_extensions import TypeGuard
 
-from pydantic import BaseModel, ConfigDict, PydanticInvalidForJsonSchema, create_model
+import dataclasses
+
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    PydanticInvalidForJsonSchema,
+    TypeAdapter,
+    create_model,
+)
+from pydantic.dataclasses import is_pydantic_dataclass
 from pydantic_settings import BaseSettings
 
 ASTERISK_FIELD_NAME = 'all fields'
@@ -105,7 +114,12 @@ class FieldInspector(BaseInspectionComposite):
     def __init__(self, parent: ModelInspector) -> None:
         super().__init__(parent)
         # json schema can reliably be created only at model level
-        self.attribute = self.model.model_fields
+        if is_pydantic_dataclass(self.model):
+            self.attribute = {
+                field.name: field.default for field in dataclasses.fields(self.model)
+            }
+        else:
+            self.attribute = self.model.model_fields
 
     @property
     def names(self) -> list[str]:
@@ -154,7 +168,7 @@ class FieldInspector(BaseInspectionComposite):
     def get_constraints(self, field_name: str) -> dict[str, Any]:
         """Get constraints for given `field_name`."""
 
-        metadata = self.model.model_fields[field_name].metadata
+        metadata = self.attribute[field_name].metadata
         available = [meta for meta in metadata if meta is not None]
 
         return {
@@ -289,8 +303,10 @@ class ConfigInspector(BaseInspectionComposite):
         values. Hence, the default values are removed.
 
         """
-
-        cfg = self.model.model_config
+        if is_pydantic_dataclass(self.model):
+            cfg = self.model.__pydantic_config__
+        else:
+            cfg = self.model.model_config
 
         if issubclass(self.model, BaseSettings):
             default = tuple(BaseSettings.model_config.items())
@@ -389,7 +405,10 @@ class SchemaInspector(BaseInspectionComposite):
         try:
             with warnings.catch_warnings():
                 warnings.simplefilter('ignore')
-                schema = self.model.model_json_schema()
+                if is_pydantic_dataclass(self.model):
+                    schema = TypeAdapter(self.model).json_schema()
+                else:
+                    schema = self.model.model_json_schema()
 
         except (TypeError, ValueError, PydanticInvalidForJsonSchema):
             new_model = self.create_sanitized_model()
@@ -419,7 +438,7 @@ class StaticInspector:
         """Determine if object is a valid pydantic model."""
 
         try:
-            return issubclass(obj, BaseModel)
+            return issubclass(obj, BaseModel) or is_pydantic_dataclass(obj)
         except TypeError:
             return False
 
@@ -429,8 +448,11 @@ class StaticInspector:
 
         if not cls.is_pydantic_model(parent):
             return False
-
-        return field_name in parent.model_fields
+        if is_pydantic_dataclass(parent):
+            fields = {field.name for field in dataclasses.fields(parent)}
+        else:
+            fields = parent.model_fields
+        return field_name in fields
 
     @classmethod
     def is_validator_by_name(cls, name: str, obj: Any) -> bool:  # noqa: ANN401
