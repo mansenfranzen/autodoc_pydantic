@@ -11,7 +11,7 @@
 [![GitHub License](https://img.shields.io/github/license/mansenfranzen/autodoc_pydantic?style=for-the-badge&color=orange&logo=semanticscholar&logoColor=white)](https://github.com/mansenfranzen/autodoc_pydantic/blob/main/LICENSE)
 [![linting - ruff](https://img.shields.io/badge/Linting-orange?style=for-the-badge&logo=ruff&logoColor=white&label=ruff)](https://github.com/astral-sh/ruff)
 [![types - Mypy](https://img.shields.io/badge/types-Mypy-orange.svg?style=for-the-badge&logo=python&logoColor=white)](https://github.com/python/mypy)<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-55-orange.svg?style=for-the-badge)](https://github.com/mansenfranzen/autodoc_pydantic?tab=readme-ov-file#-acknowledgements)
+[![All Contributors](https://img.shields.io/badge/all_contributors-56-orange.svg?style=for-the-badge)](https://github.com/mansenfranzen/autodoc_pydantic?tab=readme-ov-file#-acknowledgements)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 
@@ -129,6 +129,7 @@ Thanks to great open source projects [sphinx](https://www.sphinx-doc.org/en/mast
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/bruno-f-cruz"><img src="https://avatars.githubusercontent.com/u/7049351?v=4?s=100" width="100px;" alt="brunocruz"/><br /><sub><b>brunocruz</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/issues?q=author%3Abruno-f-cruz" title="Bug reports">🐛</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/AnneRademacher"><img src="https://avatars.githubusercontent.com/u/49472656?v=4?s=100" width="100px;" alt="Anne Rademacher"/><br /><sub><b>Anne Rademacher</b></sub></a><br /><a href="#financial-annerademacher" title="Financial">💵</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://yaal.coop"><img src="https://avatars.githubusercontent.com/u/60163?v=4?s=100" width="100px;" alt="Éloi Rivard"/><br /><sub><b>Éloi Rivard</b></sub></a><br /><a href="https://github.com/mansenfranzen/autodoc_pydantic/issues?q=author%3Aazmeuk" title="Bug reports">🐛</a> <a href="#question-azmeuk" title="Answering Questions">💬</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Ecaloota"><img src="https://avatars.githubusercontent.com/u/29943815?v=4?s=100" width="100px;" alt="Mitchell Blyth"/><br /><sub><b>Mitchell Blyth</b></sub></a><br /><a href="#question-Ecaloota" title="Answering Questions">💬</a></td>
     </tr>
   </tbody>
 </table>

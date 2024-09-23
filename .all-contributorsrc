@@ -526,6 +526,15 @@
         "bug",
         "question"
       ]
+    },
+    {
+      "login": "Ecaloota",
+      "name": "Mitchell Blyth",
+      "avatar_url": "https://avatars.githubusercontent.com/u/29943815?v=4",
+      "profile": "https://github.com/Ecaloota",
+      "contributions": [
+        "question"
+      ]
     }
   ],
   "contributorsPerLine": 7,
