@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.2.1](https://github.com/mansenfranzen/autodoc_pydantic/compare/v2.2.0...v2.2.1) (2024-09-23)
+
+
+### 👥 Contributors
+
+* add azmeuk as a contributor for question ([#305](https://github.com/mansenfranzen/autodoc_pydantic/issues/305)) ([c90f903](https://github.com/mansenfranzen/autodoc_pydantic/commit/c90f903c63b9302dc534a6b6fd24f1e59374ae11))
+* add Ecaloota as a contributor for question ([#307](https://github.com/mansenfranzen/autodoc_pydantic/issues/307)) ([21a2656](https://github.com/mansenfranzen/autodoc_pydantic/commit/21a26568f2a4ff4fbf6b1a21d1bf3905c604bec5))
+* add jlnav as a contributor for question ([#308](https://github.com/mansenfranzen/autodoc_pydantic/issues/308)) ([eb8e2e9](https://github.com/mansenfranzen/autodoc_pydantic/commit/eb8e2e98799e30e727a1fc29cc2e891dc67ce8de))
+
 ## [2.2.0](https://github.com/mansenfranzen/autodoc_pydantic/compare/v2.1.0...v2.2.0) (2024-04-26)
 
 
