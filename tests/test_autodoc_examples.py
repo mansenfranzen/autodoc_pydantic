@@ -50,6 +50,37 @@ def test_model_with_field(autodocument):
     ]
 
 
+def test_dataclass_with_field(autodocument):
+    options_app = dict(autodoc_pydantic_model_show_json=False)
+    options_doc = dict(members=None)
+    actual = autodocument(
+        documenter='pydantic_model',
+        object_path='target.examples.DataclassWithField',
+        options_doc=options_doc,
+        options_app=options_app,
+    )
+
+    assert actual == [
+        '',
+        '.. py:pydantic_model:: DataclassWithField',
+        '   :module: target.examples',
+        '',
+        '   Dataclass With Field.',
+        '',
+        '   :Fields:',
+        '      - :py:obj:`field (int) <target.examples.DataclassWithField.field>`',
+        '',
+        '',
+        '   .. py:pydantic_field:: DataclassWithField.field',
+        '      :module: target.examples',
+        '      :type: int',
+        '      :value: 5',
+        '',
+        '      The Field',
+        '',
+    ]
+
+
 def test_model_with_field_validator(autodocument):
     options_app = dict(
         autodoc_pydantic_model_show_json=False,

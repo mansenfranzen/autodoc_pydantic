@@ -705,7 +705,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
             field_name=membername,
         )
 
-        return is_valid and is_field and isattr
+        return is_valid and is_field
 
     @property
     def pydantic_field_name(self) -> str:
@@ -715,6 +715,10 @@ class PydanticFieldDocumenter(AttributeDocumenter):
         """
 
         return self.objpath[-1]
+
+    def should_suppress_value_header(self) -> bool:
+        """We handle value ourself so suppress the superclass adding it."""
+        return True
 
     def add_directive_header(self, sig: str) -> None:
         """Delegate header options."""
