@@ -28,6 +28,7 @@ OPTIONS_FIELD: dict[str, Callable] = {
     'field-list-validators': option_default_true,
     'field-swap-name-and-alias': option_default_true,
     'field-doc-policy': option_one_of_factory(OptionsFieldDocPolicy.values()),
+    'field-show-examples': option_default_true,
     '__doc_disable_except__': option_list_like,
 }
 """Represents added directive options for :class:`PydanticFieldDocumenter`."""

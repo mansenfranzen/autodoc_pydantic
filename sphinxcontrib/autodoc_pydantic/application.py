@@ -254,6 +254,11 @@ APP_CONFIGURATIONS = [
         default='field',
         types=str,
     ),
+    Config(
+        name='field_show_examples',
+        default=True,
+        types=bool,
+    ),
 
     # general
     Config(

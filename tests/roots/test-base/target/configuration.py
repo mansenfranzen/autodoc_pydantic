@@ -587,6 +587,20 @@ class FieldSwapNameAndAlias(BaseModel):
     """Field1"""
 
 
+class FieldShowExamples(BaseModel):
+    """FieldShowExamples."""
+
+    field: int = Field(1, examples=[2, 3])
+    """Field."""
+
+
+class FieldShowExamplesExtra(BaseModel):
+    """FieldShowExamplesExtra."""
+
+    field: int = Field(1, examples=[2, 3], json_schema_extra=dict(examples=[4, 5]))
+    """Field."""
+
+
 class ModelErdanticFigureRelated(ModelShowFieldSummary):
     """ModelErdanticFigureRelated."""
 

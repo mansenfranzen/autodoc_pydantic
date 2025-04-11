@@ -1632,3 +1632,95 @@ def test_autodoc_pydantic_field_swap_name_and_alias_true_directive_global(parse_
         },
     )
     assert_node(doctree, output_nodes)
+
+
+def test_autodoc_pydantic_field_show_examples_true(autodocument):
+    kwargs = dict(
+        object_path='target.configuration.FieldShowExamples.field', **KWARGS
+    )
+
+    result = [
+        '',
+        '.. py:pydantic_field:: FieldShowExamples.field',
+        '   :module: target.configuration',
+        '   :type: int',
+        '',
+        '   Field.',
+        '',
+        '   :Examples:',
+        '      - 2', 
+        '      - 3',
+        '',
+    ]
+
+    # explicit local
+    actual = autodocument(options_doc={'field-show-examples': True}, **kwargs)
+    assert result == actual
+
+    # explicit local overwrite global
+    actual = autodocument(
+        options_app={'autodoc_pydantic_field_show_examples': False},
+        options_doc={'field-show-examples': True},
+        **kwargs,
+    )
+    assert result == actual
+
+
+def test_autodoc_pydantic_field_show_examples_false(autodocument):
+    kwargs = dict(
+        object_path='target.configuration.FieldShowExamples.field', **KWARGS
+    )
+
+    result = [
+        '',
+        '.. py:pydantic_field:: FieldShowExamples.field',
+        '   :module: target.configuration',
+        '   :type: int',
+        '',
+        '   Field.',
+        '',
+    ]
+
+    # explicit local
+    actual = autodocument(options_doc={'field-show-examples': False}, **kwargs)
+    assert result == actual
+
+    # explicit local overwrite global
+    actual = autodocument(
+        options_app={'autodoc_pydantic_field_show_examples': True},
+        options_doc={'field-show-examples': False},
+        **kwargs,
+    )
+    assert result == actual
+
+
+def test_autodoc_pydantic_field_show_examples_ignore_extra(autodocument):
+    kwargs = dict(
+        object_path='target.configuration.FieldShowExamplesExtra.field', **KWARGS
+    )
+
+    result = [
+        '',
+        '.. py:pydantic_field:: FieldShowExamplesExtra.field',
+        '   :module: target.configuration',
+        '   :type: int',
+        '',
+        '   Field.',
+        '',
+        '   :Examples:',
+        '      - 2',
+        '      - 3',
+        '',
+    ]
+
+    # explicit local
+    actual = autodocument(options_doc={'field-show-examples': True}, **kwargs)
+    assert result == actual
+
+    # explicit local overwrite global
+    actual = autodocument(
+        options_app={'autodoc_pydantic_field_show_examples': False},
+        options_doc={'field-show-examples': True},
+        **kwargs,
+    )
+    assert result == actual
