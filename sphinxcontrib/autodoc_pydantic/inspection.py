@@ -18,6 +18,7 @@ try:
 except ImportError:
     from typing_extensions import TypeGuard
 
+from pydantic_core import PydanticOmit
 from pydantic import BaseModel, ConfigDict, PydanticInvalidForJsonSchema, create_model
 from pydantic_settings import BaseSettings
 
@@ -391,7 +392,7 @@ class SchemaInspector(BaseInspectionComposite):
                 warnings.simplefilter('ignore')
                 schema = self.model.model_json_schema()
 
-        except (TypeError, ValueError, PydanticInvalidForJsonSchema):
+        except (TypeError, ValueError, PydanticInvalidForJsonSchema, PydanticOmit):
             new_model = self.create_sanitized_model()
             schema = new_model.model_json_schema()
 
