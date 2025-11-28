@@ -446,6 +446,10 @@ CONSTRAINTS_TEST_DATA = {
         'type': f'{TYPEHINTS_PREFIX}pathlib.Annotated[{TYPEHINTS_PREFIX}pathlib.Path, {TYPEHINTS_PREFIX}pydantic.types.PathType(path_type=file)]',
         'constraints': ['**path_type** = file'],
     },
+    'before_validator': {
+        'type': '~typing.Annotated[int, ~pydantic.functional_validators.BeforeValidator(func=~target.configuration.before_validator, json_schema_input_type=PydanticUndefined)]',
+        'constraints': ['**func** = :py:func:before_validator']
+    },
 }
 
 @pytest.mark.parametrize(
