@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 from typing import TYPE_CHECKING, Any, Callable, ClassVar, Iterable
+from types import FunctionType
 
 import sphinx
 from pydantic import BaseModel
@@ -836,6 +837,17 @@ class PydanticFieldDocumenter(AttributeDocumenter):
             source_name = self.get_sourcename()
             self.add_line(':Constraints:', source_name)
             for key, value in constraints.items():
+                if isinstance(value, FunctionType):
+                    value = f':py:func:`{value.__name__}`'
+                if key == 'json_schema_input_type':
+                    # note PydanticUndefined is in some sort of
+                    # heirarchy; just do the simple thing and match
+                    # str.
+                    if str(value) == 'PydanticUndefined':
+                        # don't bother showing this
+                        continue
+                    else:
+                        value = f':py:obj:`{value.__name__}`'
                 line = f'   - **{key}** = {value}'
                 self.add_line(line, source_name)
 

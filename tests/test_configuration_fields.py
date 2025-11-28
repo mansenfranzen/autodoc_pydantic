@@ -412,42 +412,45 @@ def test_autodoc_pydantic_field_show_constraints_true(autodocument):
 
 CONSTRAINTS_TEST_DATA = {
     'field_conint': {
-        'type': 'int',
+        'type': f'{TYPEHINTS_PREFIX}typing.Annotated[int, {TYPEHINTS_PREFIX}pydantic.types.Strict(strict=True), {TYPEHINTS_PREFIX}annotated_types.Interval(gt=None, ge=0, lt=None, le=100), None]',
         'constraints': ['**strict** = True', '**ge** = 0', '**le** = 100'],
     },
     'field_constr': {
-        'type': 'str',
+        'type': f'{TYPEHINTS_PREFIX}typing.Annotated[str, {TYPEHINTS_PREFIX}pydantic.types.StringConstraints(strip_whitespace=None, to_upper=None, to_lower=None, strict=None, min_length=5, max_length=None, pattern=[a-z]+)]',
         'constraints': ['**min_length** = 5', '**pattern** = [a-z]+'],
     },
     'field_condate': {
-        'type': f'{TYPEHINTS_PREFIX}datetime.date',
+        'type': f'{TYPEHINTS_PREFIX}datetime.Annotated[{TYPEHINTS_PREFIX}datetime.date, {TYPEHINTS_PREFIX}pydantic.types.Strict(strict=True), {TYPEHINTS_PREFIX}annotated_types.Interval(gt=datetime.date(2023, 8, 1), ge=None, lt=None, le=None)]',
         'constraints': ['**strict** = True', '**gt** = 2023-08-01'],
     },
     'field_condecimal': {
-        'type': f'{TYPEHINTS_PREFIX}decimal.Decimal',
+        'type': f'{TYPEHINTS_PREFIX}decimal.Annotated[{TYPEHINTS_PREFIX}decimal.Decimal, None, {TYPEHINTS_PREFIX}annotated_types.Interval(gt=None, ge=None, lt=None, le=None), None, _PydanticGeneralMetadata(max_digits=4, decimal_places=1), None]',
         'constraints': ['**max_digits** = 4', '**decimal_places** = 1'],
     },
     'field_conset': {
-        'type': f'{TYPING_MODULE_PREFIX_V2}Set[int]',
+        'type': f'{TYPEHINTS_PREFIX}typing.Annotated[set[int], {TYPEHINTS_PREFIX}annotated_types.Len(min_length=3, max_length=5)]',
         'constraints': ['**min_length** = 3', '**max_length** = 5'],
     },
     'field_conlist': {
-        'type': f'{TYPING_MODULE_PREFIX_V2}List[str]',
+        'type': f'{TYPEHINTS_PREFIX}typing.Annotated[list[str], {TYPEHINTS_PREFIX}annotated_types.Len(min_length=0, max_length=3)]',
         'constraints': ['**min_length** = 0', '**max_length** = 3'],
     },
-    'field_strict_float': {'type': 'float', 'constraints': ['**strict** = True']},
-    'field_strict_bool': {'type': 'bool', 'constraints': ['**strict** = True']},
-    'field_positive_int': {'type': 'int', 'constraints': ['**gt** = 0']},
+    'field_strict_float': {'type': f'{TYPEHINTS_PREFIX}typing.Annotated[float, {TYPEHINTS_PREFIX}pydantic.types.Strict(strict=True)]', 'constraints': ['**strict** = True']},
+    'field_strict_bool': {'type': f'{TYPEHINTS_PREFIX}typing.Annotated[bool, {TYPEHINTS_PREFIX}pydantic.types.Strict(strict=True)]', 'constraints': ['**strict** = True']},
+    'field_positive_int': {'type': f'{TYPEHINTS_PREFIX}typing.Annotated[int, {TYPEHINTS_PREFIX}annotated_types.Gt(gt=0)]', 'constraints': ['**gt** = 0']},
     'uuid4': {
-        'type': f'{TYPEHINTS_PREFIX}uuid.UUID',
+        'type': f'{TYPEHINTS_PREFIX}uuid.Annotated[{TYPEHINTS_PREFIX}uuid.UUID, {TYPEHINTS_PREFIX}pydantic.types.UuidVersion(uuid_version=4)]',
         'constraints': ['**uuid_version** = 4'],
     },
     'file_path': {
-        'type': f'{TYPEHINTS_PREFIX}pathlib.Path',
+        'type': f'{TYPEHINTS_PREFIX}pathlib.Annotated[{TYPEHINTS_PREFIX}pathlib.Path, {TYPEHINTS_PREFIX}pydantic.types.PathType(path_type=file)]',
         'constraints': ['**path_type** = file'],
     },
+    'before_validator': {
+        'type': '~typing.Annotated[int, ~pydantic.functional_validators.BeforeValidator(func=~target.configuration.before_validator, json_schema_input_type=PydanticUndefined)]',
+        'constraints': ['**func** = :py:func:before_validator']
+    },
 }
-
 
 @pytest.mark.parametrize(
     'test_data',
@@ -459,6 +462,8 @@ def test_autodoc_pydantic_field_show_constraints_various(autodocument, test_data
     types.
 
     """
+    pytest.importorskip('sphinx', minversion='7.4.0',
+                        reason='Requires > 159c26715b from sphinx')
 
     name, values = test_data
     constraints = [f'      - {x}' for x in values['constraints']] + ['']

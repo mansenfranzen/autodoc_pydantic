@@ -13,6 +13,7 @@ except ImportError:
 
 from pydantic import (
     BaseModel,
+    BeforeValidator,
     field_validator,
     Field,
     model_validator,
@@ -460,6 +461,10 @@ class FieldShowConstraints(BaseModel):
     """Field."""
 
 
+def before_validator(v: int) -> int:
+    return v
+
+
 class FieldShowConstraintsNativeConstraintTypes(BaseModel):
     """FieldShowConstraints."""
 
@@ -495,6 +500,10 @@ class FieldShowConstraintsNativeConstraintTypes(BaseModel):
 
     file_path: Annotated[Path, PathType('file')]
     """file_path"""
+
+    before_validator: Annotated[int, BeforeValidator(before_validator)]
+    """before_validator"""
+
 
 
 class FieldShowConstraintsIgnoreExtraKwargs(BaseModel):
