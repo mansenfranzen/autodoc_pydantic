@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
     
       - name: Setup Test Environment and Run Tox
         uses: ./.github/actions/invoke-tox
@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
     
       - name: Setup Test Environment and Run Tox
         uses: ./.github/actions/invoke-tox
@@ -38,7 +38,7 @@ jobs:
         scan: ["lib", "dev"]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
   
       - name: Setup Test Environment and Run Tox
         uses: ./.github/actions/invoke-tox
