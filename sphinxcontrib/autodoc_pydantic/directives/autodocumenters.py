@@ -861,8 +861,7 @@ class PydanticFieldDocumenter(AttributeDocumenter):
 
         docstring = docstrings[0]  # first element is always the docstring
         without_last = docstring[:-1]  # last element is always empty
-        substitute_linebreaks = ['\n\n' if x == '' else x for x in without_last]
-        return ''.join(substitute_linebreaks)
+        return '\n'.join(without_last)
 
     def add_description(self) -> None:
         """Adds description from schema if present."""
