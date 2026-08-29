@@ -16,6 +16,7 @@ from sphinxcontrib.autodoc_pydantic.events import (
 
 if TYPE_CHECKING:
     from sphinx.application import Sphinx
+    from sphinx.config import Config
 
 EXTENSION_PREFIX = 'autodoc_pydantic_'
 
@@ -315,6 +316,18 @@ def add_configuration_values(app: Sphinx) -> None:
         )
 
 
+def force_legacy_autodoc(_: Sphinx, config: Config) -> None:
+    """Opt into the class-based autodoc implementation.
+
+    Sphinx 9.0 ignores documenters registered via `add_autodocumenter` unless
+    `autodoc_use_legacy_class_based` is enabled.
+
+    """
+
+    if getattr(config, 'autodoc_use_legacy_class_based', True) is False:
+        config.autodoc_use_legacy_class_based = True
+
+
 def add_directives_and_autodocumenters(
     app: Sphinx,
 ) -> None:
@@ -326,6 +339,7 @@ def add_directives_and_autodocumenters(
     for name, directive in DOMAIN_DIRECTIVES.items():
         app.add_directive_to_domain('py', name, directive)
 
+    app.connect('config-inited', force_legacy_autodoc, priority=400)
     app.setup_extension('sphinx.ext.autodoc')
     for autodocumenter in AUTODOCUMENTERS:
         app.add_autodocumenter(autodocumenter)
