@@ -3,7 +3,23 @@
 from __future__ import annotations
 
 import json
-from typing import TYPE_CHECKING, Any, Callable, ClassVar, Iterable
+from functools import reduce
+from operator import or_
+from typing import (
+    TYPE_CHECKING,
+    Annotated,
+    Any,
+    Callable,
+    ClassVar,
+    Iterable,
+    get_args,
+    get_origin,
+)
+
+try:
+    from types import UnionType
+except ImportError:  # python < 3.10
+    UnionType = ()  # type: ignore[assignment,misc]
 
 import sphinx
 from pydantic import BaseModel
@@ -668,6 +684,39 @@ class PydanticSettingsDocumenter(PydanticModelDocumenter):
         return False
 
 
+def strip_annotated(annotation: Any) -> Any:  # noqa: ANN401
+    """Recursively remove `Annotated` metadata from an annotation.
+
+    `sphinx.util.typing.get_type_hints` falls back to the raw `__annotations__`
+    whenever a forward reference cannot be resolved, and that fallback keeps the
+    metadata regardless of `include_extras`.
+
+    """
+
+    if get_origin(annotation) is Annotated:
+        return strip_annotated(annotation.__args__[0])
+
+    args = get_args(annotation)
+    if not args:
+        return annotation
+
+    stripped = tuple(strip_annotated(arg) for arg in args)
+    if stripped == args:
+        return annotation
+
+    if isinstance(annotation, UnionType):
+        return reduce(or_, stripped)
+
+    copy_with = getattr(annotation, 'copy_with', None)
+    if copy_with is None:
+        return annotation
+
+    try:
+        return copy_with(stripped)
+    except Exception:  # noqa: BLE001
+        return annotation
+
+
 class PydanticFieldDocumenter(AttributeDocumenter):
     """Represents specialized Documenter subclass for pydantic fields."""
 
@@ -718,10 +767,47 @@ class PydanticFieldDocumenter(AttributeDocumenter):
 
     def add_directive_header(self, sig: str) -> None:
         """Delegate header options."""
+        offset = len(self.directive.result)
         super().add_directive_header(sig)
+        self.strip_annotated_metadata(offset)
 
         self.add_default_value_or_marker()
         self.add_alias()
+
+    def strip_annotated_metadata(self, offset: int) -> None:
+        """Rewrite the `:type:` option without `Annotated` metadata.
+
+        Since Sphinx 7.4.0, `stringify_annotation` renders the metadata of an
+        `Annotated` type, which spells out the whole `pydantic.FieldInfo` repr
+        in the field signature.
+
+        """
+
+        try:
+            annotations = get_type_hints(
+                self.parent, None, self.config.autodoc_type_aliases
+            )
+        except Exception:  # noqa: BLE001
+            return
+
+        annotation = annotations.get(self.objpath[-1])
+        if annotation is None:
+            return
+
+        mode = (
+            'smart'
+            if self.config.autodoc_typehints_format == 'short'
+            else 'fully-qualified-except-typing'
+        )
+        objrepr = stringify_annotation(strip_annotated(annotation), mode)
+
+        result = self.directive.result
+        for index in range(offset, len(result)):
+            line = result[index]
+            if line.lstrip().startswith(':type:'):
+                indent = line[: len(line) - len(line.lstrip())]
+                result[index] = f'{indent}:type: {objrepr}'
+                return
 
     @property
     def needs_required_marker(self) -> bool:
@@ -966,7 +1052,7 @@ class PydanticValidatorDocumenter(MethodDocumenter):
         """Generates reST line for field reference for field list section."""
 
         name = self.pydantic.get_field_name_or_alias(reference.field_name)
-        return f'   - :py:obj:' f'`{name} ' f'<{reference.field_ref}>`'
+        return f'   - :py:obj:`{name} <{reference.field_ref}>`'
 
     def add_field_list(self) -> None:
         """Adds a field list with all fields that are validated by this
